@@ -8,6 +8,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
+use function App\CPU\translate;
 
 class AssignGuard extends BaseMiddleware
 {
@@ -25,10 +26,10 @@ class AssignGuard extends BaseMiddleware
             try {
                 $user = JWTAuth::parseToken()->authenticate();
             } catch (TokenExpiredException $e) {
-                return responseApi('false', 'Unauthenticated user');
+                return responseApi('false', translate('Unauthenticated user'));
 
             } catch (JWTException $e) {
-                return responseApi('false', 'token_invalid' . $e->getMessage());
+                return responseApi('false', translate('token_invalid').' ' . $e->getMessage());
             }
 
         } else {
