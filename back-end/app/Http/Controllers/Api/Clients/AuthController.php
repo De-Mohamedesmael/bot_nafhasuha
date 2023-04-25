@@ -261,7 +261,7 @@ class AuthController extends Controller
 
             $user->activation_code=null;
             if($user->activation_at == null ){
-                $user->activation_at=time();
+                $user->activation_at=now();
             }
             $user->save();
           return responseApi(200, translate('return success'), $user->id);
