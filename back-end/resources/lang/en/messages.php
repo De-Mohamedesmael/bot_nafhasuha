@@ -52,4 +52,5 @@
   'title_email_for_send_old' => 'Your password reset code is: ',
   'return_data_success' => 'Return data success',
   'user login' => 'User login',
+  'get_data_success' => 'Get data success',
 );

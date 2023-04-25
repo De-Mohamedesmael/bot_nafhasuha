@@ -33,12 +33,12 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors());
+            return responseApiFalse(405, $validator->errors()->first());
 
         $user= User::where('phone',$request->phone)->first();
 
         if(!$user){
-            return responseApi('false', 'Not found user');
+            return responseApiFalse(404, 'Not found user');
         }
         if (!$token=auth()->attempt($validator->validated())){
             $token = auth()->attempt(['phone'=>$request->phone,'password'=>$request->password]);
@@ -47,9 +47,9 @@ class AuthController extends Controller
 
 
         if (!$token){
-            return responseApi('false', 'Unauthorized');
+            return responseApiFalse(403, 'Unauthorized');
         }
-        return responseApi('success', translate('user login'), $this->createNewToken($token));
+        return responseApi(200, translate('user login'), $this->createNewToken($token));
     }
 
     protected function createNewToken($token)
@@ -77,12 +77,12 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApiFalse(405, $validator->errors()->first());
 
         $inputs = $request->all();
         User::create($inputs);
 
-        return responseApi('success', translate('user registered'),
+        return responseApi(200, translate('user registered'),
             $this->createNewToken(auth()->attempt($request->only(['email', 'password']))));
     }
 
@@ -90,7 +90,7 @@ class AuthController extends Controller
     {
 
         auth()->logout();
-        return responseApi('success', translate('user logout'));
+        return responseApi(200, translate('user logout'));
     }
 
     public function refresh()
@@ -101,7 +101,7 @@ class AuthController extends Controller
     public function userProfile()
     {
 
-        return responseApi('success', translate('get_data_success'),  new UserResource(auth()->user()));
+        return responseApi(200, translate('get_data_success'),  new UserResource(auth()->user()));
     }
     public function uploadImage(Request $request)
     {
@@ -109,7 +109,7 @@ class AuthController extends Controller
             'image' => 'required|Image|mimes:jpeg,jpg,png,gif',//|max:10000',
         ]);
         $user=auth()->user();
-        if ($validator->fails())return responseApi('false', $validator->errors()->all());
+        if ($validator->fails())return responseApiFalse(405, $validator->errors()->first());
 
         $image = $user->getFirstMedia('images');
 
@@ -122,7 +122,7 @@ class AuthController extends Controller
             ->usingFileName(time().'.'.$extension)
             ->toMediaCollection('images');
         $user= User::find($user->id);
-        return responseApi('success', translate('user profile update'), new UserResource($user));
+        return responseApi(200, translate('user profile update'), new UserResource($user));
     }
 
     public function editProfile(Request $request)
@@ -137,11 +137,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApiFalse(405, $validator->errors()->first());
 
         auth()->user()->update($validator->validated());
 
-        return responseApi('success', __('api.user profile update'), auth()->user());
+        return responseApi(200, __('api.user profile update'), auth()->user());
     }
 
 
@@ -153,14 +153,14 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApiFalse(405, $validator->errors()->first());
 
         if (Hash::check($request->old_password, auth()->user()->getAuthPassword())) {
             auth()->user()->update(['password' => $request->new_password]);
 
-            return responseApi('success', __('api.password update'));
+            return responseApi(200, __('api.password update'));
         }
-        return responseApi('false', __('api.old password is incorrect'));
+        return responseApiFalse(500, __('api.old password is incorrect'));
     }
 
     public function checkPhone(Request $request)
@@ -170,7 +170,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors());
+            return responseApiFalse(405, $validator->errors());
 
         $user = User::where('email', $request->email)->first();
         if($user){
@@ -186,9 +186,9 @@ class AuthController extends Controller
             $message->from($from)->to($data["email"], $data["email"] )
                 ->subject($data["subject"]);
              });
-            return responseApi('success', '', $user->id);
+            return responseApi(200, '', $user->id);
         }
-       return responseApi('false', __('api.user notfound'));
+       return responseApiFalse(404, __('api.user notfound'));
     }
     public function checkCode(Request $request)
     {
@@ -198,7 +198,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors());
+            return responseApiFalse(405, $validator->errors());
 
         $user = User::where('id', $request->user_id)->first();
 
@@ -206,9 +206,9 @@ class AuthController extends Controller
         if($user->activation_code ==  $request->code){
 
 
-          return responseApi('success', '', $user->id);
+          return responseApi(200, '', $user->id);
         }
-        return responseApi('false', __('api.activation code is incorrect'));
+        return responseApiFalse(500, __('api.activation code is incorrect'));
     }
     public function forgotPassword(Request $request)
     {
@@ -218,11 +218,11 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApiFalse(405, $validator->errors()->first());
 
         User::where('id', $request->user_id)->update(['activation_code'=>null,'password' => bcrypt($request->password)]);
 
-        return responseApi('success', __('api.Password has been restored'));
+        return responseApi(200, __('api.Password has been restored'));
     }
 
     public function removeAccount(Request $request)
@@ -232,33 +232,33 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApiFalse(405, $validator->errors()->first());
 
 
         if (Hash::check($request->password, auth()->user()->getAuthPassword())) {
             auth()->user()->delete();
             auth()->logout();
 
-            return responseApi('success', __('api.Account deleted'));
+            return responseApi(200, __('api.Account deleted'));
         }
-        return responseApi('false', __('api.password is incorrect'));
+        return responseApiFalse(500, __('api.password is incorrect'));
     }
 
     public function customRemoveAccount()
     {
         User::where('email', \request('email'))->delete();
-        return responseApi('success', __('delete success'));
+        return responseApi(200, __('delete success'));
     }
     public function ActiveRemoveAccount(){
        $is_active= Setting::first();
         if(!$is_active){
-           return responseApi('success','', false);
+           return responseApi(200,'', false);
         }elseif($is_active->active_delete_acount != \request('app_version') &&  \request('type')  != 'android'){
-            return responseApi('success','', false);
+            return responseApi(200,'', false);
         }elseif($is_active->active_delete_acount_android != \request('app_version') &&  \request('type')  == 'android'){
-            return responseApi('success','', false);
+            return responseApi(200,'', false);
         }
-        return responseApi('success','', true);
+        return responseApi(200,'', true);
 
 
     }
