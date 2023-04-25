@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name'=>$this->name,
             'email'=>$this->email,
             'phone'=>$this->phone,
+            'is_activation'=>$this->is_activation(),
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             'address'=>$this->address,
             'lat'=>$this->lat,
@@ -26,6 +27,7 @@ class UserResource extends JsonResource
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
             'area'=>new AreaResource($this->area),
+
 
         ];
     }

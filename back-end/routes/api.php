@@ -8,16 +8,17 @@ use Illuminate\Support\Facades\Route;
 ////////////////////////////////// start  auth /////////////////////////////////////////////
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::post('logout', [AuthController::class, 'logout']);
-Route::post('refresh', [AuthController::class, 'refresh']);
+Route::get('logout', [AuthController::class, 'logout']);
+Route::get('refresh', [AuthController::class, 'refresh']);
 Route::get('profile', [AuthController::class, 'userProfile']);
 Route::post('edit-profile', [AuthController::class, 'editProfile']);
 Route::post('upload-image', [AuthController::class, 'uploadImage']);
 Route::post('change-password', [AuthController::class, 'changePassword']);
 Route::post('check-phone', [AuthController::class, 'checkPhone']);
+Route::post('send-code', [AuthController::class, 'SendCode']);
 Route::post('check-code', [AuthController::class, 'checkCode']);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('remove-account', [AuthController::class, 'removeAccount']);
+Route::delete('remove-account', [AuthController::class, 'removeAccount']);
 Route::post('custom-remove-account', [AuthController::class, 'customRemoveAccount']);
 
 

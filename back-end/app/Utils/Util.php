@@ -2,6 +2,8 @@
 
 namespace App\Utils;
 
+use App\Models\User;
+
 class Util
 {
     /**
@@ -14,4 +16,28 @@ class Util
     {
         return true;
     }
+    /**
+     * converty currency base on exchange rate
+     *
+         * @param User $user
+         * @param string $type
+     * @return boolean
+     */
+    public function SendActivationCode($user,$type)
+    {
+        $user->activation_code=111111;
+        $user->save();
+        switch ($type){
+            case 'Reset':
+
+                break;
+            default:
+
+
+        }
+
+        return true;
+    }
+
+
 }

@@ -53,4 +53,12 @@
   'return_data_success' => 'Return data success',
   'user login' => 'User login',
   'get_data_success' => 'Get data success',
+  'user Not activation' => 'User Not activation',
+  'token_invalid' => 'Token invalid',
+  'user notfound' => 'User notfound',
+  'user not found' => 'User not found',
+  'return success' => 'Return success',
+  'activation code is incorrect' => 'Activation code is incorrect',
+  'Unauthorized' => 'Unauthorized',
+  'The password is incorrect' => 'The password is incorrect',
 );
