@@ -21,7 +21,7 @@ class AuthController extends Controller
     public function __construct(Util $commonUtil)
     {
         $this->commonUtil = $commonUtil;
-        $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'customRemoveAccount','ActiveRemoveAccount']]);
+        $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'SendCode','customRemoveAccount','ActiveRemoveAccount']]);
     }
 
 
@@ -38,7 +38,7 @@ class AuthController extends Controller
         $user= User::where('phone',$request->phone)->first();
 
         if(!$user){
-            return responseApiFalse(404, 'Not found user');
+            return responseApiFalse(404, translate('Not found user'));
         }
         if (!$token=auth()->attempt($validator->validated())){
             $token = auth()->attempt(['phone'=>$request->phone,'password'=>$request->password]);
@@ -47,19 +47,23 @@ class AuthController extends Controller
 
 
         if (!$token){
-            return responseApiFalse(403, 'Unauthorized');
+            return responseApiFalse(500, translate('The password is incorrect'));
+        }
+        if(! auth()->user()->is_activation()){
+            return responseApiFalse(500, translate('user Not activation'));
+
         }
         return responseApi(200, translate('user login'), $this->createNewToken($token));
     }
 
     protected function createNewToken($token)
     {
-        return response()->json([
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth('api')->factory()->getTTL() * 60,
             'user' => new UserResource(auth()->user())
-        ]);
+        ];
     }
 
     public function register(Request $request)
@@ -67,12 +71,13 @@ class AuthController extends Controller
         $validator = validator($request->all(), [
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:users',
-            'address' => 'required|string|max:255',
-            'lat' => 'required|string|max:255',
-            'lang' => 'required|string|max:255',
-            'country_id' => 'nullable|integer|exists:countries,id',
-            'city_id' => 'required|integer|exists:cities,id',
-            'area_id' => 'required|integer|exists:areas,id',
+            'email' => 'nullable|string|max:20|unique:users',
+            'address' => 'nullable|string|max:255',
+            'lat' => 'nullable|string|max:255',
+            'lang' => 'nullable|string|max:255',
+            'country_id' => 'required|integer|exists:countries,id',
+            'city_id' => 'nullable|integer|exists:cities,id',
+            'area_id' => 'nullable|integer|exists:areas,id',
             'password' => 'required|string|min:3|max:255',
         ]);
 
@@ -80,8 +85,8 @@ class AuthController extends Controller
             return responseApiFalse(405, $validator->errors()->first());
 
         $inputs = $request->all();
-        User::create($inputs);
-
+        $user= User::create($inputs);
+        $this->commonUtil->SendActivationCode($user,'Activation');
         return responseApi(200, translate('user registered'),
             $this->createNewToken(auth()->attempt($request->only(['email', 'password']))));
     }
@@ -95,7 +100,7 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return $this->createNewToken(auth()->refresh());
+        return responseApi(200, translate('user login'), $this->createNewToken(auth()->refresh()));
     }
 
     public function userProfile()
@@ -129,27 +134,56 @@ class AuthController extends Controller
     {
         $validator = validator($request->all(), [
             'name' => 'required|string|between:2,100',
-            'user_name' => 'required|string|unique:users,user_name,' . auth()->id(),
-            'email' => 'required|string|email|max:100|unique:users,email,' . auth()->id(),
-            'phone' => 'required|string|string|max:20',
-            'gander' => 'required|string|in:0,1',
-            'address' => 'required|string|string|max:255|unique:users,phone',
+            'email' => 'nullable|string|email|max:100|unique:users,email,' . auth()->id(),
+            'phone' => 'nullable|string|string|max:20|unique:users,phone,' . auth()->id(),
+            'address' => 'nullable|string|max:255',
+            'lat' => 'nullable|string|max:255',
+            'lang' => 'nullable|string|max:255',
+            'country_id' => 'required|integer|exists:countries,id',
+            'city_id' => 'nullable|integer|exists:cities,id',
+            'area_id' => 'nullable|integer|exists:areas,id',
+            'image' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
         ]);
-
+        $user=auth()->user();
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        auth()->user()->update($validator->validated());
 
-        return responseApi(200, __('api.user profile update'), auth()->user());
+        auth()->user()->update([
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'address'=>$request->address,
+            'lat'=>$request->lat,
+            'lang'=>$request->lang,
+            'country_id'=>$request->country_id,
+            'city_id'=>$request->city_id,
+            'area_id'=>$request->area_id,
+        ]);
+
+        if($request->has('image')){
+            $image = $user->getFirstMedia('images');
+
+            if($image){
+                $image->delete();
+            }
+            $uploadedFile = $request->file('image');
+            $extension = $uploadedFile->getClientOriginalExtension();
+            $user->addMedia($uploadedFile)
+                ->usingFileName(time().'.'.$extension)
+                ->toMediaCollection('images');
+        }
+
+        $user= User::find($user->id);
+
+        return responseApi(200, translate('user profile update'), new UserResource($user));
     }
 
 
     public function changePassword(Request $request)
     {
         $validator = validator($request->all(), [
-            'old_password' => 'required|string|min:8|max:255',
-            'new_password' => 'required|string|min:8|max:255',
+            'old_password' => 'required|string|min:3|max:255',
+            'new_password' => 'required|string|min:3|max:255',
         ]);
 
         if ($validator->fails())
@@ -158,43 +192,63 @@ class AuthController extends Controller
         if (Hash::check($request->old_password, auth()->user()->getAuthPassword())) {
             auth()->user()->update(['password' => $request->new_password]);
 
-            return responseApi(200, __('api.password update'));
+            return responseApi(200, translate('password update'));
         }
-        return responseApiFalse(500, __('api.old password is incorrect'));
+        return responseApiFalse(500, translate('old password is incorrect'));
     }
 
     public function checkPhone(Request $request)
     {
          $validator = validator($request->all(), [
-            'email' => 'required|email',
+             'country_id' => 'required|integer|exists:countries,id',
+             'phone' => 'required|string|string|max:20',
         ]);
 
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors());
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('country_id',$request->country_id)->where('phone', $request->phone)->first();
         if($user){
-            $user->activation_code= rand ( 1000 , 9999 );
-            $user->save();
-            $from=env('MAIL_FROM_ADDRESS');
-            $data=[];
-             $data["subject"] = 'Reset Password';
-            $data["code"] = $user->activation_code;
-            $data["name"] = $user->name;
-            $data["email"] = $request->email;
-             Mail::send('emails.resetPassword', $data, function ($message) use ($data, $from) {
-            $message->from($from)->to($data["email"], $data["email"] )
-                ->subject($data["subject"]);
-             });
-            return responseApi(200, '', $user->id);
+//            $user->activation_code= 1111;//rand ( 1000 , 9999 );
+//            $user->save();
+//            $from=env('MAIL_FROM_ADDRESS');
+//            $data=[];
+//             $data["subject"] = 'Reset Password';
+//            $data["code"] = $user->activation_code;
+//            $data["name"] = $user->name;
+//            $data["email"] = $request->email;
+//             Mail::send('emails.resetPassword', $data, function ($message) use ($data, $from) {
+//            $message->from($from)->to($data["email"], $data["email"] )
+//                ->subject($data["subject"]);
+//             });
+            return responseApi(200, translate('return success'), $user->id);
         }
-       return responseApiFalse(404, __('api.user notfound'));
+       return responseApiFalse(404, translate('user not found'));
+    }
+    public function SendCode(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+            'type' => 'required|in:Reset,Activation',
+        ]);
+
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors());
+
+        $user = User::where('id', $request->user_id)->first();
+
+
+        if($user){
+            $this->commonUtil->SendActivationCode($user,$request->type);
+            return responseApi(200, translate('return success'), $user->id);
+        }
+        return responseApiFalse(404, translate('user not found'));
     }
     public function checkCode(Request $request)
     {
          $validator = validator($request->all(), [
             'user_id' => 'required|integer|exists:users,id',
-            'code' => 'required|max:4',
+            'code' => 'required|max:6',
         ]);
 
         if ($validator->fails())
@@ -205,16 +259,20 @@ class AuthController extends Controller
 
         if($user->activation_code ==  $request->code){
 
-
-          return responseApi(200, '', $user->id);
+            $user->activation_code=null;
+            if($user->activation_at == null ){
+                $user->activation_at=time();
+            }
+            $user->save();
+          return responseApi(200, translate('return success'), $user->id);
         }
-        return responseApiFalse(500, __('api.activation code is incorrect'));
+        return responseApiFalse(500, translate('activation code is incorrect'));
     }
     public function forgotPassword(Request $request)
     {
         $validator = validator($request->all(), [
             'user_id' => 'required|integer|exists:users,id',
-            'password' => 'required|string|min:8|max:255',
+            'password' => 'required|string|min:3|max:255',
         ]);
 
         if ($validator->fails())
@@ -222,13 +280,13 @@ class AuthController extends Controller
 
         User::where('id', $request->user_id)->update(['activation_code'=>null,'password' => bcrypt($request->password)]);
 
-        return responseApi(200, __('api.Password has been restored'));
+        return responseApi(200, translate('Password has been restored'));
     }
 
     public function removeAccount(Request $request)
     {
         $validator = validator($request->all(), [
-            'password' => 'required|string|min:8|max:255',
+            'password' => 'required|string|min:3|max:255',
         ]);
 
         if ($validator->fails())
@@ -239,9 +297,9 @@ class AuthController extends Controller
             auth()->user()->delete();
             auth()->logout();
 
-            return responseApi(200, __('api.Account deleted'));
+            return responseApi(200, translate('Account deleted'));
         }
-        return responseApiFalse(500, __('api.password is incorrect'));
+        return responseApiFalse(500, translate('password is incorrect'));
     }
 
     public function customRemoveAccount()

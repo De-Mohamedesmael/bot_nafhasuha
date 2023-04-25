@@ -46,6 +46,11 @@ class User extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->belongsTo(Country::class);
     }
+
+    public function is_activation()
+    {
+        return $this->activation_at != null;
+    }
     public function city()
     {
         return $this->belongsTo(City::class);

@@ -19,11 +19,11 @@ class CreateUsersTable extends Migration
             $table->string('phone', 20)->nullable()->unique();
             $table->string('email')->nullable()->unique();
             $table->string('password');
-            $table->unsignedBigInteger('country_id')->unsigned();
+            $table->unsignedBigInteger('country_id')->unsigned()->nullable();
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
-            $table->unsignedBigInteger('city_id')->unsigned();
+            $table->unsignedBigInteger('city_id')->unsigned()->nullable();
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
-            $table->unsignedBigInteger('area_id')->unsigned();
+            $table->unsignedBigInteger('area_id')->unsigned()->nullable();
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('address')->nullable();
