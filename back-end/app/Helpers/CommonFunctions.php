@@ -2,16 +2,28 @@
 
 // ---------------- Api response -------------------
 if (!function_exists('responseApi')) {
-    function responseApi($status, $message = '', $data = null)
+    function responseApi($code, $message = '', $data = null)
     {
         return response([
-            'statsu' => $status == 'success' ? 1 : 0,
+            'status' =>'success',
+            'code' => $code != null ? $code : 200,
             'message' => $message,
             'data' => $data,
         ]);
     }
 }
-
+// ---------------- Api response -------------------
+if (!function_exists('responseApiFalse')) {
+    function responseApiFalse($code= null, $message = '', $data = null)
+    {
+        return response([
+            'status' => 'failed' ,
+            'code' => $code != null ? $code : 500,
+            'message' => $message,
+            'data' => $data,
+        ]);
+    }
+}
 // ---------------- Upload File -------------------
 if (!function_exists('uploadFile')) {
     function uploadFile($file, $path)

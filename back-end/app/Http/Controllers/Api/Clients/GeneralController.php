@@ -30,25 +30,33 @@ class GeneralController extends Controller
 
     public function countries(Request $request){
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $countries= Country::orderBy('sort', 'desc')->simplePaginate($count_paginate);
-
-        return responseApi('success',\App\CPU\translate('return_data_success'), CountryResource::collection($countries));
+        $countries= Country::orderBy('sort', 'desc');
+        if($count_paginate == 'ALL'){
+            $countries=  $countries->get();
+        }else{
+            $countries=  $countries->simplePaginate($count_paginate);
+        }
+        return responseApi(200,\App\CPU\translate('return_data_success'), CountryResource::collection($countries));
     }
     public function cities(Request $request){
         $validator = validator($request->all(), [
             'country_id' => 'nullable|integer|exists:countries,id',
         ]);
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApi('false', $validator->errors()->first());
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
         $cities= City::orderBy('sort', 'desc');
         if($request->has('country_id')){
             $cities=$cities->where('country_id',$request->country_id);
         }
-        $cities=  $cities->simplePaginate($count_paginate);
+        if($count_paginate == 'ALL'){
+            $cities=  $cities->get();
+        }else{
+            $cities=  $cities->simplePaginate($count_paginate);
+        }
 
-        return responseApi('success',\App\CPU\translate('return_data_success'), CityResource::collection($cities));
+        return responseApi(200,\App\CPU\translate('return_data_success'), CityResource::collection($cities));
     }
 
 
@@ -57,16 +65,19 @@ class GeneralController extends Controller
             'city_id' => 'nullable|integer|exists:cities,id',
         ]);
         if ($validator->fails())
-            return responseApi('false', $validator->errors()->all());
+            return responseApi('false', $validator->errors()->first());
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
         $areas= Area::orderBy('sort', 'desc');
         if($request->has('city_id')){
             $areas=$areas->where('city_id',$request->city_id);
         }
-        $areas=  $areas->simplePaginate($count_paginate);
-
-        return responseApi('success',\App\CPU\translate('return_data_success'), AreaResource::collection($areas));
+        if($count_paginate == 'ALL'){
+            $areas=  $areas->get();
+        }else{
+            $areas=  $areas->simplePaginate($count_paginate);
+        }
+        return responseApi(200,\App\CPU\translate('return_data_success'), AreaResource::collection($areas));
     }
 }
 
