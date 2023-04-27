@@ -49,10 +49,10 @@ class AuthController extends Controller
         if (!$token){
             return responseApiFalse(500, translate('The password is incorrect'));
         }
-        if(! auth()->user()->is_activation()){
-            return responseApiFalse(500, translate('user Not activation'));
-
-        }
+//        if(! auth()->user()->is_activation()){
+//            return responseApiFalse(500, translate('user Not activation'));
+//
+//        }
         return responseApi(200, translate('user login'), $this->createNewToken($token));
     }
 
