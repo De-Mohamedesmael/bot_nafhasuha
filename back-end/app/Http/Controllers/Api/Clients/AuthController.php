@@ -71,7 +71,8 @@ class AuthController extends Controller
         $validator = validator($request->all(), [
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:users',
-            'email' => 'nullable|string|max:20|unique:users',
+            'email' => 'nullable|string|max:20',
+            'invitation_code' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',
             'lat' => 'nullable|string|max:255',
             'lang' => 'nullable|string|max:255',
@@ -84,11 +85,15 @@ class AuthController extends Controller
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $inputs = $request->all();
-        $user= User::create($inputs);
-        $this->commonUtil->SendActivationCode($user,'Activation');
+        $inputs = $request->except('invitation_code');
+        $user = User::create($inputs);
+//        dd($user);
+        $this->commonUtil->SendActivationCode($user, 'Activation');
+        if ($request->has('invitation_code')){
+            $this->commonUtil->SetInvitationCode($user, $request->invitation_code);
+        }
         return responseApi(200, translate('user registered'),
-            $this->createNewToken(auth()->attempt($request->only(['email', 'password']))));
+            $this->createNewToken(auth()->attempt($request->only(['phone', 'password']))));
     }
 
     public function logout()

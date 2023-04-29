@@ -25,7 +25,7 @@ class Util
      */
     public function SendActivationCode($user,$type)
     {
-        $user->activation_code=111111;
+        $user->activation_code=1111;
         $user->save();
         switch ($type){
             case 'Reset':
@@ -39,5 +39,16 @@ class Util
         return true;
     }
 
+    /**
+     * converty currency base on exchange rate
+     *
+     * @param User $user
+     * @param string $code
+     * @return boolean
+     */
+    public function SetInvitationCode($user,$code)
+    {
 
+        return true;
+    }
 }
