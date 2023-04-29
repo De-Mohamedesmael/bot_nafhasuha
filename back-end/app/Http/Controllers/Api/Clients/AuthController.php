@@ -79,7 +79,7 @@ class AuthController extends Controller
             'country_id' => 'required|integer|exists:countries,id',
             'city_id' => 'nullable|integer|exists:cities,id',
             'area_id' => 'nullable|integer|exists:areas,id',
-            'password' => 'required|string|min:3|max:255',
+            'password' => 'required|string|min:4|max:255',
         ]);
 
         if ($validator->fails())
@@ -187,8 +187,8 @@ class AuthController extends Controller
     public function changePassword(Request $request)
     {
         $validator = validator($request->all(), [
-            'old_password' => 'required|string|min:3|max:255',
-            'new_password' => 'required|string|min:3|max:255',
+            'old_password' => 'required|string|min:4|max:255',
+            'new_password' => 'required|string|min:4|max:255',
         ]);
 
         if ($validator->fails())
@@ -277,7 +277,7 @@ class AuthController extends Controller
     {
         $validator = validator($request->all(), [
             'user_id' => 'required|integer|exists:users,id',
-            'password' => 'required|string|min:3|max:255',
+            'password' => 'required|string|min:4|max:255',
         ]);
 
         if ($validator->fails())
@@ -291,7 +291,7 @@ class AuthController extends Controller
     public function removeAccount(Request $request)
     {
         $validator = validator($request->all(), [
-            'password' => 'required|string|min:3|max:255',
+            'password' => 'required|string|min:4|max:255',
         ]);
 
         if ($validator->fails())
