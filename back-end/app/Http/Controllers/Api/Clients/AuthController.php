@@ -214,6 +214,10 @@ class AuthController extends Controller
 
         $user = User::where('country_id',$request->country_id)->where('phone', $request->phone)->first();
         if($user){
+            if ($request->has('is_reset')){
+                $this->commonUtil->SendActivationCode($user, 'Reset');
+            }
+//            dd($user);
 //            $user->activation_code= 1111;//rand ( 1000 , 9999 );
 //            $user->save();
 //            $from=env('MAIL_FROM_ADDRESS');
