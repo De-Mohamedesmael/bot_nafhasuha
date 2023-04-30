@@ -38,7 +38,7 @@ class AuthController extends Controller
         $user= User::where('phone',$request->phone)->first();
 
         if(!$user){
-            return responseApiFalse(404, translate('Not found user'));
+            return responseApiFalse(405, translate('Not found user'));
         }
         if (!$token=auth()->attempt($validator->validated())){
             $token = auth()->attempt(['phone'=>$request->phone,'password'=>$request->password]);
@@ -210,7 +210,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApiFalse(405, $validator->errors());
+            return responseApiFalse(405, $validator->errors()->first());
 
         $user = User::where('country_id',$request->country_id)->where('phone', $request->phone)->first();
         if($user){
@@ -232,7 +232,7 @@ class AuthController extends Controller
 //             });
             return responseApi(200, translate('return success'), $user->id);
         }
-       return responseApiFalse(404, translate('user not found'));
+       return responseApiFalse(405, translate('user not found'));
     }
     public function SendCode(Request $request)
     {
@@ -242,7 +242,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApiFalse(405, $validator->errors());
+            return responseApiFalse(405, $validator->errors()->first());
 
         $user = User::where('id', $request->user_id)->first();
 
@@ -251,7 +251,7 @@ class AuthController extends Controller
             $this->commonUtil->SendActivationCode($user,$request->type);
             return responseApi(200, translate('return success'), $user->id);
         }
-        return responseApiFalse(404, translate('user not found'));
+        return responseApiFalse(405, translate('user not found'));
     }
     public function checkCode(Request $request)
     {
@@ -261,7 +261,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails())
-            return responseApiFalse(405, $validator->errors());
+            return responseApiFalse(405, $validator->errors()->first());
 
         $user = User::where('id', $request->user_id)->first();
 
