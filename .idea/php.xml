@@ -145,6 +145,8 @@
       <path value="$PROJECT_DIR$/back-end/vendor/nette/utils" />
       <path value="$PROJECT_DIR$/back-end/vendor/psr/clock" />
       <path value="$PROJECT_DIR$/back-end/vendor/league/config" />
+      <path value="$PROJECT_DIR$/back-end/vendor/spatie/laravel-package-tools" />
+      <path value="$PROJECT_DIR$/back-end/vendor/rawilk/laravel-settings" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

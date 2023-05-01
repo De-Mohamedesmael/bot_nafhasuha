@@ -61,4 +61,5 @@
   'activation code is incorrect' => 'Activation code is incorrect',
   'Unauthorized' => 'Unauthorized',
   'The password is incorrect' => 'The password is incorrect',
+  'Unauthenticated user' => 'Unauthenticated user',
 );

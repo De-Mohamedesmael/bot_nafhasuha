@@ -142,6 +142,8 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/nette/utils" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/psr/clock" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/league/config" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-package-tools" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/rawilk/laravel-settings" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
