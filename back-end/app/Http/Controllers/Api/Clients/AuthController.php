@@ -110,8 +110,9 @@ class AuthController extends Controller
 
     public function userProfile()
     {
+        $data =  ['user' => new UserResource(auth()->user())];
 
-        return responseApi(200, translate('get_data_success'),  new UserResource(auth()->user()));
+        return responseApi(200, translate('get_data_success'), $data );
     }
     public function uploadImage(Request $request)
     {
@@ -131,8 +132,9 @@ class AuthController extends Controller
         $user->addMedia($uploadedFile)
             ->usingFileName(time().'.'.$extension)
             ->toMediaCollection('images');
-        $user= User::find($user->id);
-        return responseApi(200, translate('user profile update'), new UserResource($user));
+
+        $data =  ['user' => new UserResource(User::find($user->id))];
+        return responseApi(200, translate('user profile update'), $data);
     }
 
     public function editProfile(Request $request)
@@ -178,9 +180,9 @@ class AuthController extends Controller
                 ->toMediaCollection('images');
         }
 
-        $user= User::find($user->id);
+        $data =  ['user' => new UserResource(User::find($user->id))];
 
-        return responseApi(200, translate('user profile update'), new UserResource($user));
+        return responseApi(200, translate('user profile update'), $data);
     }
 
 
