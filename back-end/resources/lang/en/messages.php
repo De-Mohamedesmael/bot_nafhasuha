@@ -62,4 +62,5 @@
   'Unauthorized' => 'Unauthorized',
   'The password is incorrect' => 'The password is incorrect',
   'Unauthenticated user' => 'Unauthenticated user',
+  'Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.' => 'Your message has been successfully received  and we will get back to you as soon as possible. Thank you for contacting us.',
 );
