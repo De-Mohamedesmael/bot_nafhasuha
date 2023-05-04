@@ -36,4 +36,8 @@ Route::get('update-version',[GeneralController::class, 'updateVersion']);
 Route::get('countries', [GeneralController::class, 'countries']);
 Route::get('cities', [GeneralController::class, 'cities']);
 Route::get('areas', [GeneralController::class, 'areas']);
+Route::get('icons', [GeneralController::class, 'icons']);
+Route::get('faqs', [GeneralController::class, 'faqs']);
+Route::get('infos', [GeneralController::class, 'infos']);
+Route::post('contact-us', [GeneralController::class, 'contactUs']);
 
