@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\Clients\AuthController;
 use App\Http\Controllers\Api\Clients\GeneralController;
+use App\Http\Controllers\Api\Clients\NotificationController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 
 ////////////////////////////////// start  auth /////////////////////////////////////////////
@@ -41,3 +43,18 @@ Route::get('faqs', [GeneralController::class, 'faqs']);
 Route::get('infos', [GeneralController::class, 'infos']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 
+///////////////////////////////// start notifications //////////////////////////////////////////
+Route::post('notifications', [NotificationControlleR::class, 'index']);
+Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);
+Route::post('notifications/count' , [NotificationController::class , 'count']);
+Route::post('notifications/show' , [NotificationController::class , 'show']);
+Route::post('notifications/status' , [NotificationController::class , 'changeStatus']);
+
+///////////////////////////////// end notifications ///////////////////////////////////////////////
+
+// Fail Api
+Route::fallback(function (Request $request) {
+    $response = "Page Not Found.If error persists,contact info@gmail.com";
+
+    return responseApiFalse(404, $response);
+});

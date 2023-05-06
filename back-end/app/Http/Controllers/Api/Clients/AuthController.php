@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Clients;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\Setting;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use function App\CPU\translate;
 
 
-class AuthController extends Controller
+class AuthController extends ApiController
 {
     protected $commonUtil;
 

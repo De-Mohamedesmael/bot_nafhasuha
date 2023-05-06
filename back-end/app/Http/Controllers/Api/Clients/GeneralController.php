@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Clients;
 
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
 use App\Http\Resources\CategoryFaqResource;
@@ -28,7 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 
-class GeneralController extends Controller
+class GeneralController extends ApiController
 {
     protected $commonUtil;
     protected $count_paginate = 10;

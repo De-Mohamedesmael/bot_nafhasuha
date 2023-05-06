@@ -59,4 +59,8 @@ class User extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->belongsTo(Area::class);
     }
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notifications');
+    }
 }

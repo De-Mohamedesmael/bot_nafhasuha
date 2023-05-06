@@ -53,6 +53,7 @@
   'return_data_success' => 'Return data success',
   'user login' => 'User login',
   'get_data_success' => 'Get data success',
-   'Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.' => 'تم استلام رسالتك بنجاح، وسيتم التواصل معك في أقرب وقت ممكن. شكرًا لتواصلكم معنا.',
-
+  'Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.' => 'تم استلام رسالتك بنجاح، وسيتم التواصل معك في أقرب وقت ممكن. شكرًا لتواصلكم معنا.',
+  'Unauthenticated user' => 'Unauthenticated user',
+  'not found' => 'Not found',
 );
