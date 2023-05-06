@@ -38,7 +38,7 @@ class NotificationController extends ApiController
             return responseApi(403, translate('Unauthenticated user'));
 
         $notificationsCount = auth()->user()->notifications()
-            ->wherePivot('is_show',1)
+            ->wherePivot('is_show',0)
             ->count();
         return  responseApi(200, translate('return_data_success'),$notificationsCount);
 
@@ -66,7 +66,7 @@ class NotificationController extends ApiController
             'notification_id'=>$request->notification_id,
             'user_id'=>auth()->id()
         ])->update([
-            'is_show'=>0
+            'is_show'=>1
         ]);
         return  responseApi(200, translate('return_data_success'),new NotificationResource($notification));
 
