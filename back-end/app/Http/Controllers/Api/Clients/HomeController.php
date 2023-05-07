@@ -3,36 +3,33 @@
 namespace App\Http\Controllers\Api\Clients;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Resources\NotificationResource;
-use App\Models\Notification;
-use App\Models\ShowNotification;
 
-use App\Models\FcmToken as FcmTokenModel;
-use App\Models\UserNotification;
+use App\Http\Resources\PackageResource;
+use App\Http\Resources\ServiceResource;
+use App\Http\Resources\SliderResource;
+use App\Models\Package;
+use App\Models\Service;
+use App\Models\Slider;
 use Illuminate\Http\Request;
+
 use function App\CPU\translate;
 
-class NotificationController extends ApiController
+class HomeController extends ApiController
 {
      public function __construct()
     {
 
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        if(!auth()->check())
-            return responseApi(403, translate('Unauthenticated user'));
-
-        $notifications= Notification::wherehas('users',function ($q) {
-                $q->where('users.id',auth()->id());
-            })->with('users_pov',function ($q) {
-                $q->where('user_notifications.user_id',auth()->id());
-            })->latest()->get();
-        return  responseApi(200, translate('return_data_success'),NotificationResource::collection($notifications));
+        $data['sliders']= SliderResource::collection(Slider::Active()->orderBy('sort', 'Asc')->get());
+        $data['packages']= PackageResource::collection(Package::Active()->orderBy('sort', 'Asc')->get());
+        $data['services']= ServiceResource::collection(Service::Active()->orderBy('sort', 'Asc')->get());
+        return  responseApi(200, translate('return_data_success'),$data);
 
     }
-     public function count()
+     public function count(Request $request)
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));

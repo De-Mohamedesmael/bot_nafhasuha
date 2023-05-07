@@ -1,6 +1,11 @@
 <?php
 
 use App\Http\Controllers\Api\Clients\AuthController;
+
+use App\Http\Controllers\Api\Clients\HomeController;
+use App\Http\Controllers\Api\Clients\PackageController;
+use App\Http\Controllers\Api\Clients\ServiceController;
+
 use App\Http\Controllers\Api\Clients\GeneralController;
 use App\Http\Controllers\Api\Clients\NotificationController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +31,23 @@ Route::post('custom-remove-account', [AuthController::class, 'customRemoveAccoun
 
 Route::middleware('auth.guard:api')->group(function () {
 
+    Route::get('home', [HomeController::class, 'index']);
 
+    /////////////////////////////////////////////
+    ///                     Packages          ///
+    /// /////////////////////////////////////////
+
+    Route::prefix('packages')->group(function () {
+        Route::get('/', [PackageController::class, 'index']);
+        Route::get('/show', [PackageController::class, 'show']);
+        Route::post('/store', [PackageController::class, 'StorePackageUser']);
+        Route::get('/my-package', [PackageController::class, 'MyPackage']);
+
+    });
+    Route::prefix('services')->group(function () {
+        Route::get('/', [ServiceController::class, 'index']);
+
+    });
 });
 
 
@@ -44,13 +65,15 @@ Route::get('infos', [GeneralController::class, 'infos']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 
 ///////////////////////////////// start notifications //////////////////////////////////////////
-Route::post('notifications', [NotificationControlleR::class, 'index']);
+Route::get('notifications', [NotificationControlleR::class, 'index']);
 Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);
-Route::post('notifications/count' , [NotificationController::class , 'count']);
-Route::post('notifications/show' , [NotificationController::class , 'show']);
+Route::get('notifications/count' , [NotificationController::class , 'count']);
+Route::get('notifications/show' , [NotificationController::class , 'show']);
 Route::post('notifications/status' , [NotificationController::class , 'changeStatus']);
 
 ///////////////////////////////// end notifications ///////////////////////////////////////////////
+
+
 
 // Fail Api
 Route::fallback(function (Request $request) {

@@ -56,4 +56,6 @@
   'Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.' => 'تم استلام رسالتك بنجاح، وسيتم التواصل معك في أقرب وقت ممكن. شكرًا لتواصلكم معنا.',
   'Unauthenticated user' => 'Unauthenticated user',
   'not found' => 'Not found',
+  'Subscription_completed_successfully' => 'Subscription completed successfully',
+  'You_are_already_subscribed_to_a_package' => 'You are already subscribed to a package',
 );

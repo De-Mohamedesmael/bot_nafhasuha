@@ -43,7 +43,7 @@ return [
         ],
         'media' => [
             'driver' => 'local',
-            'root'   => public_path('assets/media'),
+            'root'   => 'assets/media',
             'url'    => env('APP_URL').'/assets/media',
         ],
         's3' => [
