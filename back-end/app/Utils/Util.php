@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Models\Transaction;
 use App\Models\User;
 
 class Util
@@ -39,16 +40,4 @@ class Util
         return true;
     }
 
-    /**
-     * converty currency base on exchange rate
-     *
-     * @param User $user
-     * @param string $code
-     * @return boolean
-     */
-    public function SetInvitationCode($user,$code)
-    {
-
-        return true;
-    }
 }
