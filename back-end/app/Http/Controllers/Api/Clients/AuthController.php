@@ -134,7 +134,6 @@ class AuthController extends ApiController
         $user->addMedia($uploadedFile)
             ->usingFileName(time().'.'.$extension)
             ->toMediaCollection('images');
-
         $data =  ['user' => new UserResource(User::find($user->id))];
         return responseApi(200, translate('user profile update'), $data);
     }
