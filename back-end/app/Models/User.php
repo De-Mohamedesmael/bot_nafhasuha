@@ -63,4 +63,21 @@ class User extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->belongsToMany(Notification::class, 'user_notifications');
     }
+
+    public function generateInviteCode()
+    {
+        $inviteCode = substr(md5(uniqid()), 0, 8);
+        $this->invite_code = $inviteCode;
+        $this->save();
+        return $inviteCode;
+    }
+
+
+
+    public function InviteBy()
+    {
+        return $this->belongsTo(self::class, 'invite_by');
+
+    }
+
 }

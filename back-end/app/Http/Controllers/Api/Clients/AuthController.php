@@ -8,10 +8,13 @@ use App\Http\Resources\UserResource;
 use App\Models\Setting;
 use App\Models\Slider;
 use App\Models\User;
+use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use function App\CPU\translate;
 
@@ -19,9 +22,11 @@ use function App\CPU\translate;
 class AuthController extends ApiController
 {
     protected $commonUtil;
+    protected $TransactionUtil;
 
-    public function __construct(Util $commonUtil)
+    public function __construct(Util $commonUtil, TransactionUtil $trnUit)
     {
+        $this->TransactionUtil = $trnUit;
         $this->commonUtil = $commonUtil;
         $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'SendCode','customRemoveAccount','ActiveRemoveAccount']]);
     }
@@ -55,6 +60,12 @@ class AuthController extends ApiController
 //            return responseApiFalse(500, translate('user Not activation'));
 //
 //        }
+//        \Settings::set('InvitationBonusValue', 5);
+//        \Settings::set('JoiningBonusValue', 5);
+        $user=auth()->user();
+        if(!$user->invite_code){
+            $user-> generateInviteCode();
+        }
         return responseApi(200, translate('user login'), $this->createNewToken($token));
     }
 
@@ -87,15 +98,30 @@ class AuthController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $inputs = $request->except('invitation_code');
-        $user = User::create($inputs);
-//        dd($user);
-        $this->commonUtil->SendActivationCode($user, 'Activation');
-        if ($request->has('invitation_code')){
-            $this->commonUtil->SetInvitationCode($user, $request->invitation_code);
+        try {
+            DB::beginTransaction();
+            $inputs = $request->except('invitation_code');
+            $user = User::create($inputs);
+            $user-> generateInviteCode();
+            $this->commonUtil->SendActivationCode($user, 'Activation');
+
+
+            if ($request->has('invitation_code')){
+                $this->TransactionUtil->SaveInviteCode( $user ,$request->invitation_code);
+            }
+
+//            if (){
+//                $this->TransactionUtil->SaveInviteCode( $user ,$request->invitation_code);
+//            }
+
+            $data= $this->createNewToken(auth()->attempt($request->only(['phone', 'password'])));
+            DB::commit();
+            return responseApi(200, translate('user registered'),$data);
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
         }
-        return responseApi(200, translate('user registered'),
-            $this->createNewToken(auth()->attempt($request->only(['phone', 'password']))));
     }
 
     public function logout()
@@ -265,20 +291,31 @@ class AuthController extends ApiController
 
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
+        try {
+            DB::beginTransaction();
+            $user = User::where('id', $request->user_id)->first();
+            if($user->activation_code ==  $request->code){
+                $user->activation_code=null;
+                if($user->activation_at == null ){
+                    $user->activation_at=now();
 
-        $user = User::where('id', $request->user_id)->first();
+                   $this->TransactionUtil->SaveJoiningBonus($user);
 
-
-        if($user->activation_code ==  $request->code){
-
-            $user->activation_code=null;
-            if($user->activation_at == null ){
-                $user->activation_at=now();
+                   if($user->invite_by){
+                       $this->TransactionUtil->ActiveInvitationBonus($user->invite_by,$user->id);
+                   }
+                }
+                $user->save();
+                DB::commit();
+              return responseApi(200, translate('return success'), $user->id);
             }
-            $user->save();
-          return responseApi(200, translate('return success'), $user->id);
+            DB::commit();
+            return responseApiFalse(500, translate('activation code is incorrect'));
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
         }
-        return responseApiFalse(500, translate('activation code is incorrect'));
     }
     public function forgotPassword(Request $request)
     {
