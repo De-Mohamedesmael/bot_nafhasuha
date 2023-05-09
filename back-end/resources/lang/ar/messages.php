@@ -58,4 +58,9 @@
   'not found' => 'Not found',
   'Subscription_completed_successfully' => 'Subscription completed successfully',
   'You_are_already_subscribed_to_a_package' => 'You are already subscribed to a package',
+  'Something went wrong' => 'Something went wrong',
+  'des_transaction_TopUpCredit' => 'تم شحن :amount ريال بنجاح ',
+  'des_transaction_OrderService' => 'تم خصم مبلغ :amount ريال مقابل خدمة :text  بنجاح',
+  'des_transaction_JoiningBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة الانضمام',
+  'des_transaction_InvitationBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة انضمام صديقك :text',
 );

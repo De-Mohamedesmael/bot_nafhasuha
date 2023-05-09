@@ -63,4 +63,8 @@
   'The password is incorrect' => 'The password is incorrect',
   'Unauthenticated user' => 'Unauthenticated user',
   'Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.' => 'Your message has been successfully received  and we will get back to you as soon as possible. Thank you for contacting us.',
-);
+    'des_transaction_TopUpCredit' => 'Successfully topped up your account with :amount SAR.',
+    'des_transaction_OrderService' => ':amount SAR has been deducted from your account for the service :text.',
+    'des_transaction_JoiningBonus' => 'Congratulations! You have been awarded a joining bonus of :amount SAR.',
+    'des_transaction_InvitationBonus' => 'Congratulations! Your friend :text has joined and you have been awarded a bonus of :amount SAR.'
+    );

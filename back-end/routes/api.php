@@ -4,10 +4,14 @@ use App\Http\Controllers\Api\Clients\AuthController;
 
 use App\Http\Controllers\Api\Clients\HomeController;
 use App\Http\Controllers\Api\Clients\PackageController;
+
+
+use App\Http\Controllers\Api\Clients\TransactionController;
+use App\Http\Controllers\Api\Clients\NotificationController;
 use App\Http\Controllers\Api\Clients\ServiceController;
 
+
 use App\Http\Controllers\Api\Clients\GeneralController;
-use App\Http\Controllers\Api\Clients\NotificationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -28,15 +32,30 @@ Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::delete('remove-account', [AuthController::class, 'removeAccount']);
 Route::post('custom-remove-account', [AuthController::class, 'customRemoveAccount']);
 
+Route::get('home', [HomeController::class, 'index']);
+
 
 Route::middleware('auth.guard:api')->group(function () {
 
-    Route::get('home', [HomeController::class, 'index']);
 
-    /////////////////////////////////////////////
-    ///                     Packages          ///
-    /// /////////////////////////////////////////
+    #############################################
+    ###          wallet & Transactions          ###
+    #############################################
+    Route::prefix('transactions')->group(function () {
+        Route::get('/my-wallet', [TransactionController::class, 'myWallet']);
+        Route::get('/', [TransactionController::class, 'index']);
+        Route::get('/show', [TransactionController::class, 'show']);
+        Route::post('/store', [TransactionController::class, 'StorePackageUser']);
+        Route::get('/my-package', [TransactionController::class, 'MyPackage']);
 
+    });
+
+
+
+
+    #############################################
+    ###                 Packages              ###
+    #############################################
     Route::prefix('packages')->group(function () {
         Route::get('/', [PackageController::class, 'index']);
         Route::get('/show', [PackageController::class, 'show']);
