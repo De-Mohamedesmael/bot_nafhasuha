@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Clients\ServiceController;
 
 
 use App\Http\Controllers\Api\Clients\GeneralController;
+use App\Http\Controllers\Api\Clients\VehicleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -47,7 +48,6 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('/show', [TransactionController::class, 'show']);
         Route::post('/store', [TransactionController::class, 'StorePackageUser']);
         Route::get('/my-package', [TransactionController::class, 'MyPackage']);
-
     });
 
 
@@ -67,8 +67,29 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('/', [ServiceController::class, 'index']);
 
     });
+    #############################################
+    ###          vehicles  user               ###
+    #############################################
+    Route::prefix('vehicles')->group(function () {
+        Route::get('/my-vehicles', [VehicleController::class, 'MyrVehicle']);
+        Route::Post('/store', [VehicleController::class, 'StoreUserVehicle']);
+
+    });
+
+
 });
 
+
+    #############################################
+    ###          vehicles & Data              ###
+    #############################################
+Route::prefix('vehicles')->group(function () {
+    Route::get('/manufacture-years', [VehicleController::class, 'manufactureYears']);
+    Route::get('/types', [VehicleController::class, 'VehicleTypes']);
+    Route::get('/models', [VehicleController::class, 'VehicleModels']);
+    Route::get('/default-names', [VehicleController::class, 'VehicleDefault']);
+
+});
 
     /////////////////////////////////////////////
     ///                     info              ///
