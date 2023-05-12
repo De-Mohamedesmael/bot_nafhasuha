@@ -63,4 +63,5 @@
   'des_transaction_OrderService' => 'تم خصم مبلغ :amount ريال مقابل خدمة :text  بنجاح',
   'des_transaction_JoiningBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة الانضمام',
   'des_transaction_InvitationBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة انضمام صديقك :text',
+  'The creation of your vehicle was successful. Thank you.' => 'The creation of your vehicle was successful. Thank you.',
 );
