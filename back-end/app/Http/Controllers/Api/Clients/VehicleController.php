@@ -43,16 +43,14 @@ class VehicleController extends ApiController
     {
         $validator = validator($request->all(), [
             'vehicle_type_id' => 'required|integer|exists:vehicle_types,id',
-            'vehicle_id' => 'nullable|integer|exists:vehicles,id',
+            'vehicle_brand_id' => 'nullable|integer|exists:vehicle_brands,id',
             'vehicle_model_id' => 'required|integer|exists:vehicle_models,id',
             'vehicle_manufacture_year_id' => 'required|integer|exists:vehicle_manufacture_years,id',
-            'title' => 'nullable|string|max:200',
             'letters_ar' => 'required|string|max:10',
             'letters_en' => 'required|string|max:10',
             'numbers_ar' => 'required|string|max:10',
             'numbers_en' => 'required|string|max:10',
             'periodic_inspection' => 'nullable|integer',
-            'description' => 'nullable|string|max:1000',
             'images' => 'required|array',
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
