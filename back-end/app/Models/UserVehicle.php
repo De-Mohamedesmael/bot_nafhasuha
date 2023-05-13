@@ -28,9 +28,9 @@ class UserVehicle extends Model implements HasMedia
     {
         return $this->belongsTo(VehicleManufactureYear::class);
     }
-    public function vehicle()
+    public function vehicle_brand()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(VehicleBrand::class);
     }
 
 }
