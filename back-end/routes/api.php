@@ -71,7 +71,7 @@ Route::middleware('auth.guard:api')->group(function () {
     ###          vehicles  user               ###
     #############################################
     Route::prefix('vehicles')->group(function () {
-        Route::get('/my-vehicles', [VehicleController::class, 'MyrVehicle']);
+        Route::get('/my-vehicles', [VehicleController::class, 'MyVehicle']);
         Route::Post('/store', [VehicleController::class, 'StoreUserVehicle']);
 
     });
@@ -87,7 +87,7 @@ Route::prefix('vehicles')->group(function () {
     Route::get('/manufacture-years', [VehicleController::class, 'manufactureYears']);
     Route::get('/types', [VehicleController::class, 'VehicleTypes']);
     Route::get('/models', [VehicleController::class, 'VehicleModels']);
-    Route::get('/default-names', [VehicleController::class, 'VehicleDefault']);
+    Route::get('/brands', [VehicleController::class, 'VehicleBrand']);
 
 });
 

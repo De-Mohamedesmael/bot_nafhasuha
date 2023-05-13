@@ -13,12 +13,12 @@ class CreateVehicleTranslationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_translations', function (Blueprint $table) {
+        Schema::create('vehicle_brand_translations', function (Blueprint $table) {
             $table->id();
             $table->string('locale',5)->index();
-            $table->unsignedBigInteger('vehicle_id')->unsigned();
-            $table->unique(['vehicle_id', 'locale']);
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->unsignedBigInteger('vehicle_brand_id')->unsigned();
+            $table->unique(['vehicle_brand_id', 'locale']);
+            $table->foreign('vehicle_brand_id')->references('id')->on('vehicle_brands')->onDelete('cascade');
             $table->string('title',200);
         });
     }

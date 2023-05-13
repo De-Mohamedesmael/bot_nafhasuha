@@ -4,7 +4,7 @@
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Database\Migrations\Migration;
 
-    class CreateVehiclesTable extends Migration
+    class CreateVehicleBrandsTable extends Migration
     {
         /**
          * Run the migrations.
@@ -13,11 +13,13 @@
          */
         public function up()
         {
-            Schema::create('vehicles', function (Blueprint $table) {
+            Schema::create('vehicle_brands', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->unsignedBigInteger('vehicle_type_id')->unsigned()->nullable();
                 $table->foreign('vehicle_type_id')->references('id')->on('vehicle_types')->onDelete('cascade');
                 $table->boolean('status')->default(true);
+                $table->string('image',250)->nullable();
+
                 $table->timestamps();
             });
         }

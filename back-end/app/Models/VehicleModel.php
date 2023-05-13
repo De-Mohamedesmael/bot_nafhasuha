@@ -17,8 +17,8 @@ class VehicleModel extends Model  implements TranslatableContract
     {
         return $query->where('status',  1);
     }
-    public function vehicle_type()
+    public function vehicle_brand()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(VehicleBrand::class);
     }
 }

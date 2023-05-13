@@ -23,16 +23,14 @@ class CreateUserVehiclesTable extends Migration
             $table->foreign('vehicle_model_id')->references('id')->on('vehicle_models')->onDelete('cascade');
             $table->unsignedBigInteger('vehicle_manufacture_year_id')->unsigned()->nullable();
             $table->foreign('vehicle_manufacture_year_id')->references('id')->on('vehicle_manufacture_years')->onDelete('cascade');
-            $table->unsignedBigInteger('vehicle_id')->unsigned()->nullable();
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->string('title',200)->nullable();
+            $table->unsignedBigInteger('vehicle_brand_id')->unsigned()->nullable();
+            $table->foreign('vehicle_brand_id')->references('id')->on('vehicle_brands')->onDelete('cascade');
             $table->string('letters_ar',10);
             $table->string('numbers_ar',10);
             $table->string('letters_en',10);
             $table->string('numbers_en',10);
             $table->integer('periodic_inspection')->nullable();
             $table->boolean('status')->default(true);
-            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

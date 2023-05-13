@@ -23,7 +23,7 @@ class VehicleType extends Model  implements TranslatableContract
 
     public function vehicles()
     {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasMany(VehicleBrand::class);
     }
     public function vehicle_models()
     {

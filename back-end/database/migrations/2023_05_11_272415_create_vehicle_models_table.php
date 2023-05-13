@@ -15,10 +15,9 @@
         {
             Schema::create('vehicle_models', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('vehicle_type_id')->unsigned()->nullable();
-                $table->foreign('vehicle_type_id')->references('id')->on('vehicle_types')->onDelete('cascade');
+                $table->unsignedBigInteger('vehicle_brand_id')->unsigned()->nullable();
+                $table->foreign('vehicle_brand_id')->references('id')->on('vehicle_brands')->onDelete('cascade');
                 $table->boolean('status')->default(true);
-
                 $table->timestamps();
             });
         }

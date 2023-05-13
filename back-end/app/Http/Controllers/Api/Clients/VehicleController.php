@@ -7,9 +7,9 @@ use App\Http\Resources\UserVehicleResource;
 use App\Http\Resources\VehicleManufactureYearResource;
 use App\Http\Resources\VehicleTypeResource;
 use App\Http\Resources\VehicleModelResource;
-use App\Http\Resources\VehicleDefaultResource;
+use App\Http\Resources\VehicleBrandResource;
 use App\Models\UserVehicle;
-use App\Models\Vehicle;
+use App\Models\VehicleBrand;
 use App\Models\VehicleManufactureYear;
 use App\Models\VehicleModel;
 use App\Models\VehicleType;
@@ -27,7 +27,7 @@ class VehicleController extends ApiController
         $this->UserVehicleUtil=$UserVehUtil;
     }
 
-    public function MyrVehicle(Request $request)
+    public function MyVehicle(Request $request)
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
@@ -118,13 +118,13 @@ class VehicleController extends ApiController
     public function VehicleModels(Request $request)
     {
         $validator = validator($request->all(), [
-            'type_id' => 'required|integer|exists:vehicle_types,id',
+            'vehicle_brand_id' => 'required|integer|exists:vehicle_brands,id',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $VehicleModels= VehicleModel::Active()->where('vehicle_type_id',$request->type_id)->
+        $VehicleModels= VehicleModel::Active()->where('vehicle_brand_id',$request->vehicle_brand_id)->
         orderByTranslation('title');
         if($count_paginate == 'ALL'){
             $VehicleModels=  $VehicleModels->get();
@@ -134,7 +134,7 @@ class VehicleController extends ApiController
         return responseApi(200,\App\CPU\translate('return_data_success'), VehicleModelResource::collection($VehicleModels));
 
     }
-    public function VehicleDefault(Request $request)
+    public function VehicleBrand(Request $request)
     {
         $validator = validator($request->all(), [
             'type_id' => 'required|integer|exists:vehicle_types,id',
@@ -143,14 +143,14 @@ class VehicleController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $Vehicles= Vehicle::Active()->where('vehicle_type_id',$request->type_id)->
+        $Vehicles= VehicleBrand::Active()->where('vehicle_type_id',$request->type_id)->
         orderByTranslation('title');
         if($count_paginate == 'ALL'){
             $Vehicles=  $Vehicles->get();
         }else{
             $Vehicles=  $Vehicles->simplePaginate($count_paginate);
         }
-        return responseApi(200,\App\CPU\translate('return_data_success'), VehicleDefaultResource::collection($Vehicles));
+        return responseApi(200,\App\CPU\translate('return_data_success'), VehicleBrandResource::collection($Vehicles));
 
     }
 
