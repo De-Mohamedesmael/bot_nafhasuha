@@ -72,7 +72,10 @@ Route::middleware('auth.guard:api')->group(function () {
     #############################################
     Route::prefix('vehicles')->group(function () {
         Route::get('/my-vehicles', [VehicleController::class, 'MyVehicle']);
+        Route::get('/my-vehicle', [VehicleController::class, 'MyVehicleOne']);
         Route::Post('/store', [VehicleController::class, 'StoreUserVehicle']);
+        Route::Post('/edit', [VehicleController::class, 'EditUserVehicle']);
+        Route::delete('/delete/{id}', [VehicleController::class, 'DeleteUserVehicle']);
 
     });
 

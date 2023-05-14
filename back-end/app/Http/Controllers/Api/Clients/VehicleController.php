@@ -33,8 +33,8 @@ class VehicleController extends ApiController
             return responseApi(403, translate('Unauthenticated user'));
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $User_vehicles= UserVehicle::Active()->get();
-
+//        $User_vehicles= UserVehicle::where('user_id',auth()->id())->Active()->get();
+        $User_vehicles= auth()->user()->vehicles()->Active()->latest()->get();
         return responseApi(200,\App\CPU\translate('return_data_success'), UserVehicleResource::collection($User_vehicles));
 
     }
@@ -51,8 +51,7 @@ class VehicleController extends ApiController
             'numbers_ar' => 'required|string|max:10',
             'numbers_en' => 'required|string|max:10',
             'periodic_inspection' => 'nullable|integer',
-            'images' => 'required|array',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
         ]);
 
         if ($validator->fails())
@@ -62,17 +61,12 @@ class VehicleController extends ApiController
         try {
 
            $Vehicle= $this->UserVehicleUtil->SaveVehicle($request);
-            if ($request->hasFile('images')) {
-                if ($request->hasFile('images')) {
-                    $files = $request->file('images');
-                    foreach ($files as $file) {
-                        $extension = $file->getClientOriginalExtension();
-                        $Vehicle->addMedia($file)
-                            ->usingFileName(time() . '.' . $extension)
-                            ->toMediaCollection('images');
-                    }
-                }
-
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                    $extension = $file->getClientOriginalExtension();
+                    $Vehicle->addMedia($file)
+                        ->usingFileName(time() . '.' . $extension)
+                        ->toMediaCollection('images');
 //                $Vehicle->addMultipleMediaFromRequest($request->file('images'))->toMediaCollection('images');
             }
 
@@ -80,14 +74,100 @@ class VehicleController extends ApiController
             return responseApi(200,\App\CPU\translate('The creation of your vehicle was successful. Thank you.'), new UserVehicleResource($Vehicle));
         }catch (\Exception $exception){
             DB::rollBack();
-            return$exception ;
+            // return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
     }
 
+    public function MyVehicleOne(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'vehicle_id' => 'required|integer|exists:user_vehicles,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
 
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
 
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
+        $User_vehicle= auth()->user()->vehicles()->where('id',$request->vehicle_id)->Active()->first();
+
+        if(!$User_vehicle){
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+        return responseApi(200,\App\CPU\translate('return_data_success'), new UserVehicleResource($User_vehicle));
+
+    }
+    public function EditUserVehicle(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'vehicle_id' => 'required|integer|exists:user_vehicles,id',
+            'vehicle_type_id' => 'required|integer|exists:vehicle_types,id',
+            'vehicle_brand_id' => 'nullable|integer|exists:vehicle_brands,id',
+            'vehicle_model_id' => 'required|integer|exists:vehicle_models,id',
+            'vehicle_manufacture_year_id' => 'required|integer|exists:vehicle_manufacture_years,id',
+            'letters_ar' => 'required|string|max:10',
+            'letters_en' => 'required|string|max:10',
+            'numbers_ar' => 'required|string|max:10',
+            'numbers_en' => 'required|string|max:10',
+            'periodic_inspection' => 'nullable|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5048',
+        ]);
+
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        DB::beginTransaction();
+        try {
+            $User_vehicle= auth()->user()->vehicles()->where('id',$request->vehicle_id)->Active()->first();
+
+            if(!$User_vehicle){
+                return responseApiFalse(500, translate('vehicle not found'));
+            }
+
+            $this->UserVehicleUtil->EditVehicle($request,$User_vehicle);
+            if ($request->hasFile('image')) {
+                $User_vehicle->clearMediaCollection('images');
+                $file = $request->file('image');
+                $extension = $file->getClientOriginalExtension();
+                $User_vehicle->addMedia($file)
+                    ->usingFileName(time() . '.' . $extension)
+                    ->toMediaCollection('images');
+            }
+
+            DB::commit();
+            return responseApi(200,\App\CPU\translate('Your vehicle has been modified successfully. Thank you.'), new UserVehicleResource($User_vehicle));
+        }catch (\Exception $exception){
+            DB::rollBack();
+            // return$exception ;
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
+    public function DeleteUserVehicle($vehicle_id)
+    {
+
+        DB::beginTransaction();
+        try {
+            $User_vehicle= auth()->user()->vehicles()->where('id',$vehicle_id)->first();
+
+            if(!$User_vehicle){
+                return responseApiFalse(405, translate('vehicle not found'));
+            }
+
+            $m= $this->UserVehicleUtil->DeleteVehicle($User_vehicle);
+
+            DB::commit();
+            return responseApi(200,$m);
+        }catch (\Exception $exception){
+            DB::rollBack();
+            // return$exception ;
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
     /******************* get data ************/
     public function manufactureYears(Request $request)
     {
