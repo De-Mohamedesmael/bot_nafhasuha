@@ -30,17 +30,17 @@ class UserVehicleResource extends JsonResource
             'numbers_en'=>$this->numbers_en,
             'periodic_inspection'=>date('m') > $this->periodic_inspection || (date('m') == $this->periodic_inspection && date('d') > 1 )  ? $oneYearFromNow.$text_periodic : date('Y').$text_periodic,
             'status'=>$this->status,
-            'first_image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
+            'first_image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : ($this->vehicle_brand != null ?($this->vehicle_brand->image != null ?asset('assets/images/'.$this->vehicle_brand->image): null): null),
             'vehicle_type'=>new VehicleTypeResource($this->vehicle_type),
             'vehicle_brand'=>new VehicleBrandResource($this->vehicle_brand),
             'vehicle_model'=>new VehicleModelResource($this->vehicle_model),
             'vehicle_manufacture_year'=>new VehicleManufactureYearResource($this->vehicle_manufacture_year),
-            'images'=> $this->getMedia('images')->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'url' => $item->getUrl(),
-                ];
-            }),
+//            'images'=> $this->getMedia('images')->map(function ($item) {
+//                return [
+//                    'id' => $item->id,
+//                    'url' => $item->getUrl(),
+//                ];
+//            }),
 
 
         ];

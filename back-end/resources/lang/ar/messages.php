@@ -64,4 +64,8 @@
   'des_transaction_JoiningBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة الانضمام',
   'des_transaction_InvitationBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة انضمام صديقك :text',
   'The creation of your vehicle was successful. Thank you.' => 'The creation of your vehicle was successful. Thank you.',
+  'Your car has been modified successfully. Thank you.' => 'Your car has been modified successfully. Thank you.',
+  'vehicle not found' => 'Vehicle not found',
+  'Your vehicle has been successfully deleted' => 'Your vehicle has been successfully deleted',
+  'Your vehicle has been successfully recovered' => 'Your vehicle has been successfully recovered',
 );
