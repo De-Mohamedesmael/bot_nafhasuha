@@ -21,7 +21,7 @@ use function App\CPU\translate;
 
 class VehicleController extends ApiController
 {
-    protected $UserVehicleUtil;
+    protected $UserVehicleUtil,   $count_paginate = 10;
     public function __construct(UserVehicleUtil $UserVehUtil)
     {
         $this->UserVehicleUtil=$UserVehUtil;
@@ -34,7 +34,7 @@ class VehicleController extends ApiController
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
 //        $User_vehicles= UserVehicle::where('user_id',auth()->id())->Active()->get();
-        $User_vehicles= auth()->user()->vehicles()->Active()->latest()->get();
+        $User_vehicles= auth()->user()->vehicles()->Active()->latest()->simplePaginate($count_paginate);
         return responseApi(200,\App\CPU\translate('return_data_success'), UserVehicleResource::collection($User_vehicles));
 
     }
@@ -91,7 +91,6 @@ class VehicleController extends ApiController
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
 
-        $count_paginate=$request->count_paginate?:$this->count_paginate;
         $User_vehicle= auth()->user()->vehicles()->where('id',$request->vehicle_id)->Active()->first();
 
         if(!$User_vehicle){
