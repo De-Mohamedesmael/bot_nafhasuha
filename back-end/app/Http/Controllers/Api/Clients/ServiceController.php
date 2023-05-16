@@ -15,6 +15,7 @@ use App\Models\Provider;
 use App\Models\Service;
 use App\Utils\ServiceUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use function App\CPU\translate;
 
 class ServiceController extends ApiController
@@ -92,15 +93,30 @@ class ServiceController extends ApiController
     public function ProviderMap(Request $request)
     {
         $validator = validator($request->all(), [
-            'service_id' => 'nullable|integer|exists:services,id'
+            'service_id' => 'nullable|integer',
+            'lat' => 'required|string',
+            'long' => 'required|string',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
+        $lat=$request->lat;
+        $long=$request->long;
         $service_id=$request->service_id;
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
-        $providers = Provider::Active();
+
+
+        $max_distance = \Settings::get('max_distance',500);
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
+       * cos( radians( `lat` ) )
+       * cos( radians( `long` )
+       - radians(' . $long  . ') )
+       + sin( radians(' . $lat  . ') )
+       * sin( radians( `lat` ) ) ) )');
+        $providers = Provider::Active()->select('id','name','provider_type','lat','long')
+            ->selectRaw("{$sqlDistance} as distance")
+            ->having('distance', '<=', $max_distance);
         if($service_id){
             $providers=  $providers->wherehas('categories',function ($q) use($service_id){
                 $q->wherehas('services',function ($q_serv) use($service_id){
@@ -108,7 +124,9 @@ class ServiceController extends ApiController
                 });
             });
         }
-        $providers= $providers->select('id','name','provider_type','lat','long')->get();
+        $providers= $providers
+            ->get();
+
         return  responseApi(200, translate('return_data_success'),ProviderServOnlineResource::collection($providers));
 
     }
