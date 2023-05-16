@@ -14,6 +14,10 @@ class Category extends Model implements TranslatableContract
 
     public $translatedAttributes = ['title'];
     protected $guarded = [];
+    public function scopeActive($query)
+    {
+        return $query->where('status',  1);
+    }
     public function services()
     {
         return $this->belongsToMany(Service::class,CategoryService::class);

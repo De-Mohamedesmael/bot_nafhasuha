@@ -64,7 +64,6 @@ Route::middleware('auth.guard:api')->group(function () {
 
     });
     Route::prefix('services')->group(function () {
-        Route::get('/', [ServiceController::class, 'index']);
         Route::post('/get-provides-map', [ServiceController::class, 'ProviderMap']);
 
     });
@@ -83,7 +82,11 @@ Route::middleware('auth.guard:api')->group(function () {
 
 });
 
+Route::prefix('services')->group(function () {
+    Route::get('/', [ServiceController::class, 'index']);
+    Route::get('/categories', [ServiceController::class, 'indexCategories']);
 
+});
     #############################################
     ###          vehicles & Data              ###
     #############################################
