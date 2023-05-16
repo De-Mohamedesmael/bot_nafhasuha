@@ -65,7 +65,7 @@ class ServiceController extends ApiController
             'service_id' => 'nullable|integer|exists:services,id',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'count_paginate' => 'nullable|integer',
+//            'count_paginate' => 'nullable|integer',
             'sort_type' => 'nullable|in:Asc,Desc',
             'sort_by' => 'nullable|string|in:distance,totalRate,id',
         ]);
@@ -73,13 +73,14 @@ class ServiceController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
 
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $sortBy=$request->sort_by;
-        $sortType=$request->sort_type;
+        $sortBy=$request->sort_by??'totalRate';
+        $sortType=$request->sort_type??'Desc';
         $service_id=$request->service_id;
         $max_distance=$request->max_distance;
         $min_distance=$request->min_distance;
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
+
         $providers = $this->ServiceUtil->getProviderForMap($request->lat,$request->long,$sortBy,$sortType,
             $count_paginate,$service_id,$max_distance,$min_distance);
 
