@@ -28,7 +28,6 @@ class ProviderServOnlineResource extends JsonResource
             "totalRate" =>$this->totalRate ,
             "rates_count" => $this->rates_count,
             "distance" => $this->distance,
-            "estimated_time" =>$this->estimated_time,
             'categories'=>CategoryResource::collection($this->categories),
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
