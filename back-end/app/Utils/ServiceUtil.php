@@ -24,7 +24,7 @@ class ServiceUtil
      * @param int $min_distance
      * @return object
      */
-    public function getProviderForMap($lat, $long, $sortBy = 'totalRate', $sortType = 'Desc',$counPaginate=10,
+    public function getProviderForMap($lat, $long, $sortBy= 'Desc' , $sortType = 'Desc',$counPaginate=10,
                                       $service_id=null,$max_distance=null,$min_distance=null): object
     {
         $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
@@ -50,12 +50,14 @@ class ServiceUtil
             if($min_distance){
                 $providers=  $providers->having('distance', '>', $min_distance);
             }
-        $providers=  $providers->orderBy($sortBy,$sortType)
-                ->paginate($counPaginate);
+        $providers=     $counPaginate !='ALL'?
+                 $providers->orderBy($sortBy,$sortType)->paginate($counPaginate):
 
-        $providers->each(function ($provider) use ($lat,$long){
-            $provider->estimated_time=$this->getEstimatedTime($lat,$long,$provider->lat,$provider->long);
-        });
+                $providers->orderBy($sortBy,$sortType)->get();
+
+//        $providers->each(function ($provider) use ($lat,$long){
+//            $provider->estimated_time=$this->getEstimatedTime($lat,$long,$provider->lat,$provider->long);
+//        });
 
         return $providers;
     }
