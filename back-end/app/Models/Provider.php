@@ -20,6 +20,10 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->attributes['password'] = bcrypt($value);
     }
+    public function scopeActive($query)
+    {
+        return $query->where('is_active',  1);
+    }
 
     public function getJWTIdentifier()
     {

@@ -34,7 +34,7 @@ class ServiceUtil
        + sin( radians(' . $lat  . ') )
        * sin( radians( `lat` ) ) ) )');
         // Get providers
-        $providers = Provider::withAvg('rates as totalRate', 'rate')
+        $providers = Provider::Active()->withAvg('rates as totalRate', 'rate')
             ->withCount('rates')->selectRaw("{$sqlDistance} as distance");
             if($service_id){
                 $providers=  $providers->wherehas('categories',function ($q) use($service_id){
