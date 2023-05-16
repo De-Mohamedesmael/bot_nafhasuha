@@ -130,7 +130,7 @@ class ServiceController extends ApiController
         return  responseApi(200, translate('return_data_success'),ProviderServOnlineResource::collection($providers));
 
     }
-    public function ViewProviderMap(Provider $provider,Request $request)
+    public function ViewProviderMap($provider_id,Request $request)
     {
         $validator = validator($request->all(), [
             'lat' => 'required|string',
@@ -139,10 +139,17 @@ class ServiceController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-
+//        dd($provider);
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
-        $provider = $this->ServiceUtil->getOneProviderForMap($request->lat,$request->long,$provider);
+
+
+        $provider = Provider::find($provider_id);
+            if(!$provider)
+                return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+
+
+        $provider = $this->ServiceUtil->getOneProviderForMap($request->lat,$request->long,$provider_id);
 
         return  responseApi(200, translate('return_data_success'),new ProviderServOnlineAllResource($provider));
 

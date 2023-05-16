@@ -126,7 +126,7 @@ Route::post('notifications/status' , [NotificationController::class , 'changeSta
 
 // Fail Api
 Route::fallback(function (Request $request) {
-    $response = "Page Not Found.If error persists,contact info@gmail.com";
+    $response = \App\CPU\translate("Page Not Found.If error persists,contact info@gmail.com");
 
     return responseApiFalse(404, $response);
 });
