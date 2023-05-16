@@ -18,20 +18,10 @@ class ProviderServOnlineResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "phone" =>$this->phone ,
-            "email" =>$this->email,
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             "provider_type" =>$this->getType(),
-            "address" => $this->address,
              "lat" => $this->lat,
-            "long" =>$this->long ,
-            "totalRate" =>$this->totalRate ,
-            "rates_count" => $this->rates_count,
-            "distance" => $this->distance,
-            'categories'=>CategoryResource::collection($this->categories),
-            'country'=>new CountryResource($this->country),
-            'city'=>new CityResource($this->city),
-            'area'=>new AreaResource($this->area),
+            "long" =>$this->long
         ];
     }
 }

@@ -62,27 +62,56 @@ class ServiceUtil
         return $providers;
     }
 
+
+
+    /**
+     * Get Providers & Get the distance in kilometers and the time of arrival via Google Maps by lat lang
+     *
+     * @param string $lat
+     * @param string $long
+     * @param Provider $provider
+     * @return object
+     */
+    public function getOneProviderForMap($lat, $long,$provider): object
+    {
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
+       * cos( radians( `lat` ) )
+       * cos( radians( `long` )
+       - radians(' . $long  . ') )
+       + sin( radians(' . $lat  . ') )
+       * sin( radians( `lat` ) ) ) )');
+        // Get providers
+        $provider = Provider::Active()->withAvg('rates as totalRate', 'rate')
+            ->withCount('rates')->selectRaw("{$sqlDistance} as distance")->first();
+
+//        $providers->each(function ($provider) use ($lat,$long){
+            $provider->estimated_time=$this->getEstimatedTime($lat,$long,$provider->lat,$provider->long);
+//        });
+
+        return $provider;
+    }
+
     /**
      * get Estimated Time
      *
      */
     public function getEstimatedTime($originLat, $originLng, $destinationLat, $destinationLng)
     {
-        $apiKey = env('GOOGLE_MAPS_API_KEY'); // استبدل YOUR_API_KEY بمفتاح الواجهة البرمجية الخاص بك
-        $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$originLat},{$originLng}&destinations={$destinationLat},{$destinationLng}&mode=driving&units=metric&key={$apiKey}";
-
-        $response = file_get_contents($url);
-
-        if ($response) {
-            $data = json_decode($response, true);
-
-            if ($data['status'] === 'OK') {
-                $duration = $data['rows'][0]['elements'][0]['duration']['text'];
-                // الوقت المقدر للوصول بالسيارة
-                return $duration;
-            }
-
-        }
+//        $apiKey = env('GOOGLE_MAPS_API_KEY'); // استبدل YOUR_API_KEY بمفتاح الواجهة البرمجية الخاص بك
+//        $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$originLat},{$originLng}&destinations={$destinationLat},{$destinationLng}&mode=driving&units=metric&key={$apiKey}";
+//
+//        $response = file_get_contents($url);
+//
+//        if ($response) {
+//            $data = json_decode($response, true);
+//
+//            if ($data['status'] === 'OK') {
+//                $duration = $data['rows'][0]['elements'][0]['duration']['text'];
+//                // الوقت المقدر للوصول بالسيارة
+//                return $duration;
+//            }
+//
+//        }
 
         return 10;
     }
