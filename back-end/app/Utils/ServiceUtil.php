@@ -2,111 +2,89 @@
 
 namespace App\Utils;
 
+use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Spatie\Geocoder\Facades\Geocoder;
+use Location\Coordinate;
 
-class TransactionUtil
+class ServiceUtil
 {
     /**
-     * Get Wallet Balance For User
+     * Get Providers & Get the distance in kilometers and the time of arrival via Google Maps by lat lang
      *
-     * @param User $user
-     * @return float
+     * @param string $lat
+     * @param string $long
+     * @param string $sortBy
+     * @param string $sortType
+     * @param int $counPaginate
+     * @param int $service_id
+     * @param int $max_distance
+     * @param int $min_distance
+     * @return object
      */
-    public function getWalletBalance(User $user): float
+    public function getProviderForMap($lat, $long, $sortBy = 'totalRate', $sortType = 'Desc',$counPaginate=10,
+                                      $service_id=null,$max_distance=null,$min_distance=null): object
     {
-        $amountCredit = Transaction::Active()
-            ->whereIn('type', ['TopUpCredit', 'JoiningBonus', 'InvitationBonus'])
-            ->where('user_id', $user->id)
-            ->sum('final_total');
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
+       * cos( radians( `lat` ) )
+       * cos( radians( `long` )
+       - radians(' . $long  . ') )
+       + sin( radians(' . $lat  . ') )
+       * sin( radians( `lat` ) ) ) )');
+        // Get providers
+        $providers = Provider::withAvg('rates as totalRate', 'rate')
+            ->withCount('rates')->selectRaw("{$sqlDistance} as distance");
+            if($service_id){
+                $providers=  $providers->wherehas('categories',function ($q) use($service_id){
+                    $q->wherehas('services',function ($q_serv) use($service_id){
+                        $q_serv->where('services.id',$service_id);
+                    });
+                });
+            }
 
-        $amountDebit = Transaction::Active()
-            ->whereIn('type', ['OrderService'])
-            ->where('user_id', $user->id)
-            ->sum('final_total');
+            if($max_distance){
+                $providers=  $providers->having('distance', '<', $max_distance);
+            }
+            if($min_distance){
+                $providers=  $providers->having('distance', '>', $min_distance);
+            }
+        $providers=  $providers->orderBy($sortBy,$sortType)
+                ->paginate($counPaginate);
 
-        return $amountCredit - $amountDebit;
+        $providers->each(function ($provider) use ($lat,$long){
+            $provider->estimated_time=$this->getEstimatedTime($lat,$long,$provider->lat,$provider->long);
+        });
+
+        return $providers;
     }
 
     /**
-     * Save Invitation Bonus  in Transaction Table for user
+     * get Estimated Time
      *
-     * @param User $user
-     * @param string $code
-     * @return boolean
      */
-    public function SaveInviteCode($user,$code)
+    public function getEstimatedTime($originLat, $originLng, $destinationLat, $destinationLng)
     {
-        $invite_by = User::where('invite_code',$code)->first();
-        if($invite_by){
-            $user->invite_by = $invite_by->id;
-            $user->save();
-            $amountInvitationBonus=\Settings::get('InvitationBonusValue');
-            if($amountInvitationBonus){
-                $Transaction= Transaction::create([
-                    'user_id'=>$invite_by->id,
-                    'type'=>'InvitationBonus',
-                    'type_id'=>$user->id,
-                    'status'=>'pending',
-                    'grand_total'=>$amountInvitationBonus,
-                    'final_total'=>$amountInvitationBonus,
-                ]);
-                $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-                $Transaction->invoice_no='IB'.$randomNumber.'-'.$invite_by->id.'u'.$Transaction->id;
-                $Transaction->save();
+        $apiKey = env('GOOGLE_MAPS_API_KEY'); // استبدل YOUR_API_KEY بمفتاح الواجهة البرمجية الخاص بك
+        $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$originLat},{$originLng}&destinations={$destinationLat},{$destinationLng}&mode=driving&units=metric&key={$apiKey}";
+
+        $response = file_get_contents($url);
+
+        if ($response) {
+            $data = json_decode($response, true);
+
+            if ($data['status'] === 'OK') {
+                $duration = $data['rows'][0]['elements'][0]['duration']['text'];
+                // الوقت المقدر للوصول بالسيارة
+                return $duration;
             }
 
         }
 
-
-        return true;
+        return 10;
     }
-    /**
-     * Save Joining Bonus  in Transaction Table for user
-     *
-     * @param User $user
-     * @return boolean
-     */
-    public function SaveJoiningBonus($user)
-    {
 
-            $amountJoiningBonusValue=\Settings::get('JoiningBonusValue');
-            if($amountJoiningBonusValue){
-                $Transaction= Transaction::create([
-                    'user_id'=>$user->id,
-                    'type'=>'JoiningBonus',
-                    'status'=>'received',
-                    'grand_total'=>$amountJoiningBonusValue,
-                    'final_total'=>$amountJoiningBonusValue,
-                ]);
-                $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
-                $Transaction->invoice_no='IB'.$randomNumber.'-'.$user->id.'u'.$Transaction->id;
-                $Transaction->save();
-            }
-        return true;
-    }
-    /**
-     * Active Invitation Bonus  in Transaction Table for user
-     *
-     * @param int $invite_by
-     * @param int $user_id
-     * @return boolean
-     */
-    public function ActiveInvitationBonus($invite_by,$user_id)
-    {
-
-        $Transaction = Transaction::where('user_id',$invite_by)->where('type','InvitationBonus')
-            ->where('status','pending')->where('type_id',$user_id)
-            ->first();
-        if($Transaction){
-            $Transaction->status = 'received';
-            $Transaction->save();
-        }
-
-
-        return true;
-    }
 
 
 }

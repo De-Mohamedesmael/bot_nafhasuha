@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Clients;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Provider;
 use App\Models\Setting;
 use App\Models\Slider;
 use App\Models\User;
@@ -149,7 +150,7 @@ class AuthController extends ApiController
         ]);
         $user=auth()->user();
         if ($validator->fails())return responseApiFalse(405, $validator->errors()->first());
-//        $user=Slider::whereId(3)->first();
+//        $user=Provider::whereId(4)->first();
         $image = $user->getFirstMedia('images');
 
         if($image){

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryFaqResource extends JsonResource
+class CategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,8 @@ class CategoryFaqResource extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'faqs'=>FaqResource::collection($this->faqs)
+            'image'=>$this->image != null ? asset('assets/images/'.$this->image) : null,
+            'services'=>ServiceResource::collection($this->services)
 
         ];
     }
