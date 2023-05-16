@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CountryResource;
 use App\Http\Resources\PackageResource;
+use App\Http\Resources\ProviderServOnlineAllResource;
 use App\Http\Resources\ProviderServOnlineResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Category;
@@ -59,7 +60,7 @@ class ServiceController extends ApiController
         return  responseApi(200, translate('return_data_success'),CategoryResource::collection($categories));
 
     }
-    public function ProviderMap(Request $request)
+    public function ProviderMapAll(Request $request)
     {
         $validator = validator($request->all(), [
             'service_id' => 'nullable|integer|exists:services,id',
@@ -88,6 +89,44 @@ class ServiceController extends ApiController
 
     }
 
+    public function ProviderMap(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'service_id' => 'nullable|integer|exists:services,id'
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        $service_id=$request->service_id;
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+        $providers = Provider::Active();
+        if($service_id){
+            $providers=  $providers->wherehas('categories',function ($q) use($service_id){
+                $q->wherehas('services',function ($q_serv) use($service_id){
+                    $q_serv->where('services.id',$service_id);
+                });
+            });
+        }
+        $providers= $providers->select('id','name','provider_type','lat','long')->get();
+        return  responseApi(200, translate('return_data_success'),ProviderServOnlineResource::collection($providers));
+
+    }
+    public function ViewProviderMap(Provider $provider,Request $request)
+    {
+        $validator = validator($request->all(), [
+            'lat' => 'required|string',
+            'long' => 'required|string',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
 
 
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+        $provider = $this->ServiceUtil->getOneProviderForMap($request->lat,$request->long,$provider);
+
+        return  responseApi(200, translate('return_data_success'),new ProviderServOnlineAllResource($provider));
+
+    }
 }

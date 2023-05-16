@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Category;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProviderServOnlineResource extends JsonResource
+class ProviderServOnlineAllResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -25,9 +25,10 @@ class ProviderServOnlineResource extends JsonResource
             "address" => $this->address,
              "lat" => $this->lat,
             "long" =>$this->long ,
-            "totalRate" =>$this->totalRate ,
+            "avg_rate" =>round($this->totalRate, 2) ,
             "rates_count" => $this->rates_count,
-            "distance" => $this->distance,
+            "distance" => round($this->distance, 2),
+            "estimated_time" => round($this->estimated_time, 2),
             'categories'=>CategoryResource::collection($this->categories),
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
