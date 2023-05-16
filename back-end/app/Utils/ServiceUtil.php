@@ -69,10 +69,10 @@ class ServiceUtil
      *
      * @param string $lat
      * @param string $long
-     * @param Provider $provider
+     * @param object $provider
      * @return object
      */
-    public function getOneProviderForMap($lat, $long,$provider): object
+    public function getOneProviderForMap($lat, $long,$provider_id): object
     {
         $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
        * cos( radians( `lat` ) )
@@ -81,7 +81,7 @@ class ServiceUtil
        + sin( radians(' . $lat  . ') )
        * sin( radians( `lat` ) ) ) )');
         // Get providers
-        $provider = Provider::Active()->withAvg('rates as totalRate', 'rate')
+        $provider = Provider::where('id',$provider_id)->withAvg('rates as totalRate', 'rate')
             ->withCount('rates')->selectRaw("{$sqlDistance} as distance")->first();
 
 //        $providers->each(function ($provider) use ($lat,$long){
