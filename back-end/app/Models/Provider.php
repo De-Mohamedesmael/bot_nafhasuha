@@ -50,4 +50,21 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
         return $this->belongsTo(Area::class);
     }
 
+    public function rates()
+    {
+        return $this->hasMany(ProviderRate::class);
+    }
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'provider_categories');
+    }
+    public function getType()
+    {
+        if($this->categories->count() > 1){
+            return 'ProviderCenter';
+        }
+        return 'Provider';
+    }
+
+
 }

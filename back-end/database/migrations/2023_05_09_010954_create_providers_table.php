@@ -28,8 +28,7 @@ class CreateProvidersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('address')->nullable();
             $table->string('lat')->nullable();
-            $table->string('lang')->nullable();
-            $table->string('image',250)->nullable();
+            $table->string('long')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('activation_code', 10)->nullable();
             $table->rememberToken();

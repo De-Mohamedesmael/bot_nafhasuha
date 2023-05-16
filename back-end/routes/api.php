@@ -65,6 +65,7 @@ Route::middleware('auth.guard:api')->group(function () {
     });
     Route::prefix('services')->group(function () {
         Route::get('/', [ServiceController::class, 'index']);
+        Route::post('/get-provides-map', [ServiceController::class, 'ProviderMap']);
 
     });
     #############################################
