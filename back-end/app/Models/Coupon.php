@@ -23,25 +23,36 @@ class Coupon extends Model
         'is_active',
         'discount',
         'min_price',
-        'usage_limit',
-        'usage_finished',
+        'limit',
+        'limit_user',
+        'use',
         'start_date',
         'end_date',
-        'store_id',
     ];
+
 
     public function setStoreIdAttribute()
     {
         return $this->attributes['store_id'] = auth('store')->id();
     }
-
-    public function store()
+    public function scopeActive($query)
     {
-        return $this->belongsTo(Store::class);
+        return $query->where('is_active',  1);
     }
+
+
 
     public function users()
     {
+        return $this->belongsToMany(User::class,'coupon_user');
+    }
+
+    public function coupon_users()
+    {
         return $this->hasMany(CouponUser::class);
+    }
+    public function services()
+    {
+        return $this->belongsToMany(Service::class,'coupon_services');
     }
 }

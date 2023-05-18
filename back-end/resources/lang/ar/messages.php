@@ -71,4 +71,5 @@
   'Not found user' => 'Not found user',
   'The password is incorrect' => 'The password is incorrect',
   'Page Not Found.If error persists,contact info@gmail.com' => 'Page Not Found.If error persists contact info@gmail.com',
+  'coupon not active in this service' => 'Coupon not active in this service',
 );
