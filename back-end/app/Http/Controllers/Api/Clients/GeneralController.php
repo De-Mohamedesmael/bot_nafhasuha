@@ -181,12 +181,15 @@ class GeneralController extends ApiController
 
         $Home=\Settings::get('IFTrueHome',1);
         $Center=\Settings::get('IFTrueCenter',1);
-
+        $data=null;
         if($Home){
-            $data['Home']=translate('Home');
+            $data[0]['type'] = 'Home';
+            $data[0]['title'] = translate('Home');
         }
         if($Center){
-            $data['Center']=translate('Center');
+            $data[1]['type'] = 'Center';
+            $data[1]['title'] = translate('Center');
+
         }
 
         return responseApi(200,\App\CPU\translate('return_data_success'), $data);
