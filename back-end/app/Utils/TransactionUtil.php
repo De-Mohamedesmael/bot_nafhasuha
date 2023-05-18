@@ -109,4 +109,43 @@ class TransactionUtil
     }
 
 
+
+
+    /**
+     * store Transaction  for Order Service
+     *
+     * @param object $OrderService
+     * @param array $discount
+     * @param integer $type_id
+     * @return object
+     */
+    public function saveTransactionForOrderService($OrderService,$discount,$type_id=null):object
+    {
+
+
+
+        $Transaction= Transaction::create([
+            'user_id'=>$OrderService->user_id,
+            'service_id'=>$OrderService->service_id,
+            'type'=>'OrderService',
+            'status'=>'pending',
+            'type_id'=>$type_id,
+            'discount_type'=>$discount['discount_type'],
+            'discount_value'=>$discount['discount_value'],
+            'discount_amount'=>$discount['discount_value'],
+            'grand_total'=>0,
+            'final_total'=>0,
+        ]);
+
+        $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $Transaction->invoice_no='OS'.$randomNumber.'-'.$OrderService->user_id.'u'.$Transaction->id;
+        $Transaction->save();
+
+
+        return $Transaction;
+    }
+
+
+
+
 }

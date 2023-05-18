@@ -2,9 +2,11 @@
 
 namespace App\Utils;
 
+use App\Models\OrderService;
 use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Geocoder\Facades\Geocoder;
 use Location\Coordinate;
@@ -91,6 +93,7 @@ class ServiceUtil
         return $provider;
     }
 
+
     /**
      * get Estimated Time
      *
@@ -117,5 +120,76 @@ class ServiceUtil
     }
 
 
+
+
+
+
+    /**
+     * Store Order Service  by request data & vehicle & type
+     *
+     * @param Request $request
+     * @param object $vehicle
+     * @param string $type
+     * @param int $service_id
+     * @return object
+     */
+    public function StoreOrderService($request, $vehicle,$type,$service_id): object
+    {
+        $all_data=[];
+        switch ($type){
+            case "VehicleBarrier" :
+//                $type= 'Maintenance'.$type;
+                $all_data['city_id']=$request->city_id;
+                $all_data['position']=$request->position;
+
+                break;
+            case 'TransportVehicle':
+                $all_data['address_to'] =$request->address_to;
+                $all_data['lat_to'] =$request->lat_to;
+                $all_data['long_to'] =$request->long_to;
+                break;
+            default :
+                break;
+        }
+
+        $data=[
+            'service_id'=>$service_id,
+            'user_id'=>auth()->id(),
+            'category_id'=>$request->category_id,
+            'vehicle_id'=>$vehicle->id??null,
+            'type'=>$type,
+            'status'=>'pending',
+            'type_from'=>$request->type_from,
+            'date_at'=>$request->date_at,
+            'time_at'=>$request->time_at,
+            'address'=>$request->address,
+            'lat'=>$request->lat,
+            'long'=>$request->long,
+            'details'=>$request->details
+        ];
+        $all_data=  array_merge($all_data,$data);
+       $order=OrderService::create($all_data);
+
+        if ($request->hasFile('images')) {
+            $files = $request->file('images');
+            foreach ($files as $file){
+                $extension = $file->getClientOriginalExtension();
+                $order->addMedia($file)
+                    ->usingFileName(time() . '.' . $extension)
+                    ->toMediaCollection('images');
+            }
+        }
+
+        if ($request->hasFile('videos')) {
+            $files = $request->file('videos');
+            foreach ($files as $file){
+                $extension = $file->getClientOriginalExtension();
+                $order->addMedia($file)
+                    ->usingFileName(time() . '.' . $extension)
+                    ->toMediaCollection('videos');
+            }
+        }
+        return$order ;
+    }
 
 }
