@@ -69,4 +69,5 @@
   'des_transaction_InvitationBonus' => 'Congratulations! Your friend :text has joined and you have been awarded a bonus of :amount SAR.',
   'Something went wrong' => 'Something went wrong',
   'Center' => 'Center',
+  'Home' => 'Home',
 );
