@@ -8,6 +8,7 @@
         "php": "8.0",
         "astrotomic/laravel-translatable": "^11.9",
         "bmatovu/multi-auth": "^10.4",
+        "doctrine/dbal": "^3.6",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.65",

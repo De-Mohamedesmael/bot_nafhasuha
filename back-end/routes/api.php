@@ -125,6 +125,7 @@ Route::get('areas', [GeneralController::class, 'areas']);
 Route::get('icons', [GeneralController::class, 'icons']);
 Route::get('faqs', [GeneralController::class, 'faqs']);
 Route::get('infos', [GeneralController::class, 'infos']);
+Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 
 ///////////////////////////////// start notifications //////////////////////////////////////////
