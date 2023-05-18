@@ -270,7 +270,8 @@ class ServiceController extends ApiController
             'date_at' => 'required|Date',
             'time_at' => 'required|string',
             'city_id' => 'required|integer|exists:cities,id',
-            'position' => 'required|string|in:Left,Right,Front,Behind',
+            'position' => 'required|array',
+            'position.*' =>'required|string|in:ALL,Left,Right,Front,Behind',
             'coupon_code' => 'nullable|string',
 
         ]);

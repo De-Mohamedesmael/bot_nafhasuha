@@ -27,6 +27,7 @@ use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use function App\CPU\translate;
 
 
 class GeneralController extends ApiController
@@ -173,6 +174,22 @@ class GeneralController extends ApiController
         ]);
 
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
+    }
+
+
+    public function GetHomeOrCenter(){
+
+        $Home=\Settings::get('IFTrueHome',1);
+        $Center=\Settings::get('IFTrueCenter',1);
+
+        if($Home){
+            $data['Home']=translate('Home');
+        }
+        if($Center){
+            $data['Center']=translate('Center');
+        }
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), $data);
     }
 }
 

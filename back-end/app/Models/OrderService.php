@@ -11,4 +11,9 @@ class OrderService extends Model implements HasMedia
 {
     use HasFactory,InteractsWithMedia;
     protected $guarded= [];
+
+
+    protected $casts = [
+        'position' => 'json',//['Left','Right','Front','Behind']
+    ];
 }

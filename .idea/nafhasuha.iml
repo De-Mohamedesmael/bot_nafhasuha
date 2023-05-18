@@ -145,6 +145,11 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-package-tools" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/rawilk/laravel-settings" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/geocoder" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/dbal" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/event-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/deprecations" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/psr/cache" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
