@@ -16,4 +16,69 @@ class OrderService extends Model implements HasMedia
     protected $casts = [
         'position' => 'json',//['Left','Right','Front','Behind']
     ];
+
+    public function scopeNotCompleted($query)
+    {
+        return $query->wherein('status',  ['pending', 'approved','received']);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->wherein('status',  ['completed']);
+    }
+    public function scopeCanceld($query)
+    {
+
+        return $query->wherein('status', ['declined','canceled'] );
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class,);
+    }
+    public function provider_with_rate()
+    {
+        return $this->belongsTo(Provider::class,'provider_id')->withAvg('rates as totalRate', 'rate')
+            ->withCount('rates');
+    }
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function vehicle()
+    {
+        return $this->belongsTo(UserVehicle::class,'vehicle_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class,'transaction_id');
+    }
+    public function canceledBy()
+    {
+
+
+
+//        canceled_type	enum('Admin', 'User', 'Provider')
+        if($this->canceled_type == 'Admin' )
+            return $this->belongsTo(Admin::class,'canceled_by');
+
+        if($this->canceled_type == 'Provider' )
+            return $this->belongsTo(Provider::class,'canceled_by');
+
+        return $this->belongsTo(User::class,'canceled_by');
+    }
+
 }

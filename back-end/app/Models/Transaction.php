@@ -35,6 +35,15 @@ class Transaction extends Model
         return __('messages.des_transaction_'.$this->type,['amount'=>$this->final_total,'text'=>$text]);
     }
 
+
+
+
+    public function transporter()
+    {
+
+        return $this->belongsTo(Transporter::class,'type_id','id');
+    }
+
     public function friend()
     {
 

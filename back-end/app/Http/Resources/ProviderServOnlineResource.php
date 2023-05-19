@@ -19,7 +19,7 @@ class ProviderServOnlineResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
-            "provider_type" =>$this->getType(),
+            "provider_type" =>$this->provider_type,
              "lat" => $this->lat,
             "long" =>$this->long
         ];
