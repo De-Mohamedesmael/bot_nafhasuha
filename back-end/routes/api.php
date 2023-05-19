@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Clients\PackageController;
 use App\Http\Controllers\Api\Clients\TransactionController;
 use App\Http\Controllers\Api\Clients\NotificationController;
 use App\Http\Controllers\Api\Clients\ServiceController;
+use App\Http\Controllers\Api\Clients\OrderController;
 
 
 use App\Http\Controllers\Api\Clients\GeneralController;
@@ -90,6 +91,15 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::Post('periodic-inspection', [ServiceController::class, 'StoreOrderServicePeriodicInspection']);
         Route::Post('consultation', [ServiceController::class, 'StoreOrderServiceConsultation']);
         Route::Post('transporter', [ServiceController::class, 'StoreOrderServiceTransportVehicle']);
+
+    });
+    Route::prefix('orders')->group(function () {
+        Route::get('pending', [OrderController::class, 'indexPending']);
+        Route::get('completed', [OrderController::class, 'indexCompleted']);
+        Route::get('canceld', [OrderController::class, 'indexCanceld']);
+        Route::get('show_by_code', [OrderController::class, 'GetByInvoiceNo']);
+
+        Route::get('show/{id}', [OrderController::class, 'show']);
 
     });
 
