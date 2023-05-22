@@ -20,11 +20,12 @@ class Util
     /**
      * converty currency base on exchange rate
      *
-         * @param User $user
+         * @param object $user
          * @param string $type
+         * @param string $auth_type
      * @return boolean
      */
-    public function SendActivationCode($user,$type)
+    public function SendActivationCode($user,$type,$auth_type="User")
     {
         $user->activation_code=1111;
         $user->save();

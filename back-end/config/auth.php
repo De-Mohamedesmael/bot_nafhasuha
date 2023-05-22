@@ -36,16 +36,6 @@ return [
     */
 
     'guards' => [
-        'booth' => [
-            'driver' => 'session',
-            'provider' => 'booths',
-        ],
-
-        'store' => [
-            'driver' => 'session',
-            'provider' => 'stores',
-        ],
-
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -59,6 +49,12 @@ return [
         'api' => [
             'driver' => 'jwt',
             'provider' => 'users',
+            'hash' => false,
+
+        ],
+        'apiProvider' => [
+            'driver' => 'jwt',
+            'provider' => 'apiProviders',
             'hash' => false,
 
         ],
@@ -82,16 +78,6 @@ return [
     */
 
     'providers' => [
-        'booths' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Store::class,
-        ],
-
-        'stores' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Store::class,
-        ],
-
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
@@ -101,11 +87,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'apiProviders' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Provider::class,
+        ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+
     ],
 
     /*
@@ -124,9 +111,9 @@ return [
     */
 
     'passwords' => [
-        'stores' => [
-            'provider' => 'stores',
-            'table' => 'store_password_resets',
+        'apiProviders' => [
+            'provider' => 'apiProviders',
+            'table' => 'providers_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
