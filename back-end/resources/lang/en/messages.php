@@ -70,4 +70,6 @@
   'Something went wrong' => 'Something went wrong',
   'Center' => 'Center',
   'Home' => 'Home',
+  'Provider login' => 'Provider login',
+  'Provider logout' => 'Provider logout',
 );

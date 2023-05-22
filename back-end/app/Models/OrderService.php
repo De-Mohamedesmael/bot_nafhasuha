@@ -24,7 +24,7 @@ class OrderService extends Model implements HasMedia
 
     public function scopeCompleted($query)
     {
-        return $query->wherein('status',  ['completed']);
+        return $query->wherein('status',  ['completed','declined','canceled']);
     }
     public function scopeCanceld($query)
     {
@@ -38,7 +38,7 @@ class OrderService extends Model implements HasMedia
     }
     public function provider()
     {
-        return $this->belongsTo(Provider::class,);
+        return $this->belongsTo(Provider::class);
     }
     public function provider_with_rate()
     {

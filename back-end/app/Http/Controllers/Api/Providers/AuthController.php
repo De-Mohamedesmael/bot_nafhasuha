@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Clients;
+namespace App\Http\Controllers\Api\Providers;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Providers\ProviderResource;
 use App\Http\Resources\UserResource;
 use App\Models\Provider;
 use App\Models\Setting;
@@ -13,6 +14,7 @@ use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +31,8 @@ class AuthController extends ApiController
     {
         $this->TransactionUtil = $trnUit;
         $this->commonUtil = $commonUtil;
+        Config::set( 'jwt.user', 'App\Models\Provider' );
+        Config::set( 'auth.providers.users.model', Provider::class );
         $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'SendCode','customRemoveAccount','ActiveRemoveAccount']]);
     }
 
@@ -43,31 +47,23 @@ class AuthController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $user= User::where('phone',$request->phone)->first();
+        $Provider= Provider::where('phone',$request->phone)->first();
 
-        if(!$user){
-            return responseApiFalse(405, translate('Not found user'));
+        if(!$Provider){
+            return responseApiFalse(405, translate('Not found Provider'));
+        }
+        if($Provider->is_deleted){
+            return responseApiFalse(405, translate("Your account has already been deleted. Please contact customer service to recover your account."));
         }
         if (!$token=auth()->attempt($validator->validated())){
             $token = auth()->attempt(['phone'=>$request->phone,'password'=>$request->password]);
         }
 
-
-
         if (!$token){
             return responseApiFalse(500, translate('The password is incorrect'));
         }
-//        if(! auth()->user()->is_activation()){
-//            return responseApiFalse(500, translate('user Not activation'));
-//
-//        }
-//        \Settings::set('InvitationBonusValue', 5);
-//        \Settings::set('JoiningBonusValue', 5);
-        $user=auth()->user();
-        if(!$user->invite_code){
-            $user-> generateInviteCode();
-        }
-        return responseApi(200, translate('user login'), $this->createNewToken($token));
+
+        return responseApi(200, translate('Provider login'), $this->createNewToken($token));
     }
 
     protected function createNewToken($token)
@@ -75,25 +71,29 @@ class AuthController extends ApiController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => null ,//auth('api')->factory()->getTTL() * 60,
-            'user' => new UserResource(auth()->user())
+            'expires_in' => null,
+            'user' => new ProviderResource(auth()->user())
         ];
     }
 
     public function register(Request $request)
     {
         $validator = validator($request->all(), [
+            'provider_type' => 'required|string|in:Provider,ProviderCenter',
             'name' => 'required|string|between:2,200',
-            'phone' => 'required|string|max:20|unique:users',
+            'phone' => 'required|string|max:20|unique:providers',
             'email' => 'nullable|string|max:20|unique:providers',
-            'invitation_code' => 'nullable|string|max:50',
-            'address' => 'nullable|string|max:255',
-            'lat' => 'nullable|string|max:255',
-            'long' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'lat' => 'required|string|max:255',
+            'long' => 'required|string|max:255',
             'country_id' => 'required|integer|exists:countries,id',
-            'city_id' => 'nullable|integer|exists:cities,id',
-            'area_id' => 'nullable|integer|exists:areas,id',
+            'city_id' => 'required|integer|exists:cities,id',
+            'area_id' => 'required|integer|exists:areas,id',
             'password' => 'required|string|min:4|max:255',
+            'services_from_home' => 'required|string|in:1,0',
+            'commercial_register' => 'required|Image|mimes:jpeg,jpg,png,gif',
+            'categories' => 'required|array',
+            'categories.*' =>'required|integer|exists:categories,id',
         ]);
 
         if ($validator->fails())
@@ -101,20 +101,17 @@ class AuthController extends ApiController
 
         try {
             DB::beginTransaction();
-            $inputs = $request->except('invitation_code');
-            $user = User::create($inputs);
-            $user-> generateInviteCode();
-            $this->commonUtil->SendActivationCode($user, 'Activation');
-
-
-            if ($request->has('invitation_code')){
-                $this->TransactionUtil->SaveInviteCode( $user ,$request->invitation_code);
+            $inputs = $request->except('categories','commercial_register');
+            $provider = Provider::create($inputs);
+            $this->commonUtil->SendActivationCode($provider, 'Activation','Provider');
+            $provider->categories()->sync($request->categories);
+            if( $request->hasFile('commercial_register')){
+                $uploadedFile = $request->file('commercial_register');
+                $extension = $uploadedFile->getClientOriginalExtension();
+                $provider->addMedia($uploadedFile)
+                    ->usingFileName(time().'.'.$extension)
+                    ->toMediaCollection('commercial_register');
             }
-
-//            if (){
-//                $this->TransactionUtil->SaveInviteCode( $user ,$request->invitation_code);
-//            }
-
             $data= $this->createNewToken(auth()->attempt($request->only(['phone', 'password'])));
             DB::commit();
             return responseApi(200, translate('user registered'),$data);
@@ -129,17 +126,17 @@ class AuthController extends ApiController
     {
 
         auth()->logout();
-        return responseApi(200, translate('user logout'));
+        return responseApi(200, translate('Provider logout'));
     }
 
     public function refresh()
     {
-        return responseApi(200, translate('user login'), $this->createNewToken(auth()->refresh()));
+        return responseApi(200, translate('Provider login'), $this->createNewToken(auth()->refresh()));
     }
 
     public function userProfile()
     {
-        $data =  ['user' => new UserResource(auth()->user())];
+        $data =  ['Provider' => new UserResource(auth()->user())];
 
         return responseApi(200, translate('get_data_success'), $data );
     }
@@ -150,9 +147,7 @@ class AuthController extends ApiController
         ]);
         $user=auth()->user();
         if ($validator->fails())return responseApiFalse(405, $validator->errors()->first());
-//        $user=Provider::whereId(4)->first();
         $image = $user->getFirstMedia('images');
-
         if($image){
             $image->delete();
         }
@@ -161,16 +156,16 @@ class AuthController extends ApiController
         $user->addMedia($uploadedFile)
             ->usingFileName(time().'.'.$extension)
             ->toMediaCollection('images');
-        $data =  ['user' => new UserResource(User::find($user->id))];
-        return responseApi(200, translate('user profile update'), $data);
+        $data =  ['user' => new ProviderResource(Provider::find($user->id))];
+        return responseApi(200, translate('Provider profile update'), $data);
     }
 
     public function editProfile(Request $request)
     {
         $validator = validator($request->all(), [
             'name' => 'required|string|between:2,100',
-            'email' => 'nullable|string|email|max:100|unique:users,email,' . auth()->id(),
-            'phone' => 'nullable|string|string|max:20|unique:users,phone,' . auth()->id(),
+            'email' => 'nullable|string|email|max:100|unique:providers,email,' . auth()->id(),
+            'phone' => 'nullable|string|string|max:20|unique:providers,phone,' . auth()->id(),
             'address' => 'nullable|string|max:255',
             'lat' => 'nullable|string|max:255',
             'lang' => 'nullable|string|max:255',
@@ -242,24 +237,12 @@ class AuthController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $user = User::where('country_id',$request->country_id)->where('phone', $request->phone)->first();
+        $user = Provider::where('country_id',$request->country_id)
+            ->where('phone', $request->phone)->first();
         if($user){
             if ($request->has('is_reset')){
-                $this->commonUtil->SendActivationCode($user, 'Reset');
+                $this->commonUtil->SendActivationCode($user, 'Reset','Provider');
             }
-//            dd($user);
-//            $user->activation_code= 1111;//rand ( 1000 , 9999 );
-//            $user->save();
-//            $from=env('MAIL_FROM_ADDRESS');
-//            $data=[];
-//             $data["subject"] = 'Reset Password';
-//            $data["code"] = $user->activation_code;
-//            $data["name"] = $user->name;
-//            $data["email"] = $request->email;
-//             Mail::send('emails.resetPassword', $data, function ($message) use ($data, $from) {
-//            $message->from($from)->to($data["email"], $data["email"] )
-//                ->subject($data["subject"]);
-//             });
             return responseApi(200, translate('return success'), $user->id);
         }
        return responseApiFalse(405, translate('user not found'));
@@ -267,26 +250,26 @@ class AuthController extends ApiController
     public function SendCode(Request $request)
     {
         $validator = validator($request->all(), [
-            'user_id' => 'required|integer|exists:users,id',
+            'provider_id' => 'required|integer|exists:providers,id',
             'type' => 'required|in:Reset,Activation',
         ]);
 
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $user = User::where('id', $request->user_id)->first();
+        $provider = Provider::where('id', $request->provider_id)->first();
 
 
-        if($user){
-            $this->commonUtil->SendActivationCode($user,$request->type);
-            return responseApi(200, translate('return success'), $user->id);
+        if($provider){
+            $this->commonUtil->SendActivationCode($provider,$request->type);
+            return responseApi(200, translate('return success'), $provider->id);
         }
         return responseApiFalse(405, translate('user not found'));
     }
     public function checkCode(Request $request)
     {
          $validator = validator($request->all(), [
-            'user_id' => 'required|integer|exists:users,id',
+            'provider_id' => 'required|integer|exists:providers,id',
             'code' => 'required|max:6',
         ]);
 
@@ -294,21 +277,15 @@ class AuthController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
         try {
             DB::beginTransaction();
-            $user = User::where('id', $request->user_id)->first();
-            if($user->activation_code ==  $request->code){
-                $user->activation_code=null;
-                if($user->activation_at == null ){
-                    $user->activation_at=now();
-
-                   $this->TransactionUtil->SaveJoiningBonus($user);
-
-                   if($user->invite_by){
-                       $this->TransactionUtil->ActiveInvitationBonus($user->invite_by,$user->id);
-                   }
+            $provider = Provider::where('id', $request->provider_id)->first();
+            if($provider->activation_code ==  $request->code){
+                $provider->activation_code=null;
+                if($provider->activation_at == null ){
+                    $provider->activation_at=now();
                 }
-                $user->save();
+                $provider->save();
                 DB::commit();
-              return responseApi(200, translate('return success'), $user->id);
+              return responseApi(200, translate('return success'), $provider->id);
             }
             DB::commit();
             return responseApiFalse(500, translate('activation code is incorrect'));
@@ -344,7 +321,7 @@ class AuthController extends ApiController
 
 
         if (Hash::check($request->password, auth()->user()->getAuthPassword())) {
-            auth()->user()->delete();
+//            auth()->user()->delete();
             auth()->logout();
 
             return responseApi(200, translate('Account deleted'));
@@ -352,23 +329,6 @@ class AuthController extends ApiController
         return responseApiFalse(500, translate('password is incorrect'));
     }
 
-    public function customRemoveAccount()
-    {
-        User::where('email', \request('email'))->delete();
-        return responseApi(200, __('delete success'));
-    }
-    public function ActiveRemoveAccount(){
-       $is_active= Setting::first();
-        if(!$is_active){
-           return responseApi(200,'', false);
-        }elseif($is_active->active_delete_acount != \request('app_version') &&  \request('type')  != 'android'){
-            return responseApi(200,'', false);
-        }elseif($is_active->active_delete_acount_android != \request('app_version') &&  \request('type')  == 'android'){
-            return responseApi(200,'', false);
-        }
-        return responseApi(200,'', true);
 
-
-    }
 }
 

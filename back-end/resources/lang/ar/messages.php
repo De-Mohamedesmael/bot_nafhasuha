@@ -75,4 +75,6 @@
   '' => '',
   'Home' => 'Home',
   'Order Not Found' => 'Order Not Found',
+  'Not found Provider' => 'Not found Provider',
+  'Provider login' => 'Provider login',
 );
