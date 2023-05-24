@@ -134,10 +134,9 @@ class AuthController extends ApiController
         return responseApi(200, translate('Provider login'), $this->createNewToken(auth()->refresh()));
     }
 
-    public function userProfile()
+    public function ProviderProfile()
     {
-        $data =  ['Provider' => new UserResource(auth()->user())];
-
+        $data =  ['Provider' => new ProviderResource(auth()->user())];
         return responseApi(200, translate('get_data_success'), $data );
     }
     public function uploadImage(Request $request)
@@ -156,25 +155,29 @@ class AuthController extends ApiController
         $user->addMedia($uploadedFile)
             ->usingFileName(time().'.'.$extension)
             ->toMediaCollection('images');
-        $data =  ['user' => new ProviderResource(Provider::find($user->id))];
+        $data =  ['provider' => new ProviderResource(Provider::find($user->id))];
         return responseApi(200, translate('Provider profile update'), $data);
     }
 
     public function editProfile(Request $request)
     {
         $validator = validator($request->all(), [
-            'name' => 'required|string|between:2,100',
+            'provider_type' => 'nullable|string|in:Provider,ProviderCenter',
+            'name' => 'required|string|between:2,200',
             'email' => 'nullable|string|email|max:100|unique:providers,email,' . auth()->id(),
-            'phone' => 'nullable|string|string|max:20|unique:providers,phone,' . auth()->id(),
-            'address' => 'nullable|string|max:255',
-            'lat' => 'nullable|string|max:255',
-            'lang' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'lat' => 'required|string|max:255',
+            'long' => 'required|string|max:255',
             'country_id' => 'required|integer|exists:countries,id',
-            'city_id' => 'nullable|integer|exists:cities,id',
-            'area_id' => 'nullable|integer|exists:areas,id',
+            'city_id' => 'required|integer|exists:cities,id',
+            'area_id' => 'required|integer|exists:areas,id',
+            'services_from_home' => 'required|string|in:1,0',
+            'commercial_register' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
+            'categories' => 'nullable|array',
+            'categories.*' =>'nullable|integer|exists:categories,id',
             'image' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
         ]);
-        $user=auth()->user();
+        $provider=auth()->user();
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
@@ -184,26 +187,42 @@ class AuthController extends ApiController
             'email'=>$request->email,
             'address'=>$request->address,
             'lat'=>$request->lat,
-            'lang'=>$request->lang,
+            'long'=>$request->long,
             'country_id'=>$request->country_id,
             'city_id'=>$request->city_id,
             'area_id'=>$request->area_id,
+            'services_from_home'=>$request->services_from_home,
         ]);
 
         if($request->has('image')){
-            $image = $user->getFirstMedia('images');
+            $image = $provider->getFirstMedia('images');
 
             if($image){
                 $image->delete();
             }
             $uploadedFile = $request->file('image');
             $extension = $uploadedFile->getClientOriginalExtension();
-            $user->addMedia($uploadedFile)
+            $provider->addMedia($uploadedFile)
                 ->usingFileName(time().'.'.$extension)
                 ->toMediaCollection('images');
         }
+        if($request->has('categories')){
+            $provider->categories()->sync($request->categories);
+        }
+        if($request->has('provider_type')){
+            $provider->provider_type = $request->provider_type;
+            $provider->save();
+        }
+        if( $request->hasFile('commercial_register')){
+            $uploadedFile = $request->file('commercial_register');
+            $extension = $uploadedFile->getClientOriginalExtension();
+            $provider->addMedia($uploadedFile)
+                ->usingFileName(time().'.'.$extension)
+                ->toMediaCollection('commercial_register');
+        }
 
-        $data =  ['user' => new UserResource(User::find($user->id))];
+
+        $data =  ['provider' => new ProviderResource(Provider::find($provider->id))];
 
         return responseApi(200, translate('user profile update'), $data);
     }
@@ -264,7 +283,7 @@ class AuthController extends ApiController
             $this->commonUtil->SendActivationCode($provider,$request->type);
             return responseApi(200, translate('return success'), $provider->id);
         }
-        return responseApiFalse(405, translate('user not found'));
+        return responseApiFalse(405, translate('provider not found'));
     }
     public function checkCode(Request $request)
     {
@@ -298,14 +317,15 @@ class AuthController extends ApiController
     public function forgotPassword(Request $request)
     {
         $validator = validator($request->all(), [
-            'user_id' => 'required|integer|exists:users,id',
+            'provider_id' => 'required|integer|exists:providers,id',
             'password' => 'required|string|min:4|max:255',
         ]);
 
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        User::where('id', $request->user_id)->update(['activation_code'=>null,'password' => bcrypt($request->password)]);
+        Provider::where('id', $request->provider_id)
+            ->update(['activation_code'=>null,'password' => bcrypt($request->password)]);
 
         return responseApi(200, translate('Password has been restored'));
     }
@@ -321,7 +341,12 @@ class AuthController extends ApiController
 
 
         if (Hash::check($request->password, auth()->user()->getAuthPassword())) {
-//            auth()->user()->delete();
+            $Provider = auth()->user();
+            $Provider ->is_deleted=1;
+            $Provider ->deleted_by=auth()->id();
+            $Provider ->deleted_by_type = 'Provider';
+            $Provider ->is_active = 0;
+            $Provider ->save();
             auth()->logout();
 
             return responseApi(200, translate('Account deleted'));

@@ -77,4 +77,5 @@
   'Order Not Found' => 'Order Not Found',
   'Not found Provider' => 'Not found Provider',
   'Provider login' => 'Provider login',
+  'Your account has already been deleted. Please contact customer service to recover your account.' => 'Your account has already been deleted. Please contact customer service to recover your account.',
 );
