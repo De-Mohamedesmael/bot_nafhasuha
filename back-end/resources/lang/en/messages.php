@@ -72,4 +72,6 @@
   'Home' => 'Home',
   'Provider login' => 'Provider login',
   'Provider logout' => 'Provider logout',
+  'Page Not Found.If error persists,contact info@gmail.com' => 'Page Not Found.If error persists contact info@gmail.com',
+  'Provider profile update' => 'Provider profile update',
 );
