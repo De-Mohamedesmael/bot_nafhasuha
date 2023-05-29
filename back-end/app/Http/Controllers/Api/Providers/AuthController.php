@@ -136,7 +136,7 @@ class AuthController extends ApiController
 
     public function ProviderProfile()
     {
-        $data =  ['Provider' => new ProviderResource(auth()->user())];
+        $data =  ['provider' => new ProviderResource(auth()->user())];
         return responseApi(200, translate('get_data_success'), $data );
     }
     public function uploadImage(Request $request)
