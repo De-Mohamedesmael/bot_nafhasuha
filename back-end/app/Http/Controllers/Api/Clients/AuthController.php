@@ -85,7 +85,7 @@ class AuthController extends ApiController
         $validator = validator($request->all(), [
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:users',
-            'email' => 'nullable|string|max:20|unique:providers',
+            'email' => 'nullable|string|max:20|unique:users',
             'invitation_code' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',
             'lat' => 'nullable|string|max:255',
