@@ -72,7 +72,7 @@ class AuthController extends ApiController
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => null,
-            'user' => new ProviderResource(auth()->user())
+            'provider' => new ProviderResource(auth()->user())
         ];
     }
 
