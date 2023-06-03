@@ -46,7 +46,7 @@ class TransactionController extends ApiController
             $count_paginate=$request->count_paginate?:$this->count_paginate;
             $date['my_wallet']=$this->TransactionUtil->getWalletBalance(auth()->user());
             $date['invite_code']=auth()->user()->invite_code;
-            $date['transactions']= MyWalletTransactionResource::collection(Transaction::Active()->latest()
+            $date['transactions']= MyWalletTransactionResource::collection(Transaction::Active()->where('user_id',auth()->id())->latest()
                 ->simplePaginate($count_paginate));
             return  responseApi(200, translate('return_data_success'),$date);
         }catch (\Exception $exception){

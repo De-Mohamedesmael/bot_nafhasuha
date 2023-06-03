@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Providers;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
+use App\Http\Resources\BanksResource;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CityResource;
@@ -14,6 +15,7 @@ use App\Http\Resources\InfoResource;
 use App\Http\Resources\SplashScreenResource;
 use App\Http\Resources\UserResource;
 use App\Models\Area;
+use App\Models\Bank;
 use App\Models\Category;
 use App\Models\CategoryFaq;
 use App\Models\CategoryFaqTranslation;
@@ -94,6 +96,7 @@ class GeneralController extends ApiController
         }
         return responseApi(200,\App\CPU\translate('return_data_success'), AreaResource::collection($areas));
     }
+
     public function splashScreen(){
 
         $SplashScreen= SplashScreen::orderBy('sort', 'Asc')->get();
@@ -225,6 +228,20 @@ class GeneralController extends ApiController
         }
 
         return responseApi(200,\App\CPU\translate('return_data_success'), $alldata);
+    }
+
+
+    public function banks(Request $request){
+
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
+        $banks= Bank::orderByTranslation('title');
+
+        if($count_paginate == 'ALL'){
+            $banks=  $banks->get();
+        }else{
+            $banks=  $banks->simplePaginate($count_paginate);
+        }
+        return responseApi(200,\App\CPU\translate('return_data_success'), BanksResource::collection($banks));
     }
 }
 

@@ -63,6 +63,10 @@
   'des_transaction_OrderService' => 'تم خصم مبلغ :amount ريال مقابل خدمة :text  بنجاح',
   'des_transaction_JoiningBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة الانضمام',
   'des_transaction_InvitationBonus' => 'تهانينا! تم اضافة  مبلغ :amount ريال مكافأة انضمام صديقك :text',
+  'des_provider_transaction_TopUpCredit' => 'تم شحن :amount ريال بنجاح ',
+  'des_provider_transaction_OrderService' => 'تم اضافة مبلغ :amount ريال مقابل خدمة :text  بنجاح',
+  'des_provider_transaction_Withdrawal' => 'تم سحب مبلغ :amount بنجاح ',
+  'Sorry_the_current_balance_is' => 'Sorry, your current balance is :amount R.S, which is the maximum withdrawal limit',
   'The creation of your vehicle was successful. Thank you.' => 'The creation of your vehicle was successful. Thank you.',
   'Your car has been modified successfully. Thank you.' => 'Your car has been modified successfully. Thank you.',
   'vehicle not found' => 'Vehicle not found',
@@ -78,4 +82,6 @@
   'Not found Provider' => 'Not found Provider',
   'Provider login' => 'Provider login',
   'Your account has already been deleted. Please contact customer service to recover your account.' => 'Your account has already been deleted. Please contact customer service to recover your account.',
+  'token_invalid' => 'Token invalid',
+  'Request_has_been_successfully' => 'Request has been successfully',
 );

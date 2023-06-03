@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Providers\AuthController;
 use App\Http\Controllers\Api\Providers\GeneralController;
+use App\Http\Controllers\Api\Providers\TransactionController;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ Route::delete('remove-account', [AuthController::class, 'removeAccount']);
 
 Route::middleware('auth.guard:api')->group(function () {
 
+Route::get('my-wallet', [TransactionController::class, 'myWallet']);
+Route::POST('request-withdrawal', [TransactionController::class, 'StoreWithdrawalRequest']);
 
 
 });
@@ -42,6 +45,7 @@ Route::get('infos', [GeneralController::class, 'infos']);
 Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 Route::get('all-categories', [GeneralController::class, 'indexCategories']);
+Route::get('banks', [GeneralController::class, 'banks']);
 
 // Fail Api
 Route::fallback(function (Request $request) {
