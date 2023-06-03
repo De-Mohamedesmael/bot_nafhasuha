@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -145,6 +146,108 @@ class TransactionUtil
         return $Transaction;
     }
 
+
+
+
+    /**
+     * Get Wallet Balance For Provider
+     *
+     * @param Provider $provider
+     * @return float
+     */
+    public function getWalletProviderBalance(Provider $provider): float
+    {
+
+
+        $amountCredit = Transaction::Active()
+            ->whereIn('type', ['OrderService','TopUpCredit'])
+            ->where('provider_id', $provider->id)
+            ->sum('final_total');
+
+        $amountDebit = Transaction::Active()
+            ->whereIn('type', ['Withdrawal'])
+            ->where('provider_id', $provider->id)
+            ->sum('final_total');
+        return $amountCredit - $amountDebit;
+    }
+
+
+
+    /**
+     * Get Provider Transactions  to Credit
+     *
+     * @param integer $provider_id
+     * @param integer $count_paginate
+     * @return object
+     */
+    public function getProviderTransactionCredit($provider_id,$count_paginate=null): object
+    {
+
+        $transactions=Transaction::Active()->where('provider_id',$provider_id)
+            ->whereIn('type', ['OrderService','TopUpCredit'])
+            ->latest();
+
+        if($count_paginate){
+            $transactions=  $transactions ->simplePaginate($count_paginate);
+        }else{
+            $transactions=$transactions->get();
+        }
+
+
+        return $transactions;
+    }
+    /**
+     * Get Provider Transactions  to Debit
+     *
+     * @param integer $provider_id
+     * @param integer $count_paginate
+     * @return object
+     */
+    public function getProviderTransactionDebit($provider_id,$count_paginate=null): object
+    {
+
+        $transactions=Transaction::Active()->where('provider_id',$provider_id)
+            ->whereIn('type', ['Withdrawal'])
+            ->latest();
+
+        if($count_paginate){
+            $transactions=  $transactions ->simplePaginate($count_paginate);
+        }else{
+            $transactions=$transactions->get();
+        }
+
+
+        return $transactions;
+    }
+
+    /**
+     * save Transactions  Withdrawal Request  For Provider
+     *
+     * @param Provider $provider
+     * @param integer $bank_id
+     * @param string $fullName
+     * @param float $amount
+     * @return object
+     */
+    public function saveProviderWithdrawalRequest($provider,$bank_id,$fullName,$amount): object
+    {
+        $data=[
+            'provider_id'=>$provider->id,
+            'type'=>'Withdrawal',
+            'type_id'=>$bank_id,
+            'status'=>'pending',
+            'grand_total'=>$amount,
+            'final_total'=>$amount,
+            'full_name'=>$fullName,
+        ];
+        $transaction=Transaction::create($data);
+
+        $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $transaction->invoice_no='WD'.$randomNumber.'-'.$provider->id.'v'.$transaction->id;
+        $transaction->save();
+//        invoice_no WD1243-15p1
+        return $transaction;
+    }
 
 
 

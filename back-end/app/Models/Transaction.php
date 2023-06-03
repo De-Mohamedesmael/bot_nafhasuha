@@ -34,6 +34,24 @@ class Transaction extends Model
         }
         return __('messages.des_transaction_'.$this->type,['amount'=>$this->final_total,'text'=>$text]);
     }
+    public function title_provider()
+    {
+
+        switch ($this->type){
+            case 'OrderService':
+                $service = $this->service;
+                $text=$service?$service->title:'';
+                break;
+            case 'InvitationBonus':
+                $type_model = $this->friend;
+                $text=$type_model?$type_model->name:'';
+                break;
+            default:
+                $text='';
+                break;
+        }
+        return __('messages.des_provider_transaction_'.$this->type,['amount'=>$this->final_total,'text'=>$text]);
+    }
 
 
 
