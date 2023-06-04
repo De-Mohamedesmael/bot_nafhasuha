@@ -1,8 +1,15 @@
 <?php
 
 use App\Http\Controllers\Api\Providers\AuthController;
+
+
+use App\Http\Controllers\Api\Providers\HomeController;
 use App\Http\Controllers\Api\Providers\GeneralController;
 use App\Http\Controllers\Api\Providers\TransactionController;
+use App\Http\Controllers\Api\Providers\OrderController;
+
+
+
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -24,6 +31,17 @@ Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::delete('remove-account', [AuthController::class, 'removeAccount']);
 
 Route::middleware('auth.guard:api')->group(function () {
+
+Route::get('home', [HomeController::class, 'index']);
+
+
+
+Route::get('completed-orders', [OrderController::class, 'CompletedOrders']);
+Route::get('ongoing-orders', [OrderController::class, 'OngoingOrders']);
+
+
+
+
 
 Route::get('my-wallet', [TransactionController::class, 'myWallet']);
 Route::POST('request-withdrawal', [TransactionController::class, 'StoreWithdrawalRequest']);
