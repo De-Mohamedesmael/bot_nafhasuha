@@ -2,7 +2,10 @@
 
 namespace App\Utils;
 
+use App\Http\Resources\OrderServiceResource;
+use App\Models\OrderService;
 use App\Models\Provider;
+use App\Models\Service;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -245,8 +248,26 @@ class TransactionUtil
         $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
         $transaction->invoice_no='WD'.$randomNumber.'-'.$provider->id.'v'.$transaction->id;
         $transaction->save();
-//        invoice_no WD1243-15p1
         return $transaction;
+    }
+
+    /**
+     * save OrderService  Request  For Provider By categories ids
+     *
+     * @param array $categories_ids
+     * @return object
+     */
+    public function getProviderPendingOrderServiceByCategories($categories_ids): object
+    {
+        $services_ids = Service::wherehas('categories',function ($q) use ($categories_ids){
+             $q->wherein('categories.id',$categories_ids);
+         })->pluck('id');
+
+        $orders=OrderService::where('status','pending')->wherein('service_id',$services_ids)->where(function ($q) use ($categories_ids){
+            $q->wherein('category_id',$categories_ids)
+                ->orwhereNull('category_id');
+        })->get();
+        return $orders;
     }
 
 

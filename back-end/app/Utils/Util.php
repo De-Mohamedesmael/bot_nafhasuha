@@ -31,11 +31,8 @@ class Util
         $user->save();
         switch ($type){
             case 'Reset':
-
                 break;
             default:
-
-
         }
 
         return true;

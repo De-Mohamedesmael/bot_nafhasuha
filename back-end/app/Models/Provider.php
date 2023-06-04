@@ -69,6 +69,9 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
         }
         return 'Provider';
     }
-
+    public function orders()
+    {
+        return $this->hasMany(OrderService::class,'provider_id');
+    }
 
 }

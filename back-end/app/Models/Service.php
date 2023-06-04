@@ -17,4 +17,10 @@ class Service extends Model implements TranslatableContract
     {
         return $query->where('status',  1);
     }
+
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,CategoryService::class);
+    }
 }
