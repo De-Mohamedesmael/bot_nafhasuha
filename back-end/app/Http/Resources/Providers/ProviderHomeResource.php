@@ -21,6 +21,8 @@ class ProviderHomeResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "is_active" =>$this->is_active,
+            'is_activation'=>$this->is_activation(),
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,
             "rates_count" => $this->rates_count,

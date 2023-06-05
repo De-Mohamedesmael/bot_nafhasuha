@@ -255,18 +255,25 @@ class TransactionUtil
      * save OrderService  Request  For Provider By categories ids
      *
      * @param array $categories_ids
+     * @param object $provider
      * @return object
      */
-    public function getProviderPendingOrderServiceByCategories($categories_ids): object
+    public function getProviderPendingOrderServiceByCategories($categories_ids,$provider): object
     {
         $services_ids = Service::wherehas('categories',function ($q) use ($categories_ids){
              $q->wherein('categories.id',$categories_ids);
          })->pluck('id');
-
-        $orders=OrderService::where('status','pending')->wherein('service_id',$services_ids)->where(function ($q) use ($categories_ids){
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$provider->lat . ') )
+       * cos( radians( `lat` ) )
+       * cos( radians( `long` )
+       - radians(' . $provider->long  . ') )
+       + sin( radians(' . $provider->lat  . ') )
+       * sin( radians( `lat` ) ) ) )');
+        $orders=OrderService::where('status','pending')
+            ->wherein('service_id',$services_ids)->where(function ($q) use ($categories_ids){
             $q->wherein('category_id',$categories_ids)
                 ->orwhereNull('category_id');
-        })->get();
+        })->selectRaw("*,{$sqlDistance} as distance")->get();
         return $orders;
     }
 
