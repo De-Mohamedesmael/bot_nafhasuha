@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api\Providers;
 
 use App\Http\Controllers\ApiController;
-use App\Http\Resources\OrderServiceResource;
+use App\Http\Resources\Providers\OrderServiceResource;
 use App\Http\Resources\Providers\ProviderHomeResource;
-use App\Http\Resources\ProviderServOnlineAllResource;
-use App\Http\Resources\ProviderServOnlineResource;
+
 use App\Models\Provider;
 use App\Utils\TransactionUtil;
 use Illuminate\Support\Facades\Config;
@@ -41,9 +40,9 @@ class HomeController extends ApiController
 
         $data['provider']=new ProviderHomeResource($provider);
 
-        $transactions= $this->TransactionUtil->getProviderPendingOrderServiceByCategories($categories_ids);
+        $transactions= $this->TransactionUtil->getProviderPendingOrderServiceByCategories($categories_ids,$provider);
 
-        $data['transactions']=OrderServiceResource::collection($transactions);
+        $data['new_orders']=OrderServiceResource::collection($transactions);
         return  responseApi(200, translate('return_data_success'),$data);
 
     }
