@@ -6,6 +6,8 @@ use App\Http\Resources\CanceledByResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ProviderOrderServiceResource;
 use App\Http\Resources\ServiceResource;
+use App\Http\Resources\TransporterResource;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use function App\CPU\translate;
 use Carbon\Carbon;
@@ -39,9 +41,15 @@ class OrderServiceResource extends JsonResource
             'lat_to'=>$this->lat_to,
             'long_to'=>$this->long_to,
             'details'=>$this->details,
+            'payment_type'=>'Cash',
             "distance" => number_format($this->distance, 2, '.', ''),//round(, 2),
+            'user'=>new UserResource($this->user),
+            'provider'=>new ProviderResource($this->provider),
             'service'=>new ServiceResource($this->service),
             'category'=>new CategoryResource($this->category),
+            'vehicle_transporter'=>new TransporterResource($transaction->transporter),
+            'images'=>$this->getMedia('images'),
+            'videos'=>$this->getMedia('videos'),
             'transaction_id'=>$this->transaction_id,
             'invoice_no'=>$transaction->invoice_no??null,
             'discount_amount'=>$transaction->discount_amount??0,

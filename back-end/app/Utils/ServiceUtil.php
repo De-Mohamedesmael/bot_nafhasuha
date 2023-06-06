@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use App\Models\OrderService;
+use App\Models\PriceQuote;
 use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
@@ -191,5 +192,26 @@ class ServiceUtil
         }
         return$order ;
     }
+    /**
+     * get Price Quotes For Order
+     *
+     * @param OrderService $order
+     * @param  $count_paginate
+     * @return object
+     */
+    public function getPriceQuotesForOrder($order,$count_paginate): object
+    {
+        $PriceQuote= PriceQuote::with(['provider'=>function ($q)  {
+            $q->withAvg('rates as totalRate', 'rate')
+                ->withCount('rates');
+        }])->whereNull('status')
+            ->where('order_service_id',$order->id);
 
+        if($count_paginate == 'ALL'){
+            $PriceQuote=  $PriceQuote->get();
+        }else{
+            $PriceQuote=  $PriceQuote->simplePaginate($count_paginate);
+        }
+        return $PriceQuote ;
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Resources\OrderServiceAllDataResource;
 use App\Http\Resources\Providers\OrderServiceResource;
 use App\Models\OrderService;
+use App\Models\PriceQuote;
 use App\Models\Provider;
 use App\Utils\ServiceUtil;
 use App\Utils\TransactionUtil;
@@ -51,7 +52,6 @@ class OrderController extends ApiController
 
     }
 
-
     public function CompletedOrders(Request $request)
     {
         if(!auth()->check())
@@ -77,44 +77,81 @@ class OrderController extends ApiController
 
     }
 
-
-    public function indexCanceld(Request $request)
+    public function getOrderOne($order_id)
     {
-        $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $orders= auth()->user()->orders()->Canceld()->latest();
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
 
-        if($count_paginate == 'ALL'){
-            $orders=  $orders->get();
-        }else{
-            $orders=  $orders->simplePaginate($count_paginate);
+        $provider=auth()->user();
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$provider->lat . ') )
+           * cos( radians( `lat` ) )
+           * cos( radians( `long` )
+           - radians(' . $provider->long  . ') )
+           + sin( radians(' . $provider->lat  . ') )
+           * sin( radians( `lat` ) ) ) )');
+        $order= OrderService::where('id',$order_id)
+                                ->wherein('status',  ['pending'])
+                                ->selectRaw("*,{$sqlDistance} as distance")
+                                ->first();
+        if(!$order){
+            return responseApi(405, translate('The order is no longer available'));
         }
-        return  responseApi(200, translate('return_data_success'),OrderServiceResource::collection($orders));
+
+        return  responseApi(200, translate('return_data_success'),new OrderServiceResource($order));
 
     }
-    public function show($id)
+
+    public function getMyOrderOne($order_id)
     {
-        $order= auth()->user()->orders()->whereId($id)->first();
-        if(!$order)
-            return responseApi(404, translate("Order Not Found"));
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
 
+        $provider=auth()->user();
+        $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$provider->lat . ') )
+           * cos( radians( `lat` ) )
+           * cos( radians( `long` )
+           - radians(' . $provider->long  . ') )
+           + sin( radians(' . $provider->lat  . ') )
+           * sin( radians( `lat` ) ) ) )');
+        $order= auth()->user()->orders()
+            ->where('id',$order_id)
+            ->selectRaw("*,{$sqlDistance} as distance")
+            ->first();
+        if(!$order){
+            return responseApi(405, translate('The order is no longer available'));
+        }
 
-        return  responseApi(200, translate('return_data_success'),new OrderServiceAllDataResource($order));
+        return  responseApi(200, translate('return_data_success'),new OrderServiceResource($order));
 
     }
-    public function GetByInvoiceNo(Request $request)
+    public function submitPrice(Request $request)
     {
-        $invoice_no=$request->invoice_no;
-//        $order= auth()->user()->orders()->wherehas('transaction',function ($q) use ($invoice_no){
-//            $q->where('invoice_no',$invoice_no);
-//        })->first();
-        $order= OrderService::wherehas('transaction',function ($q) use ($invoice_no){
-            $q->where('invoice_no',$invoice_no);
-        })->first();
-        if(!$order)
-            return responseApi(404, translate("Order Not Found"));
 
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+            'price' => 'required|numeric'
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
 
-        return  responseApi(200, translate('return_data_success'),new OrderServiceAllDataResource($order));
+     if(!auth()->check())
+         return responseApi(403, translate('Unauthenticated user'));
+
+        $provider=auth()->user();
+
+        $order=OrderService::where('id',$request->order_id)
+                    ->where('status','pending')->first();
+
+        if(!$order){
+            return responseApi(405, translate('The order is no longer available'));
+        }
+        PriceQuote::create([
+            'provider_id'=>$provider->id,
+            'order_service_id'=>$order->id,
+            'price'=>$request->price,
+        ]);
+        return  responseApi(200, translate('return_data_success'));
 
     }
+
 }
