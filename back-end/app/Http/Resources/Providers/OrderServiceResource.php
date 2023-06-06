@@ -48,8 +48,12 @@ class OrderServiceResource extends JsonResource
             'service'=>new ServiceResource($this->service),
             'category'=>new CategoryResource($this->category),
             'vehicle_transporter'=>new TransporterResource($transaction->transporter),
-            'images'=>$this->getMedia('images'),
-            'videos'=>$this->getMedia('videos'),
+            'images'=>$this->getMedia('images')->map(function ($item) {
+                return $item->getUrl();
+            })->all(),
+            'videos'=>$this->getMedia('videos')->map(function ($item) {
+                return $item->getUrl();
+            })->all(),
             'transaction_id'=>$this->transaction_id,
             'invoice_no'=>$transaction->invoice_no??null,
             'discount_amount'=>$transaction->discount_amount??0,
