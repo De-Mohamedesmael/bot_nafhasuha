@@ -84,4 +84,7 @@
   'Your account has already been deleted. Please contact customer service to recover your account.' => 'Your account has already been deleted. Please contact customer service to recover your account.',
   'token_invalid' => 'Token invalid',
   'Request_has_been_successfully' => 'Request has been successfully',
+  'The order is no longer available' => 'The order is no longer available',
+  'Price quote has been successfully declined' => 'Price quote has been successfully declined',
+  'This quote has been declined by the recipient' => 'This quote has been declined by the recipient',
 );

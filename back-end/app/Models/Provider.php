@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -73,5 +74,13 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->hasMany(OrderService::class,'provider_id');
     }
+    public function getDistanceFromCoordinates($lat, $long)
+    {
+        $lat1 = deg2rad((float)$lat);
+        $lat2 = deg2rad((float)$this->lat);
+        $long1 = deg2rad((float)$long);
+        $long2 = deg2rad((float)$this->long);
 
+        return 111.045 * acos(cos($lat1) * cos($lat2) * cos($long2 - $long1) + sin($lat1) * sin($lat2));
+    }
 }

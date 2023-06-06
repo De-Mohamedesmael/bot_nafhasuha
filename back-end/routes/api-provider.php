@@ -38,6 +38,10 @@ Route::get('home', [HomeController::class, 'index']);
 
 Route::get('completed-orders', [OrderController::class, 'CompletedOrders']);
 Route::get('ongoing-orders', [OrderController::class, 'OngoingOrders']);
+Route::get('order/{id}', [OrderController::class, 'getOrderOne']);
+Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
+
+Route::POST('submit-price', [OrderController::class, 'submitPrice']);
 
 
 
