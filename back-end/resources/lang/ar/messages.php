@@ -87,4 +87,5 @@
   'The order is no longer available' => 'The order is no longer available',
   'Price quote has been successfully declined' => 'Price quote has been successfully declined',
   'This quote has been declined by the recipient' => 'This quote has been declined by the recipient',
+  'Your wallet balance is insufficient' => 'Your wallet balance is insufficient',
 );

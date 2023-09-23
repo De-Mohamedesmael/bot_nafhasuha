@@ -87,8 +87,8 @@ class OrderController extends ApiController
 //            $q->where('invoice_no',$invoice_no);
 //        })->first();
         $order= OrderService::wherehas('transaction',function ($q) use ($invoice_no){
-            $q->where('invoice_no',$invoice_no);
-        })->first();
+                        $q->where('invoice_no',$invoice_no);
+                    })->first();
         if(!$order)
             return responseApi(404, translate("Order Not Found"));
 

@@ -149,6 +149,9 @@ class ServiceUtil
                 $all_data['lat_to'] =$request->lat_to;
                 $all_data['long_to'] =$request->long_to;
                 break;
+            case 'PeriodicInspection':
+                $all_data['cy_periodic_id'] =$request->cy_periodic_id;
+                break;
             default :
                 break;
         }
@@ -164,6 +167,7 @@ class ServiceUtil
             'date_at'=>$request->date_at,
             'time_at'=>$request->time_at,
             'address'=>$request->address,
+            'payment_method'=>$request->payment_method,
             'lat'=>$request->lat,
             'long'=>$request->long,
             'details'=>$request->details
