@@ -3,6 +3,7 @@
 namespace App\Utils;
 
 use App\Http\Resources\OrderServiceResource;
+use App\Models\CyPeriodic;
 use App\Models\OrderService;
 use App\Models\Provider;
 use App\Models\Service;
@@ -126,6 +127,13 @@ class TransactionUtil
     public function saveTransactionForOrderService($OrderService,$discount,$type_id=null):object
     {
 
+        $grand_total=0;
+        $final_total=0;
+        if($OrderService->type == 'PeriodicInspection'){
+            $cy_periodic = CyPeriodic::whereId($OrderService->cy_periodic_id)->first();
+            $grand_total=$cy_periodic->price;
+            $final_total=$cy_periodic->price - $discount['discount_value'];
+        }
 
 
         $Transaction= Transaction::create([
@@ -137,8 +145,8 @@ class TransactionUtil
             'discount_type'=>$discount['discount_type'],
             'discount_value'=>$discount['discount_value'],
             'discount_amount'=>$discount['discount_value'],
-            'grand_total'=>0,
-            'final_total'=>0,
+            'grand_total'=>$grand_total,
+            'final_total'=>$final_total,
         ]);
 
         $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);

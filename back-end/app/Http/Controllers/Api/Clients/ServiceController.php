@@ -13,6 +13,7 @@ use App\Http\Resources\TransporterResource;
 use App\Models\Category;
 use App\Models\CategoryService;
 use App\Models\Coupon;
+use App\Models\CyPeriodic;
 use App\Models\Provider;
 use App\Models\Service;
 use App\Models\Transporter;
@@ -343,14 +344,19 @@ class ServiceController extends ApiController
 
         $validator = validator($request->all(), [
             'vehicle_id' => 'required|integer|exists:user_vehicles,id',
-            'date_at' => 'required|Date',
-            'time_at' => 'required|string',
+            'cy_periodic_id' => 'required|integer|exists:cy_periodics,id',
             'city_id' => 'required|integer|exists:cities,id',
+            'address' => 'required|string|max:300',
+            'lat' => 'required|string',
+            'long' => 'required|string',
+            'payment_method' => 'required|string|in:Online,Wallet',
             'coupon_code' => 'nullable|string',
 
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
+
+
 
         $vehicle= UserVehicle::where('id',$request->vehicle_id)
             ->where('user_id',auth()->id())
@@ -363,7 +369,13 @@ class ServiceController extends ApiController
 
         DB::beginTransaction();
         try {
-
+            if($request->payment_method == 'Wallet'){
+                $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
+                $price_=CyPeriodic::whereId($request->cy_periodic_id)->first()->price;
+                if($wallet_user < $price_){
+                    return responseApiFalse(405, translate('Your wallet balance is insufficient'));
+                }
+            }
             $request->merge([
                 'service_id'=>1,
                 'category_id'=>4,
@@ -395,7 +407,7 @@ class ServiceController extends ApiController
 
         }catch (\Exception $exception){
             DB::rollBack();
-           //return$exception ;
+//           return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }

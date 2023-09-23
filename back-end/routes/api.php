@@ -139,6 +139,8 @@ Route::get('faqs', [GeneralController::class, 'faqs']);
 Route::get('infos', [GeneralController::class, 'infos']);
 Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
+Route::post('get-periodic-inspection', [GeneralController::class, 'GetPeriodicInspection']);
+Route::get('get-offers', [GeneralController::class, 'GetOffers']);
 
 ///////////////////////////////// start notifications //////////////////////////////////////////
 Route::get('notifications', [NotificationControlleR::class, 'index']);

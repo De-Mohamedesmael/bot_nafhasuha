@@ -8,6 +8,8 @@ use App\Http\Resources\AreaResource;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\CountryResource;
+use App\Http\Resources\CouponResource;
+use App\Http\Resources\CyPeriodicResource;
 use App\Http\Resources\IconResource;
 use App\Http\Resources\InfoResource;
 use App\Http\Resources\SplashScreenResource;
@@ -18,9 +20,12 @@ use App\Models\CategoryFaqTranslation;
 use App\Models\City;
 use App\Models\ContactUs;
 use App\Models\Country;
+use App\Models\Coupon;
+use App\Models\CyPeriodic;
 use App\Models\FaqTranslation;
 use App\Models\Icon;
 use App\Models\Info;
+use App\Models\Provider;
 use App\Models\SplashScreen;
 use App\Models\User;
 use App\Utils\Util;
@@ -144,7 +149,7 @@ class GeneralController extends ApiController
     }
     public function infos(Request $request){
         $validator = validator($request->all(), [
-            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy',
+            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,termsPeriodicInspection',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -199,6 +204,25 @@ class GeneralController extends ApiController
         }
 
         return responseApi(200,\App\CPU\translate('return_data_success'), $alldata);
+    }
+    public function GetPeriodicInspection(Request $request){
+        $validator = validator($request->all(), [
+            'city_id' => 'required|integer|exists:cities,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        $data=CyPeriodicResource::collection(CyPeriodic::where('city_id',$request->city_id)->Active()->orderBy('sort')->get());
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), $data);
+    }
+    public function GetOffers(){
+        $coupons=Coupon::Active()->wherehas('users',function ($q){
+            $q->where('users.id', auth('api')->id());
+        })->latest()->get();
+        $data=CouponResource::collection($coupons);
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), $data);
     }
 }
 
