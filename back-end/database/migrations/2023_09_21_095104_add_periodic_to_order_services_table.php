@@ -14,7 +14,7 @@ class AddPeriodicToOrderServicesTable extends Migration
     public function up()
     {
         Schema::table('order_services', function (Blueprint $table) {
-            $table->enum('payment_method',['Online','Cash','Wallet'])->after('status');
+            $table->enum('payment_method',['Online','Cash','Wallet'])->after('status')->nullable();
             $table->unsignedBigInteger('cy_periodic_id')->unsigned()->nullable()->after('city_id');
             $table->foreign('cy_periodic_id')
                 ->references('id')->on('cy_periodics')

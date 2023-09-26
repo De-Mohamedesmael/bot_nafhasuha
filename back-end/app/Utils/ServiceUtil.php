@@ -218,4 +218,81 @@ class ServiceUtil
         }
         return $PriceQuote ;
     }
-}
+     /**
+     * get Cost for Transport Vehicle
+     *
+     * @param  $request
+     * @return float
+     */
+    public function CostTransportVehicle($request,$transporter): float
+    {
+
+        $lat1=$request->lat;
+        $long1=$request->long;
+        $lat2=$request->lat_to;
+        $long2=$request->long_to;
+        $time=$this->suggestedTimeBetweenTheTwoPoints($lat1,$long1,$lat2,$long2);
+        $distance=$this->suggestedDistanceBetweenTheTwoPoints($lat1,$long1,$lat2,$long2);
+
+        $price[]=round($transporter->price, 2);
+        $price[]=round($transporter->price_for_minute*$time, 2);
+        $price[]= round($transporter->price_for_kilo*$distance, 2);
+
+        return max($price) ;
+    }
+    /**
+     * get The suggested time between the two points
+     *
+     * @param  $lat1
+     * @param  $long1
+     * @param  $lat2
+     * @param  $long2
+     * @return float
+     */
+    public function suggestedTimeBetweenTheTwoPoints($lat1,$long1,$lat2,$long2): float
+    {
+
+//        $client = new \GuzzleHttp\Client();
+//        $apiKey = env('GOOGLE_MAPS_API_KEY');
+//
+//        $response = $client->get("https://maps.googleapis.com/maps/api/directions/json?origin={$lat1},{$long1}&destination={$lat2},{$long2}&key={$apiKey}");
+//
+//        $data = json_decode($response->getBody());
+//
+//        if ($data->status === 'OK') {
+//            $duration = $data->routes[0]->legs[0]->duration->text;
+//            return (float)$duration;
+//        } else {
+            return 10.00;
+//        }
+
+
+    }
+    /**
+     * get The suggested distance between the two points
+     *
+     * @param  $lat1
+     * @param  $long1
+     * @param  $lat2
+     * @param  $long2
+     * @return float
+     */
+    public function suggestedDistanceBetweenTheTwoPoints($lat1,$long1,$lat2,$long2): float
+    {
+
+        $lat1 = deg2rad($lat1);
+        $long1 = deg2rad($long1);
+        $lat2 = deg2rad($lat2);
+        $long2 = deg2rad($long2);
+        $latDiff = $lat2 - $lat1;
+        $longDiff = $long2 - $long1;
+        $distance = 2 * 6371 * asin(sqrt(
+            pow(sin($latDiff / 2), 2) +
+            cos($lat1) * cos($lat2) * pow(sin($longDiff / 2), 2)
+        ));
+
+        return $distance;
+    }
+
+
+    }
