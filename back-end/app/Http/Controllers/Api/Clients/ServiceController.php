@@ -562,6 +562,45 @@ class ServiceController extends ApiController
 
 
     }
+    /** cost for  Order Transport Vehicle Service
+     * @param Request $request
+     * @return Response
+     */
+    public function CostServiceTransportVehicle(Request $request)
+    {
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        $validator = validator($request->all(), [
+            'transporter_id' => 'required|integer|exists:transporters,id',
+            'lat' => 'required|string',
+            'long' => 'required|string',
+            'lat_to' => 'required|string',
+            'long_to' => 'required|string',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        $transporter=Transporter::whereId($request->transporter_id)->first();
+        if(!$transporter){
+            return responseApiFalse(405, translate('transporter not found'));
+
+        }
+        DB::beginTransaction();
+        try {
+
+            $cost = $this->ServiceUtil->CostTransportVehicle($request,$transporter);
+            DB::commit();
+            return  responseApi(200, translate('return_data_success'),['cost'=>$cost]);
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+
+
+    }
     public function getCoupon(Request $request)
     {
         $validator = validator($request->all(), [

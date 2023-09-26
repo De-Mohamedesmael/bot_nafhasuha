@@ -124,7 +124,7 @@ class TransactionUtil
      * @param integer $type_id
      * @return object
      */
-    public function saveTransactionForOrderService($OrderService,$discount,$type_id=null):object
+    public function saveTransactionForOrderService($OrderService,$discount,$type_id=null,$suggested_price=0):object
     {
 
         $grand_total=0;
@@ -142,6 +142,7 @@ class TransactionUtil
             'type'=>'OrderService',
             'status'=>'pending',
             'type_id'=>$type_id,
+            'suggested_price'=>$suggested_price,
             'discount_type'=>$discount['discount_type'],
             'discount_value'=>$discount['discount_value'],
             'discount_amount'=>$discount['discount_value'],
