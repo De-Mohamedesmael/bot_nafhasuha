@@ -50,7 +50,7 @@ class ServiceEmergencyController extends ApiController
             'address_to' => 'required|string|max:300',
             'lat_to' => 'required|string',
             'long_to' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -124,7 +124,7 @@ class ServiceEmergencyController extends ApiController
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -201,7 +201,7 @@ class ServiceEmergencyController extends ApiController
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -265,7 +265,7 @@ class ServiceEmergencyController extends ApiController
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
