@@ -39,10 +39,12 @@ class HomeController extends ApiController
             ->firstOrFail();
 
         $data['provider']=new ProviderHomeResource($provider);
+        $data['new_orders']=[];
+        if($provider->is_activation()){
+            $transactions= $this->TransactionUtil->getProviderPendingOrderServiceByCategories($categories_ids,$provider);
+            $data['new_orders']=OrderServiceResource::collection($transactions);
+        }
 
-        $transactions= $this->TransactionUtil->getProviderPendingOrderServiceByCategories($categories_ids,$provider);
-
-        $data['new_orders']=OrderServiceResource::collection($transactions);
         return  responseApi(200, translate('return_data_success'),$data);
 
     }

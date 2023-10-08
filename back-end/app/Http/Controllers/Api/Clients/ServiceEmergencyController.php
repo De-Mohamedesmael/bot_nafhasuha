@@ -119,8 +119,8 @@ class ServiceEmergencyController extends ApiController
 
         $validator = validator($request->all(), [
             'type' => 'required|string|in:Change,Subscription',
-            'vehicle_id' => 'required_if:type,==,Change|integer|exists:user_vehicles,id',
-            'type_battery_id' => 'required_if:type,==,Change|integer|exists:type_batteries,id',
+//            'vehicle_id' => 'required_if:type,==,Change|integer|exists:user_vehicles,id',
+//            'type_battery_id' => 'required_if:type,==,Change|integer|exists:type_batteries,id',
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',

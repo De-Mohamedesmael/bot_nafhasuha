@@ -18,11 +18,12 @@ class ProviderOrderServiceResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "phone" => $this->phone,
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             "provider_type" =>$this->provider_type,
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,
             "rates_count" => $this->rates_count,
-            'categories'=>CategoryResource::collection($this->categories)
+//            'categories'=>CategoryResource::collection($this->categories)
         ];
     }
 }
