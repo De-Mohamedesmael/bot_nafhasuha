@@ -19,11 +19,13 @@ class CouponResource extends JsonResource
             'title'=>$this->title,
             'description'=>$this->description,
             'code'=>$this->code,
+            'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             'type_discount'=>$this->type_discount,
             'discount'=>(float)$this->discount,
             'min_price'=>(float)$this->min_price,
             'start_date'=>$this->start_date,
             'end_date'=>$this->end_date,
+
         ];
     }
 }
