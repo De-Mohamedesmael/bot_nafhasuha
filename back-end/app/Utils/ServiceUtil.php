@@ -2,11 +2,13 @@
 
 namespace App\Utils;
 
+use App\Models\CyPeriodicProvider;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
 use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Geocoder\Facades\Geocoder;
@@ -137,6 +139,13 @@ class ServiceUtil
     public function StoreOrderService($request, $vehicle,$type,$service_id): object
     {
         $all_data=[];
+
+        $not_request_price=['PeriodicInspection'];
+        //Tire&TransportVehicle&ChangeBattery&Petrol&SubscriptionBattery
+        $is_offer_price=1;
+        if(in_array($type,$not_request_price)){
+            $is_offer_price=0;
+        }
         switch ($type){
             case "VehicleBarrier" :
 //                $type= 'Maintenance'.$type;
@@ -194,6 +203,38 @@ class ServiceUtil
                     ->toMediaCollection('videos');
             }
         }
+
+
+        if($type == 'PeriodicInspection'){
+            $providers_id=CyPeriodicProvider::where('cy_periodic_id',$request->cy_periodic_id)
+                ->pluck('provider_id')->toArray();
+
+        }else{
+            $max_distance=\Settings::get('max_distance',500);
+            $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$request->lat . ') )
+               * cos( radians( `lat` ) )
+               * cos( radians( `long` )
+               - radians(' . $request->long  . ') )
+               + sin( radians(' . $request->lat  . ') )
+               * sin( radians( `lat` ) ) ) )');
+            // Get providers id
+            $providers_id = Provider::Active()->withAvg('rates as totalRate', 'rate')
+                ->withCount('rates')->selectRaw("{$sqlDistance} as distance")
+                ->wherehas('categories',function ($q) use($request){
+                    $q->where('categories.id',$request->category_id);
+                })->having('distance', '<=', $max_distance)
+                ->pluck('providers.id')->toArray();
+        }
+        if($providers_id){
+            UserRequest::create([
+                'order_service_id'=>$order->id,
+                'user_id'=>auth()->id(),
+                'is_offer_price'=>$is_offer_price,
+                'suggested_price'=>$request->cost,
+                'providers_id'=>json_encode($providers_id)
+            ]);
+        }
+
         return$order ;
     }
     /**

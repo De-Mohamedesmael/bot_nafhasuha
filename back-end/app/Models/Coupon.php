@@ -6,6 +6,7 @@ use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -28,7 +29,10 @@ class Coupon extends Model implements TranslatableContract ,  HasMedia
     protected $fillable = [
         'name',
         'code',
+        'type',
+        'type_id',
         'is_active',
+        'is_multi_use',
         'discount',
         'min_price',
         'limit',
@@ -45,7 +49,8 @@ class Coupon extends Model implements TranslatableContract ,  HasMedia
     }
     public function scopeActive($query)
     {
-        return $query->where('is_active',  1);
+        $date = Carbon::now()->format('Y-m-d');
+        return $query->where('is_active',  1)->whereDate('end_date','>' ,$date);
     }
 
 
@@ -59,8 +64,12 @@ class Coupon extends Model implements TranslatableContract ,  HasMedia
     {
         return $this->hasMany(CouponUser::class);
     }
-    public function services()
+    public function type_model()
     {
-        return $this->belongsToMany(Service::class,'coupon_services');
+        if($this->type=='Category'){
+            return $this->belongsTo(Category::class,'type_id');
+        }
+        return $this->belongsTo(Service::class,'type_id');
+
     }
 }

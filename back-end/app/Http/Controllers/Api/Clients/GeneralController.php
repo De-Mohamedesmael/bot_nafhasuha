@@ -149,7 +149,7 @@ class GeneralController extends ApiController
     }
     public function infos(Request $request){
         $validator = validator($request->all(), [
-            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,termsPeriodicInspection',
+            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,termsPeriodicInspection,terms',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
