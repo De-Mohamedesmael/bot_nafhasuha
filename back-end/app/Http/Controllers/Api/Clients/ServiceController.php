@@ -224,7 +224,7 @@ class ServiceController extends ApiController
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -298,7 +298,7 @@ class ServiceController extends ApiController
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -383,7 +383,7 @@ class ServiceController extends ApiController
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -407,7 +407,7 @@ class ServiceController extends ApiController
 
         }catch (\Exception $exception){
             DB::rollBack();
-//           return$exception ;
+           return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -460,7 +460,7 @@ class ServiceController extends ApiController
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -531,7 +531,7 @@ class ServiceController extends ApiController
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -604,27 +604,38 @@ class ServiceController extends ApiController
     public function getCoupon(Request $request)
     {
         $validator = validator($request->all(), [
-            'service_id' => 'required|integer|exists:services,id',
+            'service_id' => 'required',
+            'category_id' => 'required',
             'coupon_code' => 'required|string',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        $response = $this->checkCoupon($request->coupon_code,$request->service_id);
+        $response = $this->checkCoupon($request->coupon_code,$request->category_id,$request->service_id);
         if ($response['status'])
             return responseApi(200, translate('return_data_success'), ['discount' => $response['item']->discount]);
 
         return responseApiFalse(405 , $response['msg']);
     }
-    public function checkCoupon($code,$service_id)
+    public function checkCoupon($code,$category_id,$service_id)
     {
         $date = Carbon::now()->format('Y-m-d');
         $item = Coupon::where('code' , $code)->first();
 
 
         if ($item) {
-            if(!$item->services()->where('services.id',$service_id)->first())
-                return ['status' => false, 'msg' => translate('coupon not active in this service')];
+            if(!$item->is_multi_use){
+                $type_id=  $service_id;
+                 if($item->type == 'Category'){
+                     $type_id=  $category_id;
+                }
+                if( $item->type_id != $type_id ){
+                    return ['status' => false, 'msg' => translate('coupon not active in this service')];
+                }
+
+
+            }
+
 
             if ($item->start_date > $date)
                 return ['status' => false, 'msg' => translate('coupon not started')];

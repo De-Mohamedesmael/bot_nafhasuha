@@ -61,7 +61,21 @@ class Transaction extends Model
 
         return $this->belongsTo(Transporter::class,'type_id','id');
     }
+    public function tire()
+    {
 
+        return $this->belongsTo(Tire::class,'type_id','id');
+    }
+    public function type_battery()
+    {
+
+        return $this->belongsTo(TypeBattery::class,'type_id','id');
+    }
+    public function type_gasoline()
+    {
+
+        return $this->belongsTo(TypeGasoline::class,'type_id','id');
+    }
     public function friend()
     {
 

@@ -22,9 +22,9 @@ class CouponResource extends JsonResource
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             'type_discount'=>$this->type_discount,
             'discount'=>(float)$this->discount,
-            'min_price'=>(float)$this->min_price,
-            'start_date'=>$this->start_date,
-            'end_date'=>$this->end_date,
+            'is_multi_use'=>$this->is_multi_use,
+            'type'=>$this->type,
+            'type_id'=>$this->type_id,
 
         ];
     }
