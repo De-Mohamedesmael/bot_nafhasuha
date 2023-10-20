@@ -26,10 +26,12 @@ use App\Models\FaqTranslation;
 use App\Models\Icon;
 use App\Models\Info;
 use App\Models\Provider;
+use App\Models\ProviderRate;
 use App\Models\SplashScreen;
 use App\Models\User;
 use App\Utils\Util;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use function App\CPU\translate;
@@ -179,6 +181,25 @@ class GeneralController extends ApiController
         ]);
 
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
+    }
+    public function storeRate(Request $request){
+        $validator = validator($request->all(), [
+            'provider_id' => 'required|integer|exists:providers,id',
+            'rate' => 'required|in:0,1,2,3,4,5',
+            'comment' => 'required|string|max:300',
+        ]);
+
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        ProviderRate::create([
+            'user_id' => Auth::id(),
+            'provider_id' => $request->provider_id,
+            'rate' => $request->rate,
+            'comment' => $request->comment,
+        ]);
+
+        return responseApi(200,\App\CPU\translate('Your rate has been successfully'));
     }
 
 

@@ -121,6 +121,7 @@ Route::middleware('auth.guard:api')->group(function () {
     });
 
     Route::Post('check-coupon', [ServiceController::class, 'getCoupon']);
+    Route::Post('rate-provider', [GeneralController::class, 'storeRate']);
 
 });
 

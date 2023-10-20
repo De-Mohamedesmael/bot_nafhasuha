@@ -89,4 +89,5 @@
   'This quote has been declined by the recipient' => 'This quote has been declined by the recipient',
   'Your wallet balance is insufficient' => 'Your wallet balance is insufficient',
   'tire Not Found.If error persists,contact info@gmail.com' => 'Tire Not Found.If error persists contact info@gmail.com',
+  'Your rate has been successfully' => 'Your rate has been successfully',
 );
