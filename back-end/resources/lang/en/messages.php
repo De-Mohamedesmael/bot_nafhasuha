@@ -78,4 +78,5 @@
   'Provider logout' => 'Provider logout',
   'Page Not Found.If error persists,contact info@gmail.com' => 'Page Not Found.If error persists contact info@gmail.com',
   'Provider profile update' => 'Provider profile update',
+
 );

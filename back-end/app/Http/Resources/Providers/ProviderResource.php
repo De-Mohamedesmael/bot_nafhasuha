@@ -32,7 +32,8 @@ class ProviderResource extends JsonResource
             "address" => $this->address,
             "lat" => $this->lat,
             "long" =>$this->long ,
-
+            'default_language'=>$this->default_language,
+            'is_notification'=>$this->is_notification,
             'categories'=>CategoryResource::collection($this->categories),
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),

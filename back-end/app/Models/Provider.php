@@ -83,4 +83,8 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
 
         return 111.045 * acos(cos($lat1) * cos($lat2) * cos($long2 - $long1) + sin($lat1) * sin($lat2));
     }
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'provider_notifications');
+    }
 }

@@ -21,4 +21,4 @@ use App\Http\Controllers\Dashboard\TrashedStoreController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::view('/', 'front-end.home');

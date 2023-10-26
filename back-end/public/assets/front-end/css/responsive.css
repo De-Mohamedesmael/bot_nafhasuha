@@ -1,0 +1,266 @@
+/* Extra small devices (phones) */
+@media (max-width: 575.98px) {
+    /* Styles for extra small devices */
+    .navbar-brand {
+        float: left;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-right: 0;
+        font-size: 0;
+    }
+
+    .head-header {
+        height: 400px;
+    }
+
+    .head-header .image {
+        height: 80px;
+    }
+
+    .head-header img {
+        height: 130px;
+        padding-top: 16px;
+    }
+
+    .head-header .text {
+        margin-top: 50px;
+    }
+
+    .head-header h3 {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 135%;
+    }
+
+    .head-header p {
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 171%;
+    }
+
+    .head-header span {
+        font-size: 20px;
+    }
+
+    .navbar-brand {
+        margin-right: -75px;
+    }
+
+    .count-section .items {
+        display: flex !important;
+        flex-direction: column;
+    }
+
+    #services .items {
+        display: flex;
+        margin: 50px 0;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #services .items .item {
+        margin-bottom: 20px;
+    }
+
+    #review .items .body {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+        align-content: space-around;
+        align-items: center;
+        height: 350px;
+    }
+
+    #review .items .body img {
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        align-content: space-between;
+        justify-content: space-around;
+        align-items: stretch;
+        flex-wrap: nowrap;
+    }
+
+    #screen-app .img-items {
+        width: 150px;
+        background-color: #F7F9FC;
+        padding: 26px;
+        border-radius: 50%;
+        margin: auto;
+        position: static !important;
+        display: block;
+    }
+
+    #screen-app h3 {
+        font-size: 20px;
+        margin-top: 10%;
+    }
+
+    #screen-app .decs {
+        font-size: 13px;
+    }
+
+    #screen-app .row .container {
+        border-radius: 25px;
+        background: #FFF;
+        padding: 25px;
+        display: flex;
+        flex-direction: column-reverse;
+        flex-wrap: nowrap;
+        align-content: space-around;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    #screen-app .slider_review {
+        height: auto !important;
+        margin-top: 30px;
+    }
+    #package .item .title-package p {
+        font-size: 14px;
+    }
+    #package .item .title-package {
+        fill: #FFF;
+        filter: drop-shadow(0px 0px 4px rgba(88, 52, 0, 0.26));
+        position: absolute;
+        top: 18%;
+        height: 35px;
+        width: auto;
+        background: #fff;
+        padding: 5px 40px;
+        border-radius: 30px 0 0 30px;
+        right: 5%;
+    }
+    #package .item
+{
+    height: 300px;
+    margin-bottom: 30px;
+}
+    #screen-app .slider_review .owl-nav {
+        display: contents;
+    }
+
+    #newspaper svg {
+        display: none;
+    }
+
+    #newspaper .container h2 {
+        color: #FFF;
+        font-family: "Tajawal", sans-serif;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 144.5%;
+        letter-spacing: 0.8px;
+    }
+
+    #newspaper .container p {
+        color: #FFF;
+        font-family: "Tajawal", sans-serif;
+        font-size: 11px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+    }
+
+    #newspaper input {
+        width: 100%;
+    }
+
+    #newspaper button {
+        position: static;
+        height: 40px;
+        width: 110px;
+        margin: 21px auto;
+    }
+
+    #newspaper .container .body {
+        height: 400px;
+    }
+
+    #contentUs .row {
+        display: flex;
+        flex-direction: column;
+        align-content: space-around;
+        justify-content: space-between;
+        align-items: stretch;
+    }
+
+
+    footer {
+        background-image: url(../public/images/footer.png);
+        height: auto;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: relative;
+        padding: 51px 0 35px 0;
+    }
+
+    footer .row {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column-reverse;
+    }
+
+    footer .address {
+        margin-top: 150px;
+    }
+
+    footer .footer-logo {
+        display: flex;
+        /* justify-content: center; */
+        align-items: center;
+        /* height: 250px; */
+        flex-direction: column;
+        align-content: stretch;
+        flex-wrap: wrap;
+    }
+
+    footer .btn-company {
+        width: 150px;
+        height: 40px;
+        flex-shrink: 0;
+        border-radius: 218px;
+        background: #013E6B;
+        text-align: center;
+        line-height: 40px;
+        margin: 20px auto;
+    }
+
+
+}
+
+
+/* Small devices (tablets) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    /* Styles for small devices */
+    #icon_bar{
+        display: block;
+    }
+}
+
+/* Medium devices (desktops) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Styles for medium devices */
+}
+
+/* Large devices (desktops) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    /* Styles for large devices */
+    #icon_bar{
+        display: none;
+    }
+}
+
+/* Extra large devices (large desktops) */
+@media (min-width: 1200px) {
+    /* Styles for extra large devices */
+    #icon_bar{
+        display: none;
+    }
+}
