@@ -282,17 +282,17 @@
 
             <div class="row text-center ">
                 <div class="col-md-4 items">
-                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <img src="{{asset('assets/front-end/public/images/provider/service.png')}}">
                     <h4>هتختار وقتك</h4>
                     <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
                 </div>
                 <div class="col-md-4 items">
-                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <img src="{{asset('assets/front-end/public/images/provider/service1.png')}}">
                     <h4>زود دخلك</h4>
                     <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
                 </div>
                 <div class="col-md-4 items">
-                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <img src="{{asset('assets/front-end/public/images/provider/service2.png')}}">
                     <h4>قريب وبعيد هيجيلك</h4>
                     <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
                 </div>
