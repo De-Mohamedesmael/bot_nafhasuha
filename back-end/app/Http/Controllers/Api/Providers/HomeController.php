@@ -39,9 +39,10 @@ class HomeController extends ApiController
             ->firstOrFail();
 
         $data['provider']=new ProviderHomeResource($provider);
+        $data['my_wallet']=$this->TransactionUtil->getWalletProviderBalance(auth()->user());
         $data['new_orders']=[];
         if($provider->is_activation()){
-          $order_service_id=  UserRequest::whereJsonContains('providers_id',auth()->id())->pluck('order_service_id');
+            $order_service_id=  UserRequest::whereJsonContains('providers_id',auth()->id())->pluck('order_service_id');
 //            $transactions= $this->TransactionUtil->getProviderPendingOrderServiceByCategories($categories_ids,$provider);
             $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$provider->lat . ') )
                * cos( radians( `lat` ) )
