@@ -85,6 +85,9 @@
     #screen-app {
         padding: 50px 0;
     }
+    #package .items img {
+        width: 150px;
+    }
 </style>
 @endsection
 @section('content')
