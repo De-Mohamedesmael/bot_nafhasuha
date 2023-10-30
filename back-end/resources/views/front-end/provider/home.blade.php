@@ -1,5 +1,5 @@
-@extends('front-end.layouts.app')
-@section('title',\App\CPU\translate('index'))
+@extends('front-end.provider.layouts.app')
+@section('title',"شركة (مزود خدمة)")
 @section('styles')
 <style>
     img.img-count-section-right-icon {
@@ -127,33 +127,32 @@
     </section>
 
     <section id="services">
-
         <div class="container">
 
-            <div class="sections-title text-center animate__animated animate__bounceIn animate__slower">
+            <div class="sections-title text-center">
 
 
-                <h2>خدمتنا</h2>
+                <h2>شرح تطبيق مزد الخدمة</h2>
                 <p>لوريم إيبسوم هو ببساطة نص شكلي للطباعة.</p>
             </div>
             <div class="items">
-                <div class="item animate__animated animate__bounceIn animate__slower">
+                <div class="item">
                     <img alt="1" src="{{asset('assets/front-end/public/images/service/maintenance.svg')}}">
                     <h4>صيانة</h4>
                 </div>
-                <div class="item animate__animated animate__bounceIn animate__slower">
+                <div class="item">
                     <img alt="1" src="{{asset('assets/front-end/public/images/service/frame.svg')}}">
                     <h4>سطحة</h4>
                 </div>
-                <div class="item animate__animated animate__bounceIn animate__slower">
+                <div class="item">
                     <img alt="1" src="{{asset('assets/front-end/public/images/service/group-1171274898.svg')}}">
                     <h4>الفحص الدورى</h4>
                 </div>
-                <div class="item animate__animated animate__bounceIn animate__slower">
+                <div class="item">
                     <img alt="1" src="{{asset('assets/front-end/public/images/service/frame.svg')}}">
                     <h4>حواجز السيارات</h4>
                 </div>
-                <div class="item animate__animated animate__bounceIn animate__slower">
+                <div class="item">
                     <img alt="1" src="{{asset('assets/front-end/public/images/service/group-1171274959.svg')}}">
                     <h4>استشارات اعطال</h4>
                 </div>
@@ -217,7 +216,7 @@
     <section id="our-partners">
         <div class="container">
 
-            <div class="sections-title text-center animate__animated animate__bounceIn animate__slower">
+            <div class="sections-title text-center">
                 <h2>شركائنا</h2>
                 <p>اكتر من30 الف مركز صيانة خاص بينا</p>
             </div>
@@ -275,61 +274,28 @@
 
     <section id="package">
 
-        <div class="sections-title text-center animate__animated animate__bounceIn animate__slower">
-
-
-            <h2>بدون تكلفة إضافية ، اختر
-                أفضل خطة لديك</h2>
+        <div class="sections-title text-center">
+            <h2>مميزة الشغل في نفحصها</h2>
+            <p>اكتر من30 الف مركز صيانة خاص بينا</p>
         </div>
         <div class="container" style="padding: 3%;">
 
-            <div class="row">
-
-                <div class="col-md-6 col-xs-12 animate__animated animate__bounceIn animate__slower">
-                    <div class="item">
-                        <div class="background">
-                            <svg fill="none" height="131" viewBox="0 0 290 131" width="290"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M196.229 108.386C168.504 138.476 120.994 138.476 93.2696 108.386L1.35451 8.62911C-1.59758 5.42518 0.675002 0.241063 5.0316 0.241063L284.467 0.241088C288.823 0.241088 291.096 5.42519 288.144 8.62913L196.229 108.386Z"
-                                      fill="#0A2A51"/>
-                            </svg>
-                        </div>
-
-                        <div class="img">
-                            <img alt="1" src="{{asset('assets/front-end/public/images/package_two.png')}}">
-                            <div class="title-package">
-                                <p>باقة شركات</p>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
+            <div class="row text-center ">
+                <div class="col-md-4 items">
+                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <h4>هتختار وقتك</h4>
+                    <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
                 </div>
-                <div class="col-md-6 col-xs-12 animate__animated animate__bounceIn animate__slower ">
-                    <div class="item">
-                        <div class="background">
-                            <svg fill="none" height="131" viewBox="0 0 290 131" width="290"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M196.229 108.386C168.504 138.476 120.994 138.476 93.2696 108.386L1.35451 8.62911C-1.59758 5.42518 0.675002 0.241063 5.0316 0.241063L284.467 0.241088C288.823 0.241088 291.096 5.42519 288.144 8.62913L196.229 108.386Z"
-                                      fill="#0A2A51"/>
-                            </svg>
-                        </div>
-
-                        <div class="img">
-                            <img alt="1" src="{{asset('assets/front-end/public/images/package_one.png')}}">
-                            <div class="title-package">
-                                <p>باقة أفراد</p>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
+                <div class="col-md-4 items">
+                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <h4>زود دخلك</h4>
+                    <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
                 </div>
-
+                <div class="col-md-4 items">
+                    <img src="{{asset('assets/front-end/public/images/provider/service.svg')}}">
+                    <h4>قريب وبعيد هيجيلك</h4>
+                    <p>هتحدد الوقت المناسب ليك نفحصها هتسهل كل حاجة عليك</p>
+                </div>
             </div>
         </div>
     </section>
@@ -449,7 +415,7 @@
                 </div>
                 <div  class="client-slider-right" >
                     <img alt="" src="{{asset('assets/front-end/public/images/image_2023-10-25_11-06-59.png')}}">
-{{--                    <img class="img-count-client-slider-right-icon" src="{{asset('assets/front-end/public/images/image_2023-10-25_10-11-30.png')}}">--}}
+                    {{--                    <img class="img-count-client-slider-right-icon" src="{{asset('assets/front-end/public/images/image_2023-10-25_10-11-30.png')}}">--}}
 
                 </div>
                 <div class="client-slider-left" >
@@ -469,7 +435,7 @@
 
         <div class="container">
 
-            <div class="sections-title text-center animate__animated animate__bounceIn animate__slower">
+            <div class="sections-title text-center">
 
 
                 <h2>شاشة من التطبيق</h2>
@@ -480,7 +446,7 @@
                 <div class="container" style="border-radius: 25px;
 background: #FFF;padding: 25px">
 
-                    <div class="col-md-4 animate__animated animate__bounceIn animate__slower">
+                    <div class="col-md-4">
                         <div class="slider_review owl-carousel owl-theme" style="    display: flex;
     justify-content: center;
     align-items: center;
@@ -489,7 +455,7 @@ background: #FFF;padding: 25px">
                             <div class="item">
 
                                 <div class="d-flex justify-content-end" style="justify-content: end;">
-                                    <img alt="" class="avatar img-responsive" src="{{asset('assets/front-end/public/images/screen.png')}}">
+                                    <img alt="" class="avatar img-responsive" src="{{asset('assets/front-end/public/images/provider/screen.png')}}">
                                 </div>
 
 
@@ -497,7 +463,7 @@ background: #FFF;padding: 25px">
                             <div class="item">
 
                                 <div class="d-flex justify-content-end" style="justify-content: end;">
-                                    <img alt="" class="avatar img-responsive" src="{{asset('assets/front-end/public/images/screen.png')}}">
+                                    <img alt="" class="avatar img-responsive" src="{{asset('assets/front-end/public/images/provider/screen.png')}}">
 
                                 </div>
                             </div>
@@ -506,7 +472,7 @@ background: #FFF;padding: 25px">
                         </div>
 
                     </div>
-                    <div class="col-md-8 animate__animated animate__bounceIn animate__slower">
+                    <div class="col-md-8">
                         <img alt="" class="img-items" src="{{asset('assets/front-end/public/images/setting.svg')}}" style="    position: absolute;
     right: 0;">
                         <h3>تطبيق نفحصها لكل خدمات صيانة السيارات</h3>
@@ -518,10 +484,10 @@ background: #FFF;padding: 25px">
 
 
             </div>
-            <div class="w-100 text-center pt-3">
-                    <p>
-                        لننزل تطبيق 😍 نفحصها ولا تنسى الإعجاب 👍🏻 وانتظر رأيك لكتابته ✍🏻 على متجر جوجل بلاي لتطوير أنفسنا أكثر
-                    </p>
+            <div class="w-100 text-center  pt-3">
+                <p>
+                    لننزل تطبيق 😍 نفحصها ولا تنسى الإعجاب 👍🏻 وانتظر رأيك لكتابته ✍🏻 على متجر جوجل بلاي لتطوير أنفسنا أكثر
+                </p>
 
 
             </div>
@@ -539,12 +505,12 @@ background: #FFF;padding: 25px">
     <section id="contentUs">
         <div class="container">
 
-            <div class="sections-title text-center animate__animated animate__bounceIn animate__slower">
+            <div class="sections-title text-center">
                 <h2>تواصل معانا</h2>
                 <p>يمكنك التواصل معنا بسهولة لطلب خدمتك. </p>
             </div>
             <div class="row">
-                <div class="col-md-6 animate__animated animate__bounceIn animate__slower">
+                <div class="col-md-6">
                     <h2>نموذج الاتصال</h2>
                     <br>
                     <br>
@@ -552,12 +518,12 @@ background: #FFF;padding: 25px">
                     <form action="#" method="post">
                         <div class="row">
 
-                            <div class="col-md-6 col-xs-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <input class="form-control" placeholder="الاسم الكامل">
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xs-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <input class="form-control" placeholder="الايميل">
                                 </div>
@@ -583,7 +549,7 @@ background: #FFF;padding: 25px">
 
                     </form>
                 </div>
-                <div class="col-md-6 animate__animated animate__bounceIn animate__slower">
+                <div class="col-md-6">
                     <h2>ابقي على تواصل</h2>
                     <br>
                     <br>
@@ -662,8 +628,8 @@ background: #FFF;padding: 25px">
     </section>
 
     <section id="newspaper">
-        <div class="container animate__animated animate__bounceIn animate__slower">
-            <div class="first " style="position: relative">
+        <div class="container">
+            <div class="first" style="position: relative">
                 <svg fill="none" height="168" style="    left: -59px;
     position: absolute;
     height: 132px;" viewBox="0 0 211 168" width="211" xmlns="http://www.w3.org/2000/svg">
@@ -681,8 +647,8 @@ background: #FFF;padding: 25px">
 
             <svg fill="none" height="178" style="    height: 99px;
     position: absolute;
-    bottom: 8%;
-    left: 12%;" viewBox="0 0 169 178" width="169" xmlns="http://www.w3.org/2000/svg">
+    bottom: 30%;
+    left: 20%;" viewBox="0 0 169 178" width="169" xmlns="http://www.w3.org/2000/svg">
                 <path clip-rule="evenodd"
                       d="M152.164 108.795C151.187 107.835 149.635 107.85 148.667 108.812C137.064 119.973 124.847 125.649 112.39 125.791C100.261 125.928 88.0072 120.666 75.9846 110.24C73.3123 107.965 69.1815 103.227 65.5478 97.6325C68.5967 93.2469 70.6284 88.0534 71.6316 83.0498C73.1112 75.66 72.0338 68.8652 69.5952 65.5C68.244 63.6365 66.5016 62.4946 64.4643 62.0185C61.8566 61.4129 58.3132 61.9532 54.2465 65.4026C48.6357 70.1842 47.2719 77.0115 48.948 84.5253C49.8333 88.4753 51.6207 92.6204 53.8471 96.6039C51.2709 98.6603 48.0658 99.8499 44.1652 99.4216C35.9084 98.571 29.7176 91.7911 25.314 83.8142C21.495 76.9133 16.8943 66.7187 18.1104 58.6181C18.5222 55.8653 19.7264 53.4994 17.4545 51.2496C13.9761 47.7686 10.7876 51.3719 10.2168 55.1529C8.99478 63.2752 11.8899 73.0593 14.7472 80.5521C19.9911 94.3409 29.8315 106.743 43.1188 108.452C49.3479 109.225 54.6335 107.569 58.9148 104.491C62.9786 110.131 67.3615 114.797 70.2373 117.139C84.4668 128.493 98.7875 133.774 112.643 132.97C126.485 132.175 139.91 125.379 152.181 112.291C153.141 111.315 153.14 109.755 152.164 108.795ZM59.8689 86.6834C59.0048 84.3918 58.4209 82.1404 58.2496 79.9995C58.0364 77.2771 58.5615 74.7525 60.6833 72.9584C61.0429 72.659 61.4808 72.241 61.8403 71.9416C62.1107 72.887 62.5785 74.7465 62.5854 76.2846C62.5849 79.7179 61.8044 83.8035 60.2378 87.6086C60.0905 87.2898 59.9728 86.9906 59.8689 86.6834Z"
                       fill="white"
@@ -696,7 +662,7 @@ background: #FFF;padding: 25px">
                       fill="white"
                       fill-rule="evenodd"/>
             </svg>
-            <div class="justify-content-center body ">
+            <div class="justify-content-center body">
 
                 <h2>اشتراك في النشرة البريدية</h2>
                 <p>اشترك ليصلك كل ماهو جديد من خدمات وتطورات في نفحصها</p>
@@ -708,17 +674,18 @@ background: #FFF;padding: 25px">
             </div>
 
             <div>
-                <svg fill="none" height="215" style="    top: -30px;
+                <svg fill="none" height="215" style="    top: 135px;
     position: absolute;
     height: 132px;
-    right: 0;" viewBox="0 0 174 215" width="174" xmlns="http://www.w3.org/2000/svg">
+    right: 170px;" viewBox="0 0 174 215" width="174" xmlns="http://www.w3.org/2000/svg">
                     <path d="M124.22 213.14C56.3927 212.877 1.80038 161.089 2.07963 97.6652C2.35887 34.2414 57.4053 -17.1213 125.232 -16.8583C193.059 -16.5953 247.651 35.1924 247.372 98.6162C247.093 162.04 192.047 213.403 124.22 213.14Z"
                           stroke="white" stroke-width="3"/>
                 </svg>
-                <svg fill="none" height="162" style="top: -74px;
+                <svg fill="none" height="162" style="    top: 110px;
     position: absolute;
     height: 132px;
-    right: 10px;" viewBox="0 0 215 162" width="215" xmlns="http://www.w3.org/2000/svg">
+    right: 190px;
+" viewBox="0 0 215 162" width="215" xmlns="http://www.w3.org/2000/svg">
                     <path d="M123.893 159.98C56.0662 159.717 1.47397 107.929 1.75321 44.5051C2.03246 -18.9187 57.0789 -70.2814 124.906 -70.0185C192.733 -69.7555 247.325 -17.9677 247.046 45.4561C246.767 108.88 191.72 160.243 123.893 159.98Z"
                           stroke="white" stroke-width="3"/>
                 </svg>
@@ -728,45 +695,45 @@ background: #FFF;padding: 25px">
     </section>
 @endsection
 @section('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
-        const player = new Plyr('#player');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // This is the bare minimum JavaScript. You can opt to pass no arguments to setup.
+            const player = new Plyr('#player');
 
-        // Expose
-        window.player = player;
+            // Expose
+            window.player = player;
 
-        // Bind event listener
-        function on(selector, type, callback) {
-            document.querySelector(selector).addEventListener(type, callback, false);
-        }
+            // Bind event listener
+            function on(selector, type, callback) {
+                document.querySelector(selector).addEventListener(type, callback, false);
+            }
 
-        // Play
-        on('.js-play', 'click', () => {
-            player.play();
+            // Play
+            on('.js-play', 'click', () => {
+                player.play();
+            });
+
+            // Pause
+            on('.js-pause', 'click', () => {
+                player.pause();
+            });
+
+            // Stop
+            on('.js-stop', 'click', () => {
+                player.stop();
+            });
+
+            // Rewind
+            on('.js-rewind', 'click', () => {
+                player.rewind();
+            });
+
+            // Forward
+            on('.js-forward', 'click', () => {
+                player.forward();
+            });
         });
-
-        // Pause
-        on('.js-pause', 'click', () => {
-            player.pause();
-        });
-
-        // Stop
-        on('.js-stop', 'click', () => {
-            player.stop();
-        });
-
-        // Rewind
-        on('.js-rewind', 'click', () => {
-            player.rewind();
-        });
-
-        // Forward
-        on('.js-forward', 'click', () => {
-            player.forward();
-        });
-    });
-</script>
+    </script>
 
 @endsection
 

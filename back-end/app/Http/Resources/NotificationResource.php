@@ -21,7 +21,7 @@ class NotificationResource extends JsonResource
             'type'=>$this->type,
             'type_id'=>$this->type_id,
             'image'=>$this->image != null ? asset('assets/images/'.$this->image) : null,
-            'is_show'=>$this->users_pov->first()->is_show
+            'is_show'=>$this->users_pov->first()?->is_show
 
         ];
     }

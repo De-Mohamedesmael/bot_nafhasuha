@@ -44,6 +44,7 @@ Route::get('order/{id}', [OrderController::class, 'getOrderOne']);
 Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
 
 Route::POST('submit-price', [OrderController::class, 'submitPrice']);
+Route::post('accept-order', [OrderController::class, 'acceptOrder']);
 
 
 

@@ -4,22 +4,14 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light d-flex ">
 
-                <div  id="mobile_navbar">
-                    <a href="#">Home</a>
-                    <a href="#">About</a>
-                    <a href="#">Services</a>
-                    <a href="#">Contact</a>
-
-                </div>
                 <button aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation"
                         class="navbar-toggler"
                         data-target="#navbarText" data-toggle="collapse" type="button">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
-                <span class="navbar-toggler-icon  " id="icon_bar"></span>
-
                 <div class="btn-company">
-                    <a class="" href="{{url('provider')}}">
-                        شركة (مزود خدمة)
+                    <a class="" href="{{url('/')}}">
+                        مستخدم
                     </a>
                 </div>
 
@@ -53,6 +45,7 @@
                         </li>
                     </ul>
 
+
                 </div>
                 <a class="navbar-brand" href="#">
                     <img alt="" height="60" src="{{asset('assets/front-end/public/images/logo.svg')}}" width="100">
@@ -62,16 +55,15 @@
         <div class="head-header">
             <div class="container">
                 <div class="row ">
-                    <div class="image col-xs-12 col-sm-6 animate__animated animate__bounceIn animate__slower">
-                        <img alt="" src="{{asset('assets/front-end/public/images/header_one.svg')}}">
+                    <div class="image col">
+                        <img alt="" src="{{asset('assets/front-end/public/images/provider/header_two.svg')}}">
                     </div>
-                    <div class="text col-xs-12 col-sm-6 animate__animated animate__bounceIn animate__slower">
+                    <div class="text col">
                         <h3>مرحبآ بك في
                             <span>نفحصها</span>
                             كل خدمتك عندنا....</h3>
 
-                        <p class="">يعد موقع نفحصها نظاماً متكاملاً , قدرته فائقة لتلبي معظم إحتياجات مراكز الخدمة بكل
-                            أنواعها مع
+                        <p>يعد موقع نفحصها نظاماً متكاملاً , قدرته فائقة لتلبي معظم إحتياجات مراكز الخدمة بكل أنواعها مع
                             اختلاف أحجامها. كما يتميز البرنامج بسهولة الاستخدام والإنسيابية , مما يحسن من أداء العاملين
                             بالمركز , وبالتالى يرفع من كفاءة ومستوى الخدمة. و يوفر هذا النظام الأدوات الأساسية لإدارة
                             متكاملة بشكل احترافى متميز محاسبياً و إدارياً , بأعلي</p>

@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-md-3 col-xs-12 animate__animated animate__bounceIn animate__slower">
                 <div class="btn-company">
-                    <a class="" href="{{url('provider')}}">
-                        شركة (مزود خدمة)
+                    <a class="" href="{{url('/')}}">
+                        مستخدم
                     </a>
                 </div>
             </div>

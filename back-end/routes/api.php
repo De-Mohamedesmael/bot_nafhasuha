@@ -96,8 +96,8 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::Post('transporter/cost', [ServiceController::class, 'CostServiceTransportVehicle']);
         Route::prefix('emergency')->group(function () {
             Route::Post('transporter', [ServiceEmergencyController::class, 'StoreOrderServiceTransportVehicle']);
-            Route::get('battery/data', [ServiceEmergencyController::class, 'GetDataServiceBattery']);
             Route::Post('battery', [ServiceEmergencyController::class, 'StoreOrderServiceBattery']);
+            Route::get('battery/data', [ServiceEmergencyController::class, 'GetDataServiceBattery']);
 
 
             Route::Post('petrol', [ServiceEmergencyController::class, 'StoreOrderServicePetrol']);
