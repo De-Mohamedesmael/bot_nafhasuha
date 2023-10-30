@@ -34,6 +34,7 @@ Route::post('check-code', [AuthController::class, 'checkCode']);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::delete('remove-account', [AuthController::class, 'removeAccount']);
 Route::post('custom-remove-account', [AuthController::class, 'customRemoveAccount']);
+Route::post('change-default-language', [AuthController::class, 'ChangeDefaultLanguage']);
 
 Route::get('home', [HomeController::class, 'index']);
 
@@ -95,8 +96,8 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::Post('transporter/cost', [ServiceController::class, 'CostServiceTransportVehicle']);
         Route::prefix('emergency')->group(function () {
             Route::Post('transporter', [ServiceEmergencyController::class, 'StoreOrderServiceTransportVehicle']);
-            Route::get('battery/data', [ServiceEmergencyController::class, 'GetDataServiceBattery']);
             Route::Post('battery', [ServiceEmergencyController::class, 'StoreOrderServiceBattery']);
+            Route::get('battery/data', [ServiceEmergencyController::class, 'GetDataServiceBattery']);
 
 
             Route::Post('petrol', [ServiceEmergencyController::class, 'StoreOrderServicePetrol']);
@@ -108,6 +109,15 @@ Route::middleware('auth.guard:api')->group(function () {
 
         });
     });
+
+
+
+    #############################################
+    ###         cancel  Order  Service        ###
+    #############################################
+
+    Route::Post('cancel-orders-accept', [ServiceController::class, 'CancelOrdersAccept']);
+
     Route::prefix('orders')->group(function () {
         Route::get('pending', [OrderController::class, 'indexPending']);
         Route::get('completed', [OrderController::class, 'indexCompleted']);
@@ -157,13 +167,14 @@ Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 Route::post('get-periodic-inspection', [GeneralController::class, 'GetPeriodicInspection']);
 Route::get('get-offers', [GeneralController::class, 'GetOffers']);
+Route::get('canceled-reasons', [GeneralController::class, 'GetCanceledReasons']);
 
 ///////////////////////////////// start notifications //////////////////////////////////////////
-Route::get('notifications', [NotificationControlleR::class, 'index']);
+Route::get('notifications', [NotificationController::class, 'index']);
 Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);
 Route::get('notifications/count' , [NotificationController::class , 'count']);
 Route::get('notifications/show' , [NotificationController::class , 'show']);
-Route::post('notifications/status' , [NotificationController::class , 'changeStatus']);
+Route::get('notifications/status' , [NotificationController::class , 'changeStatus']);
 
 ///////////////////////////////// end notifications ///////////////////////////////////////////////
 

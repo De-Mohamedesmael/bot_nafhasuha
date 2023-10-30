@@ -9,5 +9,6 @@ class NotificationTranslation extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $guarded=[];
 
 }

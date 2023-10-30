@@ -717,8 +717,7 @@ if (!function_exists('format_price')) {
 
 function translate($key)
 {
-    $local = Helpers::default_lang();
-    App::setLocale($local);
+    $local = app()->getLocale();
 
     try {
         $lang_array = include(base_path('resources/lang/' . $local . '/messages.php'));

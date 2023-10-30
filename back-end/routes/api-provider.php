@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Providers\HomeController;
 use App\Http\Controllers\Api\Providers\GeneralController;
 use App\Http\Controllers\Api\Providers\TransactionController;
 use App\Http\Controllers\Api\Providers\OrderController;
+use App\Http\Controllers\Api\Providers\NotificationController;
 
 
 
@@ -29,6 +30,7 @@ Route::post('send-code', [AuthController::class, 'SendCode']);
 Route::post('check-code', [AuthController::class, 'checkCode']);
 Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
 Route::delete('remove-account', [AuthController::class, 'removeAccount']);
+Route::post('change-default-language', [AuthController::class, 'ChangeDefaultLanguage']);
 
 Route::middleware('auth.guard:api')->group(function () {
 
@@ -42,6 +44,7 @@ Route::get('order/{id}', [OrderController::class, 'getOrderOne']);
 Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
 
 Route::POST('submit-price', [OrderController::class, 'submitPrice']);
+Route::post('accept-order', [OrderController::class, 'acceptOrder']);
 
 
 
@@ -68,6 +71,14 @@ Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 Route::get('all-categories', [GeneralController::class, 'indexCategories']);
 Route::get('banks', [GeneralController::class, 'banks']);
+///////////////////////////////// start notifications //////////////////////////////////////////
+Route::get('notifications', [NotificationController::class, 'index']);
+Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);
+Route::get('notifications/count' , [NotificationController::class , 'count']);
+Route::get('notifications/show' , [NotificationController::class , 'show']);
+Route::get('notifications/status' , [NotificationController::class , 'changeStatus']);
+
+///////////////////////////////// end notifications ///////////////////////////////////////////////
 
 // Fail Api
 Route::fallback(function (Request $request) {

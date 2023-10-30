@@ -23,8 +23,6 @@ class OrderServiceAllDataResource extends JsonResource
                 case 'Tire':
                     $sub_category=$transaction->tire?->title;
                     break;
-
-
             }
 
         }
@@ -50,12 +48,7 @@ class OrderServiceAllDataResource extends JsonResource
                     'url' => $item->getUrl(),
                 ];
             }),
-//            'videos'=> $this->getMedia('videos')->map(function ($item) {
-//                return [
-//                    'id' => $item->id,
-//                    'url' => $item->getUrl(),
-//                ];
-//            }),
+
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
@@ -73,7 +66,7 @@ class OrderServiceAllDataResource extends JsonResource
             'final_total'=>$transaction->final_total??0,
             'city'=>new CityResource($this->city),
             'canceled_type'=>$this->canceled_type,
-            'reason'=>$this->reason,
+            'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
         ];
     }

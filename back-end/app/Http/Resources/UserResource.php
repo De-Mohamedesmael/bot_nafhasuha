@@ -24,6 +24,8 @@ class UserResource extends JsonResource
             'address'=>$this->address,
             'lat'=>$this->lat,
             'lang'=>$this->lang,
+            'default_language'=>$this->default_language,
+            'is_notification'=>$this->is_notification,
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
             'area'=>new AreaResource($this->area),

@@ -353,7 +353,19 @@ class AuthController extends ApiController
         }
         return responseApiFalse(500, translate('password is incorrect'));
     }
+    public function ChangeDefaultLanguage(Request $request){
+        $validator = validator($request->all(), [
+            'default_language' => 'required|in:ar,en',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
 
+        $user=  auth()->user();
+        $user->default_language=$request->default_language;
+        $user->save();
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), new ProviderResource($user));
+    }
 
 }
 

@@ -79,12 +79,14 @@ class ServiceEmergencyController extends ApiController
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->transporter_id,$cost);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
             DB::commit();
             return  responseApi(200, translate('return_data_success'));
 
         }catch (\Exception $exception){
             DB::rollBack();
-            return$exception ;
+//            return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -135,7 +137,7 @@ class ServiceEmergencyController extends ApiController
 
 
 
-        if(!$vehicle)
+        if(!$vehicle && $request->type == 'Change')
             return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
 
 
@@ -159,12 +161,14 @@ class ServiceEmergencyController extends ApiController
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->type_battery_id,$cost);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
             DB::commit();
             return  responseApi(200, translate('return_data_success'));
 
         }catch (\Exception $exception){
             DB::rollBack();
-            return$exception ;
+//            return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -228,12 +232,14 @@ class ServiceEmergencyController extends ApiController
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->type_id,$cost);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
             DB::commit();
             return  responseApi(200, translate('return_data_success'));
 
         }catch (\Exception $exception){
             DB::rollBack();
-            return$exception ;
+//            return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -296,6 +302,8 @@ class ServiceEmergencyController extends ApiController
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->type_id,$cost);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
             DB::commit();
             return  responseApi(200, translate('return_data_success'));
 

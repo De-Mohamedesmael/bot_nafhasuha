@@ -109,12 +109,10 @@ class NotificationController extends ApiController
     }
     public function changeStatus(Request $request)
     {
-
-
         auth()->user()->is_notification=(auth()->user()->is_notification * (-1) )+ 1;
         auth()->user()->save();
         $data['is_notification']=auth()->user()->is_notification;
-        return $this->apiResponse($request, trans('language.message'),$data, true);
+        return  responseApi(200, translate('change_Status_success'),$data);
 
     }
 

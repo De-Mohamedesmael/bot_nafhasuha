@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "rawilk/laravel-settings": "^2.2",
+        "realrashid/sweet-alert": "^7.1",
         "spatie/geocoder": "^3.14",
         "spatie/laravel-medialibrary": "^9.0.0",
         "tymon/jwt-auth": "^1.0",

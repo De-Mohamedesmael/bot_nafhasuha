@@ -66,7 +66,9 @@ class OrderController extends ApiController
        + sin( radians(' . $provider->lat  . ') )
        * sin( radians( `lat` ) ) ) )');
 
-        $orders= auth()->user()->orders()->Completed()->selectRaw("*,{$sqlDistance} as distance")->latest();
+        $orders= auth()->user()->orders()->Completed()
+            ->selectRaw("*,{$sqlDistance} as distance")
+            ->latest();
 
         if($count_paginate == 'ALL'){
             $orders=  $orders->get();
@@ -96,7 +98,7 @@ class OrderController extends ApiController
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
         }
-
+        $order->getEstimatedTime=$this->ServiceUtil->getEstimatedTime($order->lat,$order->long,$provider->lat,$provider->long);
         return  responseApi(200, translate('return_data_success'),new OrderServiceResource($order));
 
     }
@@ -117,6 +119,9 @@ class OrderController extends ApiController
             ->where('id',$order_id)
             ->selectRaw("*,{$sqlDistance} as distance")
             ->first();
+
+
+
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
         }
@@ -153,5 +158,27 @@ class OrderController extends ApiController
         return  responseApi(200, translate('return_data_success'));
 
     }
+    public function acceptOrder(Request $request)
+    {
 
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        $order=OrderService::where('id',$request->order_id)
+            ->where('status','pending')->first();
+
+        if(!$order){
+            return responseApi(405, translate('The order is no longer available'));
+        }
+
+        $this->pushNotof('Order',$order,$order->user_id,2);
+        return  responseApi(200, translate('return_data_success'));
+
+    }
 }

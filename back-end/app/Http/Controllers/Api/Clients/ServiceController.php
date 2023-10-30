@@ -402,12 +402,13 @@ class ServiceController extends ApiController
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
             DB::commit();
             return  responseApi(200, translate('return_data_success'));
 
         }catch (\Exception $exception){
             DB::rollBack();
-           return$exception ;
+            //return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -657,5 +658,31 @@ class ServiceController extends ApiController
         return ['status' => false, 'msg' => translate('coupon not found')];
     }
 
+    public function CancelOrdersAccept(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+            'cancel_reason_id' => 'required|integer|exists:cancel_reasons,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+        DB::beginTransaction();
+        try {
+            $action=$this->ServiceUtil->CanceledOrderService($request->order_id,$request->cancel_reason_id,'User',auth()->id());
 
+            if($action){
+                DB::commit();
+                return  responseApi(200, translate('The request has been successfully cancelled'));
+
+            }
+            DB::rollBack();
+            return responseApiFalse(500, translate('Something went wrong'));
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            dd($exception);
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
 }

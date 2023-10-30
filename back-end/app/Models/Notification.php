@@ -22,5 +22,13 @@ class Notification extends Model implements TranslatableContract
     {
         return $this->hasMany(UserNotification::class);
     }
+    public function providers()
+    {
+        return $this->belongsToMany(Provider::class, 'provider_notifications');
+    }
+    public function providers_pov()
+    {
+        return $this->hasMany(ProviderNotification::class);
+    }
 
 }

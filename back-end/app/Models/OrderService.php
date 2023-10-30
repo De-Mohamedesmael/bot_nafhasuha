@@ -66,6 +66,10 @@ class OrderService extends Model implements HasMedia
     {
         return $this->belongsTo(Transaction::class,'transaction_id');
     }
+    public function cancel_reason()
+    {
+        return $this->belongsTo(CancelReason::class,'cancel_reason_id');
+    }
     public function canceledBy()
     {
 

@@ -11,8 +11,10 @@ use App\Models\User;
 use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Spatie\Geocoder\Facades\Geocoder;
 use Location\Coordinate;
+use GuzzleHttp\Client;
 
 class ServiceUtil
 {
@@ -103,26 +105,27 @@ class ServiceUtil
      */
     public function getEstimatedTime($originLat, $originLng, $destinationLat, $destinationLng)
     {
-//        $apiKey = env('GOOGLE_MAPS_API_KEY'); // استبدل YOUR_API_KEY بمفتاح الواجهة البرمجية الخاص بك
-//        $url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={$originLat},{$originLng}&destinations={$destinationLat},{$destinationLng}&mode=driving&units=metric&key={$apiKey}";
-//
-//        $response = file_get_contents($url);
-//
-//        if ($response) {
-//            $data = json_decode($response, true);
-//
-//            if ($data['status'] === 'OK') {
-//                $duration = $data['rows'][0]['elements'][0]['duration']['text'];
-//                // الوقت المقدر للوصول بالسيارة
-//                return $duration;
-//            }
-//
-//        }
 
-        return 10;
+
+        $client = new Client();
+        $response = $client->get('https://maps.googleapis.com/maps/api/directions/json', [
+            'query' => [
+                'language'=>app()->getLocale(),
+                'origin' => "$originLat".','."$originLng",
+                'destination' =>"$destinationLat".','."$destinationLng",
+                'key' => env('GOOGLE_MAPS_API_KEY'),
+            ],
+        ]);
+
+        $data = $response->getBody();
+        $result = json_decode($data);
+        if($result->status=="OK"){
+
+            return $result->routes[0]->legs[0]->duration->text;
+        }
+
+        return '';
     }
-
-
 
 
 
@@ -235,7 +238,7 @@ class ServiceUtil
             ]);
         }
 
-        return$order ;
+        return $order ;
     }
     /**
      * get Price Quotes For Order
@@ -334,6 +337,34 @@ class ServiceUtil
 
         return $distance;
     }
+
+
+    /**
+     * Canceled Order Service after accept provider
+     *
+     * @param int $order_id
+     * @param  int $cancel_reason_id
+     * @param  string $type
+     * @param  int $canceled_by
+     */
+    public function CanceledOrderService($order_id,$cancel_reason_id,$type,$canceled_by)
+    {
+       $order= OrderService::whereId($order_id)->first();
+        if(!$order){
+            return false;
+        }
+        $order->update([
+            'status'=>'canceled',
+            'canceled_by'=>$canceled_by,
+            'canceled_type'=>$type,
+            'cancel_reason_id'=>$cancel_reason_id,
+        ]);
+        $order->transaction->update([
+            'status'=>'canceled',
+        ]);
+        return true;
+    }
+
 
 
     }

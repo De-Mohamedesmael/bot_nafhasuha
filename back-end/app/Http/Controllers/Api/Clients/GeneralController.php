@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Clients;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
+use App\Http\Resources\CancelReasonResource;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\CountryResource;
@@ -15,6 +16,7 @@ use App\Http\Resources\InfoResource;
 use App\Http\Resources\SplashScreenResource;
 use App\Http\Resources\UserResource;
 use App\Models\Area;
+use App\Models\CancelReason;
 use App\Models\CategoryFaq;
 use App\Models\CategoryFaqTranslation;
 use App\Models\City;
@@ -245,5 +247,12 @@ class GeneralController extends ApiController
 
         return responseApi(200,\App\CPU\translate('return_data_success'), $data);
     }
+    public function GetCanceledReasons(){
+        $reasons=CancelReason::get();
+        $data=CancelReasonResource::collection($reasons);
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), $data);
+    }
+
 }
 
