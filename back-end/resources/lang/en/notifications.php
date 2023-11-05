@@ -30,5 +30,9 @@ return [
             'title' => 'You have a new order',
             'body' => 'You have a new order with code #:code.',
         ],
+    'PriceRequest' => [
+        'title'=>'You have a new offer',
+        'body'=>'You have a new offer for your order number #:code . Thank you for using Nafhasuha',
+    ],
 
 ];

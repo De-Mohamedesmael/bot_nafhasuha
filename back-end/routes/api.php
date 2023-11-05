@@ -127,6 +127,7 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('show/{id}', [OrderController::class, 'show']);
         Route::get('quotes/{id}', [OrderController::class, 'quotes']);
         Route::Post('reject-quotes', [OrderController::class, 'rejectQuotes']);
+        Route::get('price_requests', [OrderController::class, 'priceRequestsCountForPending']);
 
     });
 

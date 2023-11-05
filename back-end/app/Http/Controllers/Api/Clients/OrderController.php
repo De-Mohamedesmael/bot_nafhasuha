@@ -8,6 +8,7 @@ use App\Http\Resources\OrderServiceResource;
 use App\Http\Resources\PriceQuotesResource;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
+use App\Models\PriceRequest;
 use App\Utils\ServiceUtil;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
@@ -29,7 +30,7 @@ class OrderController extends ApiController
     public function indexPending(Request $request)
     {
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $orders= auth()->user()->orders()->NotCompleted()->latest();
+        $orders= auth()->user()->orders()->withcount('price_requests')->NotCompleted()->latest();
 
 
         if($count_paginate == 'ALL'){
@@ -121,7 +122,7 @@ class OrderController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
 
 
-        $PriceQuote= PriceQuote::find($request->price_id);
+        $PriceQuote= PriceRequest::find($request->price_id);
 
         if(!$PriceQuote){
             return responseApi(404, translate("Price Quote Not Found"));
@@ -157,7 +158,7 @@ class OrderController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
 
 
-        $PriceQuote= PriceQuote::find($request->price_id);
+        $PriceQuote= PriceRequest::find($request->price_id);
 
         if(!$PriceQuote){
             return responseApi(404, translate("Price Quote Not Found"));
@@ -189,6 +190,20 @@ class OrderController extends ApiController
         }
     }
 
+    public function priceRequestsCountForPending(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        $requests= PriceRequest::where('order_service_id',$request->order_id)->get();
+
+
+        return  responseApi(200, translate('return_data_success'),PriceQuotesResource::collection($requests));
+
+    }
 
 
 

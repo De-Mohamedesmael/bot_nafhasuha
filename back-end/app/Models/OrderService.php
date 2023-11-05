@@ -36,6 +36,10 @@ class OrderService extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+    public function price_requests()
+    {
+        return $this->hasMany(PriceRequest::class);
+    }
     public function provider()
     {
         return $this->belongsTo(Provider::class);

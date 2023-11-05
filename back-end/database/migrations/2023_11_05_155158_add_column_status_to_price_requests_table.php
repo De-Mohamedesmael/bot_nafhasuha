@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToPriceQuotesTables extends Migration
+class AddColumnStatusToPriceRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddStatusToPriceQuotesTables extends Migration
      */
     public function up()
     {
-        Schema::table('price_quotes', function (Blueprint $table) {
-            $table->enum('status',['Accept','Reject'])->after('price')->nullable();
+        Schema::table('price_requests', function (Blueprint $table) {
+            $table->enum('status',['Accept','Reject'])->nullable()->after('price');
         });
     }
 
@@ -25,7 +25,7 @@ class AddStatusToPriceQuotesTables extends Migration
      */
     public function down()
     {
-        Schema::table('price_quotes', function (Blueprint $table) {
+        Schema::table('price_requests', function (Blueprint $table) {
             //
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Providers;
 use App\Http\Controllers\ApiController;
 use App\Http\Resources\OrderServiceAllDataResource;
 use App\Http\Resources\Providers\OrderServiceResource;
+use App\Models\FcmToken;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
 use App\Models\Provider;
@@ -13,6 +14,7 @@ use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use function App\CPU\translate;
 
 class OrderController extends ApiController
@@ -92,13 +94,13 @@ class OrderController extends ApiController
            + sin( radians(' . $provider->lat  . ') )
            * sin( radians( `lat` ) ) ) )');
         $order= OrderService::where('id',$order_id)
-                                ->wherein('status',  ['pending'])
-                                ->selectRaw("*,{$sqlDistance} as distance")
-                                ->first();
+            ->selectRaw("*,{$sqlDistance} as distance")
+            ->first();
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
         }
         $order->getEstimatedTime=$this->ServiceUtil->getEstimatedTime($order->lat,$order->long,$provider->lat,$provider->long);
+
         return  responseApi(200, translate('return_data_success'),new OrderServiceResource($order));
 
     }
@@ -143,18 +145,27 @@ class OrderController extends ApiController
          return responseApi(403, translate('Unauthenticated user'));
 
         $provider=auth()->user();
-
         $order=OrderService::where('id',$request->order_id)
                     ->where('status','pending')->first();
+        $user=$order->user;
 
+        if($user->is_notification){
+           $lang= $user->default_language;
+            $code=$order->transaction?->invoice_no;
+            $FcmToken=FcmToken::where('user_id',$user->id)->pluck('token');
+            $title=__('notifications.PriceRequest.title',[],$lang);
+            $body=__('notifications.PriceRequest.body',['code'=>$code],$lang);
+
+            $type='PriceRequest';
+            $type_id=$request->order_id;
+
+            $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
+
+        }
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
         }
-        PriceQuote::create([
-            'provider_id'=>$provider->id,
-            'order_service_id'=>$order->id,
-            'price'=>$request->price,
-        ]);
+
         return  responseApi(200, translate('return_data_success'));
 
     }
@@ -181,4 +192,37 @@ class OrderController extends ApiController
         return  responseApi(200, translate('return_data_success'));
 
     }
+    public function CancelOrdersAccept(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+            'cancel_reason_id' => 'required|integer|exists:cancel_reasons,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+        DB::beginTransaction();
+        try {
+            $action=$this->ServiceUtil->CanceledOrderServiceByProvider($request->order_id,$request->cancel_reason_id,'Provider',auth()->id());
+            if($action['status']){
+                DB::commit();
+                $data=[
+                    'is_block'=>$action['is_block'],
+                ];
+                return  responseApi(200, translate('The request has been successfully cancelled'),$data);
+
+            }
+            DB::rollBack();
+
+            return responseApiFalse(500, translate('Something went wrong'));
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
+
+
+
+
 }

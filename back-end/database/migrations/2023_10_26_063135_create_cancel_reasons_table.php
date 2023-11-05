@@ -15,7 +15,7 @@ class CreateCancelReasonsTable extends Migration
     {
         Schema::create('cancel_reasons', function (Blueprint $table) {
             $table->id();
-            $table->decimal('deduction_rate', 4, 2)
+            $table->decimal('deduction_rate', 5)
                 ->default(0)
                 ->comment('The discount percentage of the total order for cancellation');
             $table->timestamps();

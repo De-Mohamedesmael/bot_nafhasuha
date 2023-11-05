@@ -15,10 +15,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use function App\CPU\translate;
 use Carbon\Carbon;
 
-class OrderServiceResource extends JsonResource
+class OrderServicePaddingResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Transform the resource into an array. Padding
      *
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
@@ -67,6 +67,9 @@ class OrderServiceResource extends JsonResource
                     'url' => $item->getUrl(),
                 ];
             }),
+            'is_price_request'=>$this->price_requests->first()? 1:0,
+            'price_request'=>$this->price_requests->first()  ? $this->price_requests->first()->price:0,
+
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),

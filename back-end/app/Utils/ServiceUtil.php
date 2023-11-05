@@ -5,6 +5,7 @@ namespace App\Utils;
 use App\Models\CyPeriodicProvider;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
+use App\Models\PriceRequest;
 use App\Models\Provider;
 use App\Models\Transaction;
 use App\Models\User;
@@ -249,7 +250,7 @@ class ServiceUtil
      */
     public function getPriceQuotesForOrder($order,$count_paginate): object
     {
-        $PriceQuote= PriceQuote::with(['provider'=>function ($q)  {
+        $PriceQuote= PriceRequest::with(['provider'=>function ($q)  {
             $q->withAvg('rates as totalRate', 'rate')
                 ->withCount('rates');
         }])->whereNull('status')
@@ -365,6 +366,60 @@ class ServiceUtil
         return true;
     }
 
+    /**
+     * Canceled Order Service after accept  By Provider
+     *
+     * @param int $order_id
+     * @param  int $cancel_reason_id
+     * @param  string $type
+     * @param  int $canceled_by
+     */
+    public function CanceledOrderServiceByProvider($order_id,$cancel_reason_id,$type,$canceled_by)
+    {
+        $order= OrderService::whereId($order_id)->first();
+        if(!$order){
+            $data=[
+                'status'=>false
+            ];
+            return $data;
+        }
+        $order->update([
+            'status'=>'canceled',
+            'canceled_by'=>$canceled_by,
+            'canceled_type'=>$type,
+            'cancel_reason_id'=>$cancel_reason_id,
+        ]);
+        $order->transaction->update([
+            'status'=>'canceled',
+        ]);
+        $count_cancel_for_day=OrderService::where('status','canceled')
+            ->where('canceled_type',$type)
+            ->where('canceled_by',$canceled_by)
+           ->whereDate('updated_at', date('Y-m-d'))->count();
+        $limit_cancel=\Settings::get('limit_cancel',2);
+        $is_block= $count_cancel_for_day+1 >= $limit_cancel;
+        if($is_block){
+            $this->BlockProvider($canceled_by);
+        }
+        $data=[
+            'status'=>true,
+            'is_block'=>$is_block
+        ];
+        return $data;
+    }
 
+    /**
+     * Block Provider
+     *
+     * @param  int $provider_id
+     */
+    public function BlockProvider($provider_id)
+    {
+        Provider::whereId($provider_id)
+            ->update([
+               'is_active'=>0,
+            ]);
+
+    }
 
     }

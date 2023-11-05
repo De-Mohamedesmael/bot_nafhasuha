@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Providers;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\Providers\OrderServicePaddingResource;
 use App\Http\Resources\Providers\OrderServiceResource;
 use App\Http\Resources\Providers\ProviderHomeResource;
 
@@ -50,11 +51,13 @@ class HomeController extends ApiController
                - radians(' . $provider->long  . ') )
                + sin( radians(' . $provider->lat  . ') )
                * sin( radians( `lat` ) ) ) )');
-            $orders=OrderService::where('status','pending')
+            $orders=OrderService::with(['price_requests'=>function($q){
+                $q->where('provider_id',auth()->id())->orderBy('id','DESC');
+            }])->where('status','pending')
                 ->wherein('id',$order_service_id)
-                ->selectRaw("*,{$sqlDistance} as distance")->get();
+                ->selectRaw("*,{$sqlDistance} as distance")->latest()->get();
 
-            $data['new_orders']=OrderServiceResource::collection($orders);
+            $data['new_orders']=OrderServicePaddingResource::collection($orders);
         }
 
         return  responseApi(200, translate('return_data_success'),$data);

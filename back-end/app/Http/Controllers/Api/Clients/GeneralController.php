@@ -248,7 +248,7 @@ class GeneralController extends ApiController
         return responseApi(200,\App\CPU\translate('return_data_success'), $data);
     }
     public function GetCanceledReasons(){
-        $reasons=CancelReason::get();
+        $reasons=CancelReason::where('type','User')->get();
         $data=CancelReasonResource::collection($reasons);
 
         return responseApi(200,\App\CPU\translate('return_data_success'), $data);

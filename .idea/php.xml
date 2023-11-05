@@ -153,6 +153,7 @@
       <path value="$PROJECT_DIR$/back-end/vendor/doctrine/deprecations" />
       <path value="$PROJECT_DIR$/back-end/vendor/doctrine/cache" />
       <path value="$PROJECT_DIR$/back-end/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/back-end/vendor/realrashid/sweet-alert" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
