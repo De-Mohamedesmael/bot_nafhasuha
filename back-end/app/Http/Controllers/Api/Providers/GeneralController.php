@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
 use App\Http\Resources\BanksResource;
+use App\Http\Resources\CancelReasonResource;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CityResource;
@@ -16,6 +17,7 @@ use App\Http\Resources\SplashScreenResource;
 use App\Http\Resources\UserResource;
 use App\Models\Area;
 use App\Models\Bank;
+use App\Models\CancelReason;
 use App\Models\Category;
 use App\Models\CategoryFaq;
 use App\Models\CategoryFaqTranslation;
@@ -242,6 +244,12 @@ class GeneralController extends ApiController
             $banks=  $banks->simplePaginate($count_paginate);
         }
         return responseApi(200,\App\CPU\translate('return_data_success'), BanksResource::collection($banks));
+    }
+    public function GetCanceledReasons(){
+        $reasons=CancelReason::where('type','Provider')->get();
+        $data=CancelReasonResource::collection($reasons);
+
+        return responseApi(200,\App\CPU\translate('return_data_success'), $data);
     }
 }
 

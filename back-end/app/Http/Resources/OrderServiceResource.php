@@ -22,9 +22,12 @@ class OrderServiceResource extends JsonResource
             'id'=>$this->id,
             'status'=>$this->status,
             'type'=>$this->type,
+            'lat'=>$this->lat,
+            'long'=>$this->long,
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
             'category'=>new CategoryResource($this->category),
             'invoice_no'=>$transaction->invoice_no??null,
+            'price_requests_count' => $this->whenLoaded('price_requests_count')?$this->price_requests_count:0,
             'is_tracking'=>$is_tracking
         ];
     }

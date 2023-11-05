@@ -150,6 +150,7 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/deprecations" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/realrashid/sweet-alert" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

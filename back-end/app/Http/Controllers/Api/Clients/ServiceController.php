@@ -680,7 +680,6 @@ class ServiceController extends ApiController
 
         }catch (\Exception $exception){
             DB::rollBack();
-            dd($exception);
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }

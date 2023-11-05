@@ -45,6 +45,7 @@ Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
 
 Route::POST('submit-price', [OrderController::class, 'submitPrice']);
 Route::post('accept-order', [OrderController::class, 'acceptOrder']);
+Route::post('cancel-orders-accept', [OrderController::class, 'CancelOrdersAccept']);
 
 
 
@@ -71,6 +72,8 @@ Route::get('get-home-or-center', [GeneralController::class, 'GetHomeOrCenter']);
 Route::post('contact-us', [GeneralController::class, 'contactUs']);
 Route::get('all-categories', [GeneralController::class, 'indexCategories']);
 Route::get('banks', [GeneralController::class, 'banks']);
+Route::get('canceled-reasons', [GeneralController::class, 'GetCanceledReasons']);
+
 ///////////////////////////////// start notifications //////////////////////////////////////////
 Route::get('notifications', [NotificationController::class, 'index']);
 Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);
