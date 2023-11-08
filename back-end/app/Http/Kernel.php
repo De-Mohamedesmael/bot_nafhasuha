@@ -87,15 +87,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'booth.auth' => RedirectIfNotBooth::class,
-        'store.auth' => RedirectIfNotStore::class,
-        'admin.auth' => RedirectIfNotAdmin::class,
-        'booth.guest' => RedirectIfBooth::class,
-        'store.guest' => RedirectIfStore::class,
-        // 'store.verified' => \App\Http\Middleware\EnsureStoreEmailIsVerified::class,
-        // 'store.password.confirm' => \App\Http\Middleware\RequireStorePassword::class,
         'auth' => Authenticate::class,
         'auth.basic' => AuthenticateWithBasicAuth::class,
+        'admin.auth' => \App\Http\Middleware\RedirectIfNotAdmin::class,
+        'admin.guest' => \App\Http\Middleware\RedirectIfAdmin::class,
         'cache.headers' => SetCacheHeaders::class,
         'can' => Authorize::class,
         'guest' => RedirectIfAuthenticated::class,
@@ -108,5 +103,8 @@ class Kernel extends HttpKernel
         'apiLocale' => ChangLangApi::class,
         'locale' => Locale::class,
         'major' => RedirectIfNotMajor::class,
+
+        'language' => \App\Http\Middleware\Language::class,
+
     ];
 }

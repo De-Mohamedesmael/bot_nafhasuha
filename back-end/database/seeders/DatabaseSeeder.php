@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
 use App\Models\Categories;
+use Carbon\Carbon;
 use http\Client\Curl\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +18,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $user_data = [
+            'name' => 'superadmin',
+            'email' => 'superadmin@nafhasuha.com',
+            'password' => Hash::make('123456'),
+            'is_superadmin' => 1,
+            'is_admin' => 0,
+            'is_detault' => 1,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ];
 
-        $this->call(User::class);
+        $Admin = Admin::create($user_data);
+
+        $this->call(
+            PermissionTableSeeder::class
+        );
     }
 }

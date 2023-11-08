@@ -34,25 +34,25 @@ Route::post('change-default-language', [AuthController::class, 'ChangeDefaultLan
 
 Route::middleware('auth.guard:api')->group(function () {
 
-Route::get('home', [HomeController::class, 'index']);
+    Route::get('home', [HomeController::class, 'index']);
 
 
 
-Route::get('completed-orders', [OrderController::class, 'CompletedOrders']);
-Route::get('ongoing-orders', [OrderController::class, 'OngoingOrders']);
-Route::get('order/{id}', [OrderController::class, 'getOrderOne']);
-Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
+    Route::get('completed-orders', [OrderController::class, 'CompletedOrders']);
+    Route::get('ongoing-orders', [OrderController::class, 'OngoingOrders']);
+    Route::get('order/{id}', [OrderController::class, 'getOrderOne']);
+    Route::get('my-order/{id}', [OrderController::class, 'getMyOrderOne']);
 
-Route::POST('submit-price', [OrderController::class, 'submitPrice']);
-Route::post('accept-order', [OrderController::class, 'acceptOrder']);
-Route::post('cancel-orders-accept', [OrderController::class, 'CancelOrdersAccept']);
+    Route::POST('submit-price', [OrderController::class, 'submitPrice']);
+    Route::post('accept-order', [OrderController::class, 'acceptOrder']);
+    Route::post('cancel-orders-accept', [OrderController::class, 'CancelOrdersAccept']);
+
+    Route::post('cancel-orders-ongoing', [OrderController::class, 'CancelOrdersOngoing']);
 
 
 
-
-
-Route::get('my-wallet', [TransactionController::class, 'myWallet']);
-Route::POST('request-withdrawal', [TransactionController::class, 'StoreWithdrawalRequest']);
+    Route::get('my-wallet', [TransactionController::class, 'myWallet']);
+    Route::POST('request-withdrawal', [TransactionController::class, 'StoreWithdrawalRequest']);
 
 
 });

@@ -124,6 +124,7 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('canceld', [OrderController::class, 'indexCanceld']);
         Route::get('show_by_code', [OrderController::class, 'GetByInvoiceNo']);
 
+        Route::Post('accept-quotes', [ServiceController::class, 'acceptQuotes']);
         Route::get('show/{id}', [OrderController::class, 'show']);
         Route::get('quotes/{id}', [OrderController::class, 'quotes']);
         Route::Post('reject-quotes', [OrderController::class, 'rejectQuotes']);
@@ -132,6 +133,7 @@ Route::middleware('auth.guard:api')->group(function () {
     });
 
     Route::Post('check-coupon', [ServiceController::class, 'getCoupon']);
+    Route::Post('check-coupon-price', [ServiceController::class, 'getCouponPrice']);
     Route::Post('rate-provider', [GeneralController::class, 'storeRate']);
 
 });
