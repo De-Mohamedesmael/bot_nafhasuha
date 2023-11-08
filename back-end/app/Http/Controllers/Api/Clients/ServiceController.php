@@ -632,8 +632,11 @@ class ServiceController extends ApiController
 
         if(!$order)
             return responseApi(404, translate("Order Not Found"));
+
+
         DB::beginTransaction();
         try {
+
             $category_id=$order->category_id;
             $service_id=$order->service_id;
             $discount['discount_value'] = 0;
@@ -652,11 +655,20 @@ class ServiceController extends ApiController
                 $item->save();
 
             }
+            $grand_total=$PriceQuote->price;
+            $final_total=$grand_total-$discount['discount_value'];
+
+            if($request->payment_method == 'Wallet'){
+                $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
+                $price_=$final_total;
+                if($wallet_user < $price_){
+                    return responseApiFalse(405, translate('Your wallet balance is insufficient'));
+                }
+            }
             $order->payment_method=$request->payment_method;
             $order->save();
             $trans=$order->transaction;
-            $grand_total=$PriceQuote->price;
-            $final_total=$grand_total-$discount['discount_value'];
+
             $trans->discount_type=$discount['discount_type'];
             $trans->discount_value=$discount['discount_value'];
             $trans->discount_amount=$discount['discount_value'];
