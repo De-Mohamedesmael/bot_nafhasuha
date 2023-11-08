@@ -9,6 +9,7 @@ use App\Models\FcmToken;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
 use App\Models\Provider;
+use App\Models\UserRequest;
 use App\Utils\ServiceUtil;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
@@ -191,6 +192,46 @@ class OrderController extends ApiController
         $this->pushNotof('Order',$order,$order->user_id,2);
         return  responseApi(200, translate('return_data_success'));
 
+    }
+    public function CancelOrdersOngoing(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+        DB::beginTransaction();
+        try {
+
+            $request_order= UserRequest::where('order_service_id',$request->order_id)->first();
+            if($request_order){
+
+                $providers = json_decode($request_order->providers_id, true);
+
+                $index = array_search(auth()->id(), $providers);
+                if ($index !== false) {
+                    unset($providers[$index]);
+                }
+
+                $new_providers_id = json_encode($providers);
+
+                $request_order->providers_id = $new_providers_id;
+                $request_order->save();
+                DB::commit();
+                return  responseApi(200, translate('The request has been successfully cancelled'));
+            }
+
+
+
+            DB::rollBack();
+
+            return responseApiFalse(500, translate('Something went wrong'));
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
     }
     public function CancelOrdersAccept(Request $request)
     {

@@ -51,12 +51,15 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-provider.php'));
 
-            Route::as('admin.')
+            Route::as('front.')
                 ->middleware(['web', 'locale'])
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
 
-
+            Route::as('admin.')
+                ->prefix('admin')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
 
 
         });

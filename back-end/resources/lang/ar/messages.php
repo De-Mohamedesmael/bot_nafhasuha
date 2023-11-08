@@ -92,4 +92,6 @@
   'Your rate has been successfully' => 'Your rate has been successfully',
   'The request has been successfully cancelled' => 'The request has been successfully cancelled',
   'change_Status_success' => 'Change Status success',
+  'Price Quote Not Found' => 'Price Quote Not Found',
+  'Price quote has been successfully accepted' => 'Price quote has been successfully accepted',
 );

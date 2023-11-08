@@ -14,6 +14,8 @@ use App\Models\Category;
 use App\Models\CategoryService;
 use App\Models\Coupon;
 use App\Models\CyPeriodic;
+use App\Models\FcmTokenProvider;
+use App\Models\PriceRequest;
 use App\Models\Provider;
 use App\Models\Service;
 use App\Models\Transporter;
@@ -602,6 +604,87 @@ class ServiceController extends ApiController
 
 
     }
+    public function acceptQuotes(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'price_id' => 'required|integer',
+            'payment_method' => 'required|string|in:Online,Cash,Wallet',
+            'coupon_code' => 'nullable|string',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+
+        $PriceQuote= PriceRequest::find($request->price_id);
+
+        if(!$PriceQuote){
+            return responseApi(404, translate("Price Quote Not Found"));
+        }
+
+        if($PriceQuote->status == "Reject"){
+            return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
+        }elseif($PriceQuote->status =='Accept'){
+            return responseApi(405, translate("This price quote has been accepted successfully"));
+        }
+
+        $order= auth()->user()->orders()->whereId($PriceQuote->order_service_id)
+            ->first();
+
+        if(!$order)
+            return responseApi(404, translate("Order Not Found"));
+        DB::beginTransaction();
+        try {
+            $category_id=$order->category_id;
+            $service_id=$order->service_id;
+            $discount['discount_value'] = 0;
+            $discount['discount_type'] = null;
+            if ($request->coupon_code) {
+                $coupon = $this->checkCoupon($request->coupon_code, $category_id,$service_id);
+
+                if ($coupon['status'] == false)
+                    return responseApi('false', $coupon['msg']);
+
+                $item= $coupon['item'];
+                $discount['discount_value'] = $item->discount;
+                $discount['discount_type'] = $item->type_discount;
+                $item->use=$item->use+1;
+                $item->users()->attach(auth()->id());
+                $item->save();
+
+            }
+            $order->payment_method=$request->payment_method;
+            $order->save();
+            $trans=$order->transaction;
+            $grand_total=$PriceQuote->price;
+            $final_total=$grand_total-$discount['discount_value'];
+            $trans->discount_type=$discount['discount_type'];
+            $trans->discount_value=$discount['discount_value'];
+            $trans->discount_amount=$discount['discount_value'];
+            $trans->grand_total=$grand_total;
+            $trans->final_total=$final_total;
+            $trans->save();
+            $provider=$PriceQuote->provider;
+            if($provider->is_notification){
+                $lang= $provider->default_language;
+                $code=$order->transaction?->invoice_no;
+                $FcmToken=FcmTokenProvider::where('provider_id',$provider->id)->pluck('token');
+                $title=__('notifications.PriceRequestProvider.title',[],$lang);
+                $body=__('notifications.PriceRequestProvider.body',['code'=>$code],$lang);
+                $type='ClientAcceptPrice';
+                $type_id=$order->id;
+
+                $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
+
+            }
+            DB::commit();
+
+            return  responseApi(200, translate('Price quote has been successfully accepted'));
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
     public function getCoupon(Request $request)
     {
         $validator = validator($request->all(), [
@@ -618,6 +701,41 @@ class ServiceController extends ApiController
 
         return responseApiFalse(405 , $response['msg']);
     }
+    public function getCouponPrice(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'price_id' => 'required',
+            'coupon_code' => 'required|string',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+        $PriceQuote= PriceRequest::find($request->price_id);
+
+        if(!$PriceQuote){
+            return responseApi(404, translate("Price Quote Not Found"));
+        }
+
+        if($PriceQuote->status == "Reject"){
+            return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
+        }elseif($PriceQuote->status =='Accept'){
+            return responseApi(405, translate("This price quote has been accepted successfully"));
+        }
+
+        $order= auth()->user()->orders()->whereId($PriceQuote->order_service_id)
+            ->first();
+
+        if(!$order)
+            return responseApi(404, translate("Order Not Found"));
+
+        $category_id=$order->category_id;
+        $service_id=$order->service_id;
+        $response = $this->checkCoupon($request->coupon_code,$category_id,$service_id);
+        if ($response['status'])
+            return responseApi(200, translate('return_data_success'), ['discount' => $response['item']->discount]);
+
+        return responseApiFalse(405 , $response['msg']);
+    }
+
     public function checkCoupon($code,$category_id,$service_id)
     {
         $date = Carbon::now()->format('Y-m-d');
