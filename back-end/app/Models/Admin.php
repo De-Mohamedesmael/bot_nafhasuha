@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Authenticatable
+class Admin extends Authenticatable implements  HasMedia
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens,InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -87,14 +89,13 @@ class Admin extends Authenticatable
                 'profit' => __('permission.sales_and_returns'),
                 // 'details' => __('permission.details'),
             ],
-            'hr_management' => [
-                'employee' => __('permission.employee'),
-                'employee_commission' => __('permission.employee_commission'),
-                'suspend' => __('permission.suspend'),
-            ],
+
             'notification_module' => [
                 'notification' => __('permission.notification'),
                 'setting' => __('permission.setting'),
+            ],'customer_module' => [
+                'customer' => __('permission.customer'),
+                'provider' => __('permission.provider'),
             ],
             'sms_module' => [
                 'sms' => __('permission.sms'),

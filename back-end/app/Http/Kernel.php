@@ -105,6 +105,8 @@ class Kernel extends HttpKernel
         'major' => RedirectIfNotMajor::class,
 
         'language' => \App\Http\Middleware\Language::class,
+        'timezone' => \App\Http\Middleware\Timezone::class,
+        'SetSessionData' => \App\Http\Middleware\SetSessionData::class,
 
     ];
 }

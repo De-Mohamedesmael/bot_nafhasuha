@@ -206,36 +206,24 @@ $("#method").change(function () {
 });
 var language = $("#__language").val();
 
-if (language === undefined || language === null || language === "") {
-    language = $.cookie("pos.language");
-    window.location.replace(
-        base_path + "/general/switch-language/" + $.cookie("pos.language")
-    );
-}
-if ($.cookie("pos.language") !== language) {
-    $.cookie("pos.language", language);
-    window.location.replace(
-        base_path + "/general/switch-language/" + $.cookie("pos.language")
-    );
-}
 if (language == "en") {
-    dt_lang_url = base_path + "/js/datatables_lang/en.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/en.json";
 } else if (language == "fr") {
-    dt_lang_url = base_path + "/js/datatables_lang/fr.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/fr.json";
 } else if (language == "ar") {
-    dt_lang_url = base_path + "/js/datatables_lang/ar.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/ar.json";
 } else if (language == "hi") {
-    dt_lang_url = base_path + "/js/datatables_lang/hi.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/hi.json";
 } else if (language == "fa") {
-    dt_lang_url = base_path + "/js/datatables_lang/fa.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/fa.json";
 } else if (language == "ur") {
-    dt_lang_url = base_path + "/js/datatables_lang/ur.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/ur.json";
 } else if (language == "tr") {
-    dt_lang_url = base_path + "/js/datatables_lang/tr.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/tr.json";
 } else if (language == "nl") {
-    dt_lang_url = base_path + "/js/datatables_lang/nl.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/nl.json";
 } else {
-    dt_lang_url = base_path + "/js/datatables_lang/en.json";
+    dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/en.json";
 }
 var buttons = [
     {

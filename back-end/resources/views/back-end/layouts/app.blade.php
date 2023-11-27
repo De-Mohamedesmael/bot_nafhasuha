@@ -14,10 +14,9 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    @include('layouts.partials.css')
+    @include('back-end.layouts.partials.css')
     @yield('styles')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @yield('style')
     <style>
         .mCSB_draggerRail {
             width: 16px !important;
@@ -262,11 +261,9 @@
 
 <body onload="myFunction()">
     <div id="loader"></div>
-    @if (request()->segment(1) != 'pos')
-        @include('layouts.partials.header')
-    @endif
-    <div class="@if (request()->segment(1) != 'pos') page @else pos-page @endif">
-        @include('layouts.partials.sidebar')
+    @include('back-end.layouts.partials.header')
+    <div class="page">
+        @include('back-end.layouts.partials.sidebar')
         <div style="display:none" id="content" class="animate-bottom">
             @foreach ($errors->all() as $message)
                 <div class="alert alert-danger alert-dismissible text-center">
@@ -282,14 +279,12 @@
             <input type="hidden" id="__currency_symbol_placement" value="before">
             <input type="hidden" id="__precision" value="3">
             <input type="hidden" id="__quantity_precision" value="3">
-            <input type="hidden" id="system_mode" value="{{ env('SYSTEM_MODE') }}">
             @yield('content')
         </div>
 
-        @include('layouts.partials.footer')
+        @include('back-end.layouts.partials.footer')
 
 
-        <div class="modal view_modal no-print" role="dialog" aria-hidden="true"></div>
         <div class="modal" id="cropper_modal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -320,20 +315,17 @@
         </div>
 
         @php
-            $cash_register = App\Models\CashRegister::where('user_id', Auth::user()->id)
-                ->where('status', 'open')
-                ->first();
+
         @endphp
-        <input type="hidden" name="is_register_close" id="is_register_close"
-            value="@if (!empty($cash_register)) {{ 0 }}@else{{ 1 }} @endif">
-        <input type="hidden" name="cash_register_id" id="cash_register_id"
-            value="@if (!empty($cash_register)) {{ $cash_register->id }} @endif">
+
         <div id="closing_cash_modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
             class="modal text-left">
         </div>
 
         <!-- This will be printed -->
         <section class="invoice print_closing_cash print-only" id="print_closing_cash"> </section>
+        <div class="modal view_modal no-print" role="dialog" aria-hidden="true"></div>
+
     </div>
 
     <script type="text/javascript">
@@ -341,8 +333,7 @@
         current_url = "{{ url()->current() }}";
     </script>
 
-    @include('layouts.partials.currencies_obj')
-    @include('layouts.partials.javascript')
+    @include('back-end.layouts.partials.javascript')
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
         $.ajaxSetup({

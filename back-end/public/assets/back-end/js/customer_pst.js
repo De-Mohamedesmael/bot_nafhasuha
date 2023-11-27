@@ -92,81 +92,44 @@ function toggleAccordianTillItem(product) {
     $("#collapse" + brand_level).collapse("show");
     $("#collapse" + top_accordion).collapse("show");
 }
-
-let product_array = [];
-let unique_product_array = [];
-$(document).on("hidden.bs.modal", "#pctModal", function () {
-    $("#sale_promotion_table tbody").empty();
-    product_array = [];
-    unique_product_array = [];
-
-    $(".product_checkbox").each((i, obj) => {
-        if ($(obj).prop("checked") === true) {
-            product_array.push($(obj).val());
-        }
-    });
-    unique_product_array = product_array.filter(onlyUnique);
-    getProductRows(unique_product_array);
+$("#submit-btn").on("click", function (e) {
+    e.preventDefault();
+        submitForm();
 });
 
-if (is_edit_page == "1") {
-    $("#sale_promotion_table tbody").empty();
-    product_array = [];
-    unique_product_array = [];
+function submitForm() {
+    if ($("#product-form").valid()) {
+        tinyMCE.triggerSave();
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("content").style.display = "none";
+        $.ajax({
+            type: "POST",
+            url: $("form#product-form").attr("action"),
+            data: $("#product-form").serialize(),
+            success: function (response) {
+                myFunction();
+                if (response.success) {
+                    swal("Success", response.msg, "success");
+                    $("#sku").val("").change();
+                    $("#name").val("").change();
+                    $(".translations").val("").change();
 
-    $(".product_checkbox").each((i, obj) => {
-        if ($(obj).prop("checked") === true) {
-            product_array.push($(obj).val());
-        }
-    });
-    unique_product_array = product_array.filter(onlyUnique);
-    getProductRows(unique_product_array);
-}
-
-function getProductRows(array) {
-    $(".footer_sell_price_total").text(__currency_trans_from_en(0, false));
-    $(".footer_purchase_price_total").text(__currency_trans_from_en(0, false));
-    $.ajax({
-        async: false,
-        method: "get",
-        url: "/sales-promotion/get-product-details-rows",
-        data: {
-            store_ids: $("#store_ids").val(),
-            type: $("#type").val(),
-            array: array,
-        },
-        dataType: "html",
-        success: function (result) {
-            $("#sale_promotion_table tbody").append(result);
-            let sell_price_total = 0;
-            let purchase_price_total = 0;
-            if ($("#sell_price_total").length > 0) {
-                sell_price_total = $("#sell_price_total").val();
-            }
-            if ($("#purchase_price_total").length > 0) {
-                purchase_price_total = $("#purchase_price_total").val();
-            }
-
-            $(".footer_sell_price_total").text(
-                __currency_trans_from_en(sell_price_total, false)
-            );
-            $(".footer_purchase_price_total").text(
-                __currency_trans_from_en(purchase_price_total, false)
-            );
-            calculate_total_prices();
-        },
-    });
-}
-function onlyUnique(value, index, self) {
-    return self.indexOf(value) === index;
-}
-
-$(document).on("change", "#type", function () {
-    if ($(this).val() === "package_promotion") {
-        $(".product_condition_div").addClass("hide");
-        $(".qty_hide").removeClass("hide");
-    } else {
-        $(".product_condition_div").removeClass("hide");
-        $(".qty_hide").addClass("hide");
+                    if (!$('#clear_all_input_form').is(':checked')) {
+                        $('.clear_input_form').val('');
+                        $('.clear_input_form').selectpicker('refresh');
+                    }
+                    const previewContainer = document.querySelector('.preview-container');
+                    previewContainer.innerHTML = '';
+                } else {
+                    swal("Error", response.msg, "error");
+                }
+            },
+            error: function (response) {
+                myFunction();
+                if (!response.success) {
+                    swal("Error", response.msg, "error");
+                }
+            },
+        });
     }
-});
+}

@@ -94,4 +94,6 @@
   'change_Status_success' => 'Change Status success',
   'Price Quote Not Found' => 'Price Quote Not Found',
   'Price quote has been successfully accepted' => 'Price quote has been successfully accepted',
+  'User updated successfully!' => 'User updated successfully!',
+  'Provider updated successfully!' => 'Provider updated successfully!',
 );

@@ -67,6 +67,9 @@ class OrderServiceResource extends JsonResource
                     'url' => $item->getUrl(),
                 ];
             }),
+            'is_price_request'=>$this->price_requests->first()? 1:0,
+            'price_request'=>$this->price_requests->first()  ? $this->price_requests->first()->price:0,
+
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),

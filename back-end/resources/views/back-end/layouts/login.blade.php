@@ -1,5 +1,4 @@
 @php
-    \Settings::set('logo','logo.svg');
         $logo = \Settings::get('logo');
 @endphp
     <!DOCTYPE html>
