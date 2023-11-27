@@ -10,7 +10,7 @@ return [
     */
 
     'langs' => [
-//        'en' => ['full_name' => 'English', 'short_name' => 'English'],
+        'en' => ['full_name' => 'English', 'short_name' => 'English'],
 //        'fr' => ['full_name' => 'French - Français', 'short_name' => 'French'],
         'ar' => ['full_name' => 'Arabic - العَرَبِيَّة', 'short_name' => 'Arabic'],
 

@@ -7,8 +7,9 @@ $config_langs = config('constants.langs');
     <tbody>
         @foreach ($config_langs as $key => $lang)
             <tr>
-                <td> <input class="form-control translations" type="text" name="translations[{{ $attribute }}][{{ $key }}]"
-                        value="@if (!empty($translations[$attribute][$key])) {{ $translations[$attribute][$key] }} @endif"
+
+                <td> <input class="form-control translations" type="text" name="translations[{{ $key }}][{{ $attribute }}]"
+                        value="@if (!empty($translations[$key][$attribute])) {{ $translations[$key][$attribute] }} @endif"
                         placeholder="{{ $lang['full_name'] }}"></td>
             </tr>
         @endforeach

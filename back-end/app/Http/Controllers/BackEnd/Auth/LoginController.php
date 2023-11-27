@@ -4,9 +4,15 @@ namespace App\Http\Controllers\BackEnd\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use App\Utils\NotificationUtil;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -28,33 +34,54 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin';
+    protected $redirectTo = '/admin/home';
+    protected $guard = 'admin';
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(NotificationUtil $notificationUtil)
     {
-        $this->middleware('admin.guest:admin', ['except' => 'logout']);
+        $this->middleware('guest')->except('logout');
     }
-
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect( $this->redirectTo);
+    }
     protected function guard()
     {
-        return Auth::guard('admin');
+        return Auth::guard($this->guard);
     }
-
     /**
-     * Show the application's login form.
+     * Validate the user login request.
      *
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
+    protected function validateLogin(Request $request)
+    {
+        // Get the user details from database and check if user is exist and active.
+        $user = Admin::where('email', $request->email)->first();
+        if ($user && !$user->is_active) {
+            throw ValidationException::withMessages([$this->username() => __('User has been desactivated.')]);
+        }
+
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+
+    }
     public function showLoginForm()
     {
 

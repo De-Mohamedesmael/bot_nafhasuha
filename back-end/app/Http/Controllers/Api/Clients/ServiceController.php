@@ -662,6 +662,7 @@ class ServiceController extends ApiController
                 $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
                 $price_=$final_total;
                 if($wallet_user < $price_){
+                    DB::rollBack();
                     return responseApiFalse(405, translate('Your wallet balance is insufficient'));
                 }
             }
