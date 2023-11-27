@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Clients\ServiceEmergencyController;
 
 
 use App\Http\Controllers\Api\Clients\GeneralController;
+use App\Http\Controllers\Api\Clients\PaymentController;
 use App\Http\Controllers\Api\Clients\VehicleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -171,6 +172,7 @@ Route::post('contact-us', [GeneralController::class, 'contactUs']);
 Route::post('get-periodic-inspection', [GeneralController::class, 'GetPeriodicInspection']);
 Route::get('get-offers', [GeneralController::class, 'GetOffers']);
 Route::get('canceled-reasons', [GeneralController::class, 'GetCanceledReasons']);
+Route::post('get-checkouts', [PaymentController::class, 'GetCheckouts']);
 
 ///////////////////////////////// start notifications //////////////////////////////////////////
 Route::get('notifications', [NotificationController::class, 'index']);
