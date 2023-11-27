@@ -60,9 +60,9 @@ $languages[$key] = $value['full_name'];
             </p>
             <div class="copyrights text-center">
                 <p>&copy; {{ $site_title }} | <span class="">@lang('lang.developed_by')
-                        <a target="_blank" href="http://sherifshalaby.tech">nafhasuha.com</a></span></p>
+                        <a target="_blank" href="http://bot-ksa.com">nafhasuha.com</a></span></p>
                 <p>
-                    <a href="mailto:info@sherifshalaby.tech">info@nafhasuha.com</a>
+                    <a href="mailto:info@bot-ksa.com">info@nafhasuha.com</a>
                 </p>
             </div>
         </div>
