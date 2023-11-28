@@ -6,6 +6,7 @@ use App\Http\Controllers\BackEnd\Auth\LoginController;
 use App\Http\Controllers\BackEnd\HomeController;
 use App\Http\Controllers\BackEnd\CustomerController;
 use App\Http\Controllers\BackEnd\ProviderController;
+use App\Http\Controllers\BackEnd\OrderController;
 
 use App\Http\Controllers\BackEnd\TransactionPaymentController;
 use App\Http\Controllers\BackEnd\CategoryController;
@@ -76,6 +77,23 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('update_status', [ProviderController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [ProviderController::class,'deleteImage'])->name('deleteImage');
     });
+
+    Route::group(['prefix'=>'orders','as'=>'order.'], function () {
+        Route::get('/{status?}', [OrderController::class,'index'])->name('index');
+        Route::post('/{status?}', [OrderController::class,'index'])->name('index');
+        Route::get('create', [OrderController::class,'create'])->name('create');
+        Route::post('create', [OrderController::class,'store'])->name('store');
+        Route::get('edit/{id}',[OrderController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [OrderController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [OrderController::class,'destroy'])->name('delete');
+        Route::get('get-pay/{customer_id}', [OrderController::class,'getPay'])->name('pay');
+        Route::post('get-pay/{customer_id}', [OrderController::class,'postPay'])->name('postPay');
+        Route::post('update_status', [OrderController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [OrderController::class,'deleteImage'])->name('deleteImage');
+    });
+
+
+
 
 
     Route::group(['prefix'=>'service','as'=>'service.'], function () {

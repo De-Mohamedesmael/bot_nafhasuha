@@ -15,7 +15,93 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     @include('back-end.layouts.partials.css')
-    @yield('styles')
+    <style>
+        span.count-span-side-bar {
+            float: right;
+            color: #fff;
+            background-color: #00c9db;
+            padding-right: .6em;
+            padding-left: .6em;
+            border-radius: 10rem;
+            display: inline-block;
+            padding: .3125em .5em;
+            font-size: 75%;
+            font-weight: 600;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .3125rem;
+            transition: all .2s ease-in-out;
+        }
+        span.pending {
+            color: #00c9db !important;
+            background-color: rgba(0, 201, 219, .05) !important;
+
+        }
+        span.approved {
+            color: #00c9a7;
+            background-color: rgba(0, 201, 167, .1);
+        }
+        span.completed {
+            color: #fff;
+            background-color: #00c9a7;
+
+        }
+
+        span.canceled {
+            color: #fff;
+            background-color: #ed4c78;
+        }
+        span.span-status {
+            padding: 5px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+    </style>
+    @if(app()->getLocale() == 'ar')
+        <style>
+            body{
+                direction: rtl;
+                text-align: right;
+            }
+            span.count-span-side-bar {
+                float: left!important;
+            }
+            .side-navbar {
+                left: auto;
+                right: 0;
+                text-align: right;
+                direction: rtl;
+            }
+
+            div#content {
+                float: left;
+                right: 21%;
+            }
+            .list-unstyled {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            .side-navbar li a[data-toggle="collapse"]::before {
+                right: auto;
+                left: 5%;
+            }
+            apan.count-span-side-bar {
+                float: left;
+
+            }
+            nav.navbar .nav-menu li:last-child .dropdown-menu {
+                float: left;
+                right: auto;
+                left: 20px;
+            }
+            .dropdown-menu.edit-options li a, .dropdown-menu.edit-options li .btn-link {
+                text-align: right;
+            }
+        </style>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .mCSB_draggerRail {
@@ -257,6 +343,7 @@
             }
         }
     </style>
+    @yield('styles')
 </head>
 
 <body onload="myFunction()">
