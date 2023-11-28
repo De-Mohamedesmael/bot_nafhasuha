@@ -13,13 +13,13 @@
                                    auth()->user()->can('customer_module.customer_type.create_and_edit') ||
                                    auth()->user()->can('customer_module.customer_type.view') ) --}}
                 <li>
-                    <a href="#provider" aria-expanded="false" data-toggle="collapse">
+                    <a href="#orders" aria-expanded="false" data-toggle="collapse">
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>
 
                     </a>
-                    <ul id="provider"
+                    <ul id="orders"
                         class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])) show @endif">
 
                         {{--  @can('order_module.order.view')--}}
