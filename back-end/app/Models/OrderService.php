@@ -88,5 +88,9 @@ class OrderService extends Model implements HasMedia
 
         return $this->belongsTo(User::class,'canceled_by');
     }
-
+    public static function getStatusSummary()
+    {
+        return self::groupBy('status')
+            ->selectRaw('status, count(*) as count');
+    }
 }

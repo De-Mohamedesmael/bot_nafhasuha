@@ -1452,4 +1452,33 @@ return [
     'services_from_home'=>'خدمة منزلية',
     'provider_type'=>'نوع مقدم الخدمة',
     'services'=>'الخدمات',
+
+
+
+    'orders'=>'الطلبات',
+    'view_all_orders'=>'كل الطلبات',
+    'view_all_orders_pending'=>'قيد الطلب',
+    'view_all_orders_approved'=>'تمت الموافقة',
+    'view_all_orders_completed'=>'مكتملة',
+    'view_all_orders_canceled'=>'ملغية',
+
+    'canceled'=>'ملغية',
+    'Online'=>'الكتروني',
+    'Cash'=>'عند التسليم',
+    'Wallet'=>'المحفظة',
+    'not_pay'=>'لم تدفع بعد',
+    'created_at'=>'تاريخ الانشاء',
+    'updated_at'=>'تاريخ اخر تعديل',
+    'User'=>'عميل',
+    'Provider'=>'مقدم خدمة',
+
+    'service_title'=>'اسم الخدمة',
+    'cancel_reason'=>'سبب الالغاء',
+    'discount_amount'=>'خصم',
+    'suggested_price'=>'السعر المقترح',
+
+    'client_name'=>'اسم العميل',
+    'client_phone'=>'هاتف العميل',
+    'provider_name'=>'اسم مقدم الخدمة',
+    'provider_phone'=>'رقم مقدم الخدمة',
 ];

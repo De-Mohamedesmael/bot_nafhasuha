@@ -1454,5 +1454,31 @@ return [
     'quick_pay' => 'Quick pay',
     'not_allowed'=>"How could you give the money in your hand to yourself 🤪 please focus and select someone else😎",
     'pay_customer'=>'pay customer',
+    'orders'=>'Orders',
+    'view_all_orders'=>'All Orders',
+    'view_all_orders_pending'=>'Pending',
+    'view_all_orders_approved'=>'Approved',
+    'view_all_orders_completed'=>'completed',
+    'view_all_orders_canceled'=>'cancelled',
+    'canceled'=>'cancelled',
 
+
+    'Online'=>'Online',
+    'Cash'=>'Cash',
+    'Wallet'=>'Wallet',
+    'not_pay'=>'Not paid',
+
+    'created_at'=>'created_at',
+    'updated_at'=>'Last modified date',
+
+    'User'=>'Client',
+    'Provider'=>'Provider',
+    'service_title'=>'Service Name',
+    'cancel_reason'=>'Cancellation reason',
+    'discount_amount'=>'discount',
+    'suggested_price'=>'suggested price',
+    'client_name'=>'client name',
+    'client_phone'=>'client phone',
+    'provider_name'=>'provider name',
+    'provider_phone'=>'provider number',
 ];
