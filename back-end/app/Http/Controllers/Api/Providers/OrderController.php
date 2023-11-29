@@ -218,7 +218,7 @@ class OrderController extends ApiController
             return responseApi(403, translate('Unauthenticated user'));
 
         $order=OrderService::where('id',$request->order_id)
-            ->where('status','pending')->first();
+            ->where('status','!=','pending')->first();
 
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
