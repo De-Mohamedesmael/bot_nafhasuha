@@ -406,7 +406,7 @@ class ServiceController extends ApiController
             $OrderService->save();
             $this->pushNotof('Order',$OrderService,auth()->id(),1);
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('return_data_success'),$OrderService->id);
 
         }catch (\Exception $exception){
             DB::rollBack();
