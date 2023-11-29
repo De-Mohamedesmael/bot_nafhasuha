@@ -203,7 +203,41 @@ class OrderController extends ApiController
 
 
         $this->pushNotof('Order',$order,$order->user_id,2);
-        return  responseApi(200, translate('return_data_success'));
+        return  responseApi(200, translate('return_data_success'),$order->id);
+
+    }
+    public function storeCompletedOrder(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        $order=OrderService::where('id',$request->order_id)
+            ->where('status','pending')->first();
+
+        if(!$order){
+            return responseApi(405, translate('The order is no longer available'));
+        }
+            $order->status="completed";
+            $order->save();
+            $transaction= $order->transaction;
+            if($transaction){
+                $transaction->provider_id=auth()->id();
+                $transaction->status="completed";
+                $transaction->completed_at=now();
+
+                $transaction->save();
+            }
+
+
+
+        $this->pushNotof('Order',$order,$order->user_id,3);
+        return  responseApi(200, translate('return_data_success'),$order->id);
 
     }
     public function CancelOrdersOngoing(Request $request)
