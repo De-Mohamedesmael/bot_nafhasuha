@@ -188,6 +188,19 @@ class OrderController extends ApiController
         if(!$order){
             return responseApi(405, translate('The order is no longer available'));
         }
+        if($order->type == 'PeriodicInspection'){
+            $order->provider_id=auth()->id();
+            $order->status="approved";
+            $order->save();
+            $transaction= $order->transaction;
+            if($transaction){
+                $transaction->provider_id=auth()->id();
+                $transaction->status="approved";
+
+                $transaction->save();
+            }
+        }
+
 
         $this->pushNotof('Order',$order,$order->user_id,2);
         return  responseApi(200, translate('return_data_success'));
