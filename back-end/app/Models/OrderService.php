@@ -93,4 +93,15 @@ class OrderService extends Model implements HasMedia
         return self::groupBy('status')
             ->selectRaw('status, count(*) as count');
     }
+
+    public function isOfferPrice()
+    {
+        $not_request_price=['PeriodicInspection'];
+        //Tire&TransportVehicle&ChangeBattery&Petrol&SubscriptionBattery
+        $is_offer_price=true;
+        if(in_array($this->type,$not_request_price)){
+            $is_offer_price=false;
+        }
+        return$is_offer_price;
+    }
 }

@@ -439,14 +439,40 @@ class ServiceUtil
                 'msg'=>translate('provider_not_found'),
                 ];
         }
+
+        if($order->type == 'PeriodicInspection'){
+            $order->provider_id=$provider_id;
+            $order->status="approved";
+            $order->save();
+            $transaction= $order->transaction;
+            if($transaction){
+                $transaction->provider_id=$provider_id;
+                $transaction->status="approved";
+                $transaction->save();
+            }
+            UserRequest::where('order_service_id',$order->id)->delete();
+        }else{
+            PriceRequest::where('provider_id',$provider_id)->where('order_service_id',$order->id)->delete();
+            PriceRequest::create([
+                'order_service_id'=>$order->id,
+                'provider_id'=>$provider_id,
+                'price'=>$amount,
+            ]);
+        }
+
+
+
         return[
             'success'=>true,
-            "order_id"=>$order->id,
-            "price"=>$amount,
-            "type_provider"=>$provider->provider_type,//ProviderCenter,Provider
-            "image"=>$provider->getFirstMedia('images') != null ? $provider->getFirstMedia('images')->getUrl() : null,
-            "name"=>$provider->name,
-            "number_phone"=>$provider->phone
+            'msg'=>translate('successfully'),
+            'is_offer_price'=>$order->isOfferPrice(),
+
+//            "order_id"=>$order->id,
+//            "price"=>$amount,
+//            "type_provider"=>$provider->provider_type,//ProviderCenter,Provider
+//            "image"=>$provider->getFirstMedia('images') != null ? $provider->getFirstMedia('images')->getUrl() : null,
+//            "name"=>$provider->name,
+//            "number_phone"=>$provider->phone
         ];
 
     }
