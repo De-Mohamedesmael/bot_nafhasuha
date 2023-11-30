@@ -135,7 +135,6 @@
       <path value="$PROJECT_DIR$/back-end/vendor/league/glide" />
       <path value="$PROJECT_DIR$/back-end/vendor/spatie/image" />
       <path value="$PROJECT_DIR$/back-end/vendor/spatie/image-optimizer" />
-      <path value="$PROJECT_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
       <path value="$PROJECT_DIR$/back-end/vendor/spatie/temporary-directory" />
       <path value="$PROJECT_DIR$/back-end/vendor/intervention/image" />
       <path value="$PROJECT_DIR$/back-end/vendor/lcobucci/clock" />
@@ -154,6 +153,23 @@
       <path value="$PROJECT_DIR$/back-end/vendor/doctrine/cache" />
       <path value="$PROJECT_DIR$/back-end/vendor/psr/cache" />
       <path value="$PROJECT_DIR$/back-end/vendor/realrashid/sweet-alert" />
+      <path value="$PROJECT_DIR$/back-end/vendor/pusher/pusher-php-server" />
+      <path value="$PROJECT_DIR$/back-end/vendor/setasign/fpdi" />
+      <path value="$PROJECT_DIR$/back-end/vendor/niklasravnsborg/laravel-pdf" />
+      <path value="$PROJECT_DIR$/back-end/vendor/yajra/laravel-datatables-editor" />
+      <path value="$PROJECT_DIR$/back-end/vendor/yajra/laravel-datatables-fractal" />
+      <path value="$PROJECT_DIR$/back-end/vendor/yajra/laravel-datatables" />
+      <path value="$PROJECT_DIR$/back-end/vendor/staudenmeir/eloquent-json-relations" />
+      <path value="$PROJECT_DIR$/back-end/vendor/league/fractal" />
+      <path value="$PROJECT_DIR$/back-end/vendor/mpdf/mpdf" />
+      <path value="$PROJECT_DIR$/back-end/vendor/mpdf/psr-http-message-shim" />
+      <path value="$PROJECT_DIR$/back-end/vendor/mpdf/psr-log-aware-trait" />
+      <path value="$PROJECT_DIR$/back-end/vendor/spatie/browsershot" />
+      <path value="$PROJECT_DIR$/back-end/vendor/spatie/laravel-permission" />
+      <path value="$PROJECT_DIR$/back-end/vendor/paragonie/random_compat" />
+      <path value="$PROJECT_DIR$/back-end/vendor/paragonie/sodium_compat" />
+      <path value="$PROJECT_DIR$/back-end/vendor/laravel/ui" />
+      <path value="$PROJECT_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />

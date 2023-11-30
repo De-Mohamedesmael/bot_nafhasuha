@@ -82,6 +82,138 @@
 
         @endphp
     </div>
+    <div class="card mt-3 pt-2 pb-1">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('category_id',  __('lang.category') , []) !!}
+                        {!! Form::select('category_id', $categories, request()->category_id, [
+'class' => 'form-control filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                    </div>
+                </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('city_id', __('lang.city') . ':', []) !!}
+                            {!! Form::select('city_id', $cities, request()->city_id, [
+'class' => 'form-control filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('area_id', __('lang.area') . ':', []) !!}
+                            {!! Form::select('area_id', $areas, request()->area_id, [
+'class' => 'form-control filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::label('user_id', __('lang.client') . ':', []) !!}
+                            {!! Form::select('user_id', $users, request()->user_id, [
+'class' => 'form-control
+                    filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                        </div>
+                    </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('provider_id', __('lang.provider') . ':', []) !!}
+                        {!! Form::select('provider_id', $providers, request()->provider_id, [
+'class' => 'form-control
+                    filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('payment_method', __('lang.payment_method') . ':', []) !!}
+                        {!! Form::select('payment_method', ['Online'=>__('lang.Online'),'Cash'=>__('lang.Cash'),'Wallet'=>__('lang.Wallet')], request()->payment_method, [
+'class' => 'form-control
+                    filter_product
+                    selectpicker',
+'data-live-search' => 'true',
+'placeholder' => __('lang.all'),
+]) !!}
+                    </div>
+                </div>
+                <div class="col-md-6"></div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('start_date', __('lang.generation_start_date'), []) !!}
+                        {!! Form::text('start_date', request()->start_date, ['class' => 'form-control filter_product']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('start_time', __('lang.generation_start_time'), []) !!}
+                        {!! Form::text('start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('end_date', __('lang.generation_end_date'), []) !!}
+                        {!! Form::text('end_date', request()->end_date, ['class' => 'form-control filter_product']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('end_time', __('lang.generation_end_time'), []) !!}
+                        {!! Form::text('end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('complete_start_date', __('lang.complete_start_date'), []) !!}
+                        {!! Form::text('complete_start_date', request()->complete_start_date, ['class' => 'form-control datepicker filter_product', 'id' => 'complete_start_date']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('complete_start_time', __('lang.complete_start_time'), []) !!}
+                        {!! Form::text('complete_start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('complete_end_date', __('lang.complete_end_date'), []) !!}
+                        {!! Form::text('complete_end_date', request()->complete_end_date, ['class' => 'form-control filter_product', 'id' => 'complete_end_date']) !!}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        {!! Form::label('complete_end_time', __('lang.complete_end_time'), []) !!}
+                        {!! Form::text('complete_end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
+                    </div>
+                </div>
+
+                <input type="hidden" name="product_id" id="product_id" value="">
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success mt-4 ml-2" id="submit-filter">@lang('lang.filter')</button>
+
+                    <button class="btn btn-danger mt-4 clear_filters">@lang('lang.clear_filters')</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row m-3 mb-0">
         <div class="col-md-12">
             <button type="button" value="0"
@@ -113,7 +245,7 @@
                 <tr>
                     <th>@lang('lang.invoice_no')</th>
 
-                    <th class="sum">@lang('lang.service_title')</th>
+                    <th>@lang('lang.service_title')</th>
 
                     <th >@lang('lang.client_name')</th>
                     <th >@lang('lang.client_phone')</th>
@@ -161,6 +293,7 @@
 
 @section('javascript')
     <script>
+
         order_table = $("#order_table").DataTable({
             lengthChange: true,
             paging: true,
@@ -190,7 +323,20 @@
             ajax: {
                 url: '{{$url}}',
                 data: function (d) {
-                    d.order_id = $("#order_id").val();
+                    d.category_id = $("#category_id").val();
+                    d.city_id = $("#city_id").val();
+                    d.area_id = $("#area_id").val();
+                    d.user_id = $("#user_id").val();
+                    d.provider_id = $("#provider_id").val();
+                    d.payment_method = $("#payment_method").val();
+                    d.start_date = $("#start_date").val();
+                    d.start_time = $("#start_time").val();
+                    d.end_date = $("#end_date").val();
+                    d.end_time = $("#end_time").val();
+                    d.complete_start_date = $("#complete_start_date").val();
+                    d.complete_start_time = $("#complete_start_time").val();
+                    d.complete_end_date = $("#complete_end_date").val();
+                    d.complete_end_time = $("#complete_end_time").val();
                 },
             },
             columnDefs: [
@@ -255,6 +401,15 @@
                         }
                     });
             },
+        });
+        $(document).on('click', '#submit-filter', function() {
+            order_table.ajax.reload();
+        });
+        $(document).on('click', '.clear_filters', function() {
+            $('.filter_product').val('');
+            $('.filter_product').selectpicker('refresh');
+
+            order_table.ajax.reload();
         });
         $(document).ready(function() {
             var hiddenColumnArray = JSON.parse('{!! addslashes(json_encode(Cache::get("key_" . auth()->id(), []))) !!}');
@@ -390,33 +545,60 @@
                 }
             });
         });
-        $(document).on('click', '.update_status', function(e) {
-            var id=$(this).data('id');
-            $.ajax({
-                method: 'Post',
-                url: "{{route('admin.order.update_status')}}",
-                dataType: 'json',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    id: id,
-                },
-                success: function(result) {
-                    if (result.success ==
-                        true) {
-                        swal(
-                            'Success',
-                            result.msg,
-                            'success'
-                        );
-                    } else {
-                        swal(
-                            'Error',
-                            result.msg,
-                            'error'
-                        );
+        $('#city_id').on('change', function(){
+            var city_id =$(this).val();
+
+            $.get( "{{url('/admin/city/areas')}}", { city_id: city_id })
+                .done(function( data ) {
+                    if(data.code == 200){
+                        var e=data.data;
+                        $('#area_id')
+                            .find('option')
+                            .remove();
+                        $.each(e, function (key, val) {
+                            $("#area_id").append('<option value="'+val.id+'" selected="">'+val.title+'</option>');
+                        });
+                        $("#area_id").selectpicker("refresh");
                     }
-                },
-            });
+
+                });
+
         });
+
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+    <script>
+
+
+
+        function send_offer() {
+            var formData = $("#send_offer_price_form").serialize();
+            var url = $("#send_offer_price_form").attr('action');
+            console.log(url);
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: formData,
+                success: function(response) {
+                    if(response.success){
+                        var socket = io('http://135.181.122.201:3100?type=Provider&id=4');
+                        socket.emit('borad',{
+                            order_id:response.order_id,
+                            price:response.price,
+                            type_provider:response.type_provider,
+                            image:response.image,
+                            name:response.name,
+                            number_phone:response.number_phone,
+                        });
+                        socket.close();
+                    }
+
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+
 @endsection

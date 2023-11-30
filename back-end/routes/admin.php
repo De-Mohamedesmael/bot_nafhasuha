@@ -86,8 +86,8 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::get('edit/{id}',[OrderController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [OrderController::class,'update'])->name('update');
         Route::delete('delete/{id}', [OrderController::class,'destroy'])->name('delete');
-        Route::get('get-pay/{customer_id}', [OrderController::class,'getPay'])->name('pay');
-        Route::post('get-pay/{customer_id}', [OrderController::class,'postPay'])->name('postPay');
+        Route::get('send-offer/{order_id}', [OrderController::class,'getSendOffer'])->name('get-send-offer');
+        Route::post('send-offer/{order_id}', [OrderController::class,'SendOffer'])->name('send-offer');
         Route::post('update_status', [OrderController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [OrderController::class,'deleteImage'])->name('deleteImage');
     });
