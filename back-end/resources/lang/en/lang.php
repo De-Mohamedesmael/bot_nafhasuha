@@ -1499,9 +1499,13 @@ return [
     'provider_type'=>'Provider type',
     'services'=>'services',
 
+    'client'=>'client',
+    'complete_start_date' => 'Completed Start Date',
+    'complete_end_date' => 'Completed End Date',
+    'complete_start_time' => 'Completed Start Time',
+    'complete_end_time' => 'Completed End Time',
 
-
-
-
+    'send_offer'=>'send offer',
+    'The_request_has_become_unavailable'=>'The request has become unavailable',
 
 ];

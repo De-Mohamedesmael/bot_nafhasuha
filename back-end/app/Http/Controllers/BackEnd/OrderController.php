@@ -6,12 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\Provider;
 use App\Models\Slider;
 use App\Models\OrderService;
 use App\Models\System;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Utils\TransactionUtil;
+use App\Utils\ServiceUtil;
 use App\Utils\Util;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +32,7 @@ class OrderController extends Controller
      */
     protected $commonUtil;
     protected $transactionUtil;
+    protected $serviceUtil;
 
 
     /**
@@ -35,12 +40,14 @@ class OrderController extends Controller
      *
      * @param Util $commonUtil
      * @param TransactionUtil $transactionUtil
+     * @param ServiceUtil $serviceUtil
      * @return void
      */
-    public function __construct(Util $commonUtil, TransactionUtil $transactionUtil)
+    public function __construct(Util $commonUtil, TransactionUtil $transactionUtil,ServiceUtil $serviceUtil)
     {
         $this->commonUtil = $commonUtil;
         $this->transactionUtil = $transactionUtil;
+        $this->serviceUtil = $serviceUtil;
     }
 
     /**
@@ -52,7 +59,7 @@ class OrderController extends Controller
     {
         if (request()->ajax()) {
 
-            $OrderServices = OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
+            $query = OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
                 ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
                 ->leftJoin('providers', 'providers.id', '=', 'order_services.provider_id')
                 ->select('order_services.*',
@@ -85,11 +92,56 @@ class OrderController extends Controller
                         break;
                 }
 
-                $OrderServices= $OrderServices->wherein('order_services.status',$array_status);
+                $query= $query->wherein('order_services.status',$array_status);
             }
 
 
-            return DataTables::of($OrderServices)
+            if (!empty(request()->category_id)) {
+                $query->where('order_services.category_id', request()->category_id);
+            }
+            if (!empty(request()->city_id)) {
+                $query->where('order_services.city_id', request()->city_id);
+            }
+            if (!empty(request()->area_id)) {
+                $query->where('order_services.area_id', request()->area_id);
+            }
+
+            if (!empty(request()->user_id)) {
+                $query->where('order_services.user_id', request()->user_id);
+            }
+            if (!empty(request()->payment_method)) {
+                $query->where('order_services.payment_method', request()->payment_method);
+            }
+
+            if (!empty(request()->category_id)) {
+                $query->where('order_services.category_id', request()->category_id);
+            }
+            if (!empty(request()->start_date)) {
+                $query->whereDate('order_services.created_at', '>=', request()->start_date);
+            }
+            if (!empty(request()->end_date)) {
+                $query->whereDate('order_services.created_at', '<=', request()->end_date);
+            }
+            if (!empty(request()->start_time)) {
+                $query->where('order_services.created_at', '>=', request()->start_date . ' ' . Carbon::parse(request()->start_time)->format('H:i:s'));
+            }
+            if (!empty(request()->end_time)) {
+                $query->where('order_services.created_at', '<=', request()->end_date . ' ' . Carbon::parse(request()->end_time)->format('H:i:s'));
+            }
+            if (!empty(request()->complete_start_date)) {
+                $query->whereDate('order_services.completed_at', '>=', request()->complete_start_date);
+            }
+            if (!empty(request()->complete_end_date)) {
+                $query->whereDate('order_services.completed_at', '<=', request()->complete_end_date);
+            }
+            if (!empty(request()->complete_start_time)) {
+                $query->where('order_services.completed_at', '>=', request()->complete_start_date . ' ' . Carbon::parse(request()->complete_start_time)->format('H:i:s'));
+            }
+            if (!empty(request()->complete_end_time)) {
+                $query->where('order_services.completed_at', '<=', request()->complete_end_date . ' ' . Carbon::parse(request()->complete_end_time)->format('H:i:s'));
+            }
+
+            return DataTables::of($query)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
                 ->editColumn('updated_at', '{{@format_datetime($updated_at)}}')
                 ->editColumn('suggested_price', '{{@num_format($suggested_price)}}')
@@ -169,9 +221,18 @@ class OrderController extends Controller
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
 
                         $html .= '<li class="divider"></li>';
+                        if(!in_array($row->category_id,[4]) && $row->status == 'pending'  ){
 
 
+    //                        if (auth()->user()->can('customer_module.customer.edit')){
+                            $html .='<li >
+                                                        <a data-href = "'. route('admin.order.get-send-offer',  ['order_id'=>$row->id]).'"
+                                                            class="btn-modal" data-container = ".view_modal" ><i
+                                                                class="fa fa-money btn" ></i > '. __('lang.send_offer').' </a >
+                                                    </li >';
 
+    //                        }
+                        }
 
                         $html .= '</ul></div>';
                         return $html;
@@ -188,7 +249,21 @@ class OrderController extends Controller
                 ->make(true);
         }
 
-        return view('back-end.orders.index',compact('status'));
+
+        $categories = Category::listsTranslations('title as name')->pluck('name','id');
+        $cities = City::listsTranslations('title as name')->pluck('name','id');
+        $areas = Area::listsTranslations('title as name')->pluck('name','id');
+        $users = User::pluck('name','id');
+        $providers = Provider::pluck('name','id');
+
+        return view('back-end.orders.index')->with([
+          'status'=>$status,
+          'categories'=>$categories,
+          'cities'=>$cities,
+          'areas'=>$areas,
+          'users'=>$users,
+          'providers'=>$providers,
+        ]);
     }
 
     /**
@@ -503,51 +578,63 @@ class OrderController extends Controller
 
         return redirect()->back()->with(['status' => $output]);
     }
+
     /**
-     * Shows  payment Customer
+     * Shows   Send Offer Form For order
      *
-     * @param  int  $OrderService_id
+     * @param  int  $customer_id
      * @return \Illuminate\Http\Response
      */
-    public function getPay($OrderService_id)
+    public function getSendOffer($order_id)
     {
         if (request()->ajax()) {
-            $OrderService = OrderService::find($OrderService_id);
-            if ($OrderService){
-                $getWalletOrderServiceBalance = $this->transactionUtil->getWalletOrderServiceBalance($OrderService);
-                return view('back-end.orders.partial.pay_OrderService')
-                    ->with(compact( 'getWalletOrderServiceBalance','OrderService'));
+            $order = OrderService::find($order_id);
+            if ($order){
+                $providers = Provider::wherehas('categories',function ($q) use($order){
+                   return $q->where('categories.id',$order->category_id);
+                })->pluck('name','id');
+
+                return view('back-end.orders.partial.send_offer')
+                    ->with(compact( 'providers','order'));
             }
         }
     }
 
     /**
-     * Adds Payments for Customer
+     * Send Offer for Order
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function postPay (Request  $request)
+    public function SendOffer (Request  $request)
     {
         try {
-            DB::beginTransaction();
-            $this->transactionUtil->addWalletBalanceCustomer($request->OrderService_id,$request->amount,'Admin',\auth()->id(),$request->paid_on);
-            DB::commit();
-            $output = [
-                'success' => true,
-                'msg' => __('lang.success')
-            ];
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
+            $order = OrderService::find($request->order_id);
+            if(!$order){
+                return [
+                    'success'=>false,
+                    'msg'=>__('site.same_error')
+                ];
+            }
+            if($order->status != 'pending'){
+                $output = [
+                    'success'=>false,
+                    'msg'=>__('lang.The_request_has_become_unavailable')
+                ];
+            }else{
 
+                $output=  $this->serviceUtil->sendOfferPrice($order,$request->amount,$request->provider_id);
+            }
+
+
+        } catch (\Exception $e) {
+            Log::emergency("File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage());
             $output = [
                 'success' => false,
                 'msg' => "File:" . $e->getFile() . "Line:" . $e->getLine() . "Message:" . $e->getMessage()
             ];
         }
 
-        return redirect()->back()->with(['status' => $output]);
+        return $output;
     }
-
 }

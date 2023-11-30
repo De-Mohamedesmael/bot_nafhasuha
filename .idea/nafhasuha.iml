@@ -132,7 +132,6 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/league/glide" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/image" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/image-optimizer" />
-      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/temporary-directory" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/intervention/image" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/lcobucci/clock" />
@@ -151,6 +150,23 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/psr/cache" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/realrashid/sweet-alert" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/pusher/pusher-php-server" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/setasign/fpdi" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/niklasravnsborg/laravel-pdf" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/yajra/laravel-datatables-editor" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/yajra/laravel-datatables-fractal" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/yajra/laravel-datatables" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/staudenmeir/eloquent-json-relations" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/league/fractal" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/mpdf/mpdf" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/mpdf/psr-http-message-shim" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/mpdf/psr-log-aware-trait" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/browsershot" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-permission" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/paragonie/sodium_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/laravel/ui" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1478,7 +1478,16 @@ return [
     'suggested_price'=>'السعر المقترح',
 
     'client_name'=>'اسم العميل',
+    'client'=>'العميل',
     'client_phone'=>'هاتف العميل',
     'provider_name'=>'اسم مقدم الخدمة',
     'provider_phone'=>'رقم مقدم الخدمة',
+    'Complete_start_date' => 'تاريخ البدء المكتمل',
+    'Complete_end_date' => 'تاريخ الانتهاء',
+    'Complete_start_time' => 'اكتمل وقت البدء',
+    'Complete_end_time' => 'اكتمل وقت الانتهاء',
+
+    'send_offer'=>'ارسال عرض',
+    'The_request_has_become_unavailable'=>'أصبح الطلب غير متاح',
+
 ];

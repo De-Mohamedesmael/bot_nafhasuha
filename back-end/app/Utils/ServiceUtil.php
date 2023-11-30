@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Http;
 use Spatie\Geocoder\Facades\Geocoder;
 use Location\Coordinate;
 use GuzzleHttp\Client;
+use function App\CPU\translate;
 
 class ServiceUtil
 {
@@ -419,6 +420,34 @@ class ServiceUtil
             ->update([
                'is_active'=>0,
             ]);
+
+    }
+
+    /**
+     * send Offer Price To user
+     *
+     * @param  OrderService $order
+     * @param   $amount
+     * @param  int $provider_id
+     */
+    public function sendOfferPrice($order,$amount,$provider_id)
+    {
+        $provider= Provider::whereId($provider_id)->first();
+        if(!$provider){
+            return[
+                'success'=>false,
+                'msg'=>translate('provider_not_found'),
+                ];
+        }
+        return[
+            'success'=>true,
+            "order_id"=>$order->id,
+            "price"=>$amount,
+            "type_provider"=>$provider->provider_type,//ProviderCenter,Provider
+            "image"=>$provider->getFirstMedia('images') != null ? $provider->getFirstMedia('images')->getUrl() : null,
+            "name"=>$provider->name,
+            "number_phone"=>$provider->phone
+        ];
 
     }
 
