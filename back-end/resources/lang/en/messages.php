@@ -80,4 +80,6 @@
   'Provider profile update' => 'Provider profile update',
   'app_name' => 'App name',
   'index' => 'Index',
+  'provider_not_found' => 'Provider not found',
+  'successfully' => 'Successfully',
 );

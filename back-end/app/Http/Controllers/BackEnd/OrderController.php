@@ -12,6 +12,7 @@ use App\Models\OrderService;
 use App\Models\System;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserRequest;
 use App\Utils\TransactionUtil;
 use App\Utils\ServiceUtil;
 use App\Utils\Util;
@@ -221,7 +222,7 @@ class OrderController extends Controller
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
 
                         $html .= '<li class="divider"></li>';
-                        if(!in_array($row->category_id,[4]) && $row->status == 'pending'  ){
+                        if($row->isOfferPrice() && $row->status == 'pending'  ){
 
 
     //                        if (auth()->user()->can('customer_module.customer.edit')){
@@ -232,6 +233,12 @@ class OrderController extends Controller
                                                     </li >';
 
     //                        }
+                        }else{
+                            $html .='<li >
+                                                        <a data-href = "'. route('admin.order.get-send-offer',  ['order_id'=>$row->id]).'"
+                                                            class="btn-modal" data-container = ".view_modal" ><i
+                                                                class="fa fa-check-circle btn" ></i > '. __('lang.accept').' </a >
+                                                    </li >';
                         }
 
                         $html .= '</ul></div>';
@@ -590,14 +597,24 @@ class OrderController extends Controller
         if (request()->ajax()) {
             $order = OrderService::find($order_id);
             if ($order){
-                $providers = Provider::wherehas('categories',function ($q) use($order){
-                   return $q->where('categories.id',$order->category_id);
-                })->pluck('name','id');
+                $UserRequest=UserRequest::where('order_service_id',$order_id)->first();
+                if($UserRequest) {
+                    $arr_id=json_decode($UserRequest->providers_id, true);
+                    $providers = Provider::wherein('id',$arr_id)->pluck('name','id');
+//                    $providers = Provider::wherehas('categories',function ($q) use($order){
+//                        return $q->where('categories.id',$order->category_id);
+//                    })->pluck('name','id');
+                    return view('back-end.orders.partial.send_offer')
+                        ->with(compact( 'providers','order'))->render();
+                }
 
-                return view('back-end.orders.partial.send_offer')
-                    ->with(compact( 'providers','order'));
             }
         }
+        return [
+            'success'=>false,
+            'msg'=>__('lang.The_request_has_become_unavailable')
+        ];
+
     }
 
     /**
@@ -617,14 +634,17 @@ class OrderController extends Controller
                 ];
             }
             if($order->status != 'pending'){
-                $output = [
+                return [
                     'success'=>false,
                     'msg'=>__('lang.The_request_has_become_unavailable')
                 ];
-            }else{
-
-                $output=  $this->serviceUtil->sendOfferPrice($order,$request->amount,$request->provider_id);
             }
+
+            $output=  $this->serviceUtil->sendOfferPrice($order,$request->amount,$request->provider_id);
+            if($output['success']){
+                $this->pushNotof('Order',$order,$order->user_id,2);
+            }
+
 
 
         } catch (\Exception $e) {

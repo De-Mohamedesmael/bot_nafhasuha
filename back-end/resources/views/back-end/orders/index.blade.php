@@ -566,7 +566,7 @@
         });
 
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>--}}
     <script>
 
 
@@ -574,28 +574,48 @@
         function send_offer() {
             var formData = $("#send_offer_price_form").serialize();
             var url = $("#send_offer_price_form").attr('action');
-            console.log(url);
             $.ajax({
                 type: "POST",
                 url: url,
                 data: formData,
                 success: function(response) {
-                    if(response.success){
-                        var socket = io('http://135.181.122.201:3100?type=Provider&id=4');
-                        socket.emit('borad',{
-                            order_id:response.order_id,
-                            price:response.price,
-                            type_provider:response.type_provider,
-                            image:response.image,
-                            name:response.name,
-                            number_phone:response.number_phone,
-                        });
-                        socket.close();
+                    if(!response.success){
+                        swal(
+                            'Failed!',
+                            response.msg,
+                            'error'
+                        )
+                    }else{
+                        if(!response.is_offer_price){
+
+                            order_table.ajax.reload();
+                        }
+                        swal(
+                            'Success',
+                            response.msg,
+                            'success'
+                        );
+
                     }
+
+                    //     var socket = io('http://135.181.122.201:3100?type=Provider&id=4');
+                    //     socket.emit('borad',{
+                    //         order_id:response.order_id,
+                    //         price:response.price,
+                    //         type_provider:response.type_provider,
+                    //         image:response.image,
+                    //         name:response.name,
+                    //         number_phone:response.number_phone,
+                    //     });
+                    //     socket.close();
+                    // }
+                    $('.view_modal').modal('hide');
 
                 },
                 error: function(error) {
-                    console.error(error);
+                    $('.view_modal').modal('hide');
+                    console.log('Column visibility updated successfully.');
+
                 }
             });
         }

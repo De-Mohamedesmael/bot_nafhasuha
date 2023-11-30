@@ -1489,5 +1489,5 @@ return [
 
     'send_offer'=>'ارسال عرض',
     'The_request_has_become_unavailable'=>'أصبح الطلب غير متاح',
-
+    'accept'=>'قبول الطلب',
 ];

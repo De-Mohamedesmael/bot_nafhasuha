@@ -1507,5 +1507,5 @@ return [
 
     'send_offer'=>'send offer',
     'The_request_has_become_unavailable'=>'The request has become unavailable',
-
+    'accept'=>'accept request',
 ];
