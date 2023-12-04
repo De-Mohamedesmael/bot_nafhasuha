@@ -56,6 +56,7 @@ Route::middleware('auth.guard:api')->group(function () {
     Route::get('my-wallet', [TransactionController::class, 'myWallet']);
     Route::POST('request-withdrawal', [TransactionController::class, 'StoreWithdrawalRequest']);
 
+    Route::post('transactions/recharge-wallet', [TransactionController::class, 'RechargeMyWallet']);
 
 });
 

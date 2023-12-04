@@ -55,6 +55,31 @@ class TransactionController extends ApiController
         }
 
     }
+    public function RechargeMyWallet(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'amount' => 'required',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        try {
+            DB::beginTransaction();
+                $date_at=null;
+                $date=$this->TransactionUtil->addWalletBalanceCustomer(auth()->id(),$request->amount,'User',auth()->id(),$date_at);
+            DB::commit();
+
+            return  responseApi(200, translate('return_data_success'),$date);
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+
+    }
 
      public function show(Request $request)
     {
