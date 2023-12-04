@@ -62,6 +62,35 @@ class TransactionUtil
 
         return  true;
     }
+/**
+     * Get Wallet Balance For Provider
+     *
+     * @param integer $provider_id
+     * @param float $amount
+     * @param string $add_type
+     * @param integer $add_by
+     * @param string $date_at
+     * @return boolean
+     */
+    public function addWalletBalanceProvider($provider_id,$amount,$add_type,$add_by,$date_at)
+    {
+
+        $Transaction= Transaction::create([
+            'provider_id'=>$provider_id,
+            'type'=>'TopUpCredit',
+            'status'=>'received',
+            'grand_total'=>$amount,
+            'final_total'=>$amount,
+            'completed_at'=>$date_at,
+            'created_by_type'=>$add_type,
+            'created_by'=>$add_by,
+        ]);
+        $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $Transaction->invoice_no='TP'.$randomNumber.'-'.$provider_id.'u'.$Transaction->id;
+        $Transaction->save();
+
+        return  true;
+    }
 
     /**
      * Save Invitation Bonus  in Transaction Table for user
