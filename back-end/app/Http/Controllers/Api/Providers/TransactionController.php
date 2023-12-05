@@ -66,7 +66,7 @@ class TransactionController extends ApiController
         $validator = validator($request->all(), [
             'bank_id' => 'required|integer|exists:banks,id',
             'full_name' => 'required|string|max:100',
-            'iban' => 'required|numeric',
+            'iban' => 'required|string',
             'amount' => 'required|numeric',
         ]);
 
