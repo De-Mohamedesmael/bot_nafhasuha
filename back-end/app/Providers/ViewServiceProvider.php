@@ -18,6 +18,7 @@ use App\Models\Store;
 use App\Models\Supplier;
 use App\Models\City2;
 
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -45,8 +46,14 @@ class ViewServiceProvider extends ServiceProvider
             'back-end.layouts.partials.sidebar',
         ], function ($view) {
             $side_counts_orders=OrderService::getStatusSummary()->pluck('count', 'status')->toArray();
+            $side_counts_transactions_provider=Transaction::wherein('transactions.type', ['TopUpCredit','JoiningBonus','InvitationBonus','Withdrawal'])->whereNull('user_id')->count();
+            $side_counts_transactions_user=Transaction::wherein('transactions.type', ['TopUpCredit','JoiningBonus','InvitationBonus'])->whereNull('provider_id')->count();
+            $side_counts_transactions=$side_counts_transactions_provider+$side_counts_transactions_user;
             $view->with([
                 'side_counts_orders' => $side_counts_orders,
+                'side_counts_transactions_user' => $side_counts_transactions_user,
+                'side_counts_transactions_provider' => $side_counts_transactions_provider,
+                'side_counts_transactions' => $side_counts_transactions,
             ]);
         });
 

@@ -68,15 +68,15 @@
                         {{--  @can('order_module.order.view')--}}
                         <li
                             class="@if(request()->segment(2) == 'transactions' && empty(request()->segment(3))) active @endif">
-                            <a href="{{route('admin.transaction.index')}}">{{__('lang.view_all_transactions')}} <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
+                            <a href="{{route('admin.transaction.index')}}">{{__('lang.view_all_transactions')}} <span class="count-span-side-bar all_orders" >{{$side_counts_transactions}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'transactions' && request()->segment(3)=='user') active @endif">
-                            <a href="{{route('admin.transaction.index','user')}}">{{__('lang.view_all_transactions_user')}}<span class="count-span-side-bar pending" >{{$side_counts_orders['pending']??0}}</span></a>
+                            <a href="{{route('admin.transaction.index','user')}}">{{__('lang.view_all_transactions_user')}}<span class="count-span-side-bar pending" >{{$side_counts_transactions_user}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'transactions' &&  request()->segment(3)=='provider') active @endif">
-                            <a href="{{route('admin.transaction.index','provider')}}">{{__('lang.view_all_transactions_provider')}}<span class="count-span-side-bar approved" >{{$side_counts_orders['approved']??0}}</span></a>
+                            <a href="{{route('admin.transaction.index','provider')}}">{{__('lang.view_all_transactions_provider')}}<span class="count-span-side-bar approved" >{{$side_counts_transactions_provider}}</span></a>
                         </li>
 
                         {{--  @endcan--}}
