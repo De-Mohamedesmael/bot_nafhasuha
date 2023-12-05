@@ -1508,4 +1508,18 @@ return [
     'send_offer'=>'send offer',
     'The_request_has_become_unavailable'=>'The request has become unavailable',
     'accept'=>'accept request',
+
+    'accept_transaction'=>'Accept',
+    'completed_at'=>'Completed At',
+    'Withdrawal'=>'Withdrawal',
+    'TopUpCredit'=>'Top Up Credit',
+    'InvitationBonus'=>'Invitation Bonus',
+    'JoiningBonus'=>'Joining Bonus',
+    'transactions'=>'Transactions',
+    'view_all_transactions'=>'All Transactions',
+    'view_all_transactions_user'=>'User Transactions',
+    'view_all_transactions_provider'=>'Provider Transactions',
+
+
+
 ];

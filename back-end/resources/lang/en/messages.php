@@ -82,4 +82,5 @@
   'index' => 'Index',
   'provider_not_found' => 'Provider not found',
   'successfully' => 'Successfully',
+  'Transaction updated successfully!' => 'Transaction updated successfully!',
 );

@@ -50,6 +50,42 @@
                 </li>
                 {{--  @endif
              @endif --}}
+                {{-- @if( !empty($module_settings['order_module']) )
+                                  @if(auth()->user()->can('customer_module.customer.create_and_edit') ||
+                                  auth()->user()->can('customer_module.customer.view') ||
+                                  auth()->user()->can('customer_module.customer_type.create_and_edit') ||
+                                  auth()->user()->can('customer_module.customer_type.view') ) --}}
+                <li>
+                    <a href="#transactions" aria-expanded="false" data-toggle="collapse">
+                        <i
+                            class="dripicons-card"></i>
+                        <span>{{__('lang.transactions')}}</span>
+
+                    </a>
+                    <ul id="transactions"
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions'])) show @endif">
+
+                        {{--  @can('order_module.order.view')--}}
+                        <li
+                            class="@if(request()->segment(2) == 'transactions' && empty(request()->segment(3))) active @endif">
+                            <a href="{{route('admin.transaction.index')}}">{{__('lang.view_all_transactions')}} <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'transactions' && request()->segment(3)=='user') active @endif">
+                            <a href="{{route('admin.transaction.index','user')}}">{{__('lang.view_all_transactions_user')}}<span class="count-span-side-bar pending" >{{$side_counts_orders['pending']??0}}</span></a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'transactions' &&  request()->segment(3)=='provider') active @endif">
+                            <a href="{{route('admin.transaction.index','provider')}}">{{__('lang.view_all_transactions_provider')}}<span class="count-span-side-bar approved" >{{$side_counts_orders['approved']??0}}</span></a>
+                        </li>
+
+                        {{--  @endcan--}}
+
+
+                    </ul>
+                </li>
+                {{--  @endif
+             @endif --}}
                {{-- @if( !empty($module_settings['customer_module']) )
                     @if(auth()->user()->can('customer_module.customer.create_and_edit') ||
                     auth()->user()->can('customer_module.customer.view') ||
