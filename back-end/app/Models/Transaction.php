@@ -91,4 +91,40 @@ class Transaction extends Model
 
         return $this->belongsTo(Provider::class);
     }
+
+    public function cancel_reason()
+    {
+        return $this->belongsTo(CancelReason::class,'cancel_reason_id');
+    }
+    public function canceledBy()
+    {
+
+
+
+//        canceled_type	enum('Admin', 'User', 'Provider')
+        if($this->canceled_type == 'Admin' )
+            return $this->belongsTo(Admin::class,'canceled_by');
+
+        if($this->canceled_type == 'Provider' )
+            return $this->belongsTo(Provider::class,'canceled_by');
+
+        return $this->belongsTo(User::class,'canceled_by');
+    }
+
+
+    public function createdBy()
+    {
+
+
+
+//        canceled_type	enum('Admin', 'User', 'Provider')
+        if($this->created_by_type == 'Admin' )
+            return $this->belongsTo(Admin::class,'created_by');
+
+        if($this->created_by_type == 'Provider' )
+            return $this->belongsTo(Provider::class,'created_by');
+
+        return $this->belongsTo(User::class,'created_by');
+    }
+
 }

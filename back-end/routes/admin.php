@@ -7,6 +7,7 @@ use App\Http\Controllers\BackEnd\HomeController;
 use App\Http\Controllers\BackEnd\CustomerController;
 use App\Http\Controllers\BackEnd\ProviderController;
 use App\Http\Controllers\BackEnd\OrderController;
+use App\Http\Controllers\BackEnd\TransactionController;
 
 use App\Http\Controllers\BackEnd\TransactionPaymentController;
 use App\Http\Controllers\BackEnd\CategoryController;
@@ -91,7 +92,20 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('update_status', [OrderController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [OrderController::class,'deleteImage'])->name('deleteImage');
     });
-
+    Route::group(['prefix'=>'transactions','as'=>'transaction.'], function () {
+        Route::get('/{type?}', [TransactionController::class,'index'])->name('index');
+        Route::post('/{type?}', [TransactionController::class,'index'])->name('index');
+        Route::get('accept/{id}', [TransactionController::class,'accept'])->name('accept');
+        Route::get('create', [TransactionController::class,'create'])->name('create');
+        Route::post('create', [TransactionController::class,'store'])->name('store');
+        Route::get('edit/{id}',[TransactionController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [TransactionController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [TransactionController::class,'destroy'])->name('delete');
+        Route::get('send-offer/{order_id}', [TransactionController::class,'getSendOffer'])->name('get-send-offer');
+        Route::post('send-offer/{order_id}', [TransactionController::class,'SendOffer'])->name('send-offer');
+        Route::post('update_status', [TransactionController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [TransactionController::class,'deleteImage'])->name('deleteImage');
+    });
 
 
 

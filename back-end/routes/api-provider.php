@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 
+
 ////////////////////////////////// start  auth /////////////////////////////////////////////
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
