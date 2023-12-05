@@ -66,6 +66,7 @@ class TransactionController extends ApiController
         $validator = validator($request->all(), [
             'bank_id' => 'required|integer|exists:banks,id',
             'full_name' => 'required|string|max:100',
+            'iban' => 'required|numeric',
             'amount' => 'required|numeric',
         ]);
 
@@ -82,7 +83,7 @@ class TransactionController extends ApiController
 
         DB::beginTransaction();
         try {
-            $this->TransactionUtil->saveProviderWithdrawalRequest(auth()->user(),$request->bank_id,$request->full_name,$request->amount);
+            $this->TransactionUtil->saveProviderWithdrawalRequest(auth()->user(),$request->bank_id,$request->full_name,$request->amount,$request->iban);
             DB::commit();
             return responseApi(200,\App\CPU\translate('Request_has_been_successfully'));
         }catch (\Exception $exception){
