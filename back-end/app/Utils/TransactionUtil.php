@@ -299,7 +299,7 @@ class TransactionUtil
      * @param float $amount
      * @return object
      */
-    public function saveProviderWithdrawalRequest($provider,$bank_id,$fullName,$amount): object
+    public function saveProviderWithdrawalRequest($provider,$bank_id,$fullName,$amount,$iban): object
     {
         $data=[
             'provider_id'=>$provider->id,
@@ -308,6 +308,7 @@ class TransactionUtil
             'status'=>'pending',
             'grand_total'=>$amount,
             'final_total'=>$amount,
+            'details'=>$iban,
             'full_name'=>$fullName,
         ];
         $transaction=Transaction::create($data);
