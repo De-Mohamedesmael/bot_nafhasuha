@@ -28,7 +28,10 @@ class OrderServiceResource extends JsonResource
             'category'=>new CategoryResource($this->category),
             'invoice_no'=>$transaction->invoice_no??null,
             'price_requests_count' => $this->price_requests_count?:0,
-            'is_tracking'=>$is_tracking
+            'is_tracking'=>$is_tracking,
+            'canceled_type'=>$this->canceled_type,
+            'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
+            'canceled_by'=>new CanceledByResource($this->canceledby),
         ];
     }
 }
