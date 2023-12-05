@@ -83,7 +83,7 @@ class TransactionController extends ApiController
 
         DB::beginTransaction();
         try {
-            $this->TransactionUtil->saveProviderWithdrawalRequest(auth()->user(),$request->bank_id,$request->full_name,$request->amount);
+            $this->TransactionUtil->saveProviderWithdrawalRequest(auth()->user(),$request->bank_id,$request->full_name,$request->amount,$request->iban);
             DB::commit();
             return responseApi(200,\App\CPU\translate('Request_has_been_successfully'));
         }catch (\Exception $exception){
