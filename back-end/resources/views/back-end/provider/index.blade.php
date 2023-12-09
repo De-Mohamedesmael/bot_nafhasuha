@@ -83,6 +83,7 @@
                     <th class="sum">@lang('lang.balance')</th>
                     <th>@lang('lang.mobile_number')</th>
                     <th>@lang('lang.email')</th>
+                    <th>@lang('lang.totalRate')</th>
                     <th>@lang('lang.status')</th>
                     <th>@lang('lang.city')</th>
                     <th>@lang('lang.joining_date')</th>
@@ -156,6 +157,7 @@
                 { data: "balance", name: "balance" },
                 { data: "phone", name: "phone" },
                 { data: "email", name: "email" },
+                { data: "totalRate", name: "totalRate" },
                 { data: "status", name: "status" },
                 { data: "city", name: "city" },
                 { data: "created_at", name: "created_at" },

@@ -22,4 +22,13 @@ class Slider extends Model implements  HasMedia
         });
 
     }
+
+    public function service()
+    {
+        return $this->belongsTo(Category::class,'type_id','id');
+    }
+    public function info()
+    {
+        return $this->belongsTo(Info::class,'type_id','slug');
+    }
 }

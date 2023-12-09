@@ -153,26 +153,84 @@
              @endif --}}
 
 
+                {{-- @if( !empty($module_settings['customer_module']) )
+                                   @if(auth()->user()->can('customer_module.customer.create_and_edit') ||
+                                   auth()->user()->can('customer_module.customer.view') ||
+                                   auth()->user()->can('customer_module.customer_type.create_and_edit') ||
+                                   auth()->user()->can('customer_module.customer_type.view') ) --}}
+                <li>
+                    <a href="#notifications" aria-expanded="false" data-toggle="collapse">
+                        <i
+                            class="dripicons-user-group"></i>
+                        <span>{{__('lang.notifications')}}</span>
 
+                    </a>
+                    <ul id="notifications"
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['notifications'])) show @endif">
+
+                        {{--  @can('provider_module.provider.view')--}}
+                        <li
+                            class="@if(request()->segment(2) == 'notifications' && empty(request()->segment(3))) active @endif">
+                            <a href="{{route('admin.notifications.index')}}">{{__('lang.view_all_notification')}}</a>
+                        </li>
+                        {{--  @endcan--}}
+                        {{--@can('provider_module.provider.create_and_edit')--}}
+                        <li
+                            class="@if(request()->segment(2) == 'notifications' && request()->segment(3) == 'create') active @endif">
+                            <a href="{{route('admin.notifications.create')}}">{{__('lang.add_notification')}}</a>
+                        </li>
+                        {{-- @endcan--}}
+
+                    </ul>
+                </li>
+                {{--  @endif
+             @endif --}}
 
 
 {{--                @if( !empty($module_settings['settings']) )--}}
                     <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i
                                 class="dripicons-gear"></i><span>@lang('lang.settings')</span></a>
                         <ul id="setting"
-                            class="collapse list-unstyled @if(in_array(request()->segment(1), ['service', 'category'])) show @endif">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
 
 
 {{--                                @can('product_module.category.view')--}}
                                     <li
-                                        class="@if(request()->segment(1) == 'service' && empty(request()->segment(2))) active @endif">
+                                        class="@if(request()->segment(2) == 'service' ) active @endif">
                                         <a href="{{route('admin.service.index')}}">{{__('lang.services')}}</a>
                                     </li>
                                     <li
-                                        class="@if(request()->segment(1) == 'category' && empty(request()->segment(2))) active @endif">
+                                        class="@if(request()->segment(2) == 'category' ) active @endif">
                                         <a href="{{route('admin.category.index')}}">{{__('lang.categories')}}</a>
                                     </li>
-
+                                    <li
+                                        class="@if(request()->segment(2) == 'slider') active @endif">
+                                        <a href="{{route('admin.slider.index')}}">{{__('lang.slider')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'splash_screen') active @endif">
+                                        <a href="{{route('admin.splash_screen.index')}}">{{__('lang.splash_screen')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'icons') active @endif">
+                                        <a href="{{route('admin.icons.index')}}">{{__('lang.icons')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'banks') active @endif">
+                                        <a href="{{route('admin.banks.index')}}">{{__('lang.banks')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'countries') active @endif">
+                                        <a href="{{route('admin.countries.index')}}">{{__('lang.countries')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'city') active @endif">
+                                        <a href="{{route('admin.city.index')}}">{{__('lang.cities')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'areas') active @endif">
+                                        <a href="{{route('admin.areas.index')}}">{{__('lang.areas')}}</a>
+                                    </li>
 {{--                                    @endcan--}}
                                 <li
                                     class="@if(request()->segment(1) == 'settings' && request()->segment(2) == 'get-general-setting') active @endif">

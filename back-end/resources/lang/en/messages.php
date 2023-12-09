@@ -83,4 +83,9 @@
   'provider_not_found' => 'Provider not found',
   'successfully' => 'Successfully',
   'Transaction updated successfully!' => 'Transaction updated successfully!',
+  'Slider updated successfully!' => 'Slider updated successfully!',
+  'splash_screen updated successfully!' => 'Splash screen updated successfully!',
+  'country updated successfully!' => 'Country updated successfully!',
+  'city updated successfully!' => 'City updated successfully!',
+  'area updated successfully!' => 'Area updated successfully!',
 );
