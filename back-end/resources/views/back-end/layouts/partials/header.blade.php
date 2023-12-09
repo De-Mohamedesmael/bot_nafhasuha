@@ -76,7 +76,8 @@
                                         class="dripicons-gear"></i> @lang('lang.settings')</a>
                             </li>
                             @endcan
-                            <li>
+
+                            {{--<li>
                                 <a href="{{url('my-transactions/'.date('Y').'/'.date('m'))}}"><i
                                         class="dripicons-swap"></i> @lang('lang.my_transactions')</a>
                             </li>
@@ -86,7 +87,7 @@
                                         class="dripicons-vibrate"></i> @lang('lang.my_holidays')</a>
                             </li>
                             @endif
-
+                                --}}
                             <li>
                                 <a href="#" id="logout-btn"><i class="dripicons-power"></i>
                                     @lang('lang.logout')

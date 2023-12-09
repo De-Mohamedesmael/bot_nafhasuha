@@ -299,7 +299,7 @@ class TransactionUtil
      * @param float $amount
      * @return object
      */
-    public function saveProviderWithdrawalRequest($provider,$bank_id,$fullName,$amount,$iban): object
+    public function saveProviderWithdrawalRequest($provider,$bank_id,$fullName,$amount,$iban,$date=null,$admin_id=null): object
     {
         $data=[
             'provider_id'=>$provider->id,
@@ -312,7 +312,12 @@ class TransactionUtil
             'full_name'=>$fullName,
         ];
         $transaction=Transaction::create($data);
-
+        if($admin_id){
+            $transaction->created_by= $admin_id;
+            $transaction->created_by_type='Admin';
+            $transaction->status='received';
+            $transaction->completed_at= $date;
+        }
         $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
         $transaction->invoice_no='WD'.$randomNumber.'-'.$provider->id.'v'.$transaction->id;
         $transaction->save();

@@ -74,6 +74,7 @@
                @if(!isset($type))  @lang('lang.view_all_transactions')@else @lang('lang.view_all_transactions_'.$type) @endif
 
             </h3>
+
         </div>
 
 
@@ -81,6 +82,12 @@
             $url=  route("admin.transaction.index",$type);
 
         @endphp
+        @if($type != 'user' )
+            <a style="color: white" href="{{ route('admin.transaction.create') }}" class="btn btn-info"><i
+                    class="dripicons-plus"></i>
+                @lang('lang.create') @lang('lang.Withdrawal')
+            </a>
+        @endif
     </div>
     <div class="card mt-3 pt-2 pb-1">
         <div class="col-md-12">

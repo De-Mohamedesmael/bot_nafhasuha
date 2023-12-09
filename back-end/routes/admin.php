@@ -7,13 +7,27 @@ use App\Http\Controllers\BackEnd\HomeController;
 use App\Http\Controllers\BackEnd\CustomerController;
 use App\Http\Controllers\BackEnd\ProviderController;
 use App\Http\Controllers\BackEnd\OrderController;
+
 use App\Http\Controllers\BackEnd\TransactionController;
 
 use App\Http\Controllers\BackEnd\TransactionPaymentController;
 use App\Http\Controllers\BackEnd\CategoryController;
 use App\Http\Controllers\BackEnd\ServiceController;
+
+use App\Http\Controllers\BackEnd\SliderController;
+use App\Http\Controllers\BackEnd\SplashScreenController;
+
+use App\Http\Controllers\BackEnd\NotificationController;
+use App\Http\Controllers\BackEnd\IconController;
+use App\Http\Controllers\BackEnd\BankController;
+
+use App\Http\Controllers\BackEnd\CountryController;
 use App\Http\Controllers\BackEnd\CityController;
+use App\Http\Controllers\BackEnd\AreaController;
+
+
 use App\Http\Controllers\BackEnd\GeneralController;
+
 use App\Http\Controllers\BackEnd\AdminController;
 
 /**
@@ -77,6 +91,9 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('get-pay/{customer_id}', [ProviderController::class,'postPay'])->name('postPay');
         Route::post('update_status', [ProviderController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [ProviderController::class,'deleteImage'])->name('deleteImage');
+        Route::get('get_wallet', [ProviderController::class,'getWallet'])->name('get_wallet');
+        Route::get('view_rate/{provider_id}', [ProviderController::class,'viewRate'])->name('view_rate');
+        Route::delete('rate_delete/{rate_id}', [ProviderController::class,'rateDelete'])->name('rate_delete');
     });
 
     Route::group(['prefix'=>'orders','as'=>'order.'], function () {
@@ -93,18 +110,13 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('delete-image', [OrderController::class,'deleteImage'])->name('deleteImage');
     });
     Route::group(['prefix'=>'transactions','as'=>'transaction.'], function () {
-        Route::get('/{type?}', [TransactionController::class,'index'])->name('index');
-        Route::post('/{type?}', [TransactionController::class,'index'])->name('index');
-        Route::get('accept/{id}', [TransactionController::class,'accept'])->name('accept');
         Route::get('create', [TransactionController::class,'create'])->name('create');
         Route::post('create', [TransactionController::class,'store'])->name('store');
-        Route::get('edit/{id}',[TransactionController::class, 'edit'])->name('edit');
-        Route::put('update/{id}', [TransactionController::class,'update'])->name('update');
+        Route::get('accept/{id}', [TransactionController::class,'accept'])->name('accept');
         Route::delete('delete/{id}', [TransactionController::class,'destroy'])->name('delete');
-        Route::get('send-offer/{order_id}', [TransactionController::class,'getSendOffer'])->name('get-send-offer');
-        Route::post('send-offer/{order_id}', [TransactionController::class,'SendOffer'])->name('send-offer');
-        Route::post('update_status', [TransactionController::class,'update_status'])->name('update_status');
-        Route::post('delete-image', [TransactionController::class,'deleteImage'])->name('deleteImage');
+        Route::get('/{type?}', [TransactionController::class,'index'])->name('index');
+        Route::post('/{type?}', [TransactionController::class,'index'])->name('index');
+
     });
 
 
@@ -129,18 +141,89 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('update_status', [CategoryController::class,'update_status'])->name('update_status');
     });
 
+    Route::group(['prefix'=>'icons','as'=>'icons.'], function () {
+        Route::get('/', [IconController::class,'index'])->name('index');
+        Route::get('create', [IconController::class,'create'])->name('create');
+        Route::post('create', [IconController::class,'store'])->name('store');
+        Route::get('edit/{id}',[IconController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [IconController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [IconController::class,'destroy'])->name('delete');
+
+    });
+    Route::group(['prefix'=>'banks','as'=>'banks.'], function () {
+        Route::get('/', [BankController::class,'index'])->name('index');
+        Route::get('create', [BankController::class,'create'])->name('create');
+        Route::post('create', [BankController::class,'store'])->name('store');
+        Route::get('edit/{id}',[BankController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [BankController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [BankController::class,'destroy'])->name('delete');
+
+    });
+    Route::group(['prefix'=>'countries','as'=>'countries.'], function () {
+        Route::get('/', [CountryController::class,'index'])->name('index');
+        Route::get('create', [CountryController::class,'create'])->name('create');
+        Route::post('create', [CountryController::class,'store'])->name('store');
+        Route::get('edit/{id}',[CountryController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [CountryController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [CountryController::class,'destroy'])->name('delete');
+        Route::post('update_status', [CountryController::class,'update_status'])->name('update_status');
+        Route::get('cities', [CountryController::class,'cities'])->name('get-cities');
+
+    });
 Route::group(['prefix'=>'city','as'=>'city.'], function () {
-    Route::get('/', [CustomerController::class,'index'])->name('index');
-    Route::post('/', [CustomerController::class,'index'])->name('index');
-    Route::get('create', [CustomerController::class,'create'])->name('create');
-    Route::post('create', [CustomerController::class,'store'])->name('store');
+    Route::get('/', [CityController::class,'index'])->name('index');
+    Route::get('create', [CityController::class,'create'])->name('create');
+    Route::post('create', [CityController::class,'store'])->name('store');
+    Route::get('edit/{id}',[CityController::class, 'edit'])->name('edit');
+    Route::put('update/{id}', [CityController::class,'update'])->name('update');
+    Route::delete('delete/{id}', [CityController::class,'destroy'])->name('delete');
+    Route::post('update_status', [CityController::class,'update_status'])->name('update_status');
 
     Route::get('areas', [CityController::class,'areas'])->name('get-area');
 });
 
+    Route::group(['prefix'=>'areas','as'=>'areas.'], function () {
+        Route::get('/', [AreaController::class,'index'])->name('index');
+        Route::get('create', [AreaController::class,'create'])->name('create');
+        Route::post('create', [AreaController::class,'store'])->name('store');
+        Route::get('edit/{id}',[AreaController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [AreaController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [AreaController::class,'destroy'])->name('delete');
+        Route::post('update_status', [AreaController::class,'update_status'])->name('update_status');
+    });
+    Route::group(['prefix'=>'slider','as'=>'slider.'], function () {
+        Route::get('/', [SliderController::class,'index'])->name('index');
+        Route::post('/', [SliderController::class,'index'])->name('index');
+        Route::get('create', [SliderController::class,'create'])->name('create');
+        Route::post('create', [SliderController::class,'store'])->name('store');
+        Route::get('edit/{id}',[SliderController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [SliderController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [SliderController::class,'destroy'])->name('delete');
+        Route::post('update_status', [SliderController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [SliderController::class,'deleteImage'])->name('deleteImage');
 
+    });
+    Route::group(['prefix'=>'notifications','as'=>'notifications.'], function () {
+        Route::get('/', [NotificationController::class,'index'])->name('index');
+        Route::post('/', [NotificationController::class,'index'])->name('index');
+        Route::get('create', [NotificationController::class,'create'])->name('create');
+        Route::post('create', [NotificationController::class,'store'])->name('store');
+        Route::get('edit/{id}',[NotificationController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [NotificationController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [NotificationController::class,'destroy'])->name('delete');
+        Route::post('update_status', [NotificationController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [NotificationController::class,'deleteImage'])->name('deleteImage');
 
-
+    });
+    Route::group(['prefix'=>'splash_screen','as'=>'splash_screen.'], function () {
+        Route::get('/', [SplashScreenController::class,'index'])->name('index');
+        Route::get('create', [SplashScreenController::class,'create'])->name('create');
+        Route::post('create', [SplashScreenController::class,'store'])->name('store');
+        Route::get('edit/{id}',[SplashScreenController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [SplashScreenController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [SplashScreenController::class,'destroy'])->name('delete');
+        Route::post('update_status', [SplashScreenController::class,'update_status'])->name('update_status');
+    });
     /// admin
 
     Route::post('admins/check-password/{id}', [AdminController::class ,'checkPassword'])->name('checkPassword');

@@ -9,5 +9,6 @@ class SplashScreenTranslation extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $guarded=[];
 
 }

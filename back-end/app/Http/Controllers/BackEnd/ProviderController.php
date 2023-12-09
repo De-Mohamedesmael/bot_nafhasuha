@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Category;
 use App\Models\City;
+use App\Models\ProviderRate;
 use App\Models\Slider;
 use App\Models\Provider;
 use App\Models\System;
@@ -52,10 +53,11 @@ class ProviderController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $providers = Provider::groupBy('id');
+            $providers = Provider::withAvg('rates as totalRate', 'rate');
 
             return DataTables::of($providers)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
+                ->editColumn('totalRate', '{{@number_format($totalRate,1)}}')
                 ->addColumn('status', function ($row) {
                     $checked=$row->is_active?'checked':'';
                     $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
@@ -93,6 +95,15 @@ class ProviderController extends Controller
                         $html .='<li>
                                                 <a href="'. route('admin.provider.edit',$row->id) .'" target="_blank"><i
                                                         class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
+                                            </li>';
+
+//                        }
+                        $html .= '<li class="divider"></li>';
+
+//                        if (auth()->user()->can('provider_module.provider.add_balen')){
+                        $html .='<li>
+                                                <a href="'. route('admin.provider.view_rate',$row->id) .'" ><i
+                                                        class="dripicons-star btn"></i>'.__('lang.view_rate_list').'</a>
                                             </li>';
 
 //                        }
@@ -374,6 +385,7 @@ class ProviderController extends Controller
         return $output;
     }
 
+
     public function update_status(Request $request ){
 
         try {
@@ -486,5 +498,124 @@ class ProviderController extends Controller
 
         return redirect()->back()->with(['status' => $output]);
     }
+    public function getWallet(Request $request ){
 
+        try {
+            $provider=Provider::find($request->provider_id);
+
+            if(!$provider){
+
+                return [
+                    'success'=>false,
+                    'msg'=>translate('provider_not_found')
+                ];
+            }
+
+            $getWalletProviderBalance = $this->transactionUtil->getWalletProviderBalance($provider);
+
+            return [
+                'success'=>true,
+                'wallet'=>$getWalletProviderBalance,
+            ];
+        }catch (\Exception $e){
+            DB::rollback();
+            return [
+                'success'=>false,
+                'msg'=>__('site.same_error')
+            ];
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function viewRate ($provider_id)
+    {
+        if (request()->ajax()) {
+            $logo=\Settings::get('logo');
+            $rates = ProviderRate::where('provider_id',$provider_id)
+                ->leftjoin('users', 'provider_rates.user_id', 'users.id')
+                ->select('provider_rates.*',
+                    'users.name',
+                    'users.phone',
+                );
+
+            return DataTables::of($rates)
+                ->editColumn('created_at', '{{@format_datetime($created_at)}}')
+                ->editColumn('rate', '{{@number_format($rate,1)}}')
+
+                ->addColumn(
+                    'action',
+                    function ($row) {
+                        $html = ' <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
+
+
+
+                        $html .= '<li class="divider"></li>';
+
+
+//                            if (auth()->user()->can('provider_module.provider.rate.delete')) {
+                        $html .=
+                            '<li>
+                                    <a data-href="' . route('admin.provider.rate_delete', $row->id)  . '"
+                                        data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
+                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
+                                        ' . __('lang.delete') . '</a>
+                                    </li>';
+//                            }
+
+
+
+                        $html .= '</ul></div>';
+                        return $html;
+                    }
+                )
+                ->rawColumns([
+                    'action',
+                    'status',
+                    'created_at',
+                ])
+                ->make(true);
+        }
+
+        return view('back-end.provider.rates.index',compact('provider_id'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rateDelete($id)
+    {
+        try {
+            $provider = ProviderRate::find($id);
+            if ($provider){
+                $provider->delete();
+            }
+
+
+            $output = [
+                'success' => true,
+                'msg' => __('lang.success')
+            ];
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'success' => false,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
+
+        return $output;
+    }
 }

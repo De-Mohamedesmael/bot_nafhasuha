@@ -16,6 +16,9 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     @include('back-end.layouts.partials.css')
     <style>
+        .red {
+            color: #b90000;
+        }
         span.count-span-side-bar {
             float: right;
             color: #fff;
@@ -65,6 +68,16 @@
                 direction: rtl;
                 text-align: right;
             }
+            .page {
+                position: relative;
+                margin-right: 230px;
+                margin-left: 0 !important;
+            }
+            .page.active{
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+
+            }
             span.count-span-side-bar {
                 float: left!important;
             }
@@ -75,10 +88,7 @@
                 direction: rtl;
             }
 
-            div#content {
-                float: left;
-                right: 21%;
-            }
+
             .list-unstyled {
                 padding-left: 0;
                 padding-right: 0;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
 use App\Models\Area;
+use App\Models\Bank;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Provider;
@@ -266,8 +267,89 @@ class TransactionController extends Controller
     }
 
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $providers=Provider::pluck('name','id');
+        $banks = Bank::listsTranslations('title as name')->pluck('name','id');
+
+        return view('back-end.transactions.create')->with(compact(
+            'banks',
+            'providers'
+        ));
+    }
 
 
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'provider_id' => 'required|integer|exists:providers,id',
+            'bank_id' => 'required|integer|exists:banks,id',
+            'full_name' => 'required|string|max:100',
+            'iban' => 'required|string',
+            'paid_on' => 'required|Date',
+            'amount' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'code' => 405,
+                'error' =>$validator->errors()->first()
+            ];
+        }
+
+        try {
+            $provider=Provider::whereId($request->provider_id)->first();
+            if (!$provider) {
+                return [
+                    'code' => 500,
+                    'msg'=>translate('provider_not_found')
+                ];
+            }
+            $my_wallet=$this->transactionUtil->getWalletProviderBalance($provider);
+
+
+            if($my_wallet < $request->amount){
+                return [
+                    'code' => 500,
+                    'msg'=>__('messages.Sorry_the_current_balance_is',['amount'=>$my_wallet])
+                ];
+            }
+            DB::beginTransaction();
+            $date=date('Y-m-d', strtotime($request->paid_on));
+            $admin_id=\auth()->id();
+            $this->transactionUtil->saveProviderWithdrawalRequest($provider,$request->bank_id,$request->full_name,$request->amount,$request->iban,$date,$admin_id);
+            DB::commit();
+            $output = [
+                'code' => 200,
+                'provider_id' => $request->provider_id,
+                'msg' => __('lang.success')
+            ];
+        } catch (\Exception $e) {
+            Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
+            $output = [
+                'code' => 500,
+                'msg' => __('lang.something_went_wrong')
+            ];
+        }
+
+
+        return $output;
+
+
+//        return redirect()->to('provider')->with('status', $output);
+    }
 
 
     public function accept($id ){
