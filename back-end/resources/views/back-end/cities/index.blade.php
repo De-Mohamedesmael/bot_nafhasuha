@@ -65,16 +65,17 @@
     </style>
 @endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_cities')</h3>
-        </div>
-        <a style="color: white" href="{{ route('admin.city.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.add_city')</a>
 
-    </div>
     <div class="table-responsive">
+        <div class="container-fluid">
+            <div class=" d-flex align-items-center">
+                <h3 class="print-title">@lang('lang.all_cities')</h3>
+            </div>
+            <a style="color: white" href="{{ route('admin.city.create') }}" class="btn btn-info"><i
+                    class="dripicons-plus"></i>
+                @lang('lang.add_city')</a>
+
+        </div>
         <table id="city_table" class="table">
             <thead>
             <tr>
