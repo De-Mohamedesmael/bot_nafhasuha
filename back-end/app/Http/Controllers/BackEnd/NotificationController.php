@@ -56,7 +56,7 @@ class NotificationController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $notifications = Notification::listsTranslations('title','body')
+            $notifications = Notification::wherein('type',['2','3'])->listsTranslations('title','body')
                 ->select('notifications.*',
                     'notification_translations.body',
                     'notification_translations.title'
