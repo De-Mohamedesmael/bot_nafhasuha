@@ -21,7 +21,7 @@
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
                             {!! Form::open(['url' => route('admin.areas.store'), 'id' => 'cities-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
 
-                            @include('back-end.cities.partial.create_form')
+                            @include('back-end.areas.partial.create_form')
 
 
                             <div class="row">
@@ -71,7 +71,7 @@
                         if (response.code == 200) {
                             swal("Success", response.msg, "success");
                             $(".translations").val("").change();
-                            $("input").val("").change();
+                           $("input:not([type='submit'])").val("").change();
                             const previewContainer = document.querySelector('.preview-container');
                             previewContainer.innerHTML = '';
                         }else if(response.code == 405){

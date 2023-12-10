@@ -1,5 +1,5 @@
 @extends('back-end.layouts.app')
-@section('title', __('lang.add_city'))
+@section('title', __('lang.add_vehicle_manufacture_year'))
 @section('styles')
     <style>
         label#body-error , label#title-error {
@@ -15,13 +15,13 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.add_city')</h4>
+                            <h4>@lang('lang.add_vehicle_manufacture_year')</h4>
                         </div>
                         <div class="card-body">
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
-                            {!! Form::open(['url' => route('admin.city.store'), 'id' => 'cities-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
+                            {!! Form::open(['url' => route('admin.vehicle_manufacture_years.store'), 'id' => 'cities-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
 
-                            @include('back-end.cities.partial.create_form')
+                            @include('back-end.vehicle_manufacture_years.partial.create_form')
 
 
                             <div class="row">

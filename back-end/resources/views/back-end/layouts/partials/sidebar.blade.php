@@ -191,7 +191,7 @@
                     <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i
                                 class="dripicons-gear"></i><span>@lang('lang.settings')</span></a>
                         <ul id="setting"
-                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','vehicle_types','vehicle_manufacture_years','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
 
 
 {{--                                @can('product_module.category.view')--}}
@@ -231,11 +231,19 @@
                                         class="@if(request()->segment(2) == 'areas') active @endif">
                                         <a href="{{route('admin.areas.index')}}">{{__('lang.areas')}}</a>
                                     </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'vehicle_manufacture_years') active @endif">
+                                        <a href="{{route('admin.vehicle_manufacture_years.index')}}">{{__('lang.vehicle_manufacture_years')}}</a>
+                                    </li>
+                                    <li
+                                        class="@if(request()->segment(2) == 'vehicle_types') active @endif">
+                                        <a href="{{route('admin.vehicle_types.index')}}">{{__('lang.vehicle_types')}}</a>
+                                    </li>
 {{--                                    @endcan--}}
                                 <li
                                     class="@if(request()->segment(1) == 'settings' && request()->segment(2) == 'get-general-setting') active @endif">
                                     <a
-                                        href="#">{{__('lang.general_settings')}}</a>
+                                        href="{{route('admin.settings.getGeneralSetting')}}">{{__('lang.general_settings')}}</a>
                                 </li>
                         </ul>
                     </li>

@@ -1566,7 +1566,27 @@ return [
     'banks'=>'Banks',
     'add_bank'=>'Create new Bank',
     'edit_bank'=>'Edit Bank',
-    ''=>'',
+    'IFTrueCenter'=>'Service from the Centre',
+    'IFTrueHome'=>'Home Service',
+    'update_version_Provider_Android'=>'The latest version of the Android service provider application',
+    'update_version_Android'=>'The latest version of an application used for Android',
+    'update_version_Provider_IOS'=>'The latest version of the iPhone service provider application',
+    'update_version_IOS'=>'The latest version of the user application for iPhone',
 
+    'subscription_price'=>'Subscription price (for battery)',
+    'change_price'=>'Tomorrow\'s price (for battery)',
+    'max_distance'=>'Maximum search limit (KM)',
+    'limit_cancel'=>'Maximum cancellation limit',
+    'InvitationBonusValue'=>'Event Bonus',
+    'JoiningBonusValue'=>'Joining Bonus',
+
+    'all_vehicle_manufacture_years'=>'All Vehicle Manufacture Years',
+    'vehicle_manufacture_years'=>'Vehicle Manufacture Years',
+    'add_vehicle_manufacture_year'=>'Create new Vehicle Manufacture Year',
+    'edit_vehicle_manufacture_year'=>'Edit Vehicle Manufacture Year',
+    'all_vehicle_types'=>'All Vehicle Types',
+    'vehicle_types'=>'Vehicle Types',
+    'add_vehicle_type'=>'Create new Vehicle Type',
+    'edit_vehicle_type'=>'Edit Vehicle Type',
 
 ];

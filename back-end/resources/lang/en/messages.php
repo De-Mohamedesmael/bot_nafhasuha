@@ -88,4 +88,5 @@
   'country updated successfully!' => 'Country updated successfully!',
   'city updated successfully!' => 'City updated successfully!',
   'area updated successfully!' => 'Area updated successfully!',
+  'vehicle_manufacture_year updated successfully!' => 'Vehicle manufacture year updated successfully!',
 );

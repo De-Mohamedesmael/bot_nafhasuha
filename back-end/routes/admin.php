@@ -24,6 +24,10 @@ use App\Http\Controllers\BackEnd\BankController;
 use App\Http\Controllers\BackEnd\CountryController;
 use App\Http\Controllers\BackEnd\CityController;
 use App\Http\Controllers\BackEnd\AreaController;
+use App\Http\Controllers\BackEnd\VehicleManufactureYearController;
+use App\Http\Controllers\BackEnd\VehicleTypeController;
+
+use App\Http\Controllers\BackEnd\SettingController;
 
 
 use App\Http\Controllers\BackEnd\GeneralController;
@@ -191,6 +195,24 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::delete('delete/{id}', [AreaController::class,'destroy'])->name('delete');
         Route::post('update_status', [AreaController::class,'update_status'])->name('update_status');
     });
+    Route::group(['prefix'=>'vehicle_manufacture_years','as'=>'vehicle_manufacture_years.'], function () {
+        Route::get('/', [VehicleManufactureYearController::class,'index'])->name('index');
+        Route::get('create', [VehicleManufactureYearController::class,'create'])->name('create');
+        Route::post('create', [VehicleManufactureYearController::class,'store'])->name('store');
+        Route::get('edit/{id}',[VehicleManufactureYearController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VehicleManufactureYearController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [VehicleManufactureYearController::class,'destroy'])->name('delete');
+        Route::post('update_status', [VehicleManufactureYearController::class,'update_status'])->name('update_status');
+    });
+    Route::group(['prefix'=>'vehicle_types','as'=>'vehicle_types.'], function () {
+        Route::get('/', [VehicleTypeController::class,'index'])->name('index');
+        Route::get('create', [VehicleTypeController::class,'create'])->name('create');
+        Route::post('create', [VehicleTypeController::class,'store'])->name('store');
+        Route::get('edit/{id}',[VehicleTypeController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VehicleTypeController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [VehicleTypeController::class,'destroy'])->name('delete');
+        Route::post('update_status', [VehicleTypeController::class,'update_status'])->name('update_status');
+    });
     Route::group(['prefix'=>'slider','as'=>'slider.'], function () {
         Route::get('/', [SliderController::class,'index'])->name('index');
         Route::post('/', [SliderController::class,'index'])->name('index');
@@ -225,7 +247,10 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::post('update_status', [SplashScreenController::class,'update_status'])->name('update_status');
     });
     /// admin
-
+    Route::group(['prefix'=>'settings','as'=>'settings.'], function () {
+        Route::get('general-setting', [SettingController::class,'getGeneralSetting'])->name('getGeneralSetting');
+        Route::post('general-setting', [SettingController::class,'updateGeneralSetting'])->name('updateGeneralSetting');
+    });
     Route::post('admins/check-password/{id}', [AdminController::class ,'checkPassword'])->name('checkPassword');
     Route::post('admins/check-admin-password/{id}', [AdminController::class ,'checkAdminPassword'])->name('checkPassword');
     Route::get('admins/get-dropdown', [AdminController::class ,'getDropdown'])->name('getDropdown');

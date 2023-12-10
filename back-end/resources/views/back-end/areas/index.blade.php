@@ -82,6 +82,8 @@
                 <th>@lang('lang.name')</th>
                 <th>@lang('lang.city')</th>
                 <th>@lang('lang.status')</th>
+                <th>@lang('lang.created_at')</th>
+
                 <th class="notexport">@lang('lang.action')</th>
             </tr>
             </thead>

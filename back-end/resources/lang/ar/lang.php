@@ -1549,8 +1549,26 @@ return [
     'banks' => 'البنوك',
     'add_bank' => 'إنشاء بنك جديد',
     'edit_bank' => 'تحرير البنك',
+    'IFTrueCenter'=>'خدمة من المركز',
+    'IFTrueHome'=>'خدمة منزلية',
+    'update_version_Provider_Android'=>'احدث اصدار من تطبيق مقدم الخدمة للاندوريد',
+    'update_version_Android'=>'احدث اصدار من تطبيق المستخدم للاندوريد',
+    'update_version_Provider_IOS'=>'احدث اصدار من تطبيق مقدم الخدمة للأيفون',
+    'update_version_IOS'=>'احدث اصدار من تطبيق المستخدم للأيفون',
 
+    'subscription_price'=>'سعر الاشتراك(للبطرية)',
+    'change_price'=>'سعر التغيير (للبطرية)',
+    'max_distance'=>'الحد الاقصي للبحث (KM)',
+    'limit_cancel'=>'الحد الاقصي للالغاء',
+    'InvitationBonusValue'=>'مكأفأة الدعوة',
+    'JoiningBonusValue'=>'مكأفأة الانضمام',
 
-
-    ''=>'',
+    'all_vehicle_manufacture_years'=>'جميع سنوات التصنيع ',
+    'vehicle_manufacture_years'=>'سنوات التصنيع',
+    'add_vehicle_manufacture_year'=>'إنشاء سنة تصنيع جديدة',
+    'edit_vehicle_manufacture_year'=>'تعديل سنة تصنيع',
+    'all_vehicle_types'=>'جميع أنواع المركبات',
+    'vehicle_types'=>'أنواع المركبات',
+    'add_vehicle_type'=>'إنشاء نوع مركبة جديد',
+    'edit_vehicle_type'=>'تعديل نوع المركبة',
 ];

@@ -28,8 +28,8 @@
     </div>
     <div class="col-md-4">
         <div class="form-group ">
-            {!! Form::label('city_id', __('lang.city') . ':') !!}
-            {!! Form::select('city_id', $cities, false, ['class' => 'form-control', 'data-live-search' => 'true','style' => 'width: 100%', 'placeholder' => __('lang.please_select')]) !!}
+            {!! Form::label('country_id', __('lang.country') . ':') !!}
+            {!! Form::select('country_id', $countries, false, ['class' => 'form-control', 'data-live-search' => 'true','style' => 'width: 100%', 'placeholder' => __('lang.please_select')]) !!}
         </div>
     </div>
 
