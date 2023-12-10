@@ -89,4 +89,6 @@
   'city updated successfully!' => 'City updated successfully!',
   'area updated successfully!' => 'Area updated successfully!',
   'vehicle_manufacture_year updated successfully!' => 'Vehicle manufacture year updated successfully!',
-);
+    'activation_code' => 'Your activation code is: :code',
+
+    );
