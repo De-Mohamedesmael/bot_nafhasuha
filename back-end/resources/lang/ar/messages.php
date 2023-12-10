@@ -97,4 +97,6 @@
   'User updated successfully!' => 'User updated successfully!',
   'Provider updated successfully!' => 'Provider updated successfully!',
   'vehicle_type updated successfully!' => 'Vehicle type updated successfully!',
+    'activation_code' => 'كود التفعيل الخاص بك هو: :code',
+
 );
