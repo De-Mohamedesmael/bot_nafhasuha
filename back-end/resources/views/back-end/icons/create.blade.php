@@ -262,7 +262,7 @@
                         if (response.code == 200) {
                             swal("Success", response.msg, "success");
                             $(".translations").val("").change();
-                            $("input").val("").change();
+                           $("input:not([type='submit'])").val("").change();
                             const previewContainer = document.querySelector('.preview-container');
                             previewContainer.innerHTML = '';
                         }else if(response.code == 405){

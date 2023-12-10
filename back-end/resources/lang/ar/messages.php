@@ -96,4 +96,5 @@
   'Price quote has been successfully accepted' => 'Price quote has been successfully accepted',
   'User updated successfully!' => 'User updated successfully!',
   'Provider updated successfully!' => 'Provider updated successfully!',
+  'vehicle_type updated successfully!' => 'Vehicle type updated successfully!',
 );

@@ -72,7 +72,7 @@
                             </li>
                             @can('settings.general_settings.view')
                             <li>
-                                <a href="{{action('SettingController@getGeneralSetting')}}"><i
+                                <a href="{{route('admin.settings.getGeneralSetting')}}"><i
                                         class="dripicons-gear"></i> @lang('lang.settings')</a>
                             </li>
                             @endcan
