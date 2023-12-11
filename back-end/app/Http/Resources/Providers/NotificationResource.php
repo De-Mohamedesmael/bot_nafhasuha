@@ -20,7 +20,7 @@ class NotificationResource extends JsonResource
             'body'=>$this->body,
             'type'=>$this->type,
             'type_id'=>$this->type_id,
-            'order_step'=>$this->order_step,
+            'order_step'=>$this->order_step?:'',
             'image'=>$this->image != null ? asset('assets/images/'.$this->image) : null,
             'is_show'=>$this->providers_pov->first()->is_show
 
