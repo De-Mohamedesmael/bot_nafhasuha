@@ -101,12 +101,12 @@ class CategoryController extends Controller
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
                 foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
 
-                    $folderPath = public_path('assets/images/categories/');
+                    $folderPath = 'assets/images/categories/';
                     $extention = explode(";", explode("/", $imageData)[1])[0];
                     $image = rand(1, 1500) . "_image." . $extention;
                     $filePath = $folderPath . $image;
                     if (!empty($category->image)) {
-                        $oldImagePath = public_path('assets/images/' . $category->image);
+                        $oldImagePath ='assets/images/' . $category->image;
                         if (File::exists($oldImagePath)) {
                             File::delete($oldImagePath);
                         }

@@ -86,7 +86,7 @@ class SettingController extends Controller
              $data['logo'] = null;
             if ($request->has('logo') && !is_null('logo')) {
                 $imageData = $this->getCroppedImage($request->logo);
-                $folderPath = public_path('assets/images/settings/');
+                $folderPath = 'assets/images/settings/';
                 $extention = explode(";", explode("/", $imageData)[1])[0];
                 $image = rand(1, 1500) . "_image." . $extention;
                 $filePath = $folderPath . $image;

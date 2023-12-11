@@ -41,6 +41,7 @@ class ApiController extends BaseController
         // type=> ,'FriendRequest'
         // type_item
         $image=null;
+        $order_step=null;
         $type_number=3;
         $not=[];
         switch ($type){
@@ -49,16 +50,18 @@ class ApiController extends BaseController
                 $type_id=$type_item->id;
                 $type_number=1;
                 if($step == 1){
+                    $order_step='New';
                     $not['ar']['title']=__('notifications.order_step1.title',[],'ar');
                     $not['en']['title']=__('notifications.order_step1.title',[],'en');
                     $not['ar']['body']=__('notifications.order_step1.body',['code'=>$code],'ar');
                     $not['en']['body']=__('notifications.order_step1.body',['code'=>$code],'en');
                     $notarray=[
-                        'type_model'=>'Provider',
-                        'type_id'=>$type_id,
                         'type'=>$type_number,
+                        'order_step'=>$order_step,
                         'image'=>null
                     ];
+                    //'New','Price','Accept','Complete'
+                    $type_model='Provider';
                     $notarray['ar']['title']=__('notifications.order_step1_provider.title',[],'ar');
                     $notarray['en']['title']=__('notifications.order_step1_provider.title',[],'en');
                     $notarray['ar']['body']=__('notifications.order_step1_provider.body',['code'=>$code],'ar');
@@ -66,20 +69,30 @@ class ApiController extends BaseController
                    $user_req= UserRequest::where('order_service_id',$type_id)->first();
                    if($user_req){
                        $ids=json_decode($user_req->providers_id, true);
-                       $this->pushNotofarray($notarray,$ids);
+                       $this->pushNotofarray($notarray,$ids,$type_id,$type_model);
                    }
 
                 }elseif($step == 2){
+                    $order_step='Accept';
                     $not['ar']['title']=__('notifications.order_step2.title',[],'ar');
                     $not['en']['title']=__('notifications.order_step2.title',[],'en');
                     $not['ar']['body']=__('notifications.order_step2.body',['code'=>$code],'ar');
                     $not['en']['body']=__('notifications.order_step2.body',['code'=>$code],'en');
-                }else{
-                    $not['ar']['title']=__('notifications.order_step3.title',[],'ar');
-                    $not['en']['title']=__('notifications.order_step3.title',[],'en');
-                    $not['ar']['body']=__('notifications.order_step3.body',['code'=>$code],'ar');
-                    $not['en']['body']=__('notifications.order_step3.body',['code'=>$code],'en');
-                }
+                }elseif($step == 4){
+                    $order_step='Price';
+                    $not['ar']['title']=__('notifications.order_step4.title',[],'ar');
+                    $not['en']['title']=__('notifications.order_step4.title',[],'en');
+                    $not['ar']['body']=__('notifications.order_step4.body',['code'=>$code],'ar');
+                    $not['en']['body']=__('notifications.order_step4.body',['code'=>$code],'en');
+
+                }else
+                {
+                        $order_step='Complete';
+                        $not['ar']['title']=__('notifications.order_step3.title',[],'ar');
+                        $not['en']['title']=__('notifications.order_step3.title',[],'en');
+                        $not['ar']['body']=__('notifications.order_step3.body',['code'=>$code],'ar');
+                        $not['en']['body']=__('notifications.order_step3.body',['code'=>$code],'en');
+                    }
 
                 break;
 
@@ -87,22 +100,26 @@ class ApiController extends BaseController
             default:
 
         }
-        $not['type_model']='User';
-        $not['type_id']=$type_id;
-        $not['type']=$type_number;
+//        $not['type_model']='User';
+//        $not['type_id']=$type_id;
+//        $not['type']=$type_number;
+        $not['order_step']=$order_step;
         $not['image']=$image;
 
 
-        $Notification = ModelNotification::create($not);
+        $Notification = ModelNotification::updateorcreate(['type_id'=>$type_id,'type_model'=>'User'],$not);
         if(! is_array($user_id)){
-            UserNotification::create([
-            'user_id'=> $user_id,
-            'notification_id'=>$Notification->id,
-            ]);
+            if (!$Notification->users->contains($user_id)) {
+                UserNotification::create([
+                    'user_id' => $user_id,
+                    'notification_id' => $Notification->id,
+                ]);
+            }
             $FcmToken=FcmToken::where('user_id',$user_id)->pluck('token');
             $this->sendNotification($Notification,$FcmToken);
         }else{
-            $Notification->users()->sync($user_id);
+                $Notification->users()->sync($user_id);
+
             $FcmToken=FcmToken::wherein('user_id',$user_id)->pluck('token');
             $this->sendNotification($Notification,$FcmToken);
         }
@@ -114,9 +131,9 @@ class ApiController extends BaseController
     }
 
 
-    public function pushNotofarray($notarray,$ids){
+    public function pushNotofarray($notarray,$ids,$type_id,$type_model){
 
-        $not_p=ModelNotification::create($notarray);
+        $not_p=ModelNotification::updateorcreate(['type_id'=>$type_id,'type_model'=>$type_model],$notarray);
         $not_p->providers()->sync($ids);
         $FcmToken=FcmTokenProvider::wherein('provider_id',$ids)->pluck('token');
 
