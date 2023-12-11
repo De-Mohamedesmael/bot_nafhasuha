@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -17,6 +18,7 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia;
 
     protected $guarded = [];
+    protected $appends=['is_rate'];
     public function setPasswordAttribute($value)
     {
         return $this->attributes['password'] = bcrypt($value);
@@ -45,6 +47,15 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     public function is_activation()
     {
         return $this->activation_at != null;
+    }
+    public function getIsRateAttribute()
+    {
+        if (\auth()->check()) {
+            return ProviderRate::where('provider_id',$this->id)
+                ->where('user_id',\auth()->id())->exists();
+        }
+        return false;
+
     }
     public function city()
     {

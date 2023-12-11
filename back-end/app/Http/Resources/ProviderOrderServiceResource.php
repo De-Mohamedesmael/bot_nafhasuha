@@ -23,6 +23,7 @@ class ProviderOrderServiceResource extends JsonResource
             "provider_type" =>$this->provider_type,
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,
             "rates_count" => $this->rates_count,
+            "is_rate" => $this->is_rate,
 //            'categories'=>CategoryResource::collection($this->categories)
         ];
     }
