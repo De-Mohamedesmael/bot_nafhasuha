@@ -26,6 +26,10 @@ return [
             'title' => 'Your order has been completed',
             'body' => 'Your order #:code has been completed. Thank you for using our services.',
         ],
+        'order_step4' => [
+            'title'=>'You have a new quote',
+            'body'=>'You have a price quote for your order #:code Thank you for using it. We will check it',
+        ],
         'order_step1_provider' => [
             'title' => 'You have a new order',
             'body' => 'You have a new order with code #:code.',

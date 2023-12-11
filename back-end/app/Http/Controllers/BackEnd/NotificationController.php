@@ -187,12 +187,12 @@ class NotificationController extends Controller
              if ($request->has("cropImages") && count($request->cropImages) > 0) {
                  foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
 
-                     $folderPath = public_path('assets/images/notifications/');
+                     $folderPath = 'assets/images/notifications/';
                      $extention = explode(";", explode("/", $imageData)[1])[0];
                      $image = rand(1, 1500) . "_image." . $extention;
                      $filePath = $folderPath . $image;
                      if (!empty($notification->image)) {
-                         $oldImagePath = public_path('assets/images/' . $notification->image);
+                         $oldImagePath = 'assets/images/' . $notification->image;
                          if (File::exists($oldImagePath)) {
                              File::delete($oldImagePath);
                          }

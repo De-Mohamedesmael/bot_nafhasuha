@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use ZipStream\File;
+use Illuminate\Support\Facades\File;
 use function App\CPU\translate;
 
 class ServiceController extends Controller
@@ -93,12 +93,12 @@ class ServiceController extends Controller
             $service->update($request->translations);
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
                 foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
-                    $folderPath = public_path('assets/images/services/');
+                    $folderPath = 'assets/images/services/';
                     $extention = explode(";", explode("/", $imageData)[1])[0];
                     $image = rand(1, 1500) . "_image." . $extention;
                     $filePath = $folderPath . $image;
                     if (!empty($service->image)) {
-                        $oldImagePath = public_path('assets/images/'.$service->image);
+                        $oldImagePath = 'assets/images/'.$service->image;
                         if (File::exists($oldImagePath)) {
                             File::delete($oldImagePath);
                         }

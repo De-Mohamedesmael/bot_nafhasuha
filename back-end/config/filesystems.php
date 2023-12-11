@@ -46,6 +46,11 @@ return [
             'root'   => 'assets/media',
             'url'    => env('APP_URL').'/assets/media',
         ],
+        'asset_public' => [
+            'driver' => 'local',
+            'root'   => 'assets',
+            'url'    => env('APP_URL').'/assets',
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

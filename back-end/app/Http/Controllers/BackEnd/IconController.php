@@ -147,12 +147,12 @@ class IconController extends Controller
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
                 foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
 
-                    $folderPath = public_path('assets/images/icons/');
+                    $folderPath = 'assets/images/icons/';
                     $extention = explode(";", explode("/", $imageData)[1])[0];
                     $image = rand(1, 1500) . "_image." . $extention;
                     $filePath = $folderPath . $image;
                     if (!empty($icon->image)) {
-                        $oldImagePath = public_path('assets/images/' . $icon->image);
+                        $oldImagePath = 'assets/images/' . $icon->image;
                         if (File::exists($oldImagePath)) {
                             File::delete($oldImagePath);
                         }
@@ -225,12 +225,12 @@ class IconController extends Controller
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
                 foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
 
-                    $folderPath = public_path('assets/images/icons/');
+                    $folderPath = 'assets/images/icons/';
                     $extention = explode(";", explode("/", $imageData)[1])[0];
                     $image = rand(1, 1500) . "_image." . $extention;
                     $filePath = $folderPath . $image;
                     if (!empty($icon->image)) {
-                        $oldImagePath = public_path('assets/images/' . $icon->image);
+                        $oldImagePath = 'assets/images/' . $icon->image;
                         if (File::exists($oldImagePath)) {
                             File::delete($oldImagePath);
                         }

@@ -161,24 +161,14 @@ class SplashScreenController extends Controller
             $splash_screen->update($request->translations);
 
             if ($request->has("cropImages") && count($request->cropImages) > 0) {
-                foreach ($this->getCroppedImages($request->cropImages) as $imageData) {
-
-                    $folderPath = public_path('assets/images/splash_screens/');
-                    $extention = explode(";", explode("/", $imageData)[1])[0];
-                    $image = rand(1, 1500) . "_image." . $extention;
-                    $filePath = $folderPath . $image;
-                    if (!empty($splash_screen->image)) {
-                        $oldImagePath = public_path('assets/images/' . $splash_screen->image);
-                        if (File::exists($oldImagePath)) {
-                            File::delete($oldImagePath);
-                        }
-                    }
-
-                    $fp = file_put_contents($filePath, base64_decode(explode(",", $imageData)[1]));
-                    $splash_screen->image = 'splash_screens/' . $image;
-                    $splash_screen->save();
+                foreach ($request->cropImages as $imageData) {
+                    $splash_screen->clearMediaCollection('images');
+                    $extention = explode(";",explode("/",$imageData)[1])[0];
+                    $image = rand(1,1500)."_image.".$extention;
+                    $filePath = public_path('uploads/' . $image);
+                    $fp = file_put_contents($filePath,base64_decode(explode(",",$imageData)[1]));
+                    $splash_screen->addMedia($filePath)->toMediaCollection('images');
                 }
-
             }
 
             DB::commit();

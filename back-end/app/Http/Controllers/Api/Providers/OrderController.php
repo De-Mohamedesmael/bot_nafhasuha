@@ -151,16 +151,18 @@ class OrderController extends ApiController
         $user=$order->user;
 
         if($user->is_notification){
-           $lang= $user->default_language;
-            $code=$order->transaction?->invoice_no;
-            $FcmToken=FcmToken::where('user_id',$user->id)->pluck('token');
-            $title=__('notifications.PriceRequest.title',[],$lang);
-            $body=__('notifications.PriceRequest.body',['code'=>$code],$lang);
+            $this->pushNotof('Order',$order,$user->id,4);
+//           $lang= $user->default_language;
+//            $code=$order->transaction?->invoice_no;
+//            $FcmToken=FcmToken::where('user_id',$user->id)->pluck('token');
+//            $title=__('notifications.PriceRequest.title',[],$lang);
+//            $body=__('notifications.PriceRequest.body',['code'=>$code],$lang);
+//
+//            $type='PriceRequest';
+//            $type_id=$request->order_id;
+//
+//            $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
 
-            $type='PriceRequest';
-            $type_id=$request->order_id;
-
-            $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
 
         }
         if(!$order){
