@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VehicleManufactureYearResource;
-use App\Models\VehicleManufactureYear;
+
+use App\Models\TypeBattery;
+use App\Models\VehicleType;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use function App\CPU\translate;
 
-class VehicleManufactureYearController extends Controller
+class TypeBatteryController extends Controller
 {
     /**
      * All Utils instance.
@@ -47,13 +47,18 @@ class VehicleManufactureYearController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $vehicle_manufacture_years = VehicleManufactureYear::
-                select('vehicle_manufacture_years.*');
-            return DataTables::of($vehicle_manufacture_years)
+            $type_batteries = TypeBattery::listsTranslations('title')->
+            select('type_batteries.*',
+                'type_battery_translations.title',
+            )->groupBy('type_batteries.id');
+            return DataTables::of($type_batteries)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-
                 ->addColumn('status', function ($row) {
-                    $checked=$row->status?'checked':'';
+                    $checked='';
+                    $now = date('Y-m-d');
+                    if(($row->start_at <= $now||$row->start_at == null) && ($row->end_at > $now||$row->end_at == null) && $row->status){
+                        $checked='checked';
+                    }
                     $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
                         <label for="switch'.$row->id.'" data-on-label="'.__('translation.active').'" data-off-label="'.__('translation.inactive').'"></label> <span class="check"></span> </label></form>';
 
@@ -68,21 +73,24 @@ class VehicleManufactureYearController extends Controller
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_manufacture_year="menu">';
-
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
-                        $html .='<li>
-                                                <a href="'. route('admin.vehicle_manufacture_years.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
-//                            }
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" slider="menu">';
 
                         $html .= '<li class="divider"></li>';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
-                        $html .=
-                            '<li>
-                                    <a data-href="' . route('admin.vehicle_manufacture_years.delete', $row->id)  . '"
+
+//                        if (auth()->slider()->can('slider_module.slider.add_balen')){
+                        $html .='<li>
+                                                <a href="'. route('admin.type_batteries.edit',$row->id) .'" target="_blank"><i
+                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
+                                            </li>';
+
+//                        }
+                        $html .= '<li class="divider"></li>';
+
+//                            if (auth()->slider()->can('slider_module.slider.delete')) {
+                                $html .=
+                                    '<li>
+                                    <a data-href="' . route('admin.type_batteries.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
                                         class="btn text-red delete_item"><i class="dripicons-trash"></i>
                                         ' . __('lang.delete') . '</a>
@@ -103,7 +111,7 @@ class VehicleManufactureYearController extends Controller
                 ->make(true);
         }
 
-        return view('back-end.vehicle_manufacture_years.index');
+        return view('back-end.type_batteries.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -112,9 +120,8 @@ class VehicleManufactureYearController extends Controller
      */
     public function create()
     {
-        return view('back-end.vehicle_manufacture_years.create');
+        return view('back-end.type_batteries.create');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -126,6 +133,9 @@ class VehicleManufactureYearController extends Controller
 
         $validator = validator($request->all(), [
             'title' => 'required|string',
+            'translations' => 'required|array',
+            'translations.*' => 'required|array',
+            'translations.*.title' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -135,16 +145,15 @@ class VehicleManufactureYearController extends Controller
             ];
         }
         try {
+            $data=$request->translations;
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::create([
-                "title" => $request->title,
-            ]);
+            $type_battery = TypeBattery::create($data);
 
-            $vehicle_manufacture_year_id=$vehicle_manufacture_year->id;
+            $type_battery_id=$type_battery->id;
             DB::commit();
             $output = [
                 'code' => 200,
-                'vehicle_manufacture_year_id' => $vehicle_manufacture_year_id,
+                'type_battery_id' => $type_battery_id,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
@@ -160,7 +169,7 @@ class VehicleManufactureYearController extends Controller
         return $output;
 
 
-//        return redirect()->to('vehicle_manufacture_year')->with('status', $output);
+//        return redirect()->to('type_battery')->with('status', $output);
     }
 
 
@@ -173,10 +182,9 @@ class VehicleManufactureYearController extends Controller
 
     public function edit($id)
     {
-        $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-
-        return view('back-end.vehicle_manufacture_years.edit')->with(compact(
-            'vehicle_manufacture_year'
+        $type_battery = TypeBattery::find($id);
+        return view('back-end.type_batteries.edit')->with(compact(
+            'type_battery'
         ));
     }
 
@@ -187,14 +195,15 @@ class VehicleManufactureYearController extends Controller
         $this->validate(
             $request,
             ['title' => ['required','string']],
-
+            ['translations' => ['required','array']],
+            ['translations.*' => ['required','array']],
+            ['translations.*.title' => ['required', 'max:255']],
         );
 
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            $vehicle_manufacture_year->title=$request->title;
-            $vehicle_manufacture_year->save();
+            $type_battery = TypeBattery::find($id);
+            $type_battery->update($request->translations);
 
             DB::commit();
             $output = [
@@ -222,15 +231,15 @@ class VehicleManufactureYearController extends Controller
     public function destroy($id)
     {
         try {
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            if ($vehicle_manufacture_year){
-                if($vehicle_manufacture_year->id == 1){
+            $type_battery = TypeBattery::find($id);
+            if ($type_battery){
+                if($type_battery->id == 1){
                     return [
                         'success' => false,
-                        'msg' => __('lang.This_vehicle_manufacture_year_cannot_be_deleted')
+                        'msg' => __('lang.This_type_battery_cannot_be_deleted')
                     ];
                 }
-                $vehicle_manufacture_year->delete();
+                $type_battery->delete();
             }
 
 
@@ -252,22 +261,22 @@ class VehicleManufactureYearController extends Controller
     public function update_status(Request $request ){
 
         try {
-            $vehicle_manufacture_year=VehicleManufactureYear::find($request->id);
-            if(!$vehicle_manufacture_year){
+            $type_battery=TypeBattery::find($request->id);
+            if(!$type_battery){
                 return [
                     'success'=>false,
-                    'msg'=>translate('vehicle_manufacture_year_not_found')
+                    'msg'=>translate('type_battery_not_found')
                 ];
             }
 
 
             DB::beginTransaction();
-            $vehicle_manufacture_year->status=($vehicle_manufacture_year->status - 1) *-1;
-            $vehicle_manufacture_year->save();
+            $type_battery->status=($type_battery->status - 1) *-1;
+            $type_battery->save();
             DB::commit();
             return [
                 'success'=>true,
-                'msg'=>translate('vehicle_manufacture_year updated successfully!')
+                'msg'=>translate('type_battery updated successfully!')
             ];
         }catch (\Exception $e){
             DB::rollback();

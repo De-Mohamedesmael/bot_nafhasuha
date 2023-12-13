@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VehicleManufactureYearResource;
-use App\Models\VehicleManufactureYear;
+use App\Http\Resources\TypeGasolineResource;
+use App\Models\TypeGasoline;
+use App\Models\City;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use function App\CPU\translate;
 
-class VehicleManufactureYearController extends Controller
+class TypeGasolineController extends Controller
 {
     /**
      * All Utils instance.
@@ -47,11 +48,9 @@ class VehicleManufactureYearController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $vehicle_manufacture_years = VehicleManufactureYear::
-                select('vehicle_manufacture_years.*');
-            return DataTables::of($vehicle_manufacture_years)
+            $type_gasolines = TypeGasoline::groupBy('id');
+            return DataTables::of($type_gasolines)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-
                 ->addColumn('status', function ($row) {
                     $checked=$row->status?'checked':'';
                     $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
@@ -68,21 +67,21 @@ class VehicleManufactureYearController extends Controller
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_manufacture_year="menu">';
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" type_gasoline="menu">';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->type_gasoline()->can('type_gasoline_module.type_gasoline.delete')) {
                         $html .='<li>
-                                                <a href="'. route('admin.vehicle_manufacture_years.edit',$row->id) .'" target="_blank"><i
+                                                <a href="'. route('admin.type_gasolines.edit',$row->id) .'" target="_blank"><i
                                                         class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
                                             </li>';
 //                            }
 
                         $html .= '<li class="divider"></li>';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->type_gasoline()->can('type_gasoline_module.type_gasoline.delete')) {
                         $html .=
                             '<li>
-                                    <a data-href="' . route('admin.vehicle_manufacture_years.delete', $row->id)  . '"
+                                    <a data-href="' . route('admin.type_gasolines.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
                                         class="btn text-red delete_item"><i class="dripicons-trash"></i>
                                         ' . __('lang.delete') . '</a>
@@ -103,7 +102,7 @@ class VehicleManufactureYearController extends Controller
                 ->make(true);
         }
 
-        return view('back-end.vehicle_manufacture_years.index');
+        return view('back-end.type_gasolines.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -112,7 +111,7 @@ class VehicleManufactureYearController extends Controller
      */
     public function create()
     {
-        return view('back-end.vehicle_manufacture_years.create');
+        return view('back-end.type_gasolines.create');
     }
 
     /**
@@ -125,7 +124,7 @@ class VehicleManufactureYearController extends Controller
     {
 
         $validator = validator($request->all(), [
-            'title' => 'required|string',
+            'title' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -136,15 +135,14 @@ class VehicleManufactureYearController extends Controller
         }
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::create([
-                "title" => $request->title,
+            $type_gasoline = TypeGasoline::create([
+                'title'=>$request->title
             ]);
 
-            $vehicle_manufacture_year_id=$vehicle_manufacture_year->id;
             DB::commit();
             $output = [
                 'code' => 200,
-                'vehicle_manufacture_year_id' => $vehicle_manufacture_year_id,
+                'type_gasoline_id' => $type_gasoline->id,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
@@ -160,7 +158,7 @@ class VehicleManufactureYearController extends Controller
         return $output;
 
 
-//        return redirect()->to('vehicle_manufacture_year')->with('status', $output);
+//        return redirect()->to('type_gasoline')->with('status', $output);
     }
 
 
@@ -173,10 +171,10 @@ class VehicleManufactureYearController extends Controller
 
     public function edit($id)
     {
-        $vehicle_manufacture_year = VehicleManufactureYear::find($id);
+        $type_gasoline = TypeGasoline::find($id);
 
-        return view('back-end.vehicle_manufacture_years.edit')->with(compact(
-            'vehicle_manufacture_year'
+        return view('back-end.type_gasolines.edit')->with(compact(
+            'type_gasoline'
         ));
     }
 
@@ -186,15 +184,14 @@ class VehicleManufactureYearController extends Controller
 
         $this->validate(
             $request,
-            ['title' => ['required','string']],
-
+            ['title' => ['required','string']]
         );
 
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            $vehicle_manufacture_year->title=$request->title;
-            $vehicle_manufacture_year->save();
+            $type_gasoline = TypeGasoline::find($id);
+            $type_gasoline->title=$request->title;
+            $type_gasoline->save();
 
             DB::commit();
             $output = [
@@ -222,15 +219,15 @@ class VehicleManufactureYearController extends Controller
     public function destroy($id)
     {
         try {
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            if ($vehicle_manufacture_year){
-                if($vehicle_manufacture_year->id == 1){
+            $type_gasoline = TypeGasoline::find($id);
+            if ($type_gasoline){
+                if($type_gasoline->id == 1){
                     return [
                         'success' => false,
-                        'msg' => __('lang.This_vehicle_manufacture_year_cannot_be_deleted')
+                        'msg' => __('lang.This_type_gasoline_cannot_be_deleted')
                     ];
                 }
-                $vehicle_manufacture_year->delete();
+                $type_gasoline->delete();
             }
 
 
@@ -252,22 +249,22 @@ class VehicleManufactureYearController extends Controller
     public function update_status(Request $request ){
 
         try {
-            $vehicle_manufacture_year=VehicleManufactureYear::find($request->id);
-            if(!$vehicle_manufacture_year){
+            $type_gasoline=TypeGasoline::find($request->id);
+            if(!$type_gasoline){
                 return [
                     'success'=>false,
-                    'msg'=>translate('vehicle_manufacture_year_not_found')
+                    'msg'=>translate('type_gasoline_not_found')
                 ];
             }
 
 
             DB::beginTransaction();
-            $vehicle_manufacture_year->status=($vehicle_manufacture_year->status - 1) *-1;
-            $vehicle_manufacture_year->save();
+            $type_gasoline->status=($type_gasoline->status - 1) *-1;
+            $type_gasoline->save();
             DB::commit();
             return [
                 'success'=>true,
-                'msg'=>translate('vehicle_manufacture_year updated successfully!')
+                'msg'=>translate('type_gasoline updated successfully!')
             ];
         }catch (\Exception $e){
             DB::rollback();

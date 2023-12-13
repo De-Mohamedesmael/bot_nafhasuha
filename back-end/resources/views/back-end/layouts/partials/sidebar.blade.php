@@ -187,11 +187,64 @@
              @endif --}}
 
 
+                {{--                @if( !empty($module_settings['settings']) )--}}
+                <li><a href="#system_settings" aria-expanded="false" data-toggle="collapse"> <i
+                            class="dripicons-gear"></i><span>@lang('lang.system_settings')</span></a>
+                    <ul id="system_settings"
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transporters','cy_periodics','tires','type_batteries','type_gasolines','vehicle_brands','vehicle_models','vehicle_types','vehicle_manufacture_years'])) show @endif">
+
+
+                        {{--                                @can('product_module.category.view')--}}
+                        <li
+                            class="@if(request()->segment(2) == 'vehicle_types') active @endif">
+                            <a href="{{route('admin.vehicle_types.index')}}">{{__('lang.vehicle_types')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'vehicle_manufacture_years') active @endif">
+                            <a href="{{route('admin.vehicle_manufacture_years.index')}}">{{__('lang.vehicle_manufacture_years')}}</a>
+                        </li>
+
+                        <li
+                            class="@if(request()->segment(2) == 'vehicle_brands') active @endif">
+                            <a href="{{route('admin.vehicle_brands.index')}}">{{__('lang.vehicle_brands')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'vehicle_models') active @endif">
+                            <a href="{{route('admin.vehicle_models.index')}}">{{__('lang.vehicle_models')}}</a>
+                        </li>
+
+                        <li
+                            class="@if(request()->segment(2) == 'type_gasolines') active @endif">
+                            <a href="{{route('admin.type_gasolines.index')}}">{{__('lang.type_gasolines')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'type_batteries') active @endif">
+                            <a href="{{route('admin.type_batteries.index')}}">{{__('lang.type_batteries')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'tires') active @endif">
+                            <a href="{{route('admin.tires.index')}}">{{__('lang.tires')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'transporters') active @endif">
+                            <a href="{{route('admin.transporters.index')}}">{{__('lang.transporters')}}</a>
+                        </li>
+                        <li
+                            class="@if(request()->segment(2) == 'cy_periodics') active @endif">
+                            <a href="{{route('admin.cy_periodics.index')}}">{{__('lang.cy_periodics')}}</a>
+                        </li>
+                        {{--                                    @endcan--}}
+
+                    </ul>
+                </li>
+
+                {{--                @endif--}}
+
 {{--                @if( !empty($module_settings['settings']) )--}}
                     <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i
                                 class="dripicons-gear"></i><span>@lang('lang.settings')</span></a>
                         <ul id="setting"
-                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','vehicle_types','vehicle_manufacture_years','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
 
 
 {{--                                @can('product_module.category.view')--}}
@@ -231,14 +284,7 @@
                                         class="@if(request()->segment(2) == 'areas') active @endif">
                                         <a href="{{route('admin.areas.index')}}">{{__('lang.areas')}}</a>
                                     </li>
-                                    <li
-                                        class="@if(request()->segment(2) == 'vehicle_manufacture_years') active @endif">
-                                        <a href="{{route('admin.vehicle_manufacture_years.index')}}">{{__('lang.vehicle_manufacture_years')}}</a>
-                                    </li>
-                                    <li
-                                        class="@if(request()->segment(2) == 'vehicle_types') active @endif">
-                                        <a href="{{route('admin.vehicle_types.index')}}">{{__('lang.vehicle_types')}}</a>
-                                    </li>
+
 {{--                                    @endcan--}}
                                 <li
                                     class="@if(request()->segment(1) == 'settings' && request()->segment(2) == 'get-general-setting') active @endif">
@@ -247,11 +293,31 @@
                                 </li>
                         </ul>
                     </li>
-                    <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">
-                        <a href="#"><i
-                                class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>
-                    </li>
+
 {{--                @endif--}}
+                {{--                @if( !empty($module_settings['settings']) )--}}
+                <li><a href="#messages" aria-expanded="false" data-toggle="collapse"> <i
+                            class="dripicons-conversation"></i><span>@lang('lang.messages_and_contact_us')</span></a>
+                    <ul id="messages"
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['contact_us'])) show @endif">
+
+
+                        {{--                                @can('product_module.category.view')--}}
+                        <li
+                            class="@if(request()->segment(2) == 'contact_us') active @endif">
+                            <a href="{{route('admin.contact_us.index')}}">{{__('lang.contact_us')}}</a>
+                        </li>
+
+                        {{--                                    @endcan--}}
+
+                    </ul>
+                </li>
+
+                {{--                @endif--}}
+                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">
+                    <a href="#"><i
+                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>
+                </li>
             </ul>
         </div>
     </div>

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VehicleManufactureYearResource;
-use App\Models\VehicleManufactureYear;
+use App\Models\CyPeriodic;
+use App\Models\City;
+use App\Models\Provider;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use function App\CPU\translate;
 
-class VehicleManufactureYearController extends Controller
+class CyPeriodicController extends Controller
 {
     /**
      * All Utils instance.
@@ -47,11 +48,17 @@ class VehicleManufactureYearController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $vehicle_manufacture_years = VehicleManufactureYear::
-                select('vehicle_manufacture_years.*');
-            return DataTables::of($vehicle_manufacture_years)
+            $cy_periodics = CyPeriodic::leftjoin('city_translations', 'cy_periodics.city_id', 'city_translations.city_id')
+            ->listsTranslations('title')
+                ->select('cy_periodics.*',
+                    'cy_periodic_translations.title'
+                );
+            $cy_periodics=$cy_periodics->groupBy('cy_periodics.id');
+            return DataTables::of($cy_periodics)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-
+                ->addColumn('name_city', function ($row) {
+                    return $row->city?->title;
+                })
                 ->addColumn('status', function ($row) {
                     $checked=$row->status?'checked':'';
                     $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
@@ -68,21 +75,21 @@ class VehicleManufactureYearController extends Controller
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_manufacture_year="menu">';
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" cy_periodic="menu">';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->cy_periodic()->can('cy_periodic_module.cy_periodic.delete')) {
                         $html .='<li>
-                                                <a href="'. route('admin.vehicle_manufacture_years.edit',$row->id) .'" target="_blank"><i
+                                                <a href="'. route('admin.cy_periodics.edit',$row->id) .'" target="_blank"><i
                                                         class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
                                             </li>';
 //                            }
 
                         $html .= '<li class="divider"></li>';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->cy_periodic()->can('cy_periodic_module.cy_periodic.delete')) {
                         $html .=
                             '<li>
-                                    <a data-href="' . route('admin.vehicle_manufacture_years.delete', $row->id)  . '"
+                                    <a data-href="' . route('admin.cy_periodics.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
                                         class="btn text-red delete_item"><i class="dripicons-trash"></i>
                                         ' . __('lang.delete') . '</a>
@@ -97,13 +104,14 @@ class VehicleManufactureYearController extends Controller
                 )
                 ->rawColumns([
                     'action',
+                    'name_city',
                     'status',
                     'created_at',
                 ])
                 ->make(true);
         }
 
-        return view('back-end.vehicle_manufacture_years.index');
+        return view('back-end.cy_periodics.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -112,7 +120,10 @@ class VehicleManufactureYearController extends Controller
      */
     public function create()
     {
-        return view('back-end.vehicle_manufacture_years.create');
+        $cities =City::listsTranslations('title as name')->pluck('name','id');
+        $providers =Provider::pluck('name','id');
+
+        return view('back-end.cy_periodics.create',compact('cities','providers'));
     }
 
     /**
@@ -123,9 +134,16 @@ class VehicleManufactureYearController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = validator($request->all(), [
+            'price' => 'required|numeric',
+            'sort' => 'required|integer',
+            'city_id' => 'required|integer|exists:cities,id',
+            'providers' => 'required|array',
+            'providers.*' => 'required|integer|exists:providers,id',
             'title' => 'required|string',
+            'translations' => 'required|array',
+            'translations.*' => 'required|array',
+            'translations.*.title' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -136,19 +154,22 @@ class VehicleManufactureYearController extends Controller
         }
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::create([
-                "title" => $request->title,
-            ]);
-
-            $vehicle_manufacture_year_id=$vehicle_manufacture_year->id;
+            $date=$request->translations;
+            $date['city_id']=$request->city_id;
+            $date['price']=$request->price;
+            $date['sort']=$request->sort;
+            $cy_periodic = CyPeriodic::create($date);
+            if($request->has('providers')){
+                $cy_periodic->providers()->sync($request->providers);
+            }
+            $cy_periodic_id=$cy_periodic->id;
             DB::commit();
             $output = [
                 'code' => 200,
-                'vehicle_manufacture_year_id' => $vehicle_manufacture_year_id,
+                'cy_periodic_id' => $cy_periodic_id,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
-
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
                 'code' => 500,
@@ -160,7 +181,7 @@ class VehicleManufactureYearController extends Controller
         return $output;
 
 
-//        return redirect()->to('vehicle_manufacture_year')->with('status', $output);
+//        return redirect()->to('cy_periodic')->with('status', $output);
     }
 
 
@@ -173,29 +194,46 @@ class VehicleManufactureYearController extends Controller
 
     public function edit($id)
     {
-        $vehicle_manufacture_year = VehicleManufactureYear::find($id);
+        $cy_periodic = CyPeriodic::find($id);
+        $cities =City::listsTranslations('title as name')->pluck('name','id');
+        $providers =Provider::pluck('name','id');
+        $array_providers=$cy_periodic->providers()->pluck('providers.id');
 
-        return view('back-end.vehicle_manufacture_years.edit')->with(compact(
-            'vehicle_manufacture_year'
+        return view('back-end.cy_periodics.edit')->with(compact(
+            'providers',
+            'cy_periodic',
+            'array_providers',
+            'cities'
         ));
     }
 
 
     public function update(Request $request, $id)
     {
-
         $this->validate(
             $request,
+            ['price' => ['required','numeric']],
+            ['sort' => ['required','integer']],
+            ['city_id' => ['required','integer','exists:cities,id']],
+            ['providers' => ['required','array']],
+            ['providers.*' => ['required','integer','exists:providers,id']],
             ['title' => ['required','string']],
-
+            ['translations' => ['required','array']],
+            ['translations.*' => ['required','array']],
+            ['translations.*.title' => ['required', 'max:255']],
         );
 
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            $vehicle_manufacture_year->title=$request->title;
-            $vehicle_manufacture_year->save();
-
+            $date=$request->translations;
+            $date['city_id']=$request->city_id;
+            $date['price']=$request->price;
+            $date['sort']=$request->sort;
+            $cy_periodic = CyPeriodic::find($id);
+            $cy_periodic->update($date);
+            if($request->has('providers')){
+                $cy_periodic->providers()->sync($request->providers);
+            }
             DB::commit();
             $output = [
                 'success' => true,
@@ -222,15 +260,15 @@ class VehicleManufactureYearController extends Controller
     public function destroy($id)
     {
         try {
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            if ($vehicle_manufacture_year){
-                if($vehicle_manufacture_year->id == 1){
+            $cy_periodic = CyPeriodic::find($id);
+            if ($cy_periodic){
+                if($cy_periodic->id == 1){
                     return [
                         'success' => false,
-                        'msg' => __('lang.This_vehicle_manufacture_year_cannot_be_deleted')
+                        'msg' => __('lang.This_cy_periodic_cannot_be_deleted')
                     ];
                 }
-                $vehicle_manufacture_year->delete();
+                $cy_periodic->delete();
             }
 
 
@@ -252,22 +290,22 @@ class VehicleManufactureYearController extends Controller
     public function update_status(Request $request ){
 
         try {
-            $vehicle_manufacture_year=VehicleManufactureYear::find($request->id);
-            if(!$vehicle_manufacture_year){
+            $cy_periodic=CyPeriodic::find($request->id);
+            if(!$cy_periodic){
                 return [
                     'success'=>false,
-                    'msg'=>translate('vehicle_manufacture_year_not_found')
+                    'msg'=>translate('cy_periodic_not_found')
                 ];
             }
 
 
             DB::beginTransaction();
-            $vehicle_manufacture_year->status=($vehicle_manufacture_year->status - 1) *-1;
-            $vehicle_manufacture_year->save();
+            $cy_periodic->status=($cy_periodic->status - 1) *-1;
+            $cy_periodic->save();
             DB::commit();
             return [
                 'success'=>true,
-                'msg'=>translate('vehicle_manufacture_year updated successfully!')
+                'msg'=>translate('cy_periodic updated successfully!')
             ];
         }catch (\Exception $e){
             DB::rollback();

@@ -1580,6 +1580,7 @@ return [
     'InvitationBonusValue'=>'Event Bonus',
     'JoiningBonusValue'=>'Joining Bonus',
 
+    'system_settings'=>'System Settings',
     'all_vehicle_manufacture_years'=>'All Vehicle Manufacture Years',
     'vehicle_manufacture_years'=>'Vehicle Manufacture Years',
     'add_vehicle_manufacture_year'=>'Create new Vehicle Manufacture Year',
@@ -1589,4 +1590,50 @@ return [
     'add_vehicle_type'=>'Create new Vehicle Type',
     'edit_vehicle_type'=>'Edit Vehicle Type',
 
+
+    'vehicle_type'=>'Vehicle type',
+    'all_vehicle_brands'=>'All vehicle brands',
+    'vehicle_brands'=>'vehicle brands',
+    'add_vehicle_brand'=>'Add vehicle brand',
+    'edit_vehicle_brand'=>'Edit vehicle brand',
+    'vehicle_brand'=>'vehicle brand',
+
+
+    'all_vehicle_models'=>'All vehicle models',
+    'vehicle_models'=>'vehicle model',
+    'add_vehicle_model'=>'Add vehicle model',
+    'edit_vehicle_model'=>'Edit vehicle model',
+
+    'all_type_gasolines'=>'All petroleum products',
+    'type_gasolines'=>'petroleum products',
+    'add_type_gasoline'=>'Add petroleum product',
+    'edit_type_gasoline'=>'Edit petroleum product',
+
+    'all_type_batteries'=>'All types of batteries',
+    'type_batteries'=>'types of batteries',
+    'add_type_battery'=>'Add battery type',
+    'edit_type_battery'=>'Edit battery type',
+
+    'all_tires'=>'All Tires',
+    'tires'=>'tires',
+    'add_tire'=>'Add by posting',
+    'edit_tire'=>'Edit by publishing',
+
+    'all_cy_periodics'=>'Places of periodic examinations',
+    'cy_periodics'=>'examination locations',
+    'add_cy_periodic'=>'Add a periodic check-up location',
+    'edit_cy_periodic'=>'Edit periodic check',
+
+    'all_transporters'=>'All Transporters',
+    'transporters'=>'Transporters',
+    'add_transporter'=>'Add New Transporter',
+    'edit_transporter'=>'Edit Transporter',
+
+    'minimum_price'=>'minimum price',
+    'price_for_kilo'=>'price per kilometre',
+    'price_for minute'=>'price per minute',
+
+    'messages_note'=>'note',
+    'messages_and_contact_us'=>'Messages and complaints',
+    'all_contact_us'=>'View all complaints',
 ];

@@ -18,4 +18,13 @@ class CyPeriodic extends Model implements TranslatableContract
     {
         return $query->where('status',  1);
     }
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function providers()
+    {
+        return $this->belongsToMany(Provider::class,'cy_periodic_providers');
+    }
 }

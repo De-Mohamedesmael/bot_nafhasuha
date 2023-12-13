@@ -9,5 +9,6 @@ class TransporterTranslation extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $guarded=[];
 
 }

@@ -41,13 +41,13 @@ class ApiController extends BaseController
         // type=> ,'FriendRequest'
         // type_item
         $image=null;
+        $type_id=$type_item->id;
         $order_step=null;
         $type_number=3;
         $not=[];
         switch ($type){
             case 'Order':
                 $code=$type_item->transaction?->invoice_no;
-                $type_id=$type_item->id;
                 $type_number=1;
                 if($step == 1){
                     $order_step='New';
@@ -102,7 +102,7 @@ class ApiController extends BaseController
         }
 //        $not['type_model']='User';
 //        $not['type_id']=$type_id;
-//        $not['type']=$type_number;
+        $not['type']=$type_number;
         $not['order_step']=$order_step;
         $not['image']=$image;
 
