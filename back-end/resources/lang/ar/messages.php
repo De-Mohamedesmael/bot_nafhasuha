@@ -97,6 +97,9 @@
   'User updated successfully!' => 'User updated successfully!',
   'Provider updated successfully!' => 'Provider updated successfully!',
   'vehicle_type updated successfully!' => 'Vehicle type updated successfully!',
-    'activation_code' => 'كود التفعيل الخاص بك هو: :code',
-
+  'activation_code' => 'كود التفعيل الخاص بك هو: :code',
+  'vehicle_brand updated successfully!' => 'Vehicle brand updated successfully!',
+  'type_gasoline updated successfully!' => 'Type gasoline updated successfully!',
+  'tire updated successfully!' => 'Tire updated successfully!',
+  'cy_periodic updated successfully!' => 'Cy periodic updated successfully!',
 );

@@ -100,8 +100,6 @@ class VehicleTypeController extends Controller
                 )
                 ->rawColumns([
                     'action',
-                    'image',
-                    'name_city',
                     'status',
                     'created_at',
                 ])

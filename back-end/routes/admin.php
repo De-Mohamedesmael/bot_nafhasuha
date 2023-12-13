@@ -24,8 +24,18 @@ use App\Http\Controllers\BackEnd\BankController;
 use App\Http\Controllers\BackEnd\CountryController;
 use App\Http\Controllers\BackEnd\CityController;
 use App\Http\Controllers\BackEnd\AreaController;
-use App\Http\Controllers\BackEnd\VehicleManufactureYearController;
 use App\Http\Controllers\BackEnd\VehicleTypeController;
+use App\Http\Controllers\BackEnd\VehicleManufactureYearController;
+use App\Http\Controllers\BackEnd\VehicleModelController;
+use App\Http\Controllers\BackEnd\VehicleBrandController;
+
+use App\Http\Controllers\BackEnd\TypeGasolineController;
+use App\Http\Controllers\BackEnd\TypeBatteryController;
+use App\Http\Controllers\BackEnd\TireController;
+use App\Http\Controllers\BackEnd\CyPeriodicController;
+use App\Http\Controllers\BackEnd\TransporterController;
+use App\Http\Controllers\BackEnd\ContactUsController;
+use App\Http\Controllers\BackEnd\SmsController;
 
 use App\Http\Controllers\BackEnd\SettingController;
 
@@ -213,6 +223,81 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::delete('delete/{id}', [VehicleTypeController::class,'destroy'])->name('delete');
         Route::post('update_status', [VehicleTypeController::class,'update_status'])->name('update_status');
     });
+
+
+    Route::group(['prefix'=>'vehicle_brands','as'=>'vehicle_brands.'], function () {
+        Route::get('/', [VehicleBrandController::class,'index'])->name('index');
+        Route::get('create', [VehicleBrandController::class,'create'])->name('create');
+        Route::post('create', [VehicleBrandController::class,'store'])->name('store');
+        Route::get('edit/{id}',[VehicleBrandController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VehicleBrandController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [VehicleBrandController::class,'destroy'])->name('delete');
+        Route::post('update_status', [VehicleBrandController::class,'update_status'])->name('update_status');
+    });
+    Route::group(['prefix'=>'vehicle_models','as'=>'vehicle_models.'], function () {
+        Route::get('/', [VehicleModelController::class,'index'])->name('index');
+        Route::get('create', [VehicleModelController::class,'create'])->name('create');
+        Route::post('create', [VehicleModelController::class,'store'])->name('store');
+        Route::get('edit/{id}',[VehicleModelController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [VehicleModelController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [VehicleModelController::class,'destroy'])->name('delete');
+        Route::post('update_status', [VehicleModelController::class,'update_status'])->name('update_status');
+    });
+    Route::group(['prefix'=>'type_gasolines','as'=>'type_gasolines.'], function () {
+        Route::get('/', [TypeGasolineController::class,'index'])->name('index');
+        Route::get('create', [TypeGasolineController::class,'create'])->name('create');
+        Route::post('create', [TypeGasolineController::class,'store'])->name('store');
+        Route::get('edit/{id}',[TypeGasolineController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [TypeGasolineController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [TypeGasolineController::class,'destroy'])->name('delete');
+        Route::post('update_status', [TypeGasolineController::class,'update_status'])->name('update_status');
+    });
+
+    Route::group(['prefix'=>'type_batteries','as'=>'type_batteries.'], function () {
+        Route::get('/', [TypeBatteryController::class,'index'])->name('index');
+        Route::get('create', [TypeBatteryController::class,'create'])->name('create');
+        Route::post('create', [TypeBatteryController::class,'store'])->name('store');
+        Route::get('edit/{id}',[TypeBatteryController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [TypeBatteryController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [TypeBatteryController::class,'destroy'])->name('delete');
+        Route::post('update_status', [TypeBatteryController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [TypeBatteryController::class,'deleteImage'])->name('deleteImage');
+
+    });
+
+
+    Route::group(['prefix'=>'tires','as'=>'tires.'], function () {
+        Route::get('/', [TireController::class,'index'])->name('index');
+        Route::get('create', [TireController::class,'create'])->name('create');
+        Route::post('create', [TireController::class,'store'])->name('store');
+        Route::get('edit/{id}',[TireController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [TireController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [TireController::class,'destroy'])->name('delete');
+        Route::post('update_status', [TireController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [TireController::class,'deleteImage'])->name('deleteImage');
+
+    });
+    Route::group(['prefix'=>'cy_periodics','as'=>'cy_periodics.'], function () {
+        Route::get('/', [CyPeriodicController::class,'index'])->name('index');
+        Route::get('create', [CyPeriodicController::class,'create'])->name('create');
+        Route::post('create', [CyPeriodicController::class,'store'])->name('store');
+        Route::get('edit/{id}',[CyPeriodicController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [CyPeriodicController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [CyPeriodicController::class,'destroy'])->name('delete');
+        Route::post('update_status', [CyPeriodicController::class,'update_status'])->name('update_status');
+
+    });
+    Route::group(['prefix'=>'transporters','as'=>'transporters.'], function () {
+        Route::get('/', [TransporterController::class,'index'])->name('index');
+        Route::get('create', [TransporterController::class,'create'])->name('create');
+        Route::post('create', [TransporterController::class,'store'])->name('store');
+        Route::get('edit/{id}',[TransporterController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [TransporterController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [TransporterController::class,'destroy'])->name('delete');
+        Route::post('update_status', [TransporterController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [TransporterController::class,'deleteImage'])->name('deleteImage');
+
+    });
     Route::group(['prefix'=>'slider','as'=>'slider.'], function () {
         Route::get('/', [SliderController::class,'index'])->name('index');
         Route::post('/', [SliderController::class,'index'])->name('index');
@@ -245,6 +330,18 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::put('update/{id}', [SplashScreenController::class,'update'])->name('update');
         Route::delete('delete/{id}', [SplashScreenController::class,'destroy'])->name('delete');
         Route::post('update_status', [SplashScreenController::class,'update_status'])->name('update_status');
+    });
+    Route::group(['prefix'=>'contact_us','as'=>'contact_us.'], function () {
+        Route::get('/', [ContactUsController::class,'index'])->name('index');
+        Route::delete('delete/{id}', [ContactUsController::class,'destroy'])->name('delete');
+    });
+
+
+    Route::group(['prefix'=>'sms','as'=>'sms.'], function () {
+        Route::get('/', [SmsController::class,'index'])->name('index');
+        Route::get('create/{phone?}', [SmsController::class,'create'])->name('create');
+        Route::post('create', [SmsController::class,'store'])->name('store');
+        Route::delete('delete/{id}', [SmsController::class,'destroy'])->name('delete');
     });
     /// admin
     Route::group(['prefix'=>'settings','as'=>'settings.'], function () {

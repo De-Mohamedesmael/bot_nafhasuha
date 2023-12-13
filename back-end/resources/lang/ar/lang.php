@@ -180,7 +180,7 @@ return [
     'view_all_customer' => 'عرض جميع العملاء',
     'add_customer_type' => 'إضافة نوع العميل',
     'view_all_customer_types' => 'عرض جميع أنواع العملاء',
-    'settings' => 'إعدادات',
+    'settings' => 'إعدادات عامة',
     'store' => 'مخزن/متجر',
     'add_store' => 'أضف متجر/مخزن',
     'edit_store' => 'تعديل المتجر',
@@ -1563,6 +1563,8 @@ return [
     'InvitationBonusValue'=>'مكأفأة الدعوة',
     'JoiningBonusValue'=>'مكأفأة الانضمام',
 
+
+    'system_settings'=>'اعدادات النظام',
     'all_vehicle_manufacture_years'=>'جميع سنوات التصنيع ',
     'vehicle_manufacture_years'=>'سنوات التصنيع',
     'add_vehicle_manufacture_year'=>'إنشاء سنة تصنيع جديدة',
@@ -1571,4 +1573,54 @@ return [
     'vehicle_types'=>'أنواع المركبات',
     'add_vehicle_type'=>'إنشاء نوع مركبة جديد',
     'edit_vehicle_type'=>'تعديل نوع المركبة',
+
+
+
+    'vehicle_type'=>'نوع المركبة',
+    'all_vehicle_brands'=>'جميع ماركات المركبة',
+    'vehicle_brands'=>'ماركات المركبة',
+    'add_vehicle_brand'=>'اضافة ماركة مركبة',
+    'edit_vehicle_brand'=>'تعديل ماركة مركبة',
+    'vehicle_brand'=>'ماركة المركبة',
+
+
+    'all_vehicle_models'=>'جميع طرازات المركبة',
+    'vehicle_models'=>'طراز المركبة',
+    'add_vehicle_model'=>'اضافة طراز المركبة',
+    'edit_vehicle_model'=>'تعديل طراز المركبة',
+
+
+
+    'all_type_gasolines'=>'جميع المنتاجات البترولية',
+    'type_gasolines'=>'المنتاجات البترولية',
+    'add_type_gasoline'=>'اضافة منتج بترولي',
+    'edit_type_gasoline'=>'تعديل منتج بترولي',
+
+    'all_type_batteries'=>'جميع انواع البطريات',
+    'type_batteries'=>' انواع البطريات',
+    'add_type_battery'=>'اضافة نوع بطرية',
+    'edit_type_battery'=>'تعديل نوع بطرية',
+
+    'all_tires'=>'جميع الاطارات (بنشر)',
+    'tires'=>'الاطارات (بنشر)',
+    'add_tire'=>'اضافة بنشر',
+    'edit_tire'=>'تعديل بنشر',
+
+
+    'all_cy_periodics'=>'اماكن الفحصات الدورية',
+    'cy_periodics'=>'اماكن الفحصات',
+    'add_cy_periodic'=>'اضافة مكان فحص دوري',
+    'edit_cy_periodic'=>'تعديل فحص دوري',
+
+    'all_transporters'=>'السطحة',
+    'transporters'=>'السطحة',
+    'add_transporter'=>'اضافة سطحة',
+    'edit_transporter'=>'تعديل سطحة',
+
+    'minimum_price'=>'الحد الادني للسعر',
+    'price_for_kilo'=>'السعر للكيلو متر',
+    'price_for_minute'=>'السعر للدقيقة',
+    'messages_note'=>'محتوي الرسالة',
+    'messages_and_contact_us'=>'الرسائل والشكاوي',
+    'all_contact_us'=>'عرض جميع الشكاوي',
 ];

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VehicleManufactureYearResource;
-use App\Models\VehicleManufactureYear;
+use App\Http\Resources\VehicleBrandResource;
+use App\Models\VehicleBrand;
+use App\Models\City;
+use App\Models\VehicleType;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use Illuminate\Http\Request;
@@ -15,7 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use function App\CPU\translate;
 
-class VehicleManufactureYearController extends Controller
+class VehicleBrandController extends Controller
 {
     /**
      * All Utils instance.
@@ -47,11 +49,17 @@ class VehicleManufactureYearController extends Controller
     {
         if (request()->ajax()) {
             $logo=\Settings::get('logo');
-            $vehicle_manufacture_years = VehicleManufactureYear::
-                select('vehicle_manufacture_years.*');
-            return DataTables::of($vehicle_manufacture_years)
+            $vehicle_brands = VehicleBrand::listsTranslations('title')
+                ->leftJoin('vehicle_type_translations', 'vehicle_brands.vehicle_type_id', '=', 'vehicle_type_translations.vehicle_type_id')
+                ->select('vehicle_brands.*',
+                    'vehicle_brand_translations.title',
+                );
+            $vehicle_brands=$vehicle_brands->groupBy('vehicle_brands.id');
+            return DataTables::of($vehicle_brands)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-
+                ->addColumn('vehicle_type_name', function ($row) {
+                    return $row->vehicle_type?->title;
+                })
                 ->addColumn('status', function ($row) {
                     $checked=$row->status?'checked':'';
                     $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
@@ -68,21 +76,21 @@ class VehicleManufactureYearController extends Controller
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_manufacture_year="menu">';
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_brand="menu">';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->vehicle_brand()->can('vehicle_brand_module.vehicle_brand.delete')) {
                         $html .='<li>
-                                                <a href="'. route('admin.vehicle_manufacture_years.edit',$row->id) .'" target="_blank"><i
+                                                <a href="'. route('admin.vehicle_brands.edit',$row->id) .'" target="_blank"><i
                                                         class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
                                             </li>';
 //                            }
 
                         $html .= '<li class="divider"></li>';
 
-//                            if (auth()->vehicle_manufacture_year()->can('vehicle_manufacture_year_module.vehicle_manufacture_year.delete')) {
+//                            if (auth()->vehicle_brand()->can('vehicle_brand_module.vehicle_brand.delete')) {
                         $html .=
                             '<li>
-                                    <a data-href="' . route('admin.vehicle_manufacture_years.delete', $row->id)  . '"
+                                    <a data-href="' . route('admin.vehicle_brands.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
                                         class="btn text-red delete_item"><i class="dripicons-trash"></i>
                                         ' . __('lang.delete') . '</a>
@@ -97,13 +105,14 @@ class VehicleManufactureYearController extends Controller
                 )
                 ->rawColumns([
                     'action',
+                    'vehicle_type_name',
                     'status',
                     'created_at',
                 ])
                 ->make(true);
         }
 
-        return view('back-end.vehicle_manufacture_years.index');
+        return view('back-end.vehicle_brands.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -112,7 +121,8 @@ class VehicleManufactureYearController extends Controller
      */
     public function create()
     {
-        return view('back-end.vehicle_manufacture_years.create');
+        $vehicle_types=VehicleType::listsTranslations('title as name')->pluck('name','id');
+        return view('back-end.vehicle_brands.create',compact('vehicle_types'));
     }
 
     /**
@@ -125,7 +135,11 @@ class VehicleManufactureYearController extends Controller
     {
 
         $validator = validator($request->all(), [
+            'vehicle_type_id' => 'required|exists:vehicle_types,id',
             'title' => 'required|string',
+            'translations' => 'required|array',
+            'translations.*' => 'required|array',
+            'translations.*.title' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -135,16 +149,17 @@ class VehicleManufactureYearController extends Controller
             ];
         }
         try {
-            DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::create([
-                "title" => $request->title,
-            ]);
+            $data=$request->translations;
+            $data['vehicle_type_id']=$request->vehicle_type_id;
 
-            $vehicle_manufacture_year_id=$vehicle_manufacture_year->id;
+            DB::beginTransaction();
+            $vehicle_brand = VehicleBrand::create($data);
+
+            $vehicle_brand_id=$vehicle_brand->id;
             DB::commit();
             $output = [
                 'code' => 200,
-                'vehicle_manufacture_year_id' => $vehicle_manufacture_year_id,
+                'vehicle_brand_id' => $vehicle_brand_id,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
@@ -160,7 +175,7 @@ class VehicleManufactureYearController extends Controller
         return $output;
 
 
-//        return redirect()->to('vehicle_manufacture_year')->with('status', $output);
+//        return redirect()->to('vehicle_brand')->with('status', $output);
     }
 
 
@@ -173,10 +188,11 @@ class VehicleManufactureYearController extends Controller
 
     public function edit($id)
     {
-        $vehicle_manufacture_year = VehicleManufactureYear::find($id);
+        $vehicle_brand = VehicleBrand::find($id);
+        $vehicle_types=VehicleType::listsTranslations('title as name')->pluck('name','id');
 
-        return view('back-end.vehicle_manufacture_years.edit')->with(compact(
-            'vehicle_manufacture_year'
+        return view('back-end.vehicle_brands.edit')->with(compact(
+            'vehicle_brand','vehicle_types'
         ));
     }
 
@@ -186,15 +202,20 @@ class VehicleManufactureYearController extends Controller
 
         $this->validate(
             $request,
+            ['vehicle_type_id' => ['required','exists:vehicle_types,id']],
             ['title' => ['required','string']],
-
+            ['translations' => ['required','array']],
+            ['translations.*' => ['required','array']],
+            ['translations.*.title' => ['required', 'max:255']],
         );
 
         try {
             DB::beginTransaction();
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            $vehicle_manufacture_year->title=$request->title;
-            $vehicle_manufacture_year->save();
+            $vehicle_brand = VehicleBrand::find($id);
+            $vehicle_brand->vehicle_type_id=$request->vehicle_type_id;
+            $vehicle_brand->save();
+
+            $vehicle_brand->update($request->translations);
 
             DB::commit();
             $output = [
@@ -222,15 +243,15 @@ class VehicleManufactureYearController extends Controller
     public function destroy($id)
     {
         try {
-            $vehicle_manufacture_year = VehicleManufactureYear::find($id);
-            if ($vehicle_manufacture_year){
-                if($vehicle_manufacture_year->id == 1){
+            $vehicle_brand = VehicleBrand::find($id);
+            if ($vehicle_brand){
+                if($vehicle_brand->id == 1){
                     return [
                         'success' => false,
-                        'msg' => __('lang.This_vehicle_manufacture_year_cannot_be_deleted')
+                        'msg' => __('lang.This_vehicle_brand_cannot_be_deleted')
                     ];
                 }
-                $vehicle_manufacture_year->delete();
+                $vehicle_brand->delete();
             }
 
 
@@ -252,22 +273,22 @@ class VehicleManufactureYearController extends Controller
     public function update_status(Request $request ){
 
         try {
-            $vehicle_manufacture_year=VehicleManufactureYear::find($request->id);
-            if(!$vehicle_manufacture_year){
+            $vehicle_brand=VehicleBrand::find($request->id);
+            if(!$vehicle_brand){
                 return [
                     'success'=>false,
-                    'msg'=>translate('vehicle_manufacture_year_not_found')
+                    'msg'=>translate('vehicle_brand_not_found')
                 ];
             }
 
 
             DB::beginTransaction();
-            $vehicle_manufacture_year->status=($vehicle_manufacture_year->status - 1) *-1;
-            $vehicle_manufacture_year->save();
+            $vehicle_brand->status=($vehicle_brand->status - 1) *-1;
+            $vehicle_brand->save();
             DB::commit();
             return [
                 'success'=>true,
-                'msg'=>translate('vehicle_manufacture_year updated successfully!')
+                'msg'=>translate('vehicle_brand updated successfully!')
             ];
         }catch (\Exception $e){
             DB::rollback();
