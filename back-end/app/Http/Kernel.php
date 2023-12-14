@@ -107,6 +107,7 @@ class Kernel extends HttpKernel
         'language' => \App\Http\Middleware\Language::class,
         'timezone' => \App\Http\Middleware\Timezone::class,
         'SetSessionData' => \App\Http\Middleware\SetSessionData::class,
+        'CheckPermission' => \App\Http\Middleware\CheckPermission::class,
 
     ];
 }

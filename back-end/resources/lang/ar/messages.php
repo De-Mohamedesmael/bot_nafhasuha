@@ -102,4 +102,5 @@
   'type_gasoline updated successfully!' => 'Type gasoline updated successfully!',
   'tire updated successfully!' => 'Tire updated successfully!',
   'cy_periodic updated successfully!' => 'Cy periodic updated successfully!',
+  'Admin updated successfully!' => 'Admin updated successfully!',
 );

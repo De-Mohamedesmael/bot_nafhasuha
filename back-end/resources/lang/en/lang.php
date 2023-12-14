@@ -1632,7 +1632,11 @@ return [
     'minimum_price'=>'minimum price',
     'price_for_kilo'=>'price per kilometre',
     'price_for minute'=>'price per minute',
-
+    'all_admins'=>'All Admins',
+    'admins'=>'Admins',
+    'add_admin'=>'Add New Admin',
+    'add_new_admin'=>'Add New Admin',
+    'edit_admin'=>'Edit Admin',
     'messages_note'=>'note',
     'messages_and_contact_us'=>'Messages and complaints',
     'all_contact_us'=>'View all complaints',
