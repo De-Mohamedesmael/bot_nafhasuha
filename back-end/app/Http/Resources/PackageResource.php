@@ -17,7 +17,7 @@ class PackageResource extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'price'=>$this->price,
+            'price'=>(int)$this->price,
             'image'=>$this->image != null ? asset('assets/images/'.$this->image) : null,
         ];
     }

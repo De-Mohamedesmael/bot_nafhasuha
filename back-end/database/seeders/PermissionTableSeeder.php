@@ -68,5 +68,9 @@ class PermissionTableSeeder extends Seeder
             $insert_data[] = $d;
         }
         Permission::insert($insert_data);
+        $permissions= Permission::pluck('name');
+        $admin=Admin::first();
+        $admin->syncPermissions($permissions);
+
     }
 }

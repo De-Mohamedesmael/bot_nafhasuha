@@ -1640,4 +1640,22 @@ return [
     'messages_note'=>'note',
     'messages_and_contact_us'=>'Messages and complaints',
     'all_contact_us'=>'View all complaints',
+    'terms-of-service'=>'Terms and conditions of services',
+    'who-are-we'=>'Who are we',
+    'privacy-policy'=>'Privacy Policy',
+    'terms-periodic-inspection'=>'Terms and conditions of periodic inspection',
+
+    'infos'=>'info pages',
+    'all_category_faqs'=>'FAQ titles',
+    'category_faqs'=>'FAQ titles',
+    'add_category_faq'=>'Add question title',
+    'add_new_category_faq'=>'Add question title',
+    'edit_category_faq'=>'Edit question title',
+
+    'category_faq'=>'question title',
+    'all_faqs'=>'Frequently Asked Questions',
+    'faqs'=>'Frequently Asked Questions',
+    'add_faq'=>'Add a question',
+    'add_new_faq'=>'Add a question',
+    'edit_faq'=>'Edit Question',
 ];

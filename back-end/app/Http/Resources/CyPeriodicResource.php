@@ -17,7 +17,7 @@ class CyPeriodicResource extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'price'=>(float)$this->price,
+            'price'=>(int)$this->price,
         ];
     }
 }

@@ -22,7 +22,7 @@ class PriceQuotesResource extends JsonResource
         $distance=$provider->getDistanceFromCoordinates($lat,$long);
         return [
             'id'=>$this->id,
-            'price'=>$this->price,
+            'price'=>(int)$this->price,
             'order_service_id'=>$this->order_service_id,
             'provider_id'=>$provider->id,
             'provider_name'=>$provider->name,

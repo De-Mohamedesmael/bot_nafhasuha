@@ -189,7 +189,7 @@
 
                                 @if( !empty($module_settings['system_settings']) )
                 <li><a href="#system_settings" aria-expanded="false" data-toggle="collapse"> <i
-                            class="dripicons-gear"></i><span>@lang('lang.system_settings')</span></a>
+                            class="dripicons-network-4"></i><span>@lang('lang.system_settings')</span></a>
                     <ul id="system_settings"
                         class="collapse list-unstyled @if(in_array(request()->segment(2), ['transporters','cy_periodics','tires','type_batteries','type_gasolines','vehicle_brands','vehicle_models','vehicle_types','vehicle_manufacture_years'])) show @endif">
 
@@ -442,11 +442,78 @@
                     </ul>
                 </li>
                 @endif
+                @if( !empty($module_settings['info_module']) )
+                    <li>
+                        <a href="#infos" aria-expanded="false" data-toggle="collapse">
+                            <i
+                                class="dripicons-document"></i>
+                            <span>{{__('lang.infos')}}</span>
+
+                        </a>
+                        <ul id="infos"
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['infos','category_faqs','faqs'])) show @endif">
+
+
+                            @can('info_module.infos.special')
+                                <li
+                                    class="@if(request()->segment(2) == 'infos' && request()->segment(4) == 'who-are-we') active @endif">
+                                    <a href="{{route('admin.infos.edit','who-are-we')}}">{{__('lang.who-are-we')}}</a>
+                                </li>
+                            @endcan
+                            @can('info_module.infos.special')
+                                <li
+                                    class="@if(request()->segment(2) == 'infos' && request()->segment(4)=='terms-of-service') active @endif">
+                                    <a href="{{route('admin.infos.edit','terms-of-service')}}">{{__('lang.terms-of-service')}}</a>
+                                </li>
+                            @endcan
+                            @can('info_module.infos.special')
+                                <li
+                                    class="@if(request()->segment(2) == 'infos' && request()->segment(4) == 'privacy-policy') active @endif">
+                                    <a href="{{route('admin.infos.edit','privacy-policy')}}">{{__('lang.privacy-policy')}}</a>
+                                </li>
+                            @endcan
+                            @can('info_module.infos.special')
+                                <li
+                                    class="@if(request()->segment(2) == 'infos' && request()->segment(4) =='terms-periodic-inspection') active @endif">
+                                    <a href="{{route('admin.infos.edit','terms-periodic-inspection')}}">{{__('lang.terms-periodic-inspection')}}</a>
+                                </li>
+                            @endcan
+                                @can('info_module.category_faqs.view')
+                                    <li
+                                        class="@if(request()->segment(2) == 'category_faqs' && empty(request()->segment(3)) ) active @endif">
+                                        <a href="{{route('admin.category_faqs.index')}}">{{__('lang.category_faqs')}}</a>
+                                    </li>
+
+                                @endcan
+                                @can('info_module.category_faqs.create')
+                                    <li
+                                        class="@if(request()->segment(2) == 'category_faqs' && request()->segment(3) == 'create') active @endif">
+                                        <a href="{{route('admin.category_faqs.create')}}">{{__('lang.add_category_faq')}}</a>
+                                    </li>
+                                @endcan
+
+                                @can('info_module.faqs.view')
+                                    <li
+                                        class="@if(request()->segment(2) == 'faqs' && empty(request()->segment(3)) ) active @endif">
+                                        <a href="{{route('admin.faqs.index')}}">{{__('lang.faqs')}}</a>
+                                    </li>
+
+                                @endcan
+                                @can('info_module.faqs.create')
+                                    <li
+                                        class="@if(request()->segment(2) == 'faqs' && request()->segment(3) == 'create') active @endif">
+                                        <a href="{{route('admin.faqs.create')}}">{{__('lang.add_faq')}}</a>
+                                    </li>
+                                @endcan
+
+                        </ul>
+                    </li>
+                @endif
                  @if( !empty($module_settings['admin_module']) )
-                   @if(auth()->user()->can('admin_module.admins.create') ||
-                   auth()->user()->can('admin_module.admins.view') ||
-                   auth()->user()->can('admin_module.admins.edit'))
-                <li>
+                       @if(auth()->user()->can('admin_module.admins.create') ||
+                       auth()->user()->can('admin_module.admins.view') ||
+                       auth()->user()->can('admin_module.admins.edit'))
+                            <li>
                     <a href="#admins" aria-expanded="false" data-toggle="collapse">
                         <i
                             class="dripicons-user-group"></i>
@@ -471,8 +538,8 @@
 
                     </ul>
                 </li>
-                  @endif
-             @endif
+                       @endif
+                 @endif
                 <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">
                     <a href="#"><i
                             class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>

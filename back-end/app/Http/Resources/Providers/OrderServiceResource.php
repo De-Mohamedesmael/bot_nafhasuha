@@ -68,7 +68,7 @@ class OrderServiceResource extends JsonResource
                 ];
             }),
             'is_price_request'=>$this->price_requests->first()? 1:0,
-            'price_request'=>$this->price_requests->first()  ? $this->price_requests->first()->price:0,
+            'price_request'=>(int)($this->price_requests->first()  ? $this->price_requests->first()->price:0),
 
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
@@ -83,10 +83,10 @@ class OrderServiceResource extends JsonResource
             'payment_method'=>$this->payment_method,
             'is_offer_price'=>$is_offer_price,
             'invoice_no'=>$transaction->invoice_no??null,
-            'suggested_price'=>$transaction->suggested_price,
-            'discount_amount'=>$transaction->discount_amount??0,
-            'grand_total'=>$transaction->grand_total??0,
-            'final_total'=>$transaction->final_total??0,
+            'suggested_price'=>(int)$transaction->suggested_price??0,
+            'discount_amount'=>(int)$transaction->discount_amount??0,
+            'grand_total'=>(int)$transaction->grand_total??0,
+            'final_total'=>(int)$transaction->final_total??0,
             'city'=>new CityResource($this->city),
             'canceled_type'=>$this->canceled_type,
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',

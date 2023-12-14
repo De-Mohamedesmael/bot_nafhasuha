@@ -20,7 +20,7 @@ class MyWalletTransactionResource extends JsonResource
             'type'=>$this->type,
             'type_id'=>$this->type_id,
             'title'=>$this->title(),
-            'final_total'=>(float)$this->final_total ,
+            'final_total'=>(int)$this->final_total ,
             'date'=>$this->created_at->format('Y-m-d')  ,
             'time'=>$this->created_at->format('h:i A')  ,
         ];

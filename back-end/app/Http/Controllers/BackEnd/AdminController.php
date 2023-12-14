@@ -46,8 +46,8 @@ class AdminController extends Controller
         $this->commonUtil = $commonUtil;
 
         $this->middleware('CheckPermission:admin_module,admins,view')->only('index');
-        $this->middleware('CheckPermission:admin_module,admins,create')->only('create');
-        $this->middleware('CheckPermission:admin_module,admins,edit')->only('edit','update_status');
+        $this->middleware('CheckPermission:admin_module,admins,create')->only('create','store');
+        $this->middleware('CheckPermission:admin_module,admins,edit')->only('edit','update','update_status');
         $this->middleware('CheckPermission:admin_module,admins,delete')->only('destroy');
 
     }

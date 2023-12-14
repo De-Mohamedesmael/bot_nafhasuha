@@ -29,7 +29,7 @@ class ProviderHomeResource extends JsonResource
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,
             "rates_count" => $this->rates_count,
             "services_from_home" =>$this->services_from_home,
-            "count_orders_completed"=> $this->orders_count
+            "count_orders_completed"=> (int)$this->orders_count
 
         ];
     }

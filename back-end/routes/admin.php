@@ -37,6 +37,11 @@ use App\Http\Controllers\BackEnd\TransporterController;
 use App\Http\Controllers\BackEnd\ContactUsController;
 use App\Http\Controllers\BackEnd\SmsController;
 
+use App\Http\Controllers\BackEnd\InfoController;
+
+use App\Http\Controllers\BackEnd\CategoryFaqController;
+use App\Http\Controllers\BackEnd\FaqController;
+
 use App\Http\Controllers\BackEnd\SettingController;
 
 
@@ -362,6 +367,28 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::post('update_status', [AdminController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [AdminController::class,'deleteImage'])->name('deleteImage');
 
+    });
+    Route::group(['prefix'=>'infos','as'=>'infos.'], function () {
+        Route::get('edit/{slug}',[InfoController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [InfoController::class,'update'])->name('update');
+
+
+    });
+    Route::group(['prefix'=>'category_faqs','as'=>'category_faqs.'], function () {
+        Route::get('/', [CategoryFaqController::class,'index'])->name('index');
+        Route::get('create', [CategoryFaqController::class,'create'])->name('create');
+        Route::post('create', [CategoryFaqController::class,'store'])->name('store');
+        Route::get('edit/{id}',[CategoryFaqController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [CategoryFaqController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [CategoryFaqController::class,'destroy'])->name('delete');
+    });
+    Route::group(['prefix'=>'faqs','as'=>'faqs.'], function () {
+        Route::get('/', [FaqController::class,'index'])->name('index');
+        Route::get('create', [FaqController::class,'create'])->name('create');
+        Route::post('create', [FaqController::class,'store'])->name('store');
+        Route::get('edit/{id}',[FaqController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [FaqController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [FaqController::class,'destroy'])->name('delete');
     });
     Route::post('logout', [LoginController::class,'logout'])->name('logout');
 
