@@ -17,7 +17,7 @@ class TireResource extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'price'=>(float)$this->price,
+            'price'=>(int)$this->price,
             'image'=>$this->full_path_image,
         ];
     }

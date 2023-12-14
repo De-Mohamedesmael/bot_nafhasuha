@@ -1629,4 +1629,23 @@ return [
     'messages_note'=>'محتوي الرسالة',
     'messages_and_contact_us'=>'الرسائل والشكاوي',
     'all_contact_us'=>'عرض جميع الشكاوي',
+
+
+    'terms-of-service'=>'شروط واحكام الخدمات',
+    'who-are-we'=>'من نحن',
+    'privacy-policy'=>'سياسة الخصوصية',
+    'terms-periodic-inspection'=>'شروط واحكام الفحص الدوري',
+
+    'infos'=>'صفحات المعلومات',
+    'all_category_faqs'=>'اقسام الاسئلة الشائعة',
+    'category_faqs'=>'اقسام الاسئلة الشائعة',
+    'add_category_faq'=>'اضافة قسم سؤال',
+    'add_new_category_faq'=>'اضافة قسم سؤال',
+    'edit_category_faq'=>'تعديل قسم سؤال',
+    'all_faqs'=>'الاسئلة الشائعة',
+    'faqs'=>'الاسئلة الشائعة',
+    'add_faq'=>'اضافة سؤال',
+    'add_new_faq'=>'اضافة سؤال',
+    'edit_faq'=>'تعديل سؤال',
+    'category_faq'=>'قسم السؤال',
 ];

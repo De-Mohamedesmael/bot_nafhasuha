@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TypeGasolineResource;
-use App\Models\TypeGasoline;
+use App\Http\Resources\CategoryFaqResource;
+use App\Models\CategoryFaq;
 use App\Models\City;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use function App\CPU\translate;
 
-class TypeGasolineController extends Controller
+class CategoryFaqController extends Controller
 {
     /**
      * All Utils instance.
@@ -37,6 +37,11 @@ class TypeGasolineController extends Controller
     {
         $this->commonUtil = $commonUtil;
         $this->transactionUtil = $transactionUtil;
+        $this->middleware('CheckPermission:info_module,category_faqs,view')->only('index');
+        $this->middleware('CheckPermission:info_module,category_faqs,create')->only('create','store');
+        $this->middleware('CheckPermission:info_module,category_faqs,edit')->only('edit','update');
+        $this->middleware('CheckPermission:info_module,category_faqs,delete')->only('destroy');
+
     }
 
     /**
@@ -47,16 +52,13 @@ class TypeGasolineController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $type_gasolines = TypeGasoline::groupBy('id');
-            return DataTables::of($type_gasolines)
+            $category_faqs = CategoryFaq::listsTranslations('title')
+                ->select('category_faqs.*',
+                    'category_faq_translations.title',
+                )->groupBy('id');
+            return DataTables::of($category_faqs)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-                ->addColumn('status', function ($row) {
-                    $checked=$row->status?'checked':'';
-                    $html ='<form>  <label> <input class="update_status check" type="checkbox" id="switch'.$row->id.'" data-id="'.$row->id.'" switch="bool" '.$checked.' />
-                        <label for="switch'.$row->id.'" data-on-label="'.__('translation.active').'" data-off-label="'.__('translation.inactive').'"></label> <span class="check"></span> </label></form>';
 
-                    return $html;
-                })
                 ->addColumn(
                     'action',
                     function ($row) {
@@ -66,26 +68,26 @@ class TypeGasolineController extends Controller
                                 <span class="caret"></span>
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" type_gasoline="menu">';
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" category_faq="menu">';
 
-//                            if (auth()->type_gasoline()->can('type_gasoline_module.type_gasoline.delete')) {
+                            if (auth()->user()->can('info_module.category_faqs.delete')) {
                         $html .='<li>
-                                                <a href="'. route('admin.type_gasolines.edit',$row->id) .'" target="_blank"><i
+                                                <a href="'. route('admin.category_faqs.edit',$row->id) .'" target="_blank"><i
                                                         class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
                                             </li>';
-//                            }
+                            }
 
                         $html .= '<li class="divider"></li>';
 
-//                            if (auth()->type_gasoline()->can('type_gasoline_module.type_gasoline.delete')) {
+                            if (auth()->user()->can('info_module.category_faqs.delete')) {
                         $html .=
                             '<li>
-                                    <a data-href="' . route('admin.type_gasolines.delete', $row->id)  . '"
+                                    <a data-href="' . route('admin.category_faqs.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
                                         class="btn text-red delete_item"><i class="dripicons-trash"></i>
                                         ' . __('lang.delete') . '</a>
                                     </li>';
-//                            }
+                            }
 
 
 
@@ -95,13 +97,12 @@ class TypeGasolineController extends Controller
                 )
                 ->rawColumns([
                     'action',
-                    'status',
                     'created_at',
                 ])
                 ->make(true);
         }
 
-        return view('back-end.type_gasolines.index');
+        return view('back-end.category_faqs.index');
     }
     /**
      * Show the form for creating a new resource.
@@ -110,7 +111,7 @@ class TypeGasolineController extends Controller
      */
     public function create()
     {
-        return view('back-end.type_gasolines.create');
+        return view('back-end.category_faqs.create');
     }
 
     /**
@@ -123,7 +124,11 @@ class TypeGasolineController extends Controller
     {
 
         $validator = validator($request->all(), [
-            'title' => 'required|string'
+            'sort' => 'required|integer',
+            'title' => 'required|string',
+            'translations' => 'required|array',
+            'translations.*' => 'required|array',
+            'translations.*.title' => 'required|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -134,14 +139,14 @@ class TypeGasolineController extends Controller
         }
         try {
             DB::beginTransaction();
-            $type_gasoline = TypeGasoline::create([
-                'title'=>$request->title
-            ]);
+            $data=$request->translations;
+            $data['sort']=$request->sort;
+            $category_faq = CategoryFaq::create($data);
 
             DB::commit();
             $output = [
                 'code' => 200,
-                'type_gasoline_id' => $type_gasoline->id,
+                'category_faq_id' => $category_faq->id,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
@@ -157,7 +162,7 @@ class TypeGasolineController extends Controller
         return $output;
 
 
-//        return redirect()->to('type_gasoline')->with('status', $output);
+//        return redirect()->to('category_faq')->with('status', $output);
     }
 
 
@@ -170,10 +175,10 @@ class TypeGasolineController extends Controller
 
     public function edit($id)
     {
-        $type_gasoline = TypeGasoline::find($id);
+        $category_faq = CategoryFaq::find($id);
 
-        return view('back-end.type_gasolines.edit')->with(compact(
-            'type_gasoline'
+        return view('back-end.category_faqs.edit')->with(compact(
+            'category_faq'
         ));
     }
 
@@ -181,27 +186,39 @@ class TypeGasolineController extends Controller
     public function update(Request $request, $id)
     {
 
-        $this->validate(
-            $request,
-            ['title' => ['required','string']]
-        );
+        $validator = validator($request->all(), [
+            'sort' => 'required|integer',
+            'title' => 'required|string',
+            'translations' => 'required|array',
+            'translations.*' => 'required|array',
+            'translations.*.title' => 'required|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return [
+                'code' => 405,
+                'error' =>$validator->errors()->first()
+            ];
+        }
 
         try {
             DB::beginTransaction();
-            $type_gasoline = TypeGasoline::find($id);
-            $type_gasoline->title=$request->title;
-            $type_gasoline->save();
+            $category_faq = CategoryFaq::find($id);
+            $category_faq->sort=$request->sort;
+            $category_faq->save();
+            $category_faq->update($request->translations);
 
             DB::commit();
             $output = [
-                'success' => true,
+                'code' => 200,
                 'msg' => __('lang.success')
             ];
         } catch (\Exception $e) {
+//            dd($e);
             DB::rollBack();
             Log::emergency('File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Message: ' . $e->getMessage());
             $output = [
-                'success' => false,
+                'code' => 500,
                 'msg' => __('lang.something_went_wrong')
             ];
         }
@@ -218,15 +235,15 @@ class TypeGasolineController extends Controller
     public function destroy($id)
     {
         try {
-            $type_gasoline = TypeGasoline::find($id);
-            if ($type_gasoline){
-                if($type_gasoline->id == 1){
+            $category_faq = CategoryFaq::find($id);
+            if ($category_faq){
+                if($category_faq->id == 1){
                     return [
                         'success' => false,
-                        'msg' => __('lang.This_type_gasoline_cannot_be_deleted')
+                        'msg' => __('lang.This_category_faq_cannot_be_deleted')
                     ];
                 }
-                $type_gasoline->delete();
+                $category_faq->delete();
             }
 
 
@@ -245,33 +262,6 @@ class TypeGasolineController extends Controller
         return $output;
     }
 
-    public function update_status(Request $request ){
 
-        try {
-            $type_gasoline=TypeGasoline::find($request->id);
-            if(!$type_gasoline){
-                return [
-                    'success'=>false,
-                    'msg'=>translate('type_gasoline_not_found')
-                ];
-            }
-
-
-            DB::beginTransaction();
-            $type_gasoline->status=($type_gasoline->status - 1) *-1;
-            $type_gasoline->save();
-            DB::commit();
-            return [
-                'success'=>true,
-                'msg'=>translate('type_gasoline updated successfully!')
-            ];
-        }catch (\Exception $e){
-            DB::rollback();
-            return [
-                'success'=>false,
-                'msg'=>__('site.same_error')
-            ];
-        }
-    }
 
 }
