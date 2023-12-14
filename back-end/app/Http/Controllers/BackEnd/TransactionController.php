@@ -221,7 +221,7 @@ class TransactionController extends Controller
                         if($row->status == 'pending'  ){
 
 
-                            //                        if (auth()->user()->can('customer_module.customer.edit')){
+                            //                        if (auth()->user()->can('customer_module.customer.accept_transaction')){
                             $html .='<li >
                                                         <a href = "'. route('admin.transaction.accept',  ['id'=>$row->id]).'"><i
                                                                 class="fa fa-money btn" ></i > '. __('lang.accept_transaction').' </a >

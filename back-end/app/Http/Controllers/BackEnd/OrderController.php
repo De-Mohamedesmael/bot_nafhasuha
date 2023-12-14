@@ -233,7 +233,7 @@ class OrderController extends Controller
                                                     </li >';
 
     //                        }
-                        }else{
+                        }elseif($row->status == 'pending'){
                             $html .='<li >
                                                         <a data-href = "'. route('admin.order.get-send-offer',  ['order_id'=>$row->id]).'"
                                                             class="btn-modal" data-container = ".view_modal" ><i

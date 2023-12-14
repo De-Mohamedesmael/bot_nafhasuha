@@ -703,15 +703,9 @@
             $('#is_register_close').val(1);
         })
         $(document).on('click', '#logout-btn', function(e) {
-            let cash_register_id = $('#cash_register_id').val();
 
-            let is_register_close = parseInt($('#is_register_close').val());
-            if (!is_register_close) {
-                getClosingModal(cash_register_id, 'logout');
-                return 'Please enter the closing cash';
-            } else {
                 $('#logout-form').submit();
-            }
+
         })
         $(document).on('click', '.close-btn-add-closing-cash', function(e) {
             e.preventDefault()

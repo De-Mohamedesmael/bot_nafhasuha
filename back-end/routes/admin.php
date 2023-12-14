@@ -61,11 +61,8 @@ Route::group(['middleware' => ['language','admin.guest']], function () {
     Route::post('login', [LoginController::class,'login']);
 
 
-    Route::post('logout', 'BackEnd\Auth\LoginController@logout')->name('logout');
 
-// Registration Routes...
-    Route::get('register', 'BackEnd\Auth\RegisterController@showRegistrationForm')->name('register');
-    Route::post('register', 'BackEnd\Auth\RegisterController@register');
+
 
 // Password Reset Routes...
     Route::get('password/reset', 'BackEnd\Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -353,5 +350,19 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
     Route::get('admins/get-dropdown', [AdminController::class ,'getDropdown'])->name('getDropdown');
     Route::get('admins/get-profile', [AdminController::class ,'getProfile'])->name('getProfile');
     Route::put('admins/update-profile', [AdminController::class ,'updateProfile'])->name('updateProfile');
-    Route::resource('admins', AdminController::class);
+
+    Route::group(['prefix'=>'admins','as'=>'admins.'], function () {
+        Route::get('/', [AdminController::class,'index'])->name('index');
+        Route::post('/', [AdminController::class,'index'])->name('index');
+        Route::get('create', [AdminController::class,'create'])->name('create');
+        Route::post('create', [AdminController::class,'store'])->name('store');
+        Route::get('edit/{id}',[AdminController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [AdminController::class,'update'])->name('update');
+        Route::delete('delete/{id}', [AdminController::class,'destroy'])->name('delete');
+        Route::post('update_status', [AdminController::class,'update_status'])->name('update_status');
+        Route::post('delete-image', [AdminController::class,'deleteImage'])->name('deleteImage');
+
+    });
+    Route::post('logout', [LoginController::class,'logout'])->name('logout');
+
 });

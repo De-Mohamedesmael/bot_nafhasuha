@@ -8,23 +8,20 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable implements  HasMedia
 {
-    use HasFactory, Notifiable, HasRoles, HasApiTokens,InteractsWithMedia;
+    use HasFactory, Notifiable, HasRoles, HasPermissions, HasApiTokens,InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -58,58 +55,87 @@ class Admin extends Authenticatable implements  HasMedia
     {
         return [
             'dashboard' => __('permission.dashboard'),
-            'product_module' => __('permission.product_module'),
-            'raw_material_module' => __('permission.raw_material_module'),
+            'order_module' => __('permission.order_module'),
+            'transactions_module' => __('permission.transactions_module'),
             'customer_module' => __('permission.customer_module'),
-            'supplier_module' => __('permission.supplier_module'),
-            'service_provider' => __('permission.service_provider'),
-            'hr_management' => __('permission.hr_management'),
-            'purchase_order' => __('permission.purchase_order'),
-            'sale' => __('permission.sale'),
-            'return' => __('permission.return'),
-            'expense' => __('permission.expense'),
-            'stock' => __('permission.stock'),
-            'cash' => __('permission.cash'),
-            'adjustment' => __('permission.adjustment'),
-            'reports' => __('permission.reports'),
-            'quotation_for_customers' => __('permission.quotation_for_customers'),
-            'coupons_and_gift_cards' => __('permission.coupons_and_gift_cards'),
-            'loyalty_points' => __('permission.loyalty_points'),
-            'sp_module' => __('permission.sp_module'),
+            'provider_module' => __('permission.provider_module'),
             'notification_module' => __('permission.notification_module'),
-            'sms_module' => __('permission.sms_module'),
-            'email_module' => __('permission.email_module'),
+            'system_settings' => __('permission.system_settings'),
             'settings' => __('permission.settings'),
+            'messages' => __('permission.messages'),
+            'admin_module' => __('permission.admin_module'),
         ];
     }
     public static function subModulePermissionArray()
     {
         return [
             'dashboard' => [
-                'profit' => __('permission.sales_and_returns'),
-                // 'details' => __('permission.details'),
+                 'details' => __('permission.details'),
             ],
+            'order_module' => [
+                'order' => __('permission.order'),
+                'send_offer' => __('permission.send_offer'),
+                'accept_order' => __('permission.accept_order'),
 
-            'notification_module' => [
-                'notification' => __('permission.notification'),
-                'setting' => __('permission.setting'),
-            ],'customer_module' => [
+            ],
+            'transactions_module' => [
+                'transactions' => __('permission.transactions'),
+                'accept_transaction' => __('permission.accept_transaction'),
+
+                //accept_transaction
+            ],
+            'customer_module' => [
                 'customer' => __('permission.customer'),
+            ],
+            'provider_module' => [
                 'provider' => __('permission.provider'),
             ],
-            'sms_module' => [
-                'sms' => __('permission.sms'),
-                'setting' => __('permission.setting'),
+            'notification_module' => [
+                'notification' => __('permission.notification'),
             ],
-
-            'email_module' => [
-                'email' => __('permission.email'),
-                'setting' => __('permission.setting'),
+            'system_settings' => [
+                'transporters' => __('permission.transporters'),
+                'cy_periodics' => __('permission.cy_periodics'),
+                'tires' => __('permission.tires'),
+                'type_batteries' => __('permission.type_batteries'),
+                'type_gasolines' => __('permission.type_gasolines'),
+                'vehicle_brands' => __('permission.vehicle_brands'),
+                'vehicle_models' => __('permission.vehicle_models'),
+                'vehicle_types' => __('permission.vehicle_types'),
+                'vehicle_manufacture_years' => __('permission.vehicle_manufacture_years')
             ],
             'settings' => [
-
+                'service' => __('permission.service'),
+                'banks' => __('permission.banks'),
+                'icons' => __('permission.icons'),
+                'category' => __('permission.category'),
+                'slider' => __('permission.slider'),
+                'splash_screen' => __('permission.splash_screen'),
+                'countries' => __('permission.countries'),
+                'city' => __('permission.city'),
+                'areas' => __('permission.areas'),
                 'general_settings' => __('permission.general_settings'),
             ],
+            'messages' => [
+                'contact_us' => __('permission.contact_us'),
+            ],
+            'admin_module' => [
+                'admins' => __('permission.admins'),
+            ],
+
+        ];
+    }
+
+
+    public static function specialModulePermissionArray()
+    {
+        return [
+            'dashboard',
+            'accept_order' ,
+            'send_offer' ,
+            'transaction' ,
+            'accept_transaction' ,
+            'details' ,
 
         ];
     }

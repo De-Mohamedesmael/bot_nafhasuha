@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use App\Utils\NotificationUtil;
 use Carbon\Carbon;
+use Doctrine\DBAL\Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,7 +101,6 @@ class LoginController extends Controller
         $this->guard()->logout();
 
         $request->session()->invalidate();
-
         return $this->loggedOut($request) ?: redirect()->route('admin.home');
     }
 }
