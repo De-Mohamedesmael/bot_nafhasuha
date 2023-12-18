@@ -24,6 +24,7 @@ class ProviderHomeResource extends JsonResource
             "phone" =>$this->phone ,
             "provider_type" =>$this->provider_type,
             "is_active" =>$this->is_active,
+            "get_orders" =>$this->get_orders,
             'is_activation'=>$this->is_activation(),
             'image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : null,
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,

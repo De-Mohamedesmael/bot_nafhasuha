@@ -11,6 +11,7 @@ use App\Models\OrderService;
 use App\Models\Provider;
 use App\Models\UserRequest;
 use App\Utils\TransactionUtil;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use function App\CPU\translate;
@@ -27,10 +28,12 @@ class HomeController extends ApiController
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
+
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
 
         $provider = Provider::where('id',auth()->id())
             ->withAvg('rates as totalRate', 'rate')
@@ -55,7 +58,14 @@ class HomeController extends ApiController
                 $q->where('provider_id',auth()->id())->orderBy('id','DESC');
             }])->where('status','pending')
                 ->wherein('id',$order_service_id)
-                ->selectRaw("*,{$sqlDistance} as distance")->latest()->get();
+                ->selectRaw("*,{$sqlDistance} as distance")->latest();
+
+
+            if($count_paginate=='ALL'){
+                $orders= $orders->get();
+            }else{
+                $orders= $orders->simplePaginate($count_paginate);
+            }
 
             $data['new_orders']=OrderServicePaddingResource::collection($orders);
         }

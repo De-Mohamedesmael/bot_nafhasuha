@@ -25,7 +25,7 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     }
     public function scopeActive($query)
     {
-        return $query->where('is_active',  1);
+        return $query->where('is_active',  1)->where('is_deleted', 0);
     }
 
     public function getJWTIdentifier()
