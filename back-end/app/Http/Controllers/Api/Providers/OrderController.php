@@ -13,6 +13,7 @@ use App\Models\UserRequest;
 use App\Utils\ServiceUtil;
 use App\Utils\TransactionUtil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -146,6 +147,15 @@ class OrderController extends ApiController
          return responseApi(403, translate('Unauthenticated user'));
 
         $provider=auth()->user();
+
+        $have_pending=OrderService::NotCompleted()
+            ->where('provider_id',$provider->id)->exists();
+
+        if($have_pending){
+            return responseApi(405, translate('You cannot place an offer when you already have an order'));
+
+        }
+
         $order=OrderService::where('id',$request->order_id)
                     ->where('status','pending')->first();
         $user=$order->user;
@@ -184,29 +194,47 @@ class OrderController extends ApiController
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
 
-        $order=OrderService::where('id',$request->order_id)
-            ->where('status','pending')->first();
 
-        if(!$order){
-            return responseApi(405, translate('The order is no longer available'));
-        }
-        if($order->type == 'PeriodicInspection'){
-            $order->provider_id=auth()->id();
-            $order->status="approved";
-            $order->save();
-            $transaction= $order->transaction;
-            if($transaction){
-                $transaction->provider_id=auth()->id();
-                $transaction->status="approved";
 
-                $transaction->save();
+        try {
+            $have_pending=OrderService::NotCompleted()
+                ->where('provider_id',auth()->id())->exists();
+            if($have_pending){
+                return responseApi(405, translate('This request cannot be approved'));
+
             }
+
+
+            $order=OrderService::where('id',$request->order_id)
+                ->where('status','pending')->first();
+
+            if(!$order){
+                return responseApi(405, translate('The order is no longer available'));
+            }
+
+            DB::beginTransaction();
+            if($order->type == 'PeriodicInspection'){
+                $order->provider_id=auth()->id();
+                $order->status="approved";
+                $order->save();
+                $transaction= $order->transaction;
+                if($transaction){
+                    $transaction->provider_id=auth()->id();
+                    $transaction->status="approved";
+
+                    $transaction->save();
+                }
+            }
+            $this->pushNotof('Order',$order,$order->user_id,2);
+            $this->ServiceUtil->RemoveALLPricesAndRequests(auth()->id(),$order->id);
+            DB::commit();
+            return  responseApi(200, translate('return_data_success'),$order->id);
+        }catch (\Exception $exception){
+        dd($exception);
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
         }
-
-
-        $this->pushNotof('Order',$order,$order->user_id,2);
-        return  responseApi(200, translate('return_data_success'),$order->id);
-
     }
     public function storeCompletedOrder(Request $request)
     {
@@ -263,9 +291,10 @@ class OrderController extends ApiController
                 }
 
                 $new_providers_id = json_encode($providers);
+                $request_order->update(['providers_id' => $new_providers_id]);
 
-                $request_order->providers_id = $new_providers_id;
-                $request_order->save();
+//                $request_order->providers_id = $new_providers_id;
+//                $request_order->save();
                 DB::commit();
                 return  responseApi(200, translate('The request has been successfully cancelled'));
             }
@@ -312,7 +341,32 @@ class OrderController extends ApiController
         }
     }
 
+    public function ChangeStatusGetOrders(Request $request)
+    {
 
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        DB::beginTransaction();
+        try {
+            $provider=auth()->user();
+            $provider->get_orders = abs($provider->get_orders - 1);
+            $provider->save();
+            if( $provider->get_orders == 0){
+                $this->ServiceUtil->RemoveALLPricesAndRequests(auth()->id());
+            }
+
+            DB::commit();
+            return  responseApi(200, translate('return_data_success'));
+
+
+        }catch (\Exception $exception){
+            dd($exception);
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
 
 
 }

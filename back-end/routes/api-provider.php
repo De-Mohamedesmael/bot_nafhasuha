@@ -51,6 +51,7 @@ Route::middleware('auth.guard:api')->group(function () {
     Route::post('cancel-orders-accept', [OrderController::class, 'CancelOrdersAccept']);
 
     Route::post('cancel-orders-ongoing', [OrderController::class, 'CancelOrdersOngoing']);
+    Route::get('change-status-get-orders', [OrderController::class, 'ChangeStatusGetOrders']);
 
 
 

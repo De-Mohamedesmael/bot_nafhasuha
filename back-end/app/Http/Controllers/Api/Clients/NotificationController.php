@@ -14,7 +14,9 @@ use function App\CPU\translate;
 
 class NotificationController extends ApiController
 {
-     public function __construct()
+    protected $count_paginate = 10;
+
+    public function __construct()
     {
 
     }
@@ -23,12 +25,13 @@ class NotificationController extends ApiController
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
 
         $notifications= Notification::wherehas('users',function ($q) {
                 $q->where('users.id',auth()->id());
             })->with('users_pov',function ($q) {
                 $q->where('user_notifications.user_id',auth()->id());
-            })->latest()->get();
+            })->latest()->simplePaginate($count_paginate);
         return  responseApi(200, translate('return_data_success'),NotificationResource::collection($notifications));
 
     }

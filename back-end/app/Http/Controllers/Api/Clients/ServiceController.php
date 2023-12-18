@@ -15,6 +15,7 @@ use App\Models\CategoryService;
 use App\Models\Coupon;
 use App\Models\CyPeriodic;
 use App\Models\FcmTokenProvider;
+use App\Models\OrderService;
 use App\Models\PriceRequest;
 use App\Models\Provider;
 use App\Models\Service;
@@ -351,7 +352,7 @@ class ServiceController extends ApiController
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'payment_method' => 'required|string|in:Online,Wallet',
+            'payment_method' => 'required|string|in:Cash,Online,Wallet',
             'coupon_code' => 'nullable|string',
 
         ]);
@@ -621,10 +622,20 @@ class ServiceController extends ApiController
             return responseApi(404, translate("Price Quote Not Found"));
         }
 
+
+
+
         if($PriceQuote->status == "Reject"){
             return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
         }elseif($PriceQuote->status =='Accept'){
             return responseApi(405, translate("This price quote has been accepted successfully"));
+        }
+        $provider_id=$PriceQuote->provider_id;
+        $have_pending=OrderService::NotCompleted()
+            ->where('provider_id',$provider_id)->exists();
+        if($have_pending){
+            return responseApi(405, translate('This offer is no longer available'));
+
         }
 
         $order= auth()->user()->orders()->whereId($PriceQuote->order_service_id)
@@ -689,6 +700,8 @@ class ServiceController extends ApiController
                 $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
 
             }
+            $this->ServiceUtil->RemoveALLPricesAndRequests($provider->id,$order->id);
+
             DB::commit();
 
             return  responseApi(200, translate('Price quote has been successfully accepted'));

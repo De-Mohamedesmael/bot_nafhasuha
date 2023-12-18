@@ -18,6 +18,8 @@ use function App\CPU\translate;
 
 class NotificationController extends ApiController
 {
+    protected $count_paginate = 10;
+
     public function __construct()
     {
         Config::set( 'jwt.user', 'App\Models\Provider' );
@@ -28,16 +30,17 @@ class NotificationController extends ApiController
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
 
         $notifications= Notification::wherehas('providers',function ($q) {
-                $q->where('providers.id',auth()->id());
-            })->with('providers_pov',function ($q) {
-                $q->where('provider_notifications.provider_id',auth()->id());
-            })->latest()->get();
+            $q->where('providers.id',auth()->id());
+        })->with('providers_pov',function ($q) {
+            $q->where('provider_notifications.provider_id',auth()->id());
+        })->latest()->simplePaginate($count_paginate);
         return  responseApi(200, translate('return_data_success'),NotificationResource::collection($notifications));
 
     }
-     public function count()
+    public function count()
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
@@ -49,7 +52,7 @@ class NotificationController extends ApiController
 
 
     }
-     public function show(Request $request)
+    public function show(Request $request)
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
@@ -84,9 +87,9 @@ class NotificationController extends ApiController
 
         $notifications= FcmTokenProvider::where('token',$request->fcm_token)->first();
         if(!$notifications){
-          $notifications=  FcmTokenProvider::create([
-                                "token"=>$request->fcm_token,
-                              ]);
+            $notifications=  FcmTokenProvider::create([
+                "token"=>$request->fcm_token,
+            ]);
 
             if(auth()->user()){
                 FcmTokenProvider::where('provider_id',auth()->user()->id)

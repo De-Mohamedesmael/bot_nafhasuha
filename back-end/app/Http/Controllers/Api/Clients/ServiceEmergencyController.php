@@ -168,7 +168,7 @@ class ServiceEmergencyController extends ApiController
 
         }catch (\Exception $exception){
             DB::rollBack();
-//            return$exception ;
+            return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }

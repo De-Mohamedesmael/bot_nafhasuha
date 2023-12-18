@@ -4,17 +4,11 @@ namespace App\Utils;
 
 use App\Models\CyPeriodicProvider;
 use App\Models\OrderService;
-use App\Models\PriceQuote;
 use App\Models\PriceRequest;
 use App\Models\Provider;
-use App\Models\Transaction;
-use App\Models\User;
 use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Spatie\Geocoder\Facades\Geocoder;
-use Location\Coordinate;
 use GuzzleHttp\Client;
 use function App\CPU\translate;
 
@@ -223,8 +217,12 @@ class ServiceUtil
                + sin( radians(' . $request->lat  . ') )
                * sin( radians( `lat` ) ) ) )');
             // Get providers id
-            $providers_id = Provider::Active()->withAvg('rates as totalRate', 'rate')
-                ->withCount('rates')->selectRaw("{$sqlDistance} as distance")
+            $providers_id = Provider::Active()->where('get_orders',1)
+            ->select('providers.id')
+                ->selectRaw("{$sqlDistance} as distance")
+                ->whereDoesntHave('orders',function ($q){
+                  return  $q->wherein('status',  ['pending', 'approved','received']);
+                })
                 ->wherehas('categories',function ($q) use($request){
                     $q->where('categories.id',$request->category_id);
                 })->having('distance', '<=', $max_distance)
@@ -476,5 +474,32 @@ class ServiceUtil
         ];
 
     }
+    /**
+     * Remove ALL Prices And Requests For Provider
+     *
+     * @param  int $provider_id
+     * @param  int $order_id
+     */
+    public function RemoveALLPricesAndRequests($provider_id,$order_id=null)
+    {
+        $request_orders= UserRequest::whereJsonContains('providers_id',$provider_id)
+            ->when($order_id != null ,function ($q) use($order_id){
+                return$q->where('order_service_id','!=',$order_id);
+            })->get();
+        foreach($request_orders as  $request_order){
+            $providers = json_decode($request_order->providers_id, true);
+            $index = array_search($provider_id, $providers);
+            if ($index !== false) {
+                unset($providers[$index]);
+            }
+            $new_providers_id = json_encode($providers);
+            $request_order->update(['providers_id' => $new_providers_id]);
+        }
+        PriceRequest::where('provider_id',$provider_id)
+            ->when($order_id != null ,function ($q) use($order_id){
+                return$q->where('order_service_id','!=',$order_id);
+            })->delete();
 
+        return true;
     }
+}
