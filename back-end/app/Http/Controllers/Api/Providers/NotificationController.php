@@ -48,7 +48,10 @@ class NotificationController extends ApiController
         $notificationsCount = auth()->user()->notifications()
             ->wherePivot('is_show',0)
             ->count();
-        return  responseApi(200, translate('return_data_success'),$notificationsCount);
+
+        $data['count_notification'] =$notificationsCount;
+        $data['get_orders'] =auth()->user()->get_orders;
+        return  responseApi(200, translate('return_data_success'),$data);
 
 
     }

@@ -357,11 +357,10 @@ class OrderController extends ApiController
             }
 
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('return_data_success'),$provider->get_orders);
 
 
         }catch (\Exception $exception){
-            dd($exception);
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
