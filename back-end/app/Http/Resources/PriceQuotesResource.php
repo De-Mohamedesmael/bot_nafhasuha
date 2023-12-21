@@ -23,6 +23,7 @@ class PriceQuotesResource extends JsonResource
         return [
             'id'=>$this->id,
             'price'=>(int)$this->price,
+            'price_type'=>(int)$this->order->transaction?->price_type,
             'order_service_id'=>$this->order_service_id,
             'provider_id'=>$provider->id,
             'provider_name'=>$provider->name,

@@ -189,6 +189,7 @@ class ServiceEmergencyController extends ApiController
     {
         $types=TypeGasoline::Active()->get();
         $data['Petrol']=GasolineResource::collection($types);
+        $data['default_Petrol_price']=  \Settings::get('default_Petrol_price',20);
         return responseApi(200,\App\CPU\translate('return_data_success'), $data);
 
     }
@@ -216,7 +217,7 @@ class ServiceEmergencyController extends ApiController
 
         DB::beginTransaction();
         try {
-            $cost= $request->amount;
+            $cost=  \Settings::get('default_Petrol_price',20);
             $request->merge([
                 'service_id'=>6,
                 'category_id'=>10,

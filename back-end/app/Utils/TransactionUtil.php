@@ -182,15 +182,18 @@ class TransactionUtil
      * @param integer $type_id
      * @return object
      */
-    public function saveTransactionForOrderService($OrderService,$discount,$type_id=null,$suggested_price=0):object
+    public function saveTransactionForOrderService($OrderService,$discount,$type_id=null,$suggested_price=0,$amount=0):object
     {
 
         $grand_total=0;
         $final_total=0;
+        $price_type=0;
         if($OrderService->type == 'PeriodicInspection'){
             $cy_periodic = CyPeriodic::whereId($OrderService->cy_periodic_id)->first();
             $grand_total=$cy_periodic->price;
             $final_total=$cy_periodic->price - $discount['discount_value'];
+        }elseif ($OrderService->type == 'Petrol'){
+            $price_type=$amount;
         }
 
 
@@ -201,6 +204,7 @@ class TransactionUtil
             'status'=>'pending',
             'type_id'=>$type_id,
             'suggested_price'=>$suggested_price,
+            'price_type'=>$price_type,
             'discount_type'=>$discount['discount_type'],
             'discount_value'=>$discount['discount_value'],
             'discount_amount'=>$discount['discount_value'],
