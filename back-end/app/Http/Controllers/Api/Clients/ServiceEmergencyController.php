@@ -230,7 +230,7 @@ class ServiceEmergencyController extends ApiController
 
             $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle,'Petrol', $request->service_id);
 
-            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->type_id,$cost);
+            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->type_id,$cost,$request->amount);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
             $this->pushNotof('Order',$OrderService,auth()->id(),1);
