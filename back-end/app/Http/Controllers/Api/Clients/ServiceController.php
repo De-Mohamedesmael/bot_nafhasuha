@@ -647,7 +647,7 @@ class ServiceController extends ApiController
 
         DB::beginTransaction();
         try {
-
+            $trans=$order->transaction;
             $category_id=$order->category_id;
             $service_id=$order->service_id;
             $discount['discount_value'] = 0;
@@ -666,7 +666,7 @@ class ServiceController extends ApiController
                 $item->save();
 
             }
-            $grand_total=$PriceQuote->price;
+            $grand_total=$PriceQuote->price + $trans->price_type;
             $final_total=$grand_total-$discount['discount_value'];
 
             if($request->payment_method == 'Wallet'){
@@ -679,7 +679,7 @@ class ServiceController extends ApiController
             }
             $order->payment_method=$request->payment_method;
             $order->save();
-            $trans=$order->transaction;
+
 
             $trans->discount_type=$discount['discount_type'];
             $trans->discount_value=$discount['discount_value'];
