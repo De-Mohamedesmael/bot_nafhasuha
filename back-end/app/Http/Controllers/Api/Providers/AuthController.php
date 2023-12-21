@@ -33,7 +33,10 @@ class AuthController extends ApiController
         $this->commonUtil = $commonUtil;
         Config::set( 'jwt.user', 'App\Models\Provider' );
         Config::set( 'auth.providers.users.model', Provider::class );
-        $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'SendCode','customRemoveAccount','ActiveRemoveAccount']]);
+        $this->middleware('auth.guard:api',
+            ['except' => ['login', 'register', 'forgotPassword',
+                'checkPhone','checkCode', 'SendCode',
+                'customRemoveAccount','ActiveRemoveAccount']]);
     }
 
 

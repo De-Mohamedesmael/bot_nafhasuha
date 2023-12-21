@@ -122,9 +122,9 @@
              @endif
 
                  @if( !empty($module_settings['provider_module']) )
-                   @if(auth()->user()->can('customer_module.provider.edit') ||
-                   auth()->user()->can('customer_module.provider.view') ||
-                   auth()->user()->can('customer_module.provider.create')  )
+                   @if(auth()->user()->can('provider_module.provider.edit') ||
+                   auth()->user()->can('provider_module.provider.view') ||
+                   auth()->user()->can('provider_module.provider.create')  )
                 <li>
                     <a href="#provider" aria-expanded="false" data-toggle="collapse">
                         <i

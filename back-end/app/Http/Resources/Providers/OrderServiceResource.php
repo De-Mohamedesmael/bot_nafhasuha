@@ -84,6 +84,7 @@ class OrderServiceResource extends JsonResource
             'is_offer_price'=>$is_offer_price,
             'invoice_no'=>$transaction->invoice_no??null,
             'suggested_price'=>(int)$transaction->suggested_price??0,
+            'price_type'=>(int)$transaction->price_type??0,
             'discount_amount'=>(int)$transaction->discount_amount??0,
             'grand_total'=>(int)$transaction->grand_total??0,
             'final_total'=>(int)$transaction->final_total??0,

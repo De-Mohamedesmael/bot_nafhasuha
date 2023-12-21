@@ -1,7 +1,9 @@
 @extends('front-end.layouts.app')
 @section('title',\App\CPU\translate('index'))
 @section('styles')
-<style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+
+    <style>
     img.img-count-section-right-icon {
         position: absolute;
         right: -45px;
@@ -766,6 +768,8 @@ background: #FFF;padding: 25px">
             player.forward();
         });
     });
+    var socket = io.connect('http://localhost:5000');
+    console.log(socket);
 </script>
 
 @endsection

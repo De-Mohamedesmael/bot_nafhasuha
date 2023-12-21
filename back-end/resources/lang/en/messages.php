@@ -89,6 +89,9 @@
   'city updated successfully!' => 'City updated successfully!',
   'area updated successfully!' => 'Area updated successfully!',
   'vehicle_manufacture_year updated successfully!' => 'Vehicle manufacture year updated successfully!',
-    'activation_code' => 'Your activation code is: :code',
-
-    );
+  'activation_code' => 'Your activation code is: :code',
+  'pending' => 'Pending',
+  'wallet' => 'Wallet',
+  'count_order' => 'Count order',
+  'nothing' => 'Nothing',
+);

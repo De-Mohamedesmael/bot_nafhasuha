@@ -229,11 +229,13 @@ class ServiceUtil
                 ->pluck('providers.id')->toArray();
         }
         if($providers_id){
+
             UserRequest::create([
                 'order_service_id'=>$order->id,
                 'user_id'=>auth()->id(),
                 'is_offer_price'=>$is_offer_price,
                 'suggested_price'=>$request->cost,
+                'price_type'=>$request->amount,
                 'providers_id'=>json_encode($providers_id)
             ]);
         }
