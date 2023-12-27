@@ -254,6 +254,13 @@
                         {!! Form::label('subscription_price', __('lang.subscription_price'), []) !!}
                         {!! Form::number('subscription_price', \Settings::get('subscription_price') , ['class' => 'form-control']) !!}
                     </div>
+
+                    @foreach ($arr_types as $arr_type)
+                        <div class="col-md-3">
+                            {!! Form::label('percent_'.$arr_type, \App\CPU\translate('percent_'.$arr_type), []) !!}
+                            {!! Form::number('percent_'.$arr_type, \Settings::get('percent_'.$arr_type,10) , ['class' => 'form-control']) !!}
+                        </div>
+                    @endforeach
                     <div class="col-md-3">
                         {!! Form::label('limit_cancel', __('lang.limit_cancel'), []) !!}
                         {!! Form::number('limit_cancel', \Settings::get('limit_cancel') , ['class' => 'form-control']) !!}

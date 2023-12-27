@@ -57,7 +57,10 @@ class SettingController extends Controller
         $languages[$key] = $value['full_name'];
     }
 
+    //        'VehicleBarrier','Consultation','Maintenance'
+    $arr_types=['Tire','Petrol','Battery','TransportVehicle','PeriodicInspection'];
     return view('back-end.settings.general_setting')->with(compact(
+        'arr_types',
         'settings',
         'languages'
     ));
@@ -67,6 +70,13 @@ class SettingController extends Controller
     {
 
         try {
+            $arr_types=['Tire','Petrol','Battery','TransportVehicle','PeriodicInspection'];
+            foreach ($arr_types as $arr_type){
+                \Settings::set('percent_'.$arr_type,$request->get('percent_'.$arr_type));
+            }
+
+
+
 
             \Settings::set('site_title',$request->site_title);
             \Settings::set('JoiningBonusValue',$request->JoiningBonusValue);

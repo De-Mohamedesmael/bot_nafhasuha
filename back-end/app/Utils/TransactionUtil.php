@@ -187,11 +187,13 @@ class TransactionUtil
 
         $grand_total=0;
         $final_total=0;
+        $deducted_total=0;
         $price_type=0;
         if($OrderService->type == 'PeriodicInspection'){
             $cy_periodic = CyPeriodic::whereId($OrderService->cy_periodic_id)->first();
             $grand_total=$cy_periodic->price;
             $final_total=$cy_periodic->price - $discount['discount_value'];
+            $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
         }elseif ($OrderService->type == 'Petrol'){
             $price_type=$amount;
         }
@@ -209,6 +211,7 @@ class TransactionUtil
             'discount_value'=>$discount['discount_value'],
             'discount_amount'=>$discount['discount_value'],
             'grand_total'=>$grand_total,
+            'deducted_total'=>$deducted_total,
             'final_total'=>$final_total,
         ]);
 

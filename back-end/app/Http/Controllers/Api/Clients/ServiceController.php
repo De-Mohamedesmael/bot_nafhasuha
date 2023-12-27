@@ -686,6 +686,7 @@ class ServiceController extends ApiController
             $trans->discount_amount=$discount['discount_value'];
             $trans->grand_total=$grand_total;
             $trans->final_total=$final_total;
+            $trans->deducted_total=($PriceQuote->price  * \Settings::get('percent_'.$order->type,10)) / 100;;
             $trans->save();
             $provider=$PriceQuote->provider;
             if($provider->is_notification){

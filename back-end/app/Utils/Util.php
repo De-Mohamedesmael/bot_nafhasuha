@@ -117,6 +117,18 @@ class Util
 
 
     }
-
+    /**
+     * get Payment Type Array
+     *
+     * @return array
+     */
+    public function getPaymentTypeArray()
+    {
+        return [
+            'Online'=>__('lang.Online'),
+            'Cash'=>__('lang.Cash'),
+            'Wallet'=>__('lang.Wallet')
+        ];
+    }
 
 }

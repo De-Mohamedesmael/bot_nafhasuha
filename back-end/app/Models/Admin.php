@@ -65,6 +65,7 @@ class Admin extends Authenticatable implements  HasMedia
             'messages' => __('permission.messages'),
             'admin_module' => __('permission.admin_module'),
             'info_module' => __('permission.info_module'),
+            'reports' => __('lang.reports'),
         ];
     }
     public static function subModulePermissionArray()
@@ -128,6 +129,13 @@ class Admin extends Authenticatable implements  HasMedia
                 'category_faqs' => __('permission.category_faqs'),
                 'faqs' => __('permission.faqs'),
             ],
+            'reports' => [
+                'daily_report' => __('lang.daily_report'),
+                'monthly_report' => __('lang.monthly_report'),
+                'yearly_report' => __('lang.yearly_report'),
+                'best_report' => __('lang.best_report'),
+
+            ],
 
         ];
     }
@@ -142,6 +150,10 @@ class Admin extends Authenticatable implements  HasMedia
             'transaction' ,
             'accept_transaction' ,
             'infos' ,
+            'daily_report' ,
+            'monthly_report' ,
+            'yearly_report' ,
+            'best_report' ,
 
         ];
     }

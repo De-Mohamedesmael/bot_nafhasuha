@@ -1648,4 +1648,23 @@ return [
     'add_new_faq'=>'اضافة سؤال',
     'edit_faq'=>'تعديل سؤال',
     'category_faq'=>'قسم السؤال',
+
+
+    "daily_report"=>'التقارير اليومية',
+    "monthly_report"=>'التقارير الشهرية',
+    "count_all_order"=>'عدد الطلبات',
+    "count_order_completed"=>'الطلبات المكتملة',
+    "sum_deducted_total"=>'نسبة التطبيق',
+    "sum_final_total"=>'اجمالي المكتمل',
+    "sum_provider_total"=>'نسبة مقدم الخدمة',
+    "sum_final_total_canceled"=>'اجمالي الملغي',
+    "sum_final_total_TopUpCredit"=>'اجمالي الايداع',
+    "sum_final_total_Withdrawal"=>'اجمالي السحب',
+    "sum_final_total_InvitationBonus"=>'اجمالي نقاط الدعوات',
+    "sum_final_total_JoiningBonus"=>'اجمالي نقاط الانضمام',
+    "total_discount"=>'اجمالي الخصومات',
+
+    'payment_types_report'=>'تقرير طرق الدفع',
+    'wallet_customer'=>'تقرير المحفظة',
+    'total_orders'=>'ايرادات الطلبات',
 ];
