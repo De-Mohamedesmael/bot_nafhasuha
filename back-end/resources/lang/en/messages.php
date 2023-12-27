@@ -94,4 +94,5 @@
   'wallet' => 'Wallet',
   'count_order' => 'Count order',
   'nothing' => 'Nothing',
+  'SAR' => 'SAR',
 );

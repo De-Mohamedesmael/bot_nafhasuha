@@ -153,6 +153,55 @@
                   @endif
              @endif
 
+                @if( !empty($module_settings['reports']) )
+
+                    @if( auth()->user()->can('reports.daily_report.special')
+                    || auth()->user()->can('reports.monthly_report.special')
+                    || auth()->user()->can('reports.yearly_report.special')
+                    || auth()->user()->can('reports.best_report.special')
+                    )
+
+                        <li>
+                            <a href="#reports" aria-expanded="false" data-toggle="collapse">
+                                <i class="fa fa-file-text"></i>
+                                <span>{{__('lang.reports')}}</span>
+
+                            </a>
+                            <ul id="reports"
+                                class="collapse list-unstyled @if(in_array(request()->segment(2), ['reports'])) show @endif">
+                                @can('reports.daily_report.special')
+                                    <li
+                                        class="@if(request()->segment(2) == 'reports' && request()->segment(3) == 'get-daily-report') active @endif">
+                                        <a
+                                            href="{{route('admin.reports.getDailyReport')}}">{{__('lang.daily_report')}}</a>
+                                    </li>
+                                @endcan
+                                @can('reports.monthly_report.special')
+                                    <li
+                                        class="@if(request()->segment(2) == 'reports' && request()->segment(3) == 'get-monthly-report') active @endif">
+                                        <a
+                                            href="{{route('admin.reports.getMonthlyReport')}}">{{__('lang.monthly_report')}}</a>
+                                    </li>
+                                @endcan
+                                @can('reports.yearly_report.special')
+                                    <li
+                                        class="@if(request()->segment(2) == 'reports' && request()->segment(3) == 'get-yearly-report') active @endif">
+                                        <a
+                                            href="{{route('admin.reports.getYearlyReport')}}">{{__('lang.yearly_report')}}</a>
+                                    </li>
+                                @endcan
+                               {{-- @can('reports.best_report.special')
+                                    <li
+                                        class="@if(request()->segment(2) == 'reports' && request()->segment(3) == 'get-best-report') active @endif">
+                                        <a
+                                            href="{{route('admin.reports.getBestReport')}}">{{__('lang.best_report')}}</a>
+                                    </li>
+                                @endcan--}}
+
+                            </ul>
+                        </li>
+                    @endif
+                @endif
 
                  @if( !empty($module_settings['notification_module']) )
                                    @if(auth()->user()->can('notification_module.notification.edit') ||

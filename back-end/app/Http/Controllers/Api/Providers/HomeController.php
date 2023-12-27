@@ -54,6 +54,7 @@ class HomeController extends ApiController
                - radians(' . $provider->long  . ') )
                + sin( radians(' . $provider->lat  . ') )
                * sin( radians( `lat` ) ) ) )');
+
             $orders=OrderService::with(['price_requests'=>function($q){
                 $q->where('provider_id',auth()->id())->orderBy('id','DESC');
             }])->where('status','pending')

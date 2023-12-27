@@ -37,6 +37,8 @@ use App\Http\Controllers\BackEnd\TransporterController;
 use App\Http\Controllers\BackEnd\ContactUsController;
 use App\Http\Controllers\BackEnd\SmsController;
 
+use App\Http\Controllers\BackEnd\ReportController;
+
 use App\Http\Controllers\BackEnd\InfoController;
 
 use App\Http\Controllers\BackEnd\CategoryFaqController;
@@ -80,6 +82,8 @@ Route::get('general/switch-language/{lang}', [GeneralController::class ,'switchL
 Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'timezone']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/get-chart-data', [HomeController::class, 'getChartData'])->name('getChartData');
+    Route::get('/get-counter-data', [HomeController::class, 'getCounterData'])->name('getCounterData');
 
     Route::group(['prefix'=>'customer','as'=>'customer.'], function () {
         Route::get('/', [CustomerController::class,'index'])->name('index');
@@ -389,6 +393,14 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::get('edit/{id}',[FaqController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [FaqController::class,'update'])->name('update');
         Route::delete('delete/{id}', [FaqController::class,'destroy'])->name('delete');
+    });
+
+    Route::group(['prefix'=>'reports','as'=>'reports.'], function () {
+        Route::get('/get-daily-report', [ReportController::class,'getDailyReport'])->name('getDailyReport');
+        Route::get('/get-monthly-report', [ReportController::class,'getMonthlyReport'])->name('getMonthlyReport');
+        Route::get('/get-yearly-report', [ReportController::class,'getYearlyReport'])->name('getYearlyReport');
+        Route::get('/get-best-report', [ReportController::class,'getBestReport'])->name('getBestReport');
+
     });
     Route::post('logout', [LoginController::class,'logout'])->name('logout');
 

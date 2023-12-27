@@ -15,6 +15,6 @@ class PriceRequest extends Model
     }
     public function order()
     {
-        return $this->belongsTo(OrderService::class);
+        return $this->belongsTo(OrderService::class,'order_service_id');
     }
 }

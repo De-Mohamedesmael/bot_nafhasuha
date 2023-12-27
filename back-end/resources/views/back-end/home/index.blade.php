@@ -118,6 +118,9 @@
             color: #0fad01;
             font-weight: 500;
         }
+        .counter {
+            padding: 5px !important;
+        }
     </style>
 @endsection
 @section('content')
@@ -132,17 +135,16 @@
                     <div class="row">
                         <div class="col-md-2">
                             <label for="city_id"><b>@lang('lang.city')</b></label>
-                            {!! Form::select('city_id', $cities,  key($cities), ['class' => 'form-control ','multiple','data-live-search' => 'true', 'id' => 'city_id']) !!}
-                            {{--
-
-                            Form::select('store_id', $stores, array_keys($stores), ['class' => 'form-control ','multiple' , 'data-live-search' => 'true', 'id' => 'store_id', 'placeholder' => null]) --}}
-
-
+                            {!! Form::select('city_id', $cities,  false, ['class' => 'form-control ','data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'id' => 'city_id']) !!}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <label for="area_id"><b>@lang('lang.area')</b></label>
+                            {!! Form::select('area_id', [],false, ['class' => 'form-control ','data-live-search' => 'true', 'id' => 'area_id']) !!}
+                        </div>
+                        <div class="col-md-2">
                             <label for="from_date"><b>@lang('lang.from_date')</b></label>
                             <input type="date" class="form-control filter" name="from_date" id="from_date"
-                                   value="{{ date('Y-m-01') }}" placeholder="{{ __('lang.from_date') }}">
+                                   value="{{ date('Y-01-01') }}" placeholder="{{ __('lang.from_date') }}">
 
                         </div>
                         <div class="col-md-2">
@@ -151,7 +153,7 @@
                                 {!! Form::text('start_time', null, ['class' => 'form-control time_picker filter', 'id' => 'start_time']) !!}
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="to_date"><b>@lang('lang.to_date')</b></label>
                             <input type="date" class="form-control filter" name="to_date" id="to_date"
                                    value="{{ date('Y-m-t') }}" placeholder="{{ __('lang.to_date') }}">
@@ -171,53 +173,68 @@
         <div class="container-fluid mt-4">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div class="wrapper count-title text-center">
-                            <div class="icon"><i class="dripicons-user-group" style="color: #498636"></i>
+                    <div class="col-md-4 row ">
+                        <div class="col-sm-6 counter">
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-user-group" style="color: #498636"></i>
 
-                            </div>
-                            <div class="name"><strong
-                                    style="color: #498636">{{\App\CPU\translate('count_users')}}</strong>
-                            </div>
-                            <div class="count-number current_stock_value-data">
-                                {{ 7 }}</div>
-                        </div>
-                    </div>
-                    <!-- Count item widget-->
-                    <div class="col-sm-3">
-                        <div class="wrapper count-title text-center">
-                            <div class="icon"><i class="dripicons-disc"
-                                                 style="color: #733686"></i>
-                            </div>
-                            <div class="name"><strong
-                                    style="color: #733686">{{\App\CPU\translate('count_providers')}}</strong>
-                            </div>
-                            <div class="count-number revenue-data">{{4 }}
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #498636">{{\App\CPU\translate('count_users')}}</strong>
+                                </div>
+                                <div class="count-number current_users_value-data">
+                                    {{ 0 }}</div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Count item widget-->
-                    <div class="col-sm-3">
-                        <div class="wrapper count-title text-center">
-                            <div class="icon"><i class="dripicons-stopwatch" style="color: #ff8952"></i>
-                            </div>
-                            <div class="name"><strong
-                                    style="color: #ff8952">{{\App\CPU\translate('total_orders_pending')}}</strong>
-                            </div>
-                            <div class="count-number sell_return-data">
-                                {{ @num_format(5) }}
+                        <!-- Count item widget-->
+                        <div class="col-sm-6 counter">
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-disc"
+                                                     style="color: #733686"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #733686">{{\App\CPU\translate('count_providers')}}</strong>
+                                </div>
+                                <div class="count-number count_providers-data">{{0 }}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Count item widget-->
-                    <div class="col-sm-3">
-                        <div class="wrapper count-title text-center">
-                            <div class="icon"><i class="dripicons-wallet" style="color: #297ff9"></i>
+                    <div class="col-md-8 row ">
+                        <!-- Count item widget-->
+                        <div class="col-sm-4 counter">
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-stopwatch" style="color: #ff8952"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #ff8952">{{\App\CPU\translate('total_orders_pending')}}</strong>
+                                </div>
+                                <div class="count-number">
+                                    <span class="total_orders_pending-data">   {{ @num_format(0) }}</span> SAR
+                                </div>
                             </div>
-                            <div class="name"><strong
-                                    style="color: #297ff9">{{\App\CPU\translate('total_orders_completed')}}</strong>
+                        </div>
+                        <!-- Count item widget-->
+                        <div class="col-sm-4 counter">
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-wallet" style="color: #297ff9"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #297ff9">{{\App\CPU\translate('total_orders_completed')}}</strong>
+                                </div>
+                                <div class="count-number "> <span class="total_orders_completed-data">{{ @num_format(0) }}</span> SAR
+                                </div>
                             </div>
-                            <div class="count-number total_tax">{{ @num_format(10) }}
+                        </div>
+                        <div class="col-sm-4 counter">
+                            <div class="wrapper count-title text-center">
+                                <div class="icon"><i class="dripicons-wrong" style="color: #f92929"></i>
+                                </div>
+                                <div class="name"><strong
+                                        style="color: #f92929">{{\App\CPU\translate('total_orders_canceled')}}</strong>
+                                </div>
+                                <div class="count-number "> <span class="total_orders_canceled-data">{{ @num_format(0) }}</span> SAR
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -254,19 +271,19 @@
 
                                 <div class="row text-center">
                                     <div class="col-3">
-                                        <h5 class="mb-0">{{$AmountCompleted}}</h5>
+                                        <h5 class="mb-0" id="AmountCompleted">{{$AmountCompleted??0}}</h5>
                                         <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Completed')}}</p>
                                     </div>
                                     <div class="col-3">
-                                        <h5 class="mb-0">{{$AmountPending}}</h5>
+                                        <h5 class="mb-0 " id="AmountPending">{{$AmountPending??0}}</h5>
                                         <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Pending')}}</p>
                                     </div>
                                     <div class="col-3">
-                                        <h5 class="mb-0">{{$AmountCanceled}}</h5>
+                                        <h5 class="mb-0" id="AmountCanceled">{{$AmountCanceled??0}}</h5>
                                         <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Canceled')}}</p>
                                     </div>
                                     <div class="col-3">
-                                        <h5 class="mb-0">{{$AmountCompleted+$AmountPending+$AmountCanceled}}</h5>
+                                        <h5 class="mb-0" id="TotalAmount">{{--$AmountCompleted+$AmountPending+$AmountCanceled--}}</h5>
                                         <p class="text-muted text-truncate">{{\App\CPU\translate('total_amount')}}</p>
                                     </div>
                                 </div>
@@ -288,122 +305,230 @@
 
 
 @section('javascript')
+    @if (auth()->user()->can('dashboard.details.view'))
     <script src="{{ URL::asset('assets/back-end/libs/chart.js/Chart.bundle.min.js') }}"></script>
     <script>
+        $(document).ready(function() {
+            $('#city_id').change();
+
+        });
+        $(document).on("change", '.filter, #city_id,#area_id', function() {
+            var city_id = $('select#city_id').val();
+            var area_id = $('select#area_id').val();
+            var start_date = $('#from_date').val();
+            if (!start_date) {
+                start_date = 0;
+            }
+            var end_date = $('#to_date').val();
+            if (!end_date) {
+                end_date = 0;
+            }
+            getDashboardData(start_date, end_date,city_id,area_id);
+        });
+
+
+        $('#city_id').on('change', function(){
+            var city_id =$(this).val();
+
+            $.get( "{{url('/admin/city/areas')}}", { city_id: city_id })
+                .done(function( data ) {
+                    if(data.code == 200){
+                        var e=data.data;
+
+                        $('#area_id')
+                            .find('option')
+                            .remove();
+                        $.each(e, function (key, val) {
+                            $("#area_id").append('<option value="'+val.id+'" >'+val.title+'</option>');
+                        });
+                        $("#area_id").selectpicker("refresh");
+                    }
+
+                });
+
+        });
+        $('#start_time, #end_time').focusout(function(event) {
+            var city_id = $('#city_id').val();
+            var area_id = $('#area_id').val();
+            var start_date = $('#from_date').val();
+            if (!start_date) {
+                start_date = 0;
+            }
+            var end_date = $('#to_date').val();
+            if (!end_date) {
+                end_date = 0;
+            }
+
+            getDashboardData(start_date, end_date,city_id,area_id);
+
+        })
         var months =  [
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
-        var userCounts =JSON.parse("{{$userCountsString}}");
-        var userCounts_all = JSON.parse("{{$userCountsAllString}}");
 
-        var ctx = document.getElementById('bar').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [{
-                    label: '{{\App\CPU\translate('This year the number of registered users')}}',
-                    data: userCounts,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                },{
-                    label: '{{\App\CPU\translate('Number of registered users')}}',
-                    data: userCounts_all,
-                    backgroundColor: 'rgba(54,235,229,0.2)',
-                    borderColor: 'rgb(54,235,235)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+
+
+        function initializeUserChart(userCountsString,userCountsAllString) {
+            var userCounts = JSON.parse(userCountsString);
+            var userCounts_all = JSON.parse(userCountsAllString);
+            var ctx = document.getElementById('bar').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
+                        data: userCounts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: '{{\App\CPU\translate('Number of registered users')}}',
+                        data: userCounts_all,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-    </script>
-    <script>
-
-        var providerCounts =JSON.parse("{{$providerCountsString}}");
-        var providerCounts_all = JSON.parse("{{$providerCountsAllString}}");
-
-        var ctx = document.getElementById('bar_providers').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: months,
-                datasets: [{
-                    label: '{{\App\CPU\translate('This year the number of registered users')}}',
-                    data: providerCounts,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                },{
-                    label: '{{\App\CPU\translate('Number of registered users')}}',
-                    data: providerCounts_all,
-                    backgroundColor: 'rgba(54,235,229,0.2)',
-                    borderColor: 'rgb(54,235,235)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            });
+        }
+        function initializeProviderChart(providerCountsString,providerCountsAllString) {
+            var providerCounts = JSON.parse(providerCountsString);
+            var providerCounts_all = JSON.parse(providerCountsAllString);
+            var ctx = document.getElementById('bar_providers').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
+                        data: providerCounts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: '{{\App\CPU\translate('Number of registered users')}}',
+                        data: providerCounts_all,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
-    </script>
-    <script>
-        var Completed =JSON.parse("{{$CompleteString}}");
-        var Canceled = JSON.parse("{{$CanceledString}}");
-        var Pending = JSON.parse("{{$PendingString}}");
+            });
+        }
+        function initializeOrderChart(CompleteString,CanceledString,PendingString) {
 
-        var ctx = document.getElementById('lineChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: months,
-                datasets: [{
-                    label: '{{\App\CPU\translate('chart_Completed')}}',
-                    data: Completed,
-                    backgroundColor: 'rgba(72,234,18,0.2)',
-                    borderColor: 'rgb(66,235,54)',
-                    borderWidth: 1
-                },{
-                    label: '{{\App\CPU\translate('chart_Pending')}}',
-                    data: Pending,
-                    backgroundColor: 'rgba(54,235,229,0.2)',
-                    borderColor: 'rgb(54,235,235)',
-                    borderWidth: 1
-                },{
-                    label: '{{\App\CPU\translate('chart_Canceled')}}',
-                    data: Canceled,
-                    backgroundColor: 'rgba(235,54,54,0.2)',
-                    borderColor: 'rgb(235,54,54)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            var Completed =JSON.parse(CompleteString);
+            var Canceled = JSON.parse(CanceledString);
+            var Pending = JSON.parse(PendingString);
+
+            var ctx = document.getElementById('lineChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('chart_Completed')}}',
+                        data: Completed,
+                        backgroundColor: 'rgba(72,234,18,0.2)',
+                        borderColor: 'rgb(66,235,54)',
+                        borderWidth: 1
+                    },{
+                        label: '{{\App\CPU\translate('chart_Pending')}}',
+                        data: Pending,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    },{
+                        label: '{{\App\CPU\translate('chart_Canceled')}}',
+                        data: Canceled,
+                        backgroundColor: 'rgba(235,54,54,0.2)',
+                        borderColor: 'rgb(235,54,54)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        function getDashboardData(start_date, end_date,city_id,area_id) {
+            $.ajax({
+                method: 'get',
+                url: "{{route('admin.getCounterData')}}",
+                data: {
+                    start_date,
+                    end_date,
+                    city_id,
+                    area_id
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $('.current_users_value-data').html(result.count_users);
+                        $('.count_providers-data').html(result.count_providers);
+                        $('.total_orders_pending-data').html(result.total_orders_pending);
+                        $('.total_orders_completed-data').html(result.total_orders_completed);
+                        $('.total_orders_canceled-data').html(result.total_orders_canceled);
+                    }
+                },
+            });
+            $.ajax({
+                method: 'get',
+                url: "{{route('admin.getChartData')}}",
+                data: {
+                    start_date,
+                    end_date,
+                    city_id,
+                    area_id
+                },
+                success: function (result) {
+                    if (result.success) {
+                        console.log('dd');
+                        TotalAmount
+                        AmountCanceled
+                        AmountPending
+                        AmountCompleted
+                        $('#AmountCompleted').html(result.AmountCompleted);
+                        $('#AmountPending').html(result.AmountPending);
+                        $('#AmountCanceled').html(result.AmountCanceled);
+                        TotalAmount = result.AmountCanceled+result.AmountPending+result.AmountCompleted;
+                        $('#TotalAmount').html(TotalAmount);
+                        initializeUserChart(result.userCountsString, result.userCountsAllString);
+                        initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
+                        initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
+                    }
+                },
+            });
+        }
+
+
+
     </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 
     <script>
         let map, activeInfoWindow, markers ,info_window_data= [];
-
-
-
         /* ----------------------------- Initialize Map ----------------------------- */
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
@@ -516,5 +641,5 @@
         });
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&callback=initMap&language={{app()->getLocale()}}" async></script>
-
+    @endif
 @endsection
