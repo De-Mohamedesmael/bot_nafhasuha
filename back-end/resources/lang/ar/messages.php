@@ -144,4 +144,5 @@
   'percent_Petrol' => 'نسبة التطبيق للبنزين',
   'percent_Tire' => 'نسبة التطبيق للبنشر',
   'SAR' => 'ر.س',
+  'This price quote has been accepted successfully' => 'This price quote has been accepted successfully',
 );

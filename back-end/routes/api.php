@@ -127,6 +127,8 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('show_by_code', [OrderController::class, 'GetByInvoiceNo']);
 
         Route::Post('accept-quotes', [ServiceController::class, 'acceptQuotes']);
+        Route::Post('accept-maintenance-report', [OrderController::class, 'acceptMaintenanceReport']);
+        Route::get('get-maintenance-report', [OrderController::class, 'getMaintenanceReport']);
         Route::get('show/{id}', [OrderController::class, 'show']);
         Route::get('quotes/{id}', [OrderController::class, 'quotes']);
         Route::Post('reject-quotes', [OrderController::class, 'rejectQuotes']);

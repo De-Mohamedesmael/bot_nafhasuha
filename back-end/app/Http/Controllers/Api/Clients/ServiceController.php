@@ -194,11 +194,12 @@ class ServiceController extends ApiController
 
         $validator = validator($request->all(), [
 //            'service_id' => 'required|integer|exists:services,id',
+            'payment_method' => 'required|string|in:Online,Wallet',
             'category_id' => 'required|integer|exists:categories,id',
             'vehicle_id' => 'required|integer|exists:user_vehicles,id',
-            'type_from' => 'required|string|in:Home,Center',
-            'date_at' => 'required|Date',
-            'time_at' => 'required|string',
+            'status_vehicle' => 'required|in:1,0',
+//            'date_at' => 'required|Date',
+//            'time_at' => 'required|string',
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
@@ -221,13 +222,22 @@ class ServiceController extends ApiController
 
         DB::beginTransaction();
         try {
+            $amount= \Settings::get('PriceMaintenance',100);
+            if($request->payment_method == 'Wallet'){
+                $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
+                if($wallet_user < $amount){
+                    return responseApiFalse(405, translate('Your wallet balance is insufficient'));
+                }
+            }
             $request->merge([
-                'service_id'=>3
+                'service_id'=>3,
             ]);
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
             if ($request->coupon_code) {
-                $coupon = $this->checkCoupon($request->coupon_code, $request->category_id,$request->service_id);
+                $coupon = $this->checkCoupon($request->coupon_code,
+                    $request->category_id,
+                    $request->service_id);
 
                 if ($coupon['status'] == false)
                     return responseApi('false', $coupon['msg']);
@@ -235,19 +245,20 @@ class ServiceController extends ApiController
                 $item= $coupon['item'];
                 $discount['discount_value'] = $item->discount;
                 $discount['discount_type'] = $item->type_discount;
-
+                $amount=$amount-$item->discount;
                 $item->use=$item->use+1;
                 $item->users()->attach($item->id);
                 $item->save();
 
             }
 
-            $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle,'Maintenance', $request->service_id);
-            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount);
+            $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle
+                ,'Maintenance', $request->service_id);
+            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,null,0,$amount);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('return_data_success'),$OrderService->id);
 
         }catch (\Exception $exception){
             DB::rollBack();

@@ -26,6 +26,7 @@ class OrderServiceAllDataResource extends JsonResource
             }
 
         }
+        $first_children=$this->children()->wherein('status',['pending', 'approved', 'received'])->first() ?:null;
         return [
             'id'=>$this->id,
             'status'=>$this->status,
@@ -52,6 +53,10 @@ class OrderServiceAllDataResource extends JsonResource
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
+            'is_have_second_provider'=> (bool)$first_children,
+            'second_status'=> $first_children ? $first_children->status : '',
+            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : '',
+
             'vehicle_transporter'=>new TransporterResource($transaction->transporter),
             'type_battery'=>$this->type =="ChangeBattery"? new TypeBatteryResource($transaction->type_battery) :null,
             'type_gasoline'=>$this->type =="Petrol"? $transaction->type_gasoline?->title :null,
@@ -69,6 +74,7 @@ class OrderServiceAllDataResource extends JsonResource
             'canceled_type'=>$this->canceled_type,
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
+            'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):'',
         ];
     }
 }
