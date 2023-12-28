@@ -70,6 +70,14 @@ class OrderService extends Model implements HasMedia
     {
         return $this->belongsTo(Transaction::class,'transaction_id');
     }
+    public function maintenance_report()
+    {
+        return $this->belongsTo(MaintenanceReport::class,'id','order_service_id');
+    }
+    public function children()
+    {
+        return $this->hasMany(self::class,'parent_id');
+    }
     public function cancel_reason()
     {
         return $this->belongsTo(CancelReason::class,'cancel_reason_id');

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Providers;
 
 use App\Http\Controllers\ApiController;
+use App\Http\Resources\MaintenanceReportResource;
 use App\Http\Resources\OrderServiceAllDataResource;
 use App\Http\Resources\Providers\OrderServiceResource;
 use App\Models\FcmToken;
+use App\Models\MaintenanceReport;
 use App\Models\OrderService;
 use App\Models\PriceQuote;
 use App\Models\Provider;
@@ -224,11 +226,68 @@ class OrderController extends ApiController
 
                     $transaction->save();
                 }
+            }elseif ($order->type == 'Maintenance'){
+                $order->provider_id=auth()->id();
+                $order->status="approved";
+                $order->save();
+                $transaction= $order->transaction;
+                if($transaction){
+                    $transaction->provider_id=auth()->id();
+                    $transaction->status="approved";
+                    $transaction->save();
+                }
+                $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user());
             }
             $this->pushNotof('Order',$order,$order->user_id,2);
             $this->ServiceUtil->RemoveALLPricesAndRequests(auth()->id(),$order->id);
             DB::commit();
             return  responseApi(200, translate('return_data_success'),$order->id);
+        }catch (\Exception $exception){
+        dd($exception);
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
+    public function StoreMaintenanceReport(Request $request)
+    {
+
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+            'price' => 'required',
+            'date_at' => 'required|Date',
+            'time_at' => 'required|string',
+            'details' => 'required|string|max:1000',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+
+
+        try {
+
+
+
+            $order=OrderService::where('id',$request->order_id)->first();
+
+            if(!$order){
+                return responseApi(405, translate('The order is no longer available'));
+            }
+
+            DB::beginTransaction();
+               $report= MaintenanceReport::Create([
+                   'order_service_id' =>$request->order_id,
+                   'status' => 'Pending',
+                   'price' => $request->price,
+                   'date_at' => $request->date_at,
+                   'time_at' => $request->time_at,
+                   'details' => $request->details,
+                ]);
+            DB::commit();
+            return  responseApi(200, translate('return_data_success'),new MaintenanceReportResource($report));
         }catch (\Exception $exception){
         dd($exception);
             DB::rollBack();

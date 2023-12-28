@@ -6,6 +6,7 @@ use App\Models\CyPeriodicProvider;
 use App\Models\OrderService;
 use App\Models\PriceRequest;
 use App\Models\Provider;
+use App\Models\Transaction;
 use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -139,7 +140,7 @@ class ServiceUtil
     {
         $all_data=[];
 
-        $not_request_price=['PeriodicInspection'];
+        $not_request_price=['PeriodicInspection','Maintenance'];
         //Tire&TransportVehicle&ChangeBattery&Petrol&SubscriptionBattery
         $is_offer_price=1;
         if(in_array($type,$not_request_price)){
@@ -160,6 +161,7 @@ class ServiceUtil
             case 'PeriodicInspection':
                 $all_data['cy_periodic_id'] =$request->cy_periodic_id;
                 break;
+
             default :
                 break;
         }
@@ -234,8 +236,8 @@ class ServiceUtil
                 'order_service_id'=>$order->id,
                 'user_id'=>auth()->id(),
                 'is_offer_price'=>$is_offer_price,
-                'suggested_price'=>$request->cost,
-                'price_type'=>$request->amount,
+                'suggested_price'=>$request->cost??0,
+                'price_type'=>$request->amount??0,
                 'providers_id'=>json_encode($providers_id)
             ]);
         }
@@ -503,5 +505,91 @@ class ServiceUtil
             })->delete();
 
         return true;
+    }
+
+    /**
+     * Set Order To Transport Vehicle
+     *
+     */
+    public function SetOrderToTransportVehicle($order,$provider)
+    {
+        $old_transaction=$order->transaction;
+            $all_data=[
+                'parent_id'=>$order->id,
+                'service_id'=>2,
+                'category_id'=>5,
+                'address' => $order->address,
+                'lat' => $order->lat,
+                'long' => $order->long,
+                'address_to' => $provider->address,
+                'lat_to' => $provider->lat,
+                'long_to' => $provider->long,
+                'user_id'=>$order->user_id,
+                'vehicle_id'=>$order->vehicle_id??null,
+                'type'=>'TransportVehicle',
+                'status'=>'pending',
+                'date_at'=>$order->date_at,
+                'time_at'=>$order->time_at,
+                'payment_method'=>$order->payment_method,
+                'details'=>$order->details
+            ];
+            $OrderService=OrderService::create($all_data);
+            $discount['discount_value'] =$order->discount_value / 2;
+            $discount['discount_type'] =$order->discount_type;
+            $grand_total=$old_transaction->price_type/2;
+            $final_total=$grand_total-$discount['discount_value'] ;
+            $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
+
+        $max_distance=\Settings::get('max_distance',500);
+                $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$order->lat . ') )
+               * cos( radians( `lat` ) )
+               * cos( radians( `long` )
+               - radians(' . $order->long  . ') )
+               + sin( radians(' . $order->lat  . ') )
+               * sin( radians( `lat` ) ) ) )');
+                // Get providers id
+                $providers_id = Provider::Active()->where('get_orders',1)
+                    ->select('providers.id')
+                    ->selectRaw("{$sqlDistance} as distance")
+                    ->whereDoesntHave('orders',function ($q){
+                        return  $q->wherein('status',  ['pending', 'approved','received']);
+                    })
+                    ->wherehas('categories',function ($q) {
+                        $q->where('categories.id',5);
+                    })->having('distance', '<=', $max_distance)
+                    ->pluck('providers.id')->toArray();
+
+            if($providers_id){
+
+                UserRequest::create([
+                    'order_service_id'=>$OrderService->id,
+                    'user_id'=>$order->user_id,
+                    'is_offer_price'=>0,
+                    'suggested_price'=>$grand_total,
+                    'price_type'=>0,
+                    'providers_id'=>json_encode($providers_id)
+                ]);
+            }
+
+        $Transaction= Transaction::create([
+                'user_id'=>$OrderService->user_id,
+                'service_id'=>$OrderService->service_id,
+                'type'=>'OrderService',
+                'status'=>'pending',
+                'suggested_price'=>$old_transaction->price_type,
+                'discount_type'=>$discount['discount_type'],
+                'discount_value'=>$discount['discount_value'],
+                'discount_amount'=>$discount['discount_value'],
+                'grand_total'=>$grand_total,
+                'deducted_total'=>$deducted_total,
+                'final_total'=>$final_total,
+            ]);
+
+        $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        $Transaction->invoice_no='OS'.$randomNumber.'-'.$OrderService->user_id.'u'.$Transaction->id;
+        $OrderService->transaction_id=$Transaction->id;
+        $Transaction->save();
+        $OrderService->save();
+
     }
 }

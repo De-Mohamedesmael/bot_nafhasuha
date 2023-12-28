@@ -196,6 +196,8 @@ class TransactionUtil
             $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
         }elseif ($OrderService->type == 'Petrol'){
             $price_type=$amount;
+        }elseif ($OrderService->type == 'Maintenance'){
+            $price_type=$amount;
         }
 
 

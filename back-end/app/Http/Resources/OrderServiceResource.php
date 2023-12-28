@@ -18,15 +18,23 @@ class OrderServiceResource extends JsonResource
     {
         $transaction = $this->transaction;
        $is_tracking= ($this->status=='pending'||$this->status=='approved')&& ($this->category_id==5||$this->category_id==8) ? 1:0;
-        return [
+
+       $first_children=$this->children()->wherein('status',['pending', 'approved'])->first() ?:null;
+       if($first_children){
+           $is_tracking= $first_children->status == 'approved';
+       }
+       return [
             'id'=>$this->id,
             'status'=>$this->status,
             'type'=>$this->type,
             'lat'=>$this->lat,
             'long'=>$this->long,
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
+            'is_have_second_provider'=> (bool)$first_children,
+            'second_status'=> $first_children ? $first_children->status : '',
+            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : '',
             'category'=>new CategoryResource($this->category),
-            'invoice_no'=>$transaction->invoice_no??null,
+            'invoice_no'=>$transaction->invoice_no??'',
             'price_requests_count' => $this->price_requests_count?:0,
             'price_type' => $this->price_type?:0,
             'is_tracking'=>$is_tracking,

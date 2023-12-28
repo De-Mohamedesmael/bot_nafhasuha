@@ -46,6 +46,7 @@ Route::middleware('auth.guard:api')->group(function () {
 
     Route::POST('submit-price', [OrderController::class, 'submitPrice']);
     Route::post('accept-order', [OrderController::class, 'acceptOrder']);
+    Route::post('maintenance-report', [OrderController::class, 'StoreMaintenanceReport']);
     Route::Post('store-complete-order', [OrderController::class, 'storeCompletedOrder']);
 
     Route::post('cancel-orders-accept', [OrderController::class, 'CancelOrdersAccept']);
