@@ -6,6 +6,7 @@ use App\Http\Resources\AreaResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CityResource;
 use App\Http\Resources\CountryResource;
+use App\Http\Resources\TransporterResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProviderResource extends JsonResource
@@ -38,6 +39,7 @@ class ProviderResource extends JsonResource
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
             'area'=>new AreaResource($this->area),
+            'transporter'=>new TransporterResource($this->transporter),
         ];
     }
 }

@@ -211,6 +211,7 @@ class ServiceUtil
                 ->pluck('provider_id')->toArray();
 
         }else{
+            $arr_More_than_one = OrderService::GetIsMoreThanOne();
             $max_distance=\Settings::get('max_distance',500);
             $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$request->lat . ') )
                * cos( radians( `lat` ) )
@@ -222,8 +223,13 @@ class ServiceUtil
             $providers_id = Provider::Active()->where('get_orders',1)
             ->select('providers.id')
                 ->selectRaw("{$sqlDistance} as distance")
-                ->whereDoesntHave('orders',function ($q){
-                  return  $q->wherein('status',  ['pending', 'approved','received']);
+                ->when(!in_array($type,$arr_More_than_one),function ($q) use($request){
+                    return  $q->whereDoesntHave('orders',function ($q2){
+                  return  $q2->wherein('status',  ['pending', 'approved','PickUp','received']);
+                });
+                })
+                ->when($type == 'TransportVehicle',function ($q) use($request){
+                    $q->where('providers.transporter_id',$request->transporter_id);
                 })
                 ->wherehas('categories',function ($q) use($request){
                     $q->where('categories.id',$request->category_id);
@@ -511,19 +517,37 @@ class ServiceUtil
      * Set Order To Transport Vehicle
      *
      */
-    public function SetOrderToTransportVehicle($order,$provider)
+    public function SetOrderToTransportVehicle($order,$provider,$type="Accept")
     {
         $old_transaction=$order->transaction;
+            if($type == 'completed'  || $type == 'canceled'){
+                $lat=$provider->lat;
+                $long=$provider->long;
+                $address= $provider->address;
+                $lat_to=$order->lat;
+                $long_to=$order->long;
+                $address_to= $order->address;
+
+            }else{
+                $lat=$order->lat;
+                $long=$order->long;
+                $address= $order->address;
+                $lat_to=$provider->lat;
+                $long_to=$provider->long;
+                $address_to= $provider->address;
+            }
+
+
             $all_data=[
                 'parent_id'=>$order->id,
                 'service_id'=>2,
-                'category_id'=>5,
-                'address' => $order->address,
-                'lat' => $order->lat,
-                'long' => $order->long,
-                'address_to' => $provider->address,
-                'lat_to' => $provider->lat,
-                'long_to' => $provider->long,
+                'category_id'=>8,
+                'address' => $address,
+                'lat' => $lat,
+                'long' => $long,
+                'address_to' =>$address_to,
+                'lat_to' => $long_to,
+                'long_to' => $lat_to,
                 'user_id'=>$order->user_id,
                 'vehicle_id'=>$order->vehicle_id??null,
                 'type'=>'TransportVehicle',
@@ -539,25 +563,27 @@ class ServiceUtil
             $grand_total=$old_transaction->price_type/2;
             $final_total=$grand_total-$discount['discount_value'] ;
             $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
-
+        $arr_More_than_one = OrderService::GetIsMoreThanOne();
         $max_distance=\Settings::get('max_distance',500);
-                $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$order->lat . ') )
+                $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
                * cos( radians( `lat` ) )
                * cos( radians( `long` )
-               - radians(' . $order->long  . ') )
-               + sin( radians(' . $order->lat  . ') )
+               - radians(' . $long  . ') )
+               + sin( radians(' . $lat  . ') )
                * sin( radians( `lat` ) ) ) )');
                 // Get providers id
                 $providers_id = Provider::Active()->where('get_orders',1)
                     ->select('providers.id')
                     ->selectRaw("{$sqlDistance} as distance")
-                    ->whereDoesntHave('orders',function ($q){
-                        return  $q->wherein('status',  ['pending', 'approved','received']);
-                    })
+                    ->whereDoesntHave('orders',function ($q2){
+                            return  $q2->wherein('status',  ['pending', 'approved','PickUp','received']);
+                        })
+                    ->where('providers.transporter_id',$old_transaction->type_id)
                     ->wherehas('categories',function ($q) {
-                        $q->where('categories.id',5);
+                        $q->where('categories.id',8);
                     })->having('distance', '<=', $max_distance)
                     ->pluck('providers.id')->toArray();
+
 
             if($providers_id){
 
@@ -576,6 +602,7 @@ class ServiceUtil
                 'service_id'=>$OrderService->service_id,
                 'type'=>'OrderService',
                 'status'=>'pending',
+                'type_id'=>$old_transaction->type_id,
                 'suggested_price'=>$old_transaction->price_type,
                 'discount_type'=>$discount['discount_type'],
                 'discount_value'=>$discount['discount_value'],
@@ -590,6 +617,7 @@ class ServiceUtil
         $OrderService->transaction_id=$Transaction->id;
         $Transaction->save();
         $OrderService->save();
+        return $OrderService;
 
     }
 }

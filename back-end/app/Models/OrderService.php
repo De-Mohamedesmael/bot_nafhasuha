@@ -19,7 +19,7 @@ class OrderService extends Model implements HasMedia
 
     public function scopeNotCompleted($query)
     {
-        return $query->wherein('status',  ['pending', 'approved','received']);
+        return $query->wherein('status',  ['pending', 'approved','PickUp','received']);
     }
 
     public function scopeCompleted($query)
@@ -82,6 +82,10 @@ class OrderService extends Model implements HasMedia
     {
         return $this->belongsTo(CancelReason::class,'cancel_reason_id');
     }
+    public function parent()
+    {
+        return $this->belongsTo(self::class,'parent_id');
+    }
     public function canceledBy()
     {
 
@@ -100,6 +104,10 @@ class OrderService extends Model implements HasMedia
     {
         return self::groupBy('status')
             ->selectRaw('status, count(*) as count');
+    }
+    public static function GetIsMoreThanOne()
+    {
+        return ['Maintenance'];
     }
 
     public function isOfferPrice()

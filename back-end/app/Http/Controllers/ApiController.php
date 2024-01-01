@@ -49,54 +49,216 @@ class ApiController extends BaseController
             case 'Order':
                 $code=$type_item->transaction?->invoice_no;
                 $type_number=1;
-                if($step == 1){
-                    $order_step='New';
-                    $not['ar']['title']=__('notifications.order_step1.title',[],'ar');
-                    $not['en']['title']=__('notifications.order_step1.title',[],'en');
-                    $not['ar']['body']=__('notifications.order_step1.body',['code'=>$code],'ar');
-                    $not['en']['body']=__('notifications.order_step1.body',['code'=>$code],'en');
-                    $notarray=[
-                        'type'=>$type_number,
-                        'order_step'=>$order_step,
-                        'image'=>null
-                    ];
-                    //'New','Price','Accept','Complete'
-                    $type_model='Provider';
-                    $notarray['ar']['title']=__('notifications.order_step1_provider.title',[],'ar');
-                    $notarray['en']['title']=__('notifications.order_step1_provider.title',[],'en');
-                    $notarray['ar']['body']=__('notifications.order_step1_provider.body',['code'=>$code],'ar');
-                    $notarray['en']['body']=__('notifications.order_step1_provider.body',['code'=>$code],'en');
-                   $user_req= UserRequest::where('order_service_id',$type_id)->first();
-                   if($user_req){
-                       $ids=json_decode($user_req->providers_id, true);
-                       $this->pushNotofarray($notarray,$ids,$type_id,$type_model);
-                   }
+                if($type_item ->type =="Maintenance"){
+                    if ($step == 1) {
+                        $order_step = 'New';
+                        $not['ar']['title'] = __('notifications.order_step1.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step1.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step1.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step1.body', ['code' => $code], 'en');
+                        $notarray = [
+                            'type' => $type_number,
+                            'order_step' => $order_step,
+                            'image' => null
+                        ];
+                        //'New','Price','Accept','Complete'
+                        $type_model = 'Provider';
+                        $notarray['ar']['title'] = __('notifications.order_step1_provider.title', [], 'ar');
+                        $notarray['en']['title'] = __('notifications.order_step1_provider.title', [], 'en');
+                        $notarray['ar']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'ar');
+                        $notarray['en']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'en');
+                        $user_req = UserRequest::where('order_service_id', $type_id)->first();
+                        if ($user_req) {
+                            $ids = json_decode($user_req->providers_id, true);
+                            $this->pushNotofarray($notarray, $ids, $type_id, $type_model);
+                        }
 
-                }elseif($step == 2){
-                    $order_step='Accept';
-                    $not['ar']['title']=__('notifications.order_step2.title',[],'ar');
-                    $not['en']['title']=__('notifications.order_step2.title',[],'en');
-                    $not['ar']['body']=__('notifications.order_step2.body',['code'=>$code],'ar');
-                    $not['en']['body']=__('notifications.order_step2.body',['code'=>$code],'en');
-                }elseif($step == 4){
-                    $order_step='Price';
-                    $not['ar']['title']=__('notifications.order_step4.title',[],'ar');
-                    $not['en']['title']=__('notifications.order_step4.title',[],'en');
-                    $not['ar']['body']=__('notifications.order_step4.body',['code'=>$code],'ar');
-                    $not['en']['body']=__('notifications.order_step4.body',['code'=>$code],'en');
+                    }elseif ($step == 2) {
 
-                }else
-                {
-                        $order_step='Complete';
-                        $not['ar']['title']=__('notifications.order_step3.title',[],'ar');
-                        $not['en']['title']=__('notifications.order_step3.title',[],'en');
-                        $not['ar']['body']=__('notifications.order_step3.body',['code'=>$code],'ar');
-                        $not['en']['body']=__('notifications.order_step3.body',['code'=>$code],'en');
+                        $order_step = 'Accept';
+                        $not['ar']['title'] = __('notifications.order_step_transporter0.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step_transporter0.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step_transporter0.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step_transporter0.body', ['code' => $code], 'en');
+                    } else {
+                        $order_step = 'Complete';
+                        $not['ar']['title'] = __('notifications.order_step_transporter1-2.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step_transporter1-2.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step_transporter1-2.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step_transporter1-2.body', ['code' => $code], 'en');
+
                     }
+                }
+                elseif ($type_item ->type =="TransportVehicle" && $type_item ->parent_id != null){
+                    $type_id=$type_item ->parent_id;
+
+                    $parent=$type_item->parent;
+                    $code=$parent?->transaction?->invoice_no;
+                    $code_=$type_item->transaction?->invoice_no;
+
+                    if ($step == 1) {
+
+                        if($parent -> status == "completed"){
+                            $order_step = 'Complete';
+                            $not['ar']['title'] = __('notifications.order_step_transporter1-2.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter1-2.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter1-2.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter1-2.body', ['code' => $code], 'en');
+
+
+                        }
+                        elseif($parent -> status == "canceled"){
+                            $order_step = 'canceled';
+                            $not['ar']['title'] = __('notifications.order_step_transporter_canceled.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter_canceled.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter_canceled.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter_canceled.body', ['code' => $code], 'en');
+
+
+                        }
+                        else{
+                            $order_step = 'Accept';
+                            $not['ar']['title'] = __('notifications.order_step_transporter0.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter0.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter0.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter0.body', ['code' => $code], 'en');
+
+                        }
+                        $notarray = [
+                            'type' => $type_number,
+                            'order_step' => 'New',
+                            'image' => null
+                        ];
+
+                        //'New','Price','Accept','Complete'
+                        $type_model = 'Provider';
+                        $notarray['ar']['title'] = __('notifications.order_step1_provider.title', [], 'ar');
+                        $notarray['en']['title'] = __('notifications.order_step1_provider.title', [], 'en');
+                        $notarray['ar']['body'] = __('notifications.order_step1_provider.body', ['code' => $code_], 'ar');
+                        $notarray['en']['body'] = __('notifications.order_step1_provider.body', ['code' => $code_], 'en');
+                        $user_req = UserRequest::where('order_service_id', $type_item ->id)->first();
+                        if ($user_req) {
+                            $ids = json_decode($user_req->providers_id, true);
+                            $this->pushNotofarray($notarray, $ids, $type_item ->id , $type_model);
+                        }
+
+
+
+
+
+                    }
+                    elseif ($step == 2) {
+                        if(in_array($parent -> status ,[ "canceled","completed"])){
+                            $order_step = 'Accept';
+                            $not['ar']['title'] = __('notifications.order_step_transporter1-3.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter1-3.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter1-3.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter1-3.body', ['code' => $code], 'en');
+
+                        }else{
+                            $order_step = 'Accept';
+                            $not['ar']['title'] = __('notifications.order_step_transporter1.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter1.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter1.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter1.body', ['code' => $code], 'en');
+
+                        }
+
+                    }elseif ($step == 5) {
+                        $order_step = 'Accept';
+                        $not['ar']['title'] = __('notifications.order_step_transporter2.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step_transporter2.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step_transporter2.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step_transporter2.body', ['code' => $code], 'en');
+
+                    } else{
+                        $order_step = $parent->status;
+                        if($order_step == "completed"){
+
+                            $not['ar']['title'] = __('notifications.order_step_transporter3.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter3.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter3.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter3.body', ['code' => $code], 'en');
+
+                        }else {
+                            $not['ar']['title'] = __('notifications.order_step_transporter4.title', [], 'ar');
+                            $not['en']['title'] = __('notifications.order_step_transporter4.title', [], 'en');
+                            $not['ar']['body'] = __('notifications.order_step_transporter4.body', ['code' => $code], 'ar');
+                            $not['en']['body'] = __('notifications.order_step_transporter4.body', ['code' => $code], 'en');
+                        }
+                    }
+                }else {
+
+
+                    if ($step == 1) {
+                        $order_step = 'New';
+                        $not['ar']['title'] = __('notifications.order_step1.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step1.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step1.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step1.body', ['code' => $code], 'en');
+                        $notarray = [
+                            'type' => $type_number,
+                            'order_step' => $order_step,
+                            'image' => null
+                        ];
+                        //'New','Price','Accept','Complete'
+                        $type_model = 'Provider';
+                        $notarray['ar']['title'] = __('notifications.order_step1_provider.title', [], 'ar');
+                        $notarray['en']['title'] = __('notifications.order_step1_provider.title', [], 'en');
+                        $notarray['ar']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'ar');
+                        $notarray['en']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'en');
+                        $user_req = UserRequest::where('order_service_id', $type_id)->first();
+                        if ($user_req) {
+                            $ids = json_decode($user_req->providers_id, true);
+                            $this->pushNotofarray($notarray, $ids, $type_id, $type_model);
+                        }
+
+                    } elseif ($step == 2) {
+                        $order_step = 'Accept';
+                        $not['ar']['title'] = __('notifications.order_step2.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step2.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step2.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step2.body', ['code' => $code], 'en');
+                    } elseif ($step == 4) {
+                        $order_step = 'Price';
+                        $not['ar']['title'] = __('notifications.order_step4.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step4.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step4.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step4.body', ['code' => $code], 'en');
+
+                    }elseif ($step == 5) {
+                        $order_step = 'PuckUp';
+                        $not['ar']['title'] = __('notifications.order_step_transporter2.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step_transporter2.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step_transporter2.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step_transporter2.body', ['code' => $code], 'en');
+
+                    } else {
+                        $order_step = 'Complete';
+                        $not['ar']['title'] = __('notifications.order_step3.title', [], 'ar');
+                        $not['en']['title'] = __('notifications.order_step3.title', [], 'en');
+                        $not['ar']['body'] = __('notifications.order_step3.body', ['code' => $code], 'ar');
+                        $not['en']['body'] = __('notifications.order_step3.body', ['code' => $code], 'en');
+
+                    }
+                }
 
                 break;
 
+            case 'MaintenanceReport':
+                $code=$type_item->transaction?->invoice_no;
+                $type_number=1;
+                if($step == 1){
+                    $order_step='MaintenanceReport';
+                    $not['ar']['title']=__('notifications.order_step_MaintenanceReport0.title',[],'ar');
+                    $not['en']['title']=__('notifications.order_step_MaintenanceReport0.title',[],'en');
+                    $not['ar']['body']=__('notifications.order_step_MaintenanceReport0.body',['code'=>$code],'ar');
+                    $not['en']['body']=__('notifications.order_step_MaintenanceReport0.body',['code'=>$code],'en');
 
+                }else{
+
+                }
+                break;
             default:
 
         }
@@ -136,7 +298,6 @@ class ApiController extends BaseController
         $not_p=ModelNotification::updateorcreate(['type_id'=>$type_id,'type_model'=>$type_model],$notarray);
         $not_p->providers()->sync($ids);
         $FcmToken=FcmTokenProvider::wherein('provider_id',$ids)->pluck('token');
-
        $this->sendNotification($not_p,$FcmToken);
        return true;
 

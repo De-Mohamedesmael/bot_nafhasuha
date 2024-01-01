@@ -39,4 +39,48 @@ return [
         'body'=>'You have a new offer for your order number #:code . Thank you for using Nafhasuha',
     ],
 
+
+    'order_step_transporter0' => [
+        'title' => 'Approval Pending for Tow Truck',
+        'body' => 'Your request #:code has been approved and is awaiting a tow truck.',
+    ],
+    'order_step_transporter1' => [
+        'title' => 'Tow Truck En Route to You',
+        'body' => 'The tow truck is on its way to you. Please wait.',
+    ],
+    'order_step_transporter1-2' => [
+        'title' => 'Your Request is Completed',
+        'body' => 'Your request #:code has been completed, and the tow truck is en route to the center to pick up the vehicle.',
+    ],
+    'order_step_transporter1-3' => [
+        'title' => 'Tow Truck En Route',
+        'body' => 'The tow truck is on its way to the center to pick up the vehicle.',
+    ],
+
+    'order_step_transporter_canceled' => [
+        'title' => 'Your Request has been Successfully Canceled',
+        'body' => 'Your request #:code has been canceled, and the tow truck is en route to the center to pick up the vehicle.',
+    ],
+    'order_step_transporter2' => [
+        'title' => 'Picked up by the Tow Truck',
+        'body' => 'The vehicle has been picked up by the tow truck, and delivery to the destination is in progress.',
+    ],
+    'order_step_transporter3' => [
+        'title' => 'Successfully Delivered',
+        'body' => 'The vehicle has been successfully delivered to the destination. Thank you.',
+    ],
+    'order_step_transporter4' => [
+        'title' => 'Successfully Delivered to the Center',
+        'body' => 'The vehicle has been successfully delivered to the center. Thank you.',
+    ],
+
+    'order_step_MaintenanceReport0' => [
+        'title' => 'Maintenance Report Issued',
+        'body' => 'The maintenance report has been issued. Please review the maintenance reports.',
+    ],
+    'order_step_MaintenanceReport2' => [
+        'title' => 'Report Approved',
+        'body' => 'The report for request #:code has been approved. You can now start the maintenance process.',
+    ],
+
 ];

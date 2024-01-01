@@ -75,7 +75,7 @@ class OrderController extends Controller
                 'providers.name as provider_name',
                 'providers.phone as provider_phone',
             );
-            ///'pending','approved','received','completed','declined','canceled'
+            ///'pending','approved','PickUp','received','completed','declined','canceled'
             if($status){
                 $array_status=[];
                 switch ($status){
@@ -83,7 +83,7 @@ class OrderController extends Controller
                         $array_status=['pending'];
                         break;
                     case 'approved':
-                        $array_status=['approved'];
+                        $array_status=['approved','PickUp'];
                         break;
                     case 'completed':
                         $array_status=['received','completed'];
@@ -174,6 +174,7 @@ class OrderController extends Controller
                             $class='pending';
                             break;
                         case 'approved':
+                        case 'PickUp':
                             $class='approved';
                             break;
                         case 'completed':

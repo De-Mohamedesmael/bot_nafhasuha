@@ -48,7 +48,7 @@ class OrderController extends ApiController
        + sin( radians(' . $provider->lat  . ') )
        * sin( radians( `lat` ) ) ) )');
         $orders= auth()->user()->orders()
-            ->wherein('status',  ['approved'])->selectRaw("*,{$sqlDistance} as distance")->latest();
+            ->wherein('status',  ['approved','PickUp'])->selectRaw("*,{$sqlDistance} as distance")->latest();
         if($count_paginate == 'ALL'){
             $orders=  $orders->get();
         }else{
@@ -199,12 +199,6 @@ class OrderController extends ApiController
 
 
         try {
-            $have_pending=OrderService::NotCompleted()
-                ->where('provider_id',auth()->id())->exists();
-            if($have_pending){
-                return responseApi(405, translate('This request cannot be approved'));
-
-            }
 
 
             $order=OrderService::where('id',$request->order_id)
@@ -214,6 +208,15 @@ class OrderController extends ApiController
                 return responseApi(405, translate('The order is no longer available'));
             }
 
+            $arr_More_than_one = OrderService::GetIsMoreThanOne();
+            if (!in_array($order->type,$arr_More_than_one)){
+                $have_pending=OrderService::NotCompleted()
+                    ->where('provider_id',auth()->id())->exists();
+                if($have_pending){
+                    return responseApi(405, translate('This request cannot be approved'));
+
+                }
+            }
             DB::beginTransaction();
             if($order->type == 'PeriodicInspection'){
                 $order->provider_id=auth()->id();
@@ -226,6 +229,8 @@ class OrderController extends ApiController
 
                     $transaction->save();
                 }
+                $this->pushNotof('Order',$order,$order->user_id,2);
+
             }elseif ($order->type == 'Maintenance'){
                 $order->provider_id=auth()->id();
                 $order->status="approved";
@@ -236,14 +241,49 @@ class OrderController extends ApiController
                     $transaction->status="approved";
                     $transaction->save();
                 }
-                $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user());
+                $OrderService =  $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user());
+                $this->pushNotof('Order',$OrderService,$order->user_id,1);
+
+            }else{
+
+                $this->pushNotof('Order',$order,$order->user_id,2);
             }
-            $this->pushNotof('Order',$order,$order->user_id,2);
             $this->ServiceUtil->RemoveALLPricesAndRequests(auth()->id(),$order->id);
             DB::commit();
             return  responseApi(200, translate('return_data_success'),$order->id);
         }catch (\Exception $exception){
-        dd($exception);
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
+    public function pickUpOrder(Request $request)
+    {
+
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+
+
+        try {
+
+            $order=OrderService::where('id',$request->order_id)->first();
+            if(!$order){
+                return responseApi(405, translate('The order is no longer available'));
+            }
+            DB::beginTransaction();
+                $order->status="PickUp";
+                $order->save();
+                $this->pushNotof('Order',$order,$order->user_id, 5);
+            DB::commit();
+            return  responseApi(200, translate('return_data_success'),$order->id);
+        }catch (\Exception $exception){
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
@@ -286,6 +326,7 @@ class OrderController extends ApiController
                    'time_at' => $request->time_at,
                    'details' => $request->details,
                 ]);
+            $this->pushNotof('MaintenanceReport',$order,$order->user_id,1);
             DB::commit();
             return  responseApi(200, translate('return_data_success'),new MaintenanceReportResource($report));
         }catch (\Exception $exception){
@@ -317,15 +358,28 @@ class OrderController extends ApiController
             $transaction= $order->transaction;
             if($transaction){
                 $transaction->provider_id=auth()->id();
-                $transaction->status="completed";
+                $transaction->status="received";
                 $transaction->completed_at=now();
 
                 $transaction->save();
             }
+            $parent= $order->parent;
+            if($parent && $parent->status != "completed"){
+                $parent->status="PickUp";
+                $parent->save();
+            }
+
+            if ($order->type == 'Maintenance'){
+                $OrderService =  $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user(),'completed');
+                $this->pushNotof('Order',$OrderService,$order->user_id,1);
+
+            }else{
+                $this->pushNotof('Order',$order,$order->user_id,3);
+            }
 
 
 
-        $this->pushNotof('Order',$order,$order->user_id,3);
+
         return  responseApi(200, translate('return_data_success'),$order->id);
 
     }

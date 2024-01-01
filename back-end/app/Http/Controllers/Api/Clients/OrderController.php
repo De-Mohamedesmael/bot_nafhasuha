@@ -157,7 +157,7 @@ class OrderController extends ApiController
     {
         $validator = validator($request->all(), [
             'maintenance_report_id' => 'required|integer',
-            'payment_method' => 'required|string|in:Online,Cash,Wallet',
+            'payment_method' => 'required|string|in:Online,Wallet',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -210,23 +210,70 @@ class OrderController extends ApiController
             $trans->save();
             $MaintenanceReport->status='Accept';
             $MaintenanceReport->save();
-//            if($provider->is_notification){
-//                $lang= $provider->default_language;
-//                $code=$order->transaction?->invoice_no;
-//                $FcmToken=FcmTokenProvider::where('provider_id',$provider->id)->pluck('token');
-//                $title=__('notifications.PriceRequestProvider.title',[],$lang);
-//                $body=__('notifications.PriceRequestProvider.body',['code'=>$code],$lang);
-//                $type='ClientAcceptPrice';
-//                $type_id=$order->id;
-//
-//                $this->sendNotificationNat($title,$body,$type,$type_id,$FcmToken);
+            $provider=$order->provider;
+            if($provider->is_notification){
+                $code=$order->transaction?->invoice_no;
+               $notarray = [
+                    'type' => 1,
+                    'order_step' => 'Accept',
+                    'image' => null
+                ];
+                $type_model = 'Provider';
+                $notarray['ar']['title'] = __('notifications.order_step_MaintenanceReport2.title', [], 'ar');
+                $notarray['en']['title'] = __('notifications.order_step_MaintenanceReport2.title', [], 'en');
+                $notarray['ar']['body'] = __('notifications.order_step_MaintenanceReport2.body', ['code' => $code], 'ar');
+                $notarray['en']['body'] = __('notifications.order_step_MaintenanceReport2.body', ['code' => $code], 'en');
+                $this->pushNotofarray($notarray, [$provider->id], $order->id, $type_model);
 
-//            }
-
-
+            }
             DB::commit();
 
-            return  responseApi(200, translate('Price quote has been successfully accepted'),$order->id);
+            return  responseApi(200, translate('Maintenance Report has been successfully accepted'),$order->id);
+        }catch (\Exception $exception){
+            DB::rollBack();
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+    }
+
+    public function rejectMaintenanceReport(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
+        ]);
+        if ($validator->fails())
+            return responseApiFalse(405, $validator->errors()->first());
+
+
+        $MaintenanceReport= MaintenanceReport::where('order_service_id',$request->order_id)
+        ->first();
+
+        $order= auth()->user()->orders()->whereId($request->order_id)
+            ->first();
+
+        if(!$order)
+            return responseApi(404, translate("Order Not Found"));
+
+
+        DB::beginTransaction();
+        try {
+            if($MaintenanceReport){
+                if($MaintenanceReport->status == "Reject"){
+                    return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
+                }elseif($MaintenanceReport->status =='Accept'){
+                    return responseApi(405, translate("This price quote has been accepted successfully"));
+                }
+                $MaintenanceReport->status='Reject';
+                $MaintenanceReport->save();
+            }
+
+            $this->ServiceUtil->CanceledOrderService($request->order_id,null,'User',auth()->id());
+
+            $OrderService =  $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user(),'canceled');
+            $this->pushNotof('Order',$OrderService,$order->user_id,1);
+
+            DB::commit();
+            return  responseApi(200, translate('The request has been successfully cancelled'));
         }catch (\Exception $exception){
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
