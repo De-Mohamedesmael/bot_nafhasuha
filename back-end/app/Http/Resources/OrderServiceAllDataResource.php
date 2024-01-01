@@ -26,7 +26,7 @@ class OrderServiceAllDataResource extends JsonResource
             }
 
         }
-        $first_children=$this->children()->wherein('status',['pending', 'approved', 'received'])->first() ?:null;
+        $first_children=$this->children()->wherein('status',['pending','PickUp', 'approved', 'received'])->first() ?:null;
         return [
             'id'=>$this->id,
             'status'=>$this->status,
@@ -43,6 +43,7 @@ class OrderServiceAllDataResource extends JsonResource
             'lat_to'=>$this->lat_to,
             'long_to'=>$this->long_to,
             'details'=>$this->details,
+            'status_vehicle'=>$this->status_vehicle,
             'images'=> $this->getMedia('images')->map(function ($item) {
                 return [
                     'id' => $item->id,
@@ -74,6 +75,7 @@ class OrderServiceAllDataResource extends JsonResource
             'canceled_type'=>$this->canceled_type,
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
+            'is_maintenance_report'=>(boolean)$this->maintenance_report,
             'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):'',
         ];
     }

@@ -90,6 +90,7 @@ Route::middleware('auth.guard:api')->group(function () {
     ###          Order  Service               ###
     #############################################
     Route::prefix('services/store')->group(function () {
+        Route::get('get-cost-maintenance', [ServiceController::class, 'getCostMaintenance']);
         Route::Post('maintenance', [ServiceController::class, 'StoreOrderServiceMaintenance']);
         Route::Post('vehicle-barriers', [ServiceController::class, 'StoreOrderServiceVehicleBarriers']);
         Route::Post('periodic-inspection', [ServiceController::class, 'StoreOrderServicePeriodicInspection']);
@@ -128,6 +129,7 @@ Route::middleware('auth.guard:api')->group(function () {
 
         Route::Post('accept-quotes', [ServiceController::class, 'acceptQuotes']);
         Route::Post('accept-maintenance-report', [OrderController::class, 'acceptMaintenanceReport']);
+        Route::Post('reject-maintenance-report', [OrderController::class, 'rejectMaintenanceReport']);
         Route::get('get-maintenance-report', [OrderController::class, 'getMaintenanceReport']);
         Route::get('show/{id}', [OrderController::class, 'show']);
         Route::get('quotes/{id}', [OrderController::class, 'quotes']);

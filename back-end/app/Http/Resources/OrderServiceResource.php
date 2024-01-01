@@ -17,11 +17,11 @@ class OrderServiceResource extends JsonResource
     public function toArray($request)
     {
         $transaction = $this->transaction;
-       $is_tracking= ($this->status=='pending'||$this->status=='approved')&& ($this->category_id==5||$this->category_id==8) ? 1:0;
+       $is_tracking= ($this->status=='pending'||$this->status=='approved' || $this->status=='PickUp')&& ($this->category_id==5||$this->category_id==8) ? 1:0;
 
-       $first_children=$this->children()->wherein('status',['pending', 'approved'])->first() ?:null;
+       $first_children=$this->children()->wherein('status',['pending', 'PickUp','approved'])->first() ?:null;
        if($first_children){
-           $is_tracking= $first_children->status == 'approved';
+           $is_tracking= $first_children->status == 'approved' || $first_children->status == 'PickUp';
        }
        return [
             'id'=>$this->id,
@@ -29,6 +29,7 @@ class OrderServiceResource extends JsonResource
             'type'=>$this->type,
             'lat'=>$this->lat,
             'long'=>$this->long,
+            'status_vehicle'=>$this->status_vehicle,
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
             'is_have_second_provider'=> (bool)$first_children,
             'second_status'=> $first_children ? $first_children->status : '',

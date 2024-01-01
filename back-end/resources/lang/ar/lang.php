@@ -1010,6 +1010,7 @@ return [
     'internal_stock_request' => 'طلب مخزون داخلي',
     'internal_stock_request_list' => 'قائمة طلبات المخزون الداخلي',
     'approved' => 'وافق',
+    'PickUp' => 'التقاط',
     'request_stock_should_not_greater_than_current_stock' => 'يجب ألا يزيد طلب المخزون عن المخزون الحالي.',
     'update_status' => 'تحديث الحالة',
     'kindly_assign_pos_for_that_user_to_able_to_use_it' => 'يرجى تخصيص نقاط البيع لهذا المستخدم ليتمكن من استخدامه',

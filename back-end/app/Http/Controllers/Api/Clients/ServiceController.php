@@ -73,7 +73,9 @@ class ServiceController extends ApiController
         }else {
             $categories = $categories->orderBy('sort', 'Asc')->simplePaginate($count_paginate);
         }
-        return  responseApi(200, translate('return_data_success'),CategoryResource::collection($categories));
+        $data['cost_maintenance']= \Settings::get('PriceMaintenance',100);
+        $data['categories']= CategoryResource::collection($categories);
+        return  responseApi(200, translate('return_data_success'),$data);
 
     }
     public function transportVehicles(Request $request)
@@ -198,6 +200,8 @@ class ServiceController extends ApiController
             'category_id' => 'required|integer|exists:categories,id',
             'vehicle_id' => 'required|integer|exists:user_vehicles,id',
             'status_vehicle' => 'required|in:1,0',
+            'transporter_id' => 'required|integer|exists:transporters,id',
+
 //            'date_at' => 'required|Date',
 //            'time_at' => 'required|string',
             'address' => 'required|string|max:300',
@@ -254,9 +258,11 @@ class ServiceController extends ApiController
 
             $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle
                 ,'Maintenance', $request->service_id);
-            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,null,0,$amount);
+            $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->transporter_id,0,$amount);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
             DB::commit();
             return  responseApi(200, translate('return_data_success'),$OrderService->id);
 
@@ -269,7 +275,13 @@ class ServiceController extends ApiController
 
     }
 
+    public function getCostMaintenance( )
+    {
 
+        $amount= \Settings::get('PriceMaintenance',100);
+        return  responseApi(200, translate('return_data_success'),$amount);
+
+    }
 
     /** store Order  Vehicle Barriers Service
      * @param Request $request
@@ -642,19 +654,26 @@ class ServiceController extends ApiController
             return responseApi(405, translate("This price quote has been accepted successfully"));
         }
         $provider_id=$PriceQuote->provider_id;
-        $have_pending=OrderService::NotCompleted()
-            ->where('provider_id',$provider_id)->exists();
-        if($have_pending){
-            return responseApi(405, translate('This offer is no longer available'));
 
-        }
+
+
 
         $order= auth()->user()->orders()->whereId($PriceQuote->order_service_id)
             ->first();
 
+
         if(!$order)
             return responseApi(404, translate("Order Not Found"));
 
+        $arr_More_than_one = OrderService::GetIsMoreThanOne();
+        if (!in_array($order->type,$arr_More_than_one)){
+            $have_pending=OrderService::NotCompleted()
+                ->where('provider_id',$provider_id)->exists();
+            if($have_pending){
+                return responseApi(405, translate('This offer is no longer available'));
+
+            }
+        }
 
         DB::beginTransaction();
         try {

@@ -177,6 +177,7 @@ class TransactionController extends Controller
                             $class='pending';
                             break;
                         case 'approved':
+                        case 'PickUp':
                             $class='approved';
                             break;
                         case 'completed':

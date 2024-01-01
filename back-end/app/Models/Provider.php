@@ -65,6 +65,10 @@ class Provider extends Authenticatable implements JWTSubject, HasMedia
     {
         return $this->belongsTo(Area::class);
     }
+    public function transporter()
+    {
+        return $this->belongsTo(Transporter::class);
+    }
 
     public function rates()
     {

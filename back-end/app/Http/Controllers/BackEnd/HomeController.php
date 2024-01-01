@@ -45,7 +45,7 @@ class HomeController extends Controller
         $end_date = new Carbon('last day of this month');
         $cities =City::listsTranslations('title as name')->pluck('name','id');
         $providers = Provider::with(['orders'=>function($q){
-            $q->wherein('order_services.status',['pending', 'approved','received']);
+            $q->wherein('order_services.status',['pending', 'approved','PickUp','received']);
         }])->withAvg('rates as totalRate', 'rate')
             ->withCount(['orders'=>function ($q) {
                 $q->wherein('status',['completed']);
@@ -176,7 +176,7 @@ class HomeController extends Controller
 
         $AmountPendingByMonthThisYear=OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
             ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
-            ->wherein('order_services.status',  ['pending', 'approved','received'])
+            ->wherein('order_services.status',  ['pending', 'approved','PickUp','received'])
             ->select(DB::raw('MONTH(order_services.created_at) as month'),
                 DB::raw('sum(transactions.final_total) as sum_final_total'))
             ->where('order_services.created_at', '>=', $start_date)

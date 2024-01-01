@@ -143,6 +143,7 @@
   'percent_Battery' => 'نسبة التطبيق للبطرية',
   'percent_Petrol' => 'نسبة التطبيق للبنزين',
   'percent_Tire' => 'نسبة التطبيق للبنشر',
-  'SAR' => 'ر.س',
-  'This price quote has been accepted successfully' => 'This price quote has been accepted successfully',
+    'SAR' => 'ر.س',
+    'This price quote has been accepted successfully' => 'تم قبول عرض السعر بنجاح',
+    'Maintenance Report has been successfully accepted' => 'تم قبول تقرير الصيانة بنجاح',
 );

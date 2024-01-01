@@ -83,6 +83,8 @@ class AuthController extends ApiController
     {
         $validator = validator($request->all(), [
             'provider_type' => 'required|string|in:Provider,ProviderCenter',
+            'transporter_id' => 'nullable|integer|exists:transporters,id',
+
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:providers',
             'email' => 'nullable|string|max:20|unique:providers',
@@ -166,6 +168,8 @@ class AuthController extends ApiController
     {
         $validator = validator($request->all(), [
             'provider_type' => 'nullable|string|in:Provider,ProviderCenter',
+            'transporter_id' => 'nullable|integer|exists:transporters,id',
+
             'name' => 'required|string|between:2,200',
             'email' => 'nullable|string|email|max:100|unique:providers,email,' . auth()->id(),
             'address' => 'required|string|max:255',
@@ -187,6 +191,7 @@ class AuthController extends ApiController
 
         auth()->user()->update([
             'name'=>$request->name,
+
             'email'=>$request->email,
             'address'=>$request->address,
             'lat'=>$request->lat,
@@ -208,6 +213,10 @@ class AuthController extends ApiController
             $provider->addMedia($uploadedFile)
                 ->usingFileName(time().'.'.$extension)
                 ->toMediaCollection('images');
+        }
+        if($request->has('transporter_id')){
+            $provider->transporter_id = $request->transporter_id;
+            $provider->save();
         }
         if($request->has('categories')){
             $provider->categories()->sync($request->categories);
