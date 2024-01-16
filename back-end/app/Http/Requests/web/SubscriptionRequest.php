@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Store;
+namespace App\Http\Requests\web;
 
-use App\Models\Attribute;
+use App\Models\Store;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
-class AttributeRequest extends FormRequest
+class SubscriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,6 +18,7 @@ class AttributeRequest extends FormRequest
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,6 +26,10 @@ class AttributeRequest extends FormRequest
      */
     public function rules()
     {
-        return Attribute::$rules;
+        return [
+            'email' => 'required|max:200|email',
+
+        ];
     }
+
 }

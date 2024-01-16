@@ -38,7 +38,7 @@
                             <a class="nav-link" data-value="contentUs" href="#">{{\App\CPU\translate('contentUs')}}
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                             <a class="nav-link" href="{{route('front.info.show','terms-and-conditions')}}">{{\App\CPU\translate('Terms and Conditions')}}
                             </a>
                         </li>
@@ -53,7 +53,7 @@
                         <li class="nav-item">
                             <a class="nav-link" data-value="services" href="#">{{\App\CPU\translate('Our-Services')}}</a>
                         </li>
-                        <li class="nav-item active">
+                        <li class="nav-item ">
                             <a class="nav-link" href="#">{{\App\CPU\translate('Home')}}</a>
                         </li>
                     </ul>
@@ -64,30 +64,4 @@
                 </a>
             </nav>
         </div>
-        <div class="head-header">
-            <div class="container">
-                <div class="row ">
-                    <div class="image col-xs-12 col-sm-6 animate__animated animate__bounceIn animate__slower">
-                        <img alt="" src="{{asset('assets/front-end/public/images/header_one.svg')}}">
-                    </div>
-                    <div class="text col-xs-12 col-sm-6 animate__animated animate__bounceIn animate__slower">
-                        <h3>
-                            {!!  \App\CPU\translate('welcome_nf_user') !!} <span>{!!  \App\CPU\translate('welcome_nf_user2') !!}</span>
-                            <br>{!!  \App\CPU\translate('welcome_nf_user3') !!}
-                        </h3>
 
-                        <p class="">{{\Settings::get('welcome_messages'.app()->getLocale(),"يعد موقع نفحصها نظاماً متكاملاً , قدرته فائقة لتلبي معظم إحتياجات مراكز الخدمة بكل
-                            أنواعها مع
-                            اختلاف أحجامها. كما يتميز البرنامج بسهولة الاستخدام والإنسيابية , مما يحسن من أداء العاملين
-                            بالمركز , وبالتالى يرفع من كفاءة ومستوى الخدمة. و يوفر هذا النظام الأدوات الأساسية لإدارة
-                            متكاملة بشكل احترافى متميز محاسبياً و إدارياً , بأعلي")}}</p>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-
-
-    </section>
-</header>
