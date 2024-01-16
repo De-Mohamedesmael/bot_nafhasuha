@@ -11,44 +11,48 @@
                 </button>
                 <div class="btn-company">
                     <a class="" href="{{url('/')}}">
-                        مستخدم
+                        {{\App\CPU\translate('web_user')}}
                     </a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="navbarText" style="justify-content: center;">
                     <ul class="navbar-nav links">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">EN
+                            @if(app()->getLocale() == 'en')
+                                <a class="nav-link" href="{{route('admin.switchLanguage', 'ar') }}">Ar</a>
+                            @else
+                                <a class="nav-link" href="{{route('admin.switchLanguage', 'en') }}">EN</a>
+                            @endif
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-value="contentUs" href="#">{{\App\CPU\translate('contentUs')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-value="contentUs" href="#">تواصل معانا
+                            <a class="nav-link" data-value="our-partners" href="#">{{\App\CPU\translate('About')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-value="our-partners" href="#">من نحن
+                            <a class="nav-link" data-value="our-partners" href="#">{{\App\CPU\translate('our-partners')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-value="our-partners" href="#">شركائنا
+                            <a class="nav-link" data-value="app-video" href="#">{{\App\CPU\translate('app-video')}}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-value="app-video" href="#">شرح التطبيق
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-value="services" href="#">خدمتنا</a>
+                            <a class="nav-link" data-value="services" href="#">{{\App\CPU\translate('Our-Services')}}</a>
                         </li>
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">الرئيسية</a>
+                            <a class="nav-link" href="#">{{\App\CPU\translate('Home')}}</a>
                         </li>
                     </ul>
 
 
                 </div>
-                <a class="navbar-brand" href="#">
-                    <img alt="" height="60" src="{{asset('assets/front-end/public/images/logo.svg')}}" width="100">
+                <a class="navbar-brand" href="\">
+                    <img alt="{{\App\CPU\translate('app_name')}}" height="60" src="{{asset('assets/images/settings/'.$logo)}}" width="100">
                 </a>
             </nav>
         </div>
@@ -59,15 +63,16 @@
                         <img alt="" src="{{asset('assets/front-end/public/images/provider/header_two.svg')}}">
                     </div>
                     <div class="text col">
-                        <h3>مرحبآ بك في
-                            <span>نفحصها</span>
-                            كل خدمتك عندنا....</h3>
+                        <h3>
+                            {!!  \App\CPU\translate('welcome_nf_user') !!} <span>{!!  \App\CPU\translate('welcome_nf_user2') !!}</span>
+                            <br>{!!  \App\CPU\translate('welcome_nf_user3') !!}
+                        </h3>
 
-                        <p>يعد موقع نفحصها نظاماً متكاملاً , قدرته فائقة لتلبي معظم إحتياجات مراكز الخدمة بكل أنواعها مع
+                        <p class="">{{\Settings::get('welcome_messages_provider_'.app()->getLocale(),"يعد موقع نفحصها نظاماً متكاملاً , قدرته فائقة لتلبي معظم إحتياجات مراكز الخدمة بكل
+                            أنواعها مع
                             اختلاف أحجامها. كما يتميز البرنامج بسهولة الاستخدام والإنسيابية , مما يحسن من أداء العاملين
                             بالمركز , وبالتالى يرفع من كفاءة ومستوى الخدمة. و يوفر هذا النظام الأدوات الأساسية لإدارة
-                            متكاملة بشكل احترافى متميز محاسبياً و إدارياً , بأعلي</p>
-                    </div>
+                            متكاملة بشكل احترافى متميز محاسبياً و إدارياً , بأعلي")}}</p>                    </div>
                 </div>
             </div>
 

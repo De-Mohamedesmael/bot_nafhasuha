@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Department;
 use App\Models\Equipment;
+use App\Models\Icon;
 use App\Models\Item;
 use App\Models\Manufacture;
 use App\Models\OrderService;
@@ -56,6 +57,16 @@ class ViewServiceProvider extends ServiceProvider
                 'side_counts_transactions' => $side_counts_transactions,
             ]);
         });
-
+        view()->composer([
+            'front-end.home',
+            'front-end.provider.home',
+            'front-end.layouts.footer',
+            'front-end.provider.layouts.footer',
+        ], function ($view) {
+            $icons=Icon::get();
+            $view->with([
+                'icons' => $icons,
+            ]);
+        });
     }
 }

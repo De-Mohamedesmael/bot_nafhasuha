@@ -26,7 +26,33 @@
 <script src="{{asset('assets/front-end/gallery/script.js')}}"></script>
 <script src="{{asset('assets/front-end/slidervideo/script.js')}}"></script>
 <script src="{{asset('assets/front-end/formoid.min.js')}}"></script>
+<script src="{{asset('assets/front-end/js/cdn.jsdelivr.net_npm_sweetalert2@11')}}"></script>
 
+@if(session()->has('success'))
+    <script>
+
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: " {{ session()->get('success') }}",
+            showConfirmButton: false,
+            timer: 2500
+        })
+    </script>
+@endif
+@if(session()->has('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '{{ session()->get('error') }}',
+            showConfirmButton: true,
+            confirmButtonText: "{{__('site.okay')}}",
+            timer: 2500
+        })
+
+    </script>
+@endif
 <script>
     $(document).ready(function () {
 

@@ -39,7 +39,17 @@
         color: #333;
     }
 
-
+    footer a.nav-link {
+        color: #fff;
+        text-align: end;
+        padding: 3px 0px !important;
+    }
+    footer .social ul li {
+        width: 25px;
+        height: 25px;
+        padding: 0 !important;
+        background-color: unset !important;
+    }
 </style>
 <script>
     // Simulating a 2-second delay
