@@ -41,7 +41,7 @@ class OrderServiceResource extends JsonResource
         $not_request_price=['PeriodicInspection','Maintenance'];
         //Tire&TransportVehicle&ChangeBattery&Petrol&SubscriptionBattery
         $is_offer_price=1;
-        if(in_array($this->type,$not_request_price)){
+         if(in_array($this->type,$not_request_price) || ($this->type == 'TransportVehicle' &&  $this->parent_id != null)){
             $is_offer_price=0;
         }
         return [
@@ -91,7 +91,7 @@ class OrderServiceResource extends JsonResource
             'final_total'=>(int)$transaction->final_total??0,
             'city'=>new CityResource($this->city),
             'is_report'=>(boolean)$this->maintenance_report,
-            'report'=>$this->maintenance_report ? new MaintenanceReportResource($this->maintenance_report):'',
+            'report'=>$this->maintenance_report ? new MaintenanceReportResource($this->maintenance_report):null,
             'canceled_type'=>$this->canceled_type,
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),

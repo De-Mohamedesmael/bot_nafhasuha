@@ -565,6 +565,8 @@ class ServiceUtil
             $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
         $arr_More_than_one = OrderService::GetIsMoreThanOne();
         $max_distance=\Settings::get('max_distance',500);
+        
+        
                 $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
                * cos( radians( `lat` ) )
                * cos( radians( `long` )

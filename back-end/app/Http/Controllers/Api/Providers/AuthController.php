@@ -83,7 +83,7 @@ class AuthController extends ApiController
     {
         $validator = validator($request->all(), [
             'provider_type' => 'required|string|in:Provider,ProviderCenter',
-            'transporter_id' => 'nullable|integer|exists:transporters,id',
+            'transporter_id' => 'nullable|integer',
 
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:providers',
@@ -106,8 +106,13 @@ class AuthController extends ApiController
 
         try {
             DB::beginTransaction();
-            $inputs = $request->except('categories','commercial_register');
+            $inputs = $request->except('categories','commercial_register','transporter_id');
             $provider = Provider::create($inputs);
+            
+            if($request->transporter_id > 0 ){
+               $provider-> transporter_id=$request->transporter_id;
+               $provider->save();
+            }
             $this->commonUtil->SendActivationCode($provider, 'Activation','Provider');
             $provider->categories()->sync($request->categories);
             if( $request->hasFile('commercial_register')){
@@ -168,7 +173,7 @@ class AuthController extends ApiController
     {
         $validator = validator($request->all(), [
             'provider_type' => 'nullable|string|in:Provider,ProviderCenter',
-            'transporter_id' => 'nullable|integer|exists:transporters,id',
+            'transporter_id' => 'nullable|integer',
 
             'name' => 'required|string|between:2,200',
             'email' => 'nullable|string|email|max:100|unique:providers,email,' . auth()->id(),
@@ -214,7 +219,7 @@ class AuthController extends ApiController
                 ->usingFileName(time().'.'.$extension)
                 ->toMediaCollection('images');
         }
-        if($request->has('transporter_id')){
+        if($request->has('transporter_id') && $request->transporter_id > 0){
             $provider->transporter_id = $request->transporter_id;
             $provider->save();
         }

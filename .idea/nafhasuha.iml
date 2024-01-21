@@ -167,6 +167,9 @@
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/paragonie/sodium_compat" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/laravel/ui" />
       <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/dasprid/enum" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/simplesoftwareio/simple-qrcode" />
+      <excludeFolder url="file://$MODULE_DIR$/back-end/vendor/bacon/bacon-qr-code" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

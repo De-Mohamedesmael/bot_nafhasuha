@@ -33,9 +33,15 @@ class OrderController extends ApiController
     public function indexPending(Request $request)
     {
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $orders= auth()->user()->orders()->whereNull('parent_id')->withcount(['price_requests'=>function ($q){
+        $orders= auth()->user()->orders()->where(function ($pq){
+            $pq->whereNull('parent_id')->withcount(['price_requests'=>function ($q){
                 $q->whereNull('status');
-            }])->NotCompleted()->latest();
+            }])->NotCompleted();
+        })->orwhere(function ($pq){
+            $pq->wherein('status',  ['completed'])->wherehas('children',function ($q){
+                $q->whereIn('status', ['pending', 'approved', 'PickUp', 'received']);
+            });
+        })->latest();
 
 
         if($count_paginate == 'ALL'){
@@ -51,13 +57,22 @@ class OrderController extends ApiController
     public function indexCompleted(Request $request)
     {
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $orders= auth()->user()->orders()->whereNull('parent_id')->Completed()->latest();
+        $orders = auth()->user()->orders()
+            ->whereNull('parent_id')
+            ->whereDoesntHave('children', function($q) {
+                $q->whereIn('status', ['pending', 'approved', 'PickUp', 'received']);
+            })
+            ->Completed()
+            ->latest();
 
         if($count_paginate == 'ALL'){
             $orders=  $orders->get();
         }else{
             $orders=  $orders->simplePaginate($count_paginate);
         }
+        
+        
+        
         return  responseApi(200, translate('return_data_success'),OrderServiceResource::collection($orders));
 
     }
@@ -170,9 +185,9 @@ class OrderController extends ApiController
         }
 
         if($MaintenanceReport->status == "Reject"){
-            return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
+            return responseApi(405, translate("Maintenance Report cannot be accepted as it has been declined"));
         }elseif($MaintenanceReport->status =='Accept'){
-            return responseApi(405, translate("This price quote has been accepted successfully"));
+            return responseApi(405, translate("This Maintenance Report has been accepted successfully"));
         }
 
         $order= auth()->user()->orders()->whereId($MaintenanceReport->order_service_id)
@@ -259,22 +274,24 @@ class OrderController extends ApiController
         try {
             if($MaintenanceReport){
                 if($MaintenanceReport->status == "Reject"){
-                    return responseApi(405, translate("Price quote cannot be accepted as it has been declined"));
+                    return responseApi(405, translate("Maintenance Report cannot be accepted as it has been declined"));
                 }elseif($MaintenanceReport->status =='Accept'){
-                    return responseApi(405, translate("This price quote has been accepted successfully"));
+                    return responseApi(405, translate("This Maintenance Report has been accepted successfully"));
                 }
                 $MaintenanceReport->status='Reject';
                 $MaintenanceReport->save();
             }
-
             $this->ServiceUtil->CanceledOrderService($request->order_id,null,'User',auth()->id());
 
-            $OrderService =  $this->ServiceUtil->SetOrderToTransportVehicle($order,auth()->user(),'canceled');
+            $OrderService =  $this->ServiceUtil->SetOrderToTransportVehicle($order,$order->provider,'canceled');
+            
             $this->pushNotof('Order',$OrderService,$order->user_id,1);
 
             DB::commit();
             return  responseApi(200, translate('The request has been successfully cancelled'));
         }catch (\Exception $exception){
+            
+            dd($exception);
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));

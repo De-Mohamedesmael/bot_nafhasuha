@@ -29,6 +29,7 @@ class UserVehicleResource extends JsonResource
             'numbers_ar'=>$this->numbers_ar,
             'numbers_en'=>$this->numbers_en,
             'periodic_inspection'=>date('m') > $this->periodic_inspection || (date('m') == $this->periodic_inspection && date('d') > 1 )  ? $oneYearFromNow.$text_periodic : date('Y').$text_periodic,
+            'month_inspection'=> $this->periodic_inspection,
             'status'=>$this->status,
             'first_image'=>$this->getFirstMedia('images') != null ? $this->getFirstMedia('images')->getUrl() : ($this->vehicle_brand != null ?($this->vehicle_brand->image != null ?asset('assets/images/'.$this->vehicle_brand->image): null): null),
             'vehicle_type'=>new VehicleTypeResource($this->vehicle_type),

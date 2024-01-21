@@ -12,6 +12,7 @@ class OrderService extends Model implements HasMedia
     use HasFactory,InteractsWithMedia;
     protected $guarded= [];
 
+    protected $appends=['is_rate'];
 
     protected $casts = [
         'position' => 'json',//['Left','Right','Front','Behind']
@@ -120,4 +121,14 @@ class OrderService extends Model implements HasMedia
         }
         return$is_offer_price;
     }
+    public function getIsRateAttribute()
+    {
+        if (\auth()->check()) {
+            return ProviderRate::where('order_service_id',$this->id)->where('provider_id',$this->provider_id)
+                ->where('user_id',\auth()->id())->exists();
+        }
+        return false;
+
+    }
+    
 }
