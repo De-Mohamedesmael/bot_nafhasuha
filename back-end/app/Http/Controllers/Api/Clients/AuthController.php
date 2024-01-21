@@ -104,9 +104,7 @@ class AuthController extends ApiController
             $inputs = $request->except('invitation_code');
             $user = User::create($inputs);
             $user-> generateInviteCode();
-            $this->commonUtil->SendActivationCode($user, 'Activation');
-
-
+            $r=$this->commonUtil->SendActivationCode($user, 'Activation');
             if ($request->has('invitation_code')){
                 $this->TransactionUtil->SaveInviteCode( $user ,$request->invitation_code);
             }

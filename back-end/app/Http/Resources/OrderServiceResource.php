@@ -21,7 +21,7 @@ class OrderServiceResource extends JsonResource
 
        $first_children=$this->children()->wherein('status',['pending', 'PickUp','approved'])->first() ?:null;
        if($first_children){
-           $is_tracking= $first_children->status == 'approved' || $first_children->status == 'PickUp';
+           $is_tracking= $first_children->status == 'approved' || $first_children->status == 'PickUp'? 1:0;
        }
        return [
             'id'=>$this->id,
@@ -33,15 +33,19 @@ class OrderServiceResource extends JsonResource
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
             'is_have_second_provider'=> (bool)$first_children,
             'second_status'=> $first_children ? $first_children->status : '',
-            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : '',
+            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : null,
             'category'=>new CategoryResource($this->category),
             'invoice_no'=>$transaction->invoice_no??'',
             'price_requests_count' => $this->price_requests_count?:0,
             'price_type' => $this->price_type?:0,
             'is_tracking'=>$is_tracking,
             'canceled_type'=>$this->canceled_type,
+            'is_rate_order'=> $this->is_rate,
+
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
+            'is_maintenance_report'=>(boolean)$this->maintenance_report,
+            'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):null,
         ];
     }
 }

@@ -305,254 +305,254 @@
 
 @section('javascript')
     @if (auth()->user()->can('dashboard.details.view'))
-        <script src="{{ URL::asset('assets/back-end/libs/chart.js/Chart.bundle.min.js') }}"></script>
-        <script>
-            $(document).ready(function() {
-                $('#city_id').change();
+    <script src="{{ URL::asset('assets/back-end/libs/chart.js/Chart.bundle.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#city_id').change();
 
-            });
-            $(document).on("change", '.filter, #city_id,#area_id', function() {
-                var city_id = $('select#city_id').val();
-                var area_id = $('select#area_id').val();
-                var start_date = $('#from_date').val();
-                if (!start_date) {
-                    start_date = 0;
-                }
-                var end_date = $('#to_date').val();
-                if (!end_date) {
-                    end_date = 0;
-                }
-                getDashboardData(start_date, end_date,city_id,area_id);
-            });
-
-
-            $('#city_id').on('change', function(){
-                var city_id =$(this).val();
-
-                $.get( "{{url('/admin/city/areas')}}", { city_id: city_id })
-                    .done(function( data ) {
-                        if(data.code == 200){
-                            var e=data.data;
-
-                            $('#area_id')
-                                .find('option')
-                                .remove();
-                            $.each(e, function (key, val) {
-                                $("#area_id").append('<option value="'+val.id+'" >'+val.title+'</option>');
-                            });
-                            $("#area_id").selectpicker("refresh");
-                        }
-
-                    });
-
-            });
-            $('#start_time, #end_time').focusout(function(event) {
-                var city_id = $('#city_id').val();
-                var area_id = $('#area_id').val();
-                var start_date = $('#from_date').val();
-                if (!start_date) {
-                    start_date = 0;
-                }
-                var end_date = $('#to_date').val();
-                if (!end_date) {
-                    end_date = 0;
-                }
-
-                getDashboardData(start_date, end_date,city_id,area_id);
-
-            })
-            var months =  [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
-            ];
+        });
+        $(document).on("change", '.filter, #city_id,#area_id', function() {
+            var city_id = $('select#city_id').val();
+            var area_id = $('select#area_id').val();
+            var start_date = $('#from_date').val();
+            if (!start_date) {
+                start_date = 0;
+            }
+            var end_date = $('#to_date').val();
+            if (!end_date) {
+                end_date = 0;
+            }
+            getDashboardData(start_date, end_date,city_id,area_id);
+        });
 
 
+        $('#city_id').on('change', function(){
+            var city_id =$(this).val();
 
-            function initializeUserChart(userCountsString,userCountsAllString) {
-                var userCounts = JSON.parse(userCountsString);
-                var userCounts_all = JSON.parse(userCountsAllString);
-                var ctx = document.getElementById('bar').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: '{{\App\CPU\translate('This year the number of registered users')}}',
-                            data: userCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }, {
-                            label: '{{\App\CPU\translate('Number of registered users')}}',
-                            data: userCounts_all,
-                            backgroundColor: 'rgba(54,235,229,0.2)',
-                            borderColor: 'rgb(54,235,235)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+            $.get( "{{url('/admin/city/areas')}}", { city_id: city_id })
+                .done(function( data ) {
+                    if(data.code == 200){
+                        var e=data.data;
+
+                        $('#area_id')
+                            .find('option')
+                            .remove();
+                        $.each(e, function (key, val) {
+                            $("#area_id").append('<option value="'+val.id+'" >'+val.title+'</option>');
+                        });
+                        $("#area_id").selectpicker("refresh");
+                    }
+
+                });
+
+        });
+        $('#start_time, #end_time').focusout(function(event) {
+            var city_id = $('#city_id').val();
+            var area_id = $('#area_id').val();
+            var start_date = $('#from_date').val();
+            if (!start_date) {
+                start_date = 0;
+            }
+            var end_date = $('#to_date').val();
+            if (!end_date) {
+                end_date = 0;
+            }
+
+            getDashboardData(start_date, end_date,city_id,area_id);
+
+        })
+        var months =  [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+
+
+        function initializeUserChart(userCountsString,userCountsAllString) {
+            var userCounts = JSON.parse(userCountsString);
+            var userCounts_all = JSON.parse(userCountsAllString);
+            var ctx = document.getElementById('bar').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
+                        data: userCounts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: '{{\App\CPU\translate('Number of registered users')}}',
+                        data: userCounts_all,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
-                });
-            }
-            function initializeProviderChart(providerCountsString,providerCountsAllString) {
-                var providerCounts = JSON.parse(providerCountsString);
-                var providerCounts_all = JSON.parse(providerCountsAllString);
-                var ctx = document.getElementById('bar_providers').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: '{{\App\CPU\translate('This year the number of registered users')}}',
-                            data: providerCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }, {
-                            label: '{{\App\CPU\translate('Number of registered users')}}',
-                            data: providerCounts_all,
-                            backgroundColor: 'rgba(54,235,229,0.2)',
-                            borderColor: 'rgb(54,235,235)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                }
+            });
+        }
+        function initializeProviderChart(providerCountsString,providerCountsAllString) {
+            var providerCounts = JSON.parse(providerCountsString);
+            var providerCounts_all = JSON.parse(providerCountsAllString);
+            var ctx = document.getElementById('bar_providers').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
+                        data: providerCounts,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: '{{\App\CPU\translate('Number of registered users')}}',
+                        data: providerCounts_all,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
-                });
-            }
-            function initializeOrderChart(CompleteString,CanceledString,PendingString) {
+                }
+            });
+        }
+        function initializeOrderChart(CompleteString,CanceledString,PendingString) {
 
-                var Completed =JSON.parse(CompleteString);
-                var Canceled = JSON.parse(CanceledString);
-                var Pending = JSON.parse(PendingString);
+            var Completed =JSON.parse(CompleteString);
+            var Canceled = JSON.parse(CanceledString);
+            var Pending = JSON.parse(PendingString);
 
-                var ctx = document.getElementById('lineChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: '{{\App\CPU\translate('chart_Completed')}}',
-                            data: Completed,
-                            backgroundColor: 'rgba(72,234,18,0.2)',
-                            borderColor: 'rgb(66,235,54)',
-                            borderWidth: 1
-                        },{
-                            label: '{{\App\CPU\translate('chart_Pending')}}',
-                            data: Pending,
-                            backgroundColor: 'rgba(54,235,229,0.2)',
-                            borderColor: 'rgb(54,235,235)',
-                            borderWidth: 1
-                        },{
-                            label: '{{\App\CPU\translate('chart_Canceled')}}',
-                            data: Canceled,
-                            backgroundColor: 'rgba(235,54,54,0.2)',
-                            borderColor: 'rgb(235,54,54)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+            var ctx = document.getElementById('lineChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: '{{\App\CPU\translate('chart_Completed')}}',
+                        data: Completed,
+                        backgroundColor: 'rgba(72,234,18,0.2)',
+                        borderColor: 'rgb(66,235,54)',
+                        borderWidth: 1
+                    },{
+                        label: '{{\App\CPU\translate('chart_Pending')}}',
+                        data: Pending,
+                        backgroundColor: 'rgba(54,235,229,0.2)',
+                        borderColor: 'rgb(54,235,235)',
+                        borderWidth: 1
+                    },{
+                        label: '{{\App\CPU\translate('chart_Canceled')}}',
+                        data: Canceled,
+                        backgroundColor: 'rgba(235,54,54,0.2)',
+                        borderColor: 'rgb(235,54,54)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
-                });
-            }
+                }
+            });
+        }
 
-            function getDashboardData(start_date, end_date,city_id,area_id) {
-                $.ajax({
-                    method: 'get',
-                    url: "{{route('admin.getCounterData')}}",
-                    data: {
-                        start_date,
-                        end_date,
-                        city_id,
-                        area_id
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            $('.current_users_value-data').html(result.count_users);
-                            $('.count_providers-data').html(result.count_providers);
-                            $('.total_orders_pending-data').html(result.total_orders_pending);
-                            $('.total_orders_completed-data').html(result.total_orders_completed);
-                            $('.total_orders_canceled-data').html(result.total_orders_canceled);
-                        }
-                    },
-                });
-                $.ajax({
-                    method: 'get',
-                    url: "{{route('admin.getChartData')}}",
-                    data: {
-                        start_date,
-                        end_date,
-                        city_id,
-                        area_id
-                    },
-                    success: function (result) {
-                        if (result.success) {
-                            console.log('dd');
-                            TotalAmount
-                            AmountCanceled
-                            AmountPending
-                            AmountCompleted
-                            $('#AmountCompleted').html(result.AmountCompleted);
-                            $('#AmountPending').html(result.AmountPending);
-                            $('#AmountCanceled').html(result.AmountCanceled);
-                            TotalAmount = result.AmountCanceled+result.AmountPending+result.AmountCompleted;
-                            $('#TotalAmount').html(TotalAmount);
-                            initializeUserChart(result.userCountsString, result.userCountsAllString);
-                            initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
-                            initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
-                        }
-                    },
-                });
-            }
+        function getDashboardData(start_date, end_date,city_id,area_id) {
+            $.ajax({
+                method: 'get',
+                url: "{{route('admin.getCounterData')}}",
+                data: {
+                    start_date,
+                    end_date,
+                    city_id,
+                    area_id
+                },
+                success: function (result) {
+                    if (result.success) {
+                        $('.current_users_value-data').html(result.count_users);
+                        $('.count_providers-data').html(result.count_providers);
+                        $('.total_orders_pending-data').html(result.total_orders_pending);
+                        $('.total_orders_completed-data').html(result.total_orders_completed);
+                        $('.total_orders_canceled-data').html(result.total_orders_canceled);
+                    }
+                },
+            });
+            $.ajax({
+                method: 'get',
+                url: "{{route('admin.getChartData')}}",
+                data: {
+                    start_date,
+                    end_date,
+                    city_id,
+                    area_id
+                },
+                success: function (result) {
+                    if (result.success) {
+                        console.log('dd');
+                        TotalAmount
+                        AmountCanceled
+                        AmountPending
+                        AmountCompleted
+                        $('#AmountCompleted').html(result.AmountCompleted);
+                        $('#AmountPending').html(result.AmountPending);
+                        $('#AmountCanceled').html(result.AmountCanceled);
+                        TotalAmount = result.AmountCanceled+result.AmountPending+result.AmountCompleted;
+                        $('#TotalAmount').html(TotalAmount);
+                        initializeUserChart(result.userCountsString, result.userCountsAllString);
+                        initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
+                        initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
+                    }
+                },
+            });
+        }
 
 
 
-        </script>
+    </script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
 
-        <script>
-            let map, activeInfoWindow, markers ,info_window_data= [];
-            /* ----------------------------- Initialize Map ----------------------------- */
-            function initMap() {
-                map = new google.maps.Map(document.getElementById("map"), {
-                    center: {
-                        lat: 24.774265,
-                        lng: 46.738586,
-                    },
-                    zoom: 8
-                });
+    <script>
+        let map, activeInfoWindow, markers ,info_window_data= [];
+        /* ----------------------------- Initialize Map ----------------------------- */
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {
+                    lat: 24.774265,
+                    lng: 46.738586,
+                },
+                zoom: 8
+            });
 
-                map.addListener("click", function(event) {
-                    mapClicked(event);
-                });
+            map.addListener("click", function(event) {
+                mapClicked(event);
+            });
 
-                initMarkers();
-            }
+            initMarkers();
+        }
 
-            /* --------------------------- Initialize Markers --------------------------- */
-            function initMarkers() {
-                markers=[];
-                const initialMarkers = <?php echo json_encode($providers) ?>;
-                console.log(initialMarkers);
-                for (let index = 0; index < initialMarkers.length; index++) {
-                    const markerData = initialMarkers[index];
-                    info_window_data[index]=`<div class="all-data">
+        /* --------------------------- Initialize Markers --------------------------- */
+        function initMarkers() {
+            markers=[];
+            const initialMarkers = <?php echo json_encode($providers) ?>;
+            console.log(initialMarkers);
+            for (let index = 0; index < initialMarkers.length; index++) {
+                const markerData = initialMarkers[index];
+                info_window_data[index]=`<div class="all-data">
                     <div class="w-50 data-left">
                         <div>
                             <div class="img-info-map">
@@ -582,67 +582,67 @@
 
 
                 </div>`;
-                    const position =   { lat: parseFloat(markerData.lat), lng: parseFloat(markerData.long)};
-                    const marker = new google.maps.Marker({
-                        position:position,
-                        icon: {
-                            url: "{{asset('assets/back-end/images/icon-car.png')}}",
-                            scaledSize: new google.maps.Size(35, 35),
-                        },
-                        title:  markerData.name ,
-                        draggable: true,
+                const position =   { lat: parseFloat(markerData.lat), lng: parseFloat(markerData.long)};
+                const marker = new google.maps.Marker({
+                    position:position,
+                    icon: {
+                        url: "{{asset('assets/back-end/images/icon-car.png')}}",
+                        scaledSize: new google.maps.Size(35, 35),
+                    },
+                    title:  markerData.name ,
+                    draggable: true,
+                    map
+                });
+                console.log( markers);
+                markers.push({
+                    key: markerData.id,
+                    marker: marker
+                });
+                console.log( markers);
+                const infowindow = new google.maps.InfoWindow({
+                    content: info_window_data[index],
+                });
+                marker.addListener("click", (event) => {
+                    if(activeInfoWindow) {
+                        activeInfoWindow.close();
+                    }
+                    infowindow.open({
+                        anchor: marker,
+                        shouldFocus: false,
                         map
                     });
-                    console.log( markers);
-                    markers.push({
-                        key: markerData.id,
-                        marker: marker
-                    });
-                    console.log( markers);
-                    const infowindow = new google.maps.InfoWindow({
-                        content: info_window_data[index],
-                    });
-                    marker.addListener("click", (event) => {
-                        if(activeInfoWindow) {
-                            activeInfoWindow.close();
-                        }
-                        infowindow.open({
-                            anchor: marker,
-                            shouldFocus: false,
-                            map
-                        });
-                        activeInfoWindow = infowindow;
-                        markerClicked(marker, index);
-                    });
+                    activeInfoWindow = infowindow;
+                    markerClicked(marker, index);
+                });
 
-                    marker.addListener("dragend", (event) => {
-                        markerDragEnd(event, index);
-                    });
+                marker.addListener("dragend", (event) => {
+                    markerDragEnd(event, index);
+                });
 
 
 
-                }
             }
-            /* --------------------------- update Markers --------------------------- */
+        }
+        /* --------------------------- update Markers --------------------------- */
 
-            function UpdateMarkerByKey(key,newLat,newLng) {
-                const markerObject = markers.find(markerObj => markerObj.key === key);
+        function UpdateMarkerByKey(key,newLat,newLng) {
+            const markerObject = markers.find(markerObj => markerObj.key === key);
 
-                if (markerObject) {
-                    markerObject.marker.setMap();
-                    markerObject.marker.setPosition(new google.maps.LatLng(newLat, newLng));
+            if (markerObject) {
+                markerObject.marker.setMap();
+                markerObject.marker.setPosition(new google.maps.LatLng(newLat, newLng));
 
-                    // Remove the marker object from the markers array
-                    markers = markers.filter(markerObj => markerObj.key !== key);
-                }
+                // Remove the marker object from the markers array
+                markers = markers.filter(markerObj => markerObj.key !== key);
             }
-            const socket = io('http://localhost:3000', { withCredentials: true });
+        }
+        const socket = io('https://socket.nafhasuha.com', { withCredentials: true });
 
-            socket.on('Notification', (coordinates) => {
-                console.log(coordinates);
-                // UpdateMarkerByKey(coordinates.id,coordinates.lat,coordinates.long)
-            });
-        </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&callback=initMap&language={{app()->getLocale()}}" async></script>
+        socket.on('update-marker', (coordinates) => {
+            console.log(coordinates);
+            UpdateMarkerByKey(coordinates.id,coordinates.lat,coordinates.long)
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&callback=initMap&language={{app()->getLocale()}}" async></script>
     @endif
 @endsection

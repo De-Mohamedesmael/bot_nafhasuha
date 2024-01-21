@@ -48,6 +48,7 @@ Route::middleware('auth.guard:api')->group(function () {
     #############################################
     Route::prefix('transactions')->group(function () {
         Route::get('/my-wallet', [TransactionController::class, 'myWallet']);
+        Route::get('/my-invoice/{order_id}', [TransactionController::class, 'myInvoice']);
         Route::post('/recharge-wallet', [TransactionController::class, 'RechargeMyWallet']);
         Route::get('/', [TransactionController::class, 'index']);
         Route::get('/show', [TransactionController::class, 'show']);

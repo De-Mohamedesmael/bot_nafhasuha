@@ -54,9 +54,10 @@ class OrderServiceAllDataResource extends JsonResource
             'user'=>new UserResource($this->user),
             'user_vehicle'=>new UserVehicleResource($this->vehicle),
             'provider'=>new ProviderOrderServiceResource($this->provider_with_rate),
+            'is_rate_order'=> $this->is_rate,
             'is_have_second_provider'=> (bool)$first_children,
             'second_status'=> $first_children ? $first_children->status : '',
-            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : '',
+            'second_provider'=>$first_children ? new ProviderOrderServiceResource($first_children->provider_with_rate) : null,
 
             'vehicle_transporter'=>new TransporterResource($transaction->transporter),
             'type_battery'=>$this->type =="ChangeBattery"? new TypeBatteryResource($transaction->type_battery) :null,
@@ -76,7 +77,7 @@ class OrderServiceAllDataResource extends JsonResource
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
             'is_maintenance_report'=>(boolean)$this->maintenance_report,
-            'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):'',
+            'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):null,
         ];
     }
 }

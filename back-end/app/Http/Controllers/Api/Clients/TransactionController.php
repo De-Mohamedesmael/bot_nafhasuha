@@ -7,6 +7,8 @@ use App\Http\Resources\MyPackageResource;
 use App\Http\Resources\MyWalletTransactionResource;
 use App\Http\Resources\PackageResource;
 use App\Http\Resources\PackageWithFeatureResource;
+use App\Http\Resources\MyInvoiceResource;
+
 use App\Models\Package;
 
 use App\Models\PackageUser;
@@ -49,6 +51,24 @@ class TransactionController extends ApiController
             $date['transactions']= MyWalletTransactionResource::collection(Transaction::Active()->where('user_id',auth()->id())->latest()
                 ->simplePaginate($count_paginate));
             return  responseApi(200, translate('return_data_success'),$date);
+        }catch (\Exception $exception){
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+
+    }
+    
+    public function myInvoice($id)
+    {
+         $order= auth()->user()->orders()->whereId($id)->first();
+        if(!$order)
+            return responseApi(404, translate("Order Not Found"));
+            
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        try {
+            return  responseApi(200, translate('return_data_success'),new MyInvoiceResource($order));
         }catch (\Exception $exception){
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));

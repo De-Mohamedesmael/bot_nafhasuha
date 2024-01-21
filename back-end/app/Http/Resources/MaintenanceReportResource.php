@@ -23,6 +23,9 @@ class MaintenanceReportResource extends JsonResource
             'date_at'=>$this->date_at,
             'time_at' => $this->time_at == null ? null :  Carbon::createFromFormat('H:i', $this->time_at)->format('h:i A'),
             'details' => $this->details,
+            'images'=> $this->getMedia('images')->map(function ($item) {
+                return  $item->getUrl();
+            }),
         ];
     }
 }

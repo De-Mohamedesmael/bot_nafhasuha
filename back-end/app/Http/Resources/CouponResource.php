@@ -25,6 +25,7 @@ class CouponResource extends JsonResource
             'is_multi_use'=>$this->is_multi_use,
             'type'=>$this->type,
             'type_id'=>$this->type_id,
+            'title_type'=>$this->type_model? $this->type_model->title:'',
 
         ];
     }

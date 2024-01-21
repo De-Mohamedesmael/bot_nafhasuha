@@ -41,7 +41,7 @@ class OrderServicePaddingResource extends JsonResource
         $not_request_price=['PeriodicInspection','Maintenance'];
         //Tire&TransportVehicle&ChangeBattery&Petrol&SubscriptionBattery
         $is_offer_price=1;
-        if(in_array($this->type,$not_request_price) || ($this->type == 'TransportVehicle' &&  $this->parent_id)){
+        if(in_array($this->type,$not_request_price) || ($this->type == 'TransportVehicle' &&  $this->parent_id != null)){
             $is_offer_price=0;
         }
         return [
