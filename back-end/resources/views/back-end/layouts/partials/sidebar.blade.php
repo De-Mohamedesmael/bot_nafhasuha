@@ -527,6 +527,12 @@
                                     <a href="{{route('admin.infos.edit','terms-periodic-inspection')}}">{{__('lang.terms-periodic-inspection')}}</a>
                                 </li>
                             @endcan
+                             @can('info_module.infos.special')
+                                <li
+                                    class="@if(request()->segment(2) == 'infos' && request()->segment(4) =='terms-and-conditions') active @endif">
+                                    <a href="{{route('admin.infos.edit','terms-and-conditions')}}">{{__('lang.terms-and-conditions')}}</a>
+                                </li>
+                            @endcan
                                 @can('info_module.category_faqs.view')
                                     <li
                                         class="@if(request()->segment(2) == 'category_faqs' && empty(request()->segment(3)) ) active @endif">

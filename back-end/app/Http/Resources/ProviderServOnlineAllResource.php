@@ -28,7 +28,7 @@ class ProviderServOnlineAllResource extends JsonResource
             "avg_rate" =>number_format($this->totalRate, 2, '.', '') ,
             "rates_count" => $this->rates_count,
             "distance" => number_format($this->distance, 2, '.', ''),//round(, 2),
-            "estimated_time" => number_format($this->estimated_time, 2,'.', ''),
+            "estimated_time" => 0,
             'categories'=>CategoryResource::collection($this->categories),
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),

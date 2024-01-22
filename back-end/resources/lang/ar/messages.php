@@ -178,4 +178,6 @@
   'You can easily contact us to request your service.' => 'يمكنك التواصل معنا بسهولة لطلب خدمتك. ',
   'Contact form' => 'نموذج الاتصال',
   'Terms and Conditions' => 'الشروط والاحكام',
+  'Price quote cannot be accepted as it has been declined' => 'Price quote cannot be accepted as it has been declined',
+  'Maintenance Report cannot be accepted as it has been declined' => 'Maintenance Report cannot be accepted as it has been declined',
 );

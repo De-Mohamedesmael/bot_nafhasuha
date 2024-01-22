@@ -10,6 +10,7 @@ use App\Http\Resources\CancelReasonResource;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CityResource;
+use App\Http\Resources\TransporterResource;
 use App\Http\Resources\CountryResource;
 use App\Http\Resources\IconResource;
 use App\Http\Resources\InfoResource;
@@ -29,6 +30,7 @@ use App\Models\Icon;
 use App\Models\Info;
 use App\Models\SplashScreen;
 use App\Models\User;
+use App\Models\Transporter;
 use App\Utils\Util;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -151,7 +153,7 @@ class GeneralController extends ApiController
     }
     public function infos(Request $request){
         $validator = validator($request->all(), [
-            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy',
+            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,TermsandConditions',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -183,6 +185,7 @@ class GeneralController extends ApiController
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
 
+    
     public function indexCategories(Request $request)
     {
 
@@ -205,7 +208,21 @@ class GeneralController extends ApiController
         }else {
             $categories = $categories->orderBy('sort', 'Asc')->simplePaginate($count_paginate);
         }
-        return  responseApi(200, translate('return_data_success'),CategoryResource::collection($categories));
+        $data['cost_maintenance']= \Settings::get('PriceMaintenance',100);
+        $data['categories']= CategoryResource::collection($categories);
+        return  responseApi(200, translate('return_data_success'),$data);
+
+    }
+    public function transportVehicles(Request $request)
+    {
+        $count_paginate=$request->count_paginate?:$this->count_paginate;
+        $transporters= Transporter::Active()->orderBy('sort', 'Asc');
+        if($count_paginate == 'ALL'){
+            $transporters=  $transporters->get();
+        }else {
+            $transporters = $transporters->simplePaginate($count_paginate);
+        }
+        return  responseApi(200, translate('return_data_success'),TransporterResource::collection($transporters));
 
     }
     public function GetHomeOrCenter(){

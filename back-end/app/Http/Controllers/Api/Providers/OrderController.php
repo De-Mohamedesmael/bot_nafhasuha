@@ -298,6 +298,8 @@ class OrderController extends ApiController
             'date_at' => 'required|Date',
             'time_at' => 'required|string',
             'details' => 'required|string|max:1000',
+             'images' => 'nullable|array',
+            'images.*' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -326,9 +328,18 @@ class OrderController extends ApiController
                    'time_at' => $request->time_at,
                    'details' => $request->details,
                 ]);
+                if ($request->hasFile('images')) {
+                    $files = $request->file('images');
+                    foreach ($files as $file){
+                        $extension = $file->getClientOriginalExtension();
+                        $report->addMedia($file)
+                            ->usingFileName(time() . '.' . $extension)
+                            ->toMediaCollection('images');
+                    }
+                }
             $this->pushNotof('MaintenanceReport',$order,$order->user_id,1);
             DB::commit();
-            return  responseApi(200, translate('return_data_success'),new MaintenanceReportResource($report));
+            return  responseApi(200, translate('return_data_success'),null);
         }catch (\Exception $exception){
         dd($exception);
             DB::rollBack();
@@ -364,7 +375,7 @@ class OrderController extends ApiController
                 $transaction->save();
             }
             $parent= $order->parent;
-            if($parent && $parent->status != "completed"){
+            if($parent && !in_array($parent->status ,[ "completed","canceled"] )){
                 $parent->status="PickUp";
                 $parent->save();
             }

@@ -39,6 +39,7 @@ class ProviderResource extends JsonResource
             'country'=>new CountryResource($this->country),
             'city'=>new CityResource($this->city),
             'area'=>new AreaResource($this->area),
+            'transporter_id'=>$this->transporter_id??0,
             'transporter'=>new TransporterResource($this->transporter),
         ];
     }

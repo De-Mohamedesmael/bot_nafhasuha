@@ -81,6 +81,8 @@ Route::get('all-categories', [GeneralController::class, 'indexCategories']);
 Route::get('banks', [GeneralController::class, 'banks']);
 Route::get('canceled-reasons', [GeneralController::class, 'GetCanceledReasons']);
 
+Route::get('transport-vehicles',[GeneralController::class, 'transportVehicles']);
+
 ///////////////////////////////// start notifications //////////////////////////////////////////
 Route::get('notifications', [NotificationController::class, 'index']);
 Route::post('notifications/save_token' , [NotificationController::class , 'save_token']);

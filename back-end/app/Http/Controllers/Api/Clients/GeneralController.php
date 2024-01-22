@@ -153,7 +153,7 @@ class GeneralController extends ApiController
     }
     public function infos(Request $request){
         $validator = validator($request->all(), [
-            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,termsPeriodicInspection,terms',
+            'type' => 'required|string|in:WhoAreWe,termsOfService,privacyPolicy,termsPeriodicInspection,TermsandConditions',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -184,8 +184,9 @@ class GeneralController extends ApiController
 
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
-    public function storeRate(Request $request){
+   public function storeRate(Request $request){
         $validator = validator($request->all(), [
+            'order_id' => 'required|integer|exists:order_services,id',
             'provider_id' => 'required|integer|exists:providers,id',
             'rate' => 'required|in:0,1,2,3,4,5',
             'comment' => 'required|string|max:300',
@@ -196,6 +197,7 @@ class GeneralController extends ApiController
 
         ProviderRate::create([
             'user_id' => Auth::id(),
+            'order_service_id' => $request->order_id,
             'provider_id' => $request->provider_id,
             'rate' => $request->rate,
             'comment' => $request->comment,

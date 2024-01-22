@@ -1636,6 +1636,7 @@ return [
     'who-are-we'=>'من نحن',
     'privacy-policy'=>'سياسة الخصوصية',
     'terms-periodic-inspection'=>'شروط واحكام الفحص الدوري',
+    'terms-and-conditions'=>'الشروط والاحكام',
 
     'infos'=>'صفحات المعلومات',
     'all_category_faqs'=>'اقسام الاسئلة الشائعة',
