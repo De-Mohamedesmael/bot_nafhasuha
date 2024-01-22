@@ -223,9 +223,9 @@ class ServiceUtil
             $providers_id = Provider::Active()->where('get_orders',1)
             ->select('providers.id')
                 ->selectRaw("{$sqlDistance} as distance")
-                ->when(!in_array($type,$arr_More_than_one),function ($q) use($request){
-                    return  $q->whereDoesntHave('orders',function ($q2){
-                  return  $q2->wherein('status',  ['pending', 'approved','PickUp','received']);
+                ->when(!in_array($type,$arr_More_than_one),function ($q) use($request,$arr_More_than_one){
+                    return  $q->whereDoesntHave('orders',function ($q2) use($arr_More_than_one){
+                  return  $q2->wherein('status',  ['pending', 'approved','PickUp','received'])->whereNotIn('type',$arr_More_than_one);
                 });
                 })
                 ->when($type == 'TransportVehicle',function ($q) use($request){
@@ -577,8 +577,8 @@ class ServiceUtil
                 $providers_id = Provider::Active()->where('get_orders',1)
                     ->select('providers.id')
                     ->selectRaw("{$sqlDistance} as distance")
-                    ->whereDoesntHave('orders',function ($q2){
-                            return  $q2->wherein('status',  ['pending', 'approved','PickUp','received']);
+                    ->whereDoesntHave('orders',function ($q2) use($arr_More_than_one){
+                            return  $q2->wherein('status',  ['pending', 'approved','PickUp','received'])->whereNotIn('type',$arr_More_than_one);;
                         })
                     ->where('providers.transporter_id',$old_transaction->type_id)
                     ->wherehas('categories',function ($q) {

@@ -375,7 +375,7 @@ class OrderController extends ApiController
                 $transaction->save();
             }
             $parent= $order->parent;
-            if($parent && $parent->status != "completed"){
+            if($parent && !in_array($parent->status ,[ "completed","canceled"] )){
                 $parent->status="PickUp";
                 $parent->save();
             }
