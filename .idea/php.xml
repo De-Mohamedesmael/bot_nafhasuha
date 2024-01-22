@@ -170,6 +170,9 @@
       <path value="$PROJECT_DIR$/back-end/vendor/paragonie/sodium_compat" />
       <path value="$PROJECT_DIR$/back-end/vendor/laravel/ui" />
       <path value="$PROJECT_DIR$/back-end/vendor/spatie/laravel-medialibrary" />
+      <path value="$PROJECT_DIR$/back-end/vendor/dasprid/enum" />
+      <path value="$PROJECT_DIR$/back-end/vendor/simplesoftwareio/simple-qrcode" />
+      <path value="$PROJECT_DIR$/back-end/vendor/bacon/bacon-qr-code" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
