@@ -1,6 +1,9 @@
 <?php
 
 // ---------------- Api response -------------------
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 if (!function_exists('responseApi')) {
     function responseApi($code, $message = '', $data = null)
     {
@@ -94,4 +97,32 @@ if (!function_exists('active')) {
         if (in_array($route, $array)) return true;
         return false;
     }
+}
+
+
+function generate_qr_code($invoice_no)
+{
+    $filename = 'qr_code_'.$invoice_no.'.png';
+    if (!Storage::disk('qr')->exists($filename)) {
+        $logo = 'assets/images/settings/' . \Settings::get('logo');
+        $logoPath = public_path($logo);
+        $link = route('front.invoice.index',$invoice_no);
+        if (file_exists($logoPath)) {
+            $image =QrCode::format('png')
+                ->merge(public_path($logo), 0.5, true)
+                ->size(500)
+                ->errorCorrection('H')
+                ->generate($link);
+            Storage::disk('qr')->put($filename, $image);
+
+        } else {
+            $image =QrCode::format('png')
+                ->size(500)
+                ->errorCorrection('H')
+                ->generate($link);
+            Storage::disk('qr')->put($filename, $image);
+        }
+    }
+
+    return asset('assets/images/qr/'.$filename);
 }

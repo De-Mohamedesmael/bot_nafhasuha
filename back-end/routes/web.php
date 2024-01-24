@@ -18,3 +18,5 @@ Route::group(['middleware' => ['language']], function () {
 //    Route::view('/', )->name('user.home');
 //    Route::view('/provider', 'front-end.provider.home')->name('provider.home');
 });
+Route::get('/invoice/{invoice_no}', [HomeController::class ,'showInvoice'])->name('invoice.index');
+
