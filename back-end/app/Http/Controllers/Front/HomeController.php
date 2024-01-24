@@ -7,10 +7,12 @@ use App\Http\Resources\CompanyResource;
 use App\Models\AppScreen;
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\OrderService;
 use App\Models\Review;
 use App\Models\Service;
 use Illuminate\Http\Request;
-use function App\Http\Controllers\BackEnd\public_path;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 // use App\Models\WagesAndCompensation;
 
@@ -31,6 +33,18 @@ class HomeController extends Controller
             'companies'=>$companies,
             'reviews'=>$reviews,
             'screens'=>$screens,
+        ]);
+    }
+
+
+    public function showInvoice($invoice_no)
+    {
+        app()->setLocale('ar');
+        $order= OrderService::wherehas('transaction',function ($q) use($invoice_no){
+            $q->where('transactions.invoice_no', $invoice_no);
+        })->firstOrFail();
+        return view('front-end.invoice')->with([
+            'order'=>$order
         ]);
     }
     public function indexProvider()

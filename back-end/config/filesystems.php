@@ -46,6 +46,11 @@ return [
             'root'   => 'assets/media',
             'url'    => env('APP_URL').'/assets/media',
         ],
+        'qr' => [
+            'driver' => 'local',
+            'root'   => 'assets/images/qr',
+            'url'    => env('APP_URL').'/assets/images/qr',
+        ],
         'asset_public' => [
             'driver' => 'local',
             'root'   => 'assets',
