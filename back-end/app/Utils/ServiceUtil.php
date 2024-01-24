@@ -372,6 +372,19 @@ class ServiceUtil
         $order->transaction->update([
             'status'=>'canceled',
         ]);
+
+        if($order->children->count() > 0){
+            $order->children()->update([
+                'status'=>'canceled',
+                'canceled_by'=>$canceled_by,
+                'canceled_type'=>$type,
+                'cancel_reason_id'=>$cancel_reason_id,
+            ]);
+            $transaction_ids=$order->children->pluck('transaction_id');
+            Transaction::wherein('id',$transaction_ids)->update([
+                'status'=>'canceled',
+            ]);
+        }
         return true;
     }
 
@@ -565,8 +578,8 @@ class ServiceUtil
             $deducted_total=($final_total * \Settings::get('percent_'.$OrderService->type,10)) / 100;
         $arr_More_than_one = OrderService::GetIsMoreThanOne();
         $max_distance=\Settings::get('max_distance',500);
-        
-        
+
+
                 $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$lat . ') )
                * cos( radians( `lat` ) )
                * cos( radians( `long` )
