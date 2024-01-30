@@ -30,7 +30,7 @@ class Util
         $user->activation_code=rand(1000, 9999);
         $user->save();
         $phones=["966{$user->phone}"];
-        $ms=__('translation.activation_code',['code'=>$user->activation_code]);
+        $ms=__('messages.activation_code',['code'=>$user->activation_code]);
         $data=$this->SendSMS($ms,$phones);
         switch ($type){
             case 'Reset':

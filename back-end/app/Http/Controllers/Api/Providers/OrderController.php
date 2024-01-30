@@ -445,12 +445,14 @@ class OrderController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
         DB::beginTransaction();
         try {
+            $order= OrderService::whereId($request->order_id)->first();
             $action=$this->ServiceUtil->CanceledOrderServiceByProvider($request->order_id,$request->cancel_reason_id,'Provider',auth()->id());
             if($action['status']){
                 DB::commit();
                 $data=[
                     'is_block'=>$action['is_block'],
                 ];
+                $this->pushNotof('Order',$order,$order->user_id,10);
                 return  responseApi(200, translate('The request has been successfully cancelled'),$data);
 
             }
@@ -459,6 +461,7 @@ class OrderController extends ApiController
             return responseApiFalse(500, translate('Something went wrong'));
 
         }catch (\Exception $exception){
+            dd($exception);
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));

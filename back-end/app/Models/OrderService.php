@@ -83,6 +83,10 @@ class OrderService extends Model implements HasMedia
     {
         return $this->belongsTo(CancelReason::class,'cancel_reason_id');
     }
+    public function cancellation_record()
+    {
+        return $this->belongsTo(CancellationRecord::class,'id','order_service_id');
+    }
     public function parent()
     {
         return $this->belongsTo(self::class,'parent_id');
@@ -130,5 +134,5 @@ class OrderService extends Model implements HasMedia
         return false;
 
     }
-    
+
 }

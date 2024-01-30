@@ -43,6 +43,10 @@
                             <a href="{{route('admin.order.index','completed')}}">{{__('lang.view_all_orders_completed')}}<span class="count-span-side-bar completed" >{{($side_counts_orders['completed']??0 )+ ($side_counts_orders['received']??0 ) }}</span></a>
                         </li>
                         <li
+                            class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled-provider') active @endif">
+                            <a href="{{route('admin.order.canceled-provider')}}">{{__('lang.view_all_orders_canceled-provider')}}<span class="count-span-side-bar canceled" >{{\App\Models\CancellationRecord::count() }}</span></a>
+                        </li>
+                            <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled') active @endif">
                             <a href="{{route('admin.order.index','canceled')}}">{{__('lang.view_all_orders_canceled')}}<span class="count-span-side-bar canceled" >{{($side_counts_orders['declined']??0 )+($side_counts_orders['canceled']??0 ) }}</span></a>
                         </li>

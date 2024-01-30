@@ -138,7 +138,7 @@ class ServiceEmergencyController extends ApiController
 
 
         if(!$vehicle && $request->type == 'Change')
-            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+            return responseApi(404, translate("vehicle Not Found"));
 
 
         //**

@@ -49,7 +49,29 @@ class ApiController extends BaseController
             case 'Order':
                 $code=$type_item->transaction?->invoice_no;
                 $type_number=1;
-                if($type_item ->type =="Maintenance"){
+                if ($step == 10){
+                    $order_step = 'New';
+                    $not['ar']['title'] = __('notifications.order_step10.title', [], 'ar');
+                    $not['en']['title'] = __('notifications.order_step10.title', [], 'en');
+                    $not['ar']['body'] = __('notifications.order_step10.body', ['code' => $code], 'ar');
+                    $not['en']['body'] = __('notifications.order_step10.body', ['code' => $code], 'en');
+                    $notarray = [
+                        'type' => $type_number,
+                        'order_step' => $order_step,
+                        'image' => null
+                    ];
+                    //'New','Price','Accept','Complete'
+                    $type_model = 'Provider';
+                    $notarray['ar']['title'] = __('notifications.order_step1_provider.title', [], 'ar');
+                    $notarray['en']['title'] = __('notifications.order_step1_provider.title', [], 'en');
+                    $notarray['ar']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'ar');
+                    $notarray['en']['body'] = __('notifications.order_step1_provider.body', ['code' => $code], 'en');
+                    $user_req = UserRequest::where('order_service_id', $type_id)->first();
+                    if ($user_req) {
+                        $ids = json_decode($user_req->providers_id, true);
+                        $this->pushNotofarray($notarray, $ids, $type_id, $type_model);
+                    }
+                }elseif($type_item ->type =="Maintenance"){
                     if ($step == 1) {
                         $order_step = 'New';
                         $not['ar']['title'] = __('notifications.order_step1.title', [], 'ar');

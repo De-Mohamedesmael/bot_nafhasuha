@@ -78,8 +78,8 @@
             padding: 0 25px;
         }
         .invoice-data {
-             text-align: start;
-         }
+            text-align: start;
+        }
         .invoice-date {
             text-align: end;
         }
@@ -202,7 +202,10 @@
             padding: 0 20px;
             cursor: pointer;
         }
-
+        img.provider-img {
+            max-width: 100px;
+            border-radius: 50%;
+        }
         @media only screen and (max-width: 600px) {
             body{
                 font-size: 15px;
@@ -278,180 +281,165 @@
     </style>
 </head>
 <body>
-    <section class="container">
-        <div class="row" id="all-data">
-            <div class="top-line-red"></div>
-            <div class="container-invoice ">
-                <div class="invoice-header ">
-                    <div class="logo-div row">
-                        <img class="logo-img" src="{{asset('assets/images/settings/'.$logo)}}" >
-                    </div>
-                    <div class="invoice-data">
-                        <div class="invoice-header invoice-header-div">
-                            <div class="invoice-header-data">
-                                <div class="invoice-number  w-50" >
-                                    الفاتورة رقم :  {{$order->id}}
-                                </div>
-
-                                <div class="invoice-date  w-50" >
-                                    {{$createdAt->format('j F Y')}}
-                                </div>
+<section class="container">
+    <div class="row" id="all-data">
+        <div class="top-line-red"></div>
+        <div class="container-invoice ">
+            <div class="invoice-header ">
+                <div class="logo-div row">
+                    <img class="logo-img" src="{{asset('assets/images/settings/'.$logo)}}" >
+                </div>
+                <div class="invoice-data">
+                    <div class="invoice-header invoice-header-div">
+                        <div class="invoice-header-data">
+                            <div class="invoice-number  w-50" >
+                                الفاتورة رقم :  {{$order->id}}
                             </div>
-                            <div class="invoice-adders w-100">
 
-                                   <img class="adders-img" src="{{asset('assets/images/map-icon.png')}}" >
-
-                                {{$order->address}}
+                            <div class="invoice-date  w-50" >
+                                {{$createdAt->format('j F Y')}}
                             </div>
                         </div>
-                        <div class="invoice-body-data">
-                                <h2 class="title">
-                                    بيانات الطلب
-                                </h2>
+                        <div class="invoice-adders w-100">
 
-                                <div class="data-group">
-                                    <div class="service-data">
-                                        <div class="service-image">
-                                            @php
-                                                if($order->type =="Maintenance"){
-                                                    $img =$order->service?->image;
-                                                }else{
-                                                   $img = $order->category?->image;
-                                                }
-                                            @endphp
-                                            <img class="service-img" src="{{asset('assets/images/'.$img)}}" >
-                                        </div>
-                                        <div class="service-des">
-                                            <div class="service-title">
-                                                خدمة
-                                                @if($order->type =="Maintenance")
-                                                {{$order->service?->title }}
-                                                @else
-                                                    {{$order->category?->title }}
-                                                @endif
-                                            </div>
-                                            <div class="service-code">
-                                                كود : <span> #{{$transaction->invoice_no}}</span>
-                                            </div>
-                                            <div class="service-sub-title">
+                            <img class="adders-img" src="{{asset('assets/images/map-icon.png')}}" >
 
-                                                @if($order->type =="ChangeBattery")
-                                                    {{$transaction->type_battery?->title }}
-                                                @elseif($order->type =="Petrol")
-                                                    {{$transaction->type_gasoline?->title }}
-                                                @elseif($order->type =="Tire")
-                                                    {{$transaction->tire?->title}}
-                                                @endif
-                                                    تغير البطارية الخاصة بالسيارة
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="price-data">
-                                        <div class="tax-data">
-                                            <div class="line-bil">
-                                                <div class="title-line">الرقم الضريبي </div>
-                                                <div class="data-line">{{$tax_number}}</div>
-                                            </div>
-                                            <div class="line-bil small-size">
-                                                <div class="title-line">القيمة الاساسية</div>
-                                                <div class="data-line">{{(int)($transaction->final_total-$amount_tax)}}  ريال </div>
-                                            </div>
-                                        </div>
-                                        <div class="second-data">
-                                            <div class="line-bil small-size top-border-line">
-                                                <div class="title-line">المجموع الجزئي</div>
-                                                <div class="data-line">{{(int)($transaction->final_total-$amount_tax)}}  ريال </div>
-                                            </div>
-                                            <div class="line-bil small-size top-border-line">
-                                                <div class="title-line">ضريبة القيمة المضافة ({{$value_tax}}%)</div>
-                                                <div class="data-line">{{(int)$amount_tax}}  ريال </div>
-                                            </div>
-                                            <div class="line-bil small-size top-border-line">
-                                                <div class="title-line">اجمالي السعر المدفوع</div>
-                                                <div class="data-line final_total">{{(int)($transaction->final_total)}}  ريال </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            {{$order->address}}
+                        </div>
+                    </div>
+                    <div class="invoice-body-data">
+                        <h2 class="title">
+                            بيانات الطلب
+                        </h2>
 
+                        <div class="data-group">
+                            <div class="service-data">
+                                <div class="service-image">
+                                    @php
+                                        if($order->type =="Maintenance"){
+                                            $img =$order->service?->image;
+                                        }else{
+                                           $img = $order->category?->image;
+                                        }
+                                    @endphp
+                                    <img class="service-img" src="{{asset('assets/images/'.$img)}}" >
                                 </div>
-                            <h2 class="title mt-4">
-                                بيانات مقدم الخدمة
-                            </h2>
-                            <div class="provider-group">
-                                <div class="provider-image">
-                                    <img class="provider-img" src="{{$provider_img}}">
-                                </div>
-                                <div class="provider-data">
+                                <div class="service-des">
                                     <div class="service-title">
-                                        {{$provider->name}}
+                                        خدمة
+                                        @if($order->type =="Maintenance")
+                                            {{$order->service?->title }}
+                                        @else
+                                            {{$order->category?->title }}
+                                        @endif
                                     </div>
                                     <div class="service-code">
-                                        مزود الخدمة
+                                        كود : <span> #{{$transaction->invoice_no}}</span>
                                     </div>
-                                    <div class="provider-rate">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i class="star-icon fa fa-star{{$provider->totalRate < $i && $provider->totalRate > $i-1 ?"-half-o":($provider->totalRate < $i ? "-o":null)}}" aria-hidden="true"></i>
+                                    <div class="service-sub-title">
 
-
-                                        @endfor
+                                        @if($order->type =="ChangeBattery")
+                                            {{$transaction->type_battery?->title }}
+                                        @elseif($order->type =="Petrol")
+                                            {{$transaction->type_gasoline?->title }}
+                                        @elseif($order->type =="Tire")
+                                            {{$transaction->tire?->title}}
+                                        @endif
+                                        تغير البطارية الخاصة بالسيارة
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" style="    justify-content: center;    text-align: center;">
-                                <a class="print-image " onclick="PrintElem(elem)">
-                                    <img class="print-img" src="{{asset('assets/images/print-icon.png')}}" >
-                                    <h3>
-                                        طباعة
-                                    </h3>
-                                </a>
-                                <div class="qr-image" id="bn-qr" >
-
-                                    <img class="qr-img" src="{{generate_qr_code($transaction->invoice_no)}}" >
-
+                            <div class="price-data">
+                                <div class="tax-data">
+                                    <div class="line-bil">
+                                        <div class="title-line">الرقم الضريبي </div>
+                                        <div class="data-line">{{$tax_number}}</div>
+                                    </div>
+                                    <div class="line-bil small-size">
+                                        <div class="title-line">القيمة الاساسية</div>
+                                        <div class="data-line">{{(int)($transaction->final_total-$amount_tax)}}  ريال </div>
+                                    </div>
                                 </div>
-                                <a class="share-image" id="bn-share" >
-                                    <img class="share-img" src="{{asset('assets/images/share-icon.png')}}" >
-                                    <h3>
-                                        مشاركة
-                                    </h3>
-                                </a>
+                                <div class="second-data">
+                                    <div class="line-bil small-size top-border-line">
+                                        <div class="title-line">المجموع الجزئي</div>
+                                        <div class="data-line">{{(int)($transaction->final_total-$amount_tax)}}  ريال </div>
+                                    </div>
+                                    <div class="line-bil small-size top-border-line">
+                                        <div class="title-line">ضريبة القيمة المضافة ({{$value_tax}}%)</div>
+                                        <div class="data-line">{{(int)$amount_tax}}  ريال </div>
+                                    </div>
+                                    <div class="line-bil small-size top-border-line">
+                                        <div class="title-line">اجمالي السعر المدفوع</div>
+                                        <div class="data-line final_total">{{(int)($transaction->final_total)}}  ريال </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
+                        <h2 class="title mt-4">
+                            بيانات مقدم الخدمة
+                        </h2>
+                        <div class="provider-group">
+                            <div class="provider-image">
+                                <img class="provider-img" src="{{$provider_img}}">
+                            </div>
+                            <div class="provider-data">
+                                <div class="service-title">
+                                    {{$provider->name}}
+                                </div>
+                                <div class="service-code">
+                                    مزود الخدمة
+                                </div>
+                                <div class="provider-rate">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="star-icon fa fa-star{{$provider->totalRate < $i && $provider->totalRate > $i-1 ?"-half-o":($provider->totalRate < $i ? "-o":null)}}" aria-hidden="true"></i>
+
+
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="    justify-content: center;    text-align: center;">
+                            <a class="print-image "onclick="window.print();">
+                                <img class="print-img" src="{{asset('assets/images/print-icon.png')}}" >
+                                <h3>
+                                    طباعة
+                                </h3>
+                            </a>
+                            <div class="qr-image" id="bn-qr" >
+
+                                <img class="qr-img" src="{{generate_qr_code($transaction->invoice_no)}}" >
+
+                            </div>
+                            <a class="share-image" id="bn-share" >
+                                <img class="share-img" src="{{asset('assets/images/share-icon.png')}}" >
+                                <h3>
+                                    مشاركة
+                                </h3>
+                            </a>
+                        </div>
+
                     </div>
                 </div>
-
             </div>
 
         </div>
-    </section>
 
-{{--<script>--}}
-{{--    function PrintElem()--}}
-{{--    {--}}
-{{--        var mywindow = window.open('', 'PRINT', 'height=400,width=600');--}}
+    </div>
+</section>
 
-{{--        mywindow.document.write('<html><head><title>' + document.title  + '</title>');--}}
-{{--        mywindow.document.write('</head><body >');--}}
-{{--        mywindow.document.write('<h1>' + document.title  + '</h1>');--}}
-{{--        mywindow.document.write(document.getElementById("all-data").innerHTML);--}}
-{{--        mywindow.document.write('</body></html>');--}}
+<script>
 
-{{--        mywindow.document.close(); // necessary for IE >= 10--}}
-{{--        mywindow.focus(); // necessary for IE >= 10*/--}}
 
-{{--        mywindow.print();--}}
-{{--        mywindow.close();--}}
 
-{{--        return true;--}}
-{{--    }--}}
-{{--    let shareData = {--}}
-{{--        url: window.location.href,--}}
-{{--    }--}}
+    let shareData = {
+        url: window.location.href,
+    }
 
-{{--    document.querySelector('#bn-share').addEventListener('click', () => {--}}
-{{--        navigator.share(shareData);--}}
-{{--    });--}}
-{{--</script>--}}
+    document.querySelector('#bn-share').addEventListener('click', () => {
+        navigator.share(shareData);
+    });
+</script>
 </body>
 </html>
