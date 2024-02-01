@@ -132,8 +132,8 @@ class ServiceController extends ApiController
         $lat=$request->lat;
         $long=$request->long;
         $service_id=$request->service_id;
-        if(!auth()->check())
-            return responseApi(403, translate('Unauthenticated user'));
+//        if(!auth()->check())
+//            return responseApi(403, translate('Unauthenticated user'));
 
 
         $max_distance = \Settings::get('max_distance',500);
@@ -169,8 +169,8 @@ class ServiceController extends ApiController
             return responseApiFalse(405, $validator->errors()->first());
 
 //        dd($provider);
-        if(!auth()->check())
-            return responseApi(403, translate('Unauthenticated user'));
+//        if(!auth()->check())
+//            return responseApi(403, translate('Unauthenticated user'));
 
 
         $provider = Provider::find($provider_id);
@@ -222,7 +222,7 @@ class ServiceController extends ApiController
 
 
         if(!$vehicle)
-            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+            return responseApi(404, translate("vehicle Not Found"));
 
         DB::beginTransaction();
         try {
@@ -312,7 +312,7 @@ class ServiceController extends ApiController
 
 
         if(!$vehicle)
-            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+            return responseApi(404, translate("vehicle Not Found"));
 
         DB::beginTransaction();
         try {
@@ -391,7 +391,7 @@ class ServiceController extends ApiController
 
 
         if(!$vehicle)
-            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+            return responseApi(404, translate("vehicle Not Found"));
 
         DB::beginTransaction();
         try {
@@ -470,7 +470,7 @@ class ServiceController extends ApiController
 
 
         if(!$vehicle)
-            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+            return responseApi(404, translate("vehicle Not Found"));
 
         DB::beginTransaction();
         try {

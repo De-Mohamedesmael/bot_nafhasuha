@@ -38,7 +38,12 @@ Route::post('custom-remove-account', [AuthController::class, 'customRemoveAccoun
 Route::post('change-default-language', [AuthController::class, 'ChangeDefaultLanguage']);
 
 Route::get('home', [HomeController::class, 'index']);
+Route::prefix('services')->group(function () {
+    Route::post('/get-provides-map-all', [ServiceController::class, 'ProviderMapAll']);
+    Route::post('/get-provides-map', [ServiceController::class, 'ProviderMap']);
+    Route::Put('/view-provide-map/{id}', [ServiceController::class, 'ViewProviderMap']);
 
+});
 
 Route::middleware('auth.guard:api')->group(function () {
 
@@ -69,12 +74,7 @@ Route::middleware('auth.guard:api')->group(function () {
         Route::get('/my-package', [PackageController::class, 'MyPackage']);
 
     });
-    Route::prefix('services')->group(function () {
-        Route::post('/get-provides-map-all', [ServiceController::class, 'ProviderMapAll']);
-        Route::post('/get-provides-map', [ServiceController::class, 'ProviderMap']);
-        Route::Put('/view-provide-map/{id}', [ServiceController::class, 'ViewProviderMap']);
 
-    });
     #############################################
     ###          vehicles  user               ###
     #############################################

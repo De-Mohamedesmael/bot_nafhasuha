@@ -1669,4 +1669,10 @@ return [
     'payment_types_report'=>'تقرير طرق الدفع',
     'wallet_customer'=>'تقرير المحفظة',
     'total_orders'=>'ايرادات الطلبات',
+    'canceled_at'=>'تاريخ الالغاء',
+    'cancellation_start_date'=>'تاريخ الالغاء من :',
+    'cancellation_end_date'=>'تاريخ الالغاء الي :',
+    'cancellation_start_time'=>'وقت الالغاء من :',
+    'cancellation_end_time'=>'وقت الالغاء الي:',
+    'view_all_orders_canceled-provider'=>' جميع طلبات مقدمي الخدمة الملغية',
 ];

@@ -273,7 +273,71 @@ class OrderController extends Controller
           'providers'=>$providers,
         ]);
     }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexCanceledProvider($status=null)
+    {
+        if (request()->ajax()) {
 
+            $query = OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
+                ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
+                ->Join('cancellation_records', 'cancellation_records.order_service_id', '=', 'order_services.id')
+                ->leftJoin('providers', 'providers.id', '=', 'cancellation_records.provider_id')
+//                ->wherehas()
+                ->select('order_services.*',
+                    'cancellation_records.created_at as canceled_at',
+                    'cancellation_records.cancel_reason_id as cancellation_cancel_reason_id',
+                    'transactions.invoice_no',
+                    'transactions.final_total',
+                    'transactions.grand_total',
+                    'transactions.discount_amount',
+                    'transactions.suggested_price',
+                    'users.name as client_name',
+                    'users.phone as client_phone',
+                    'providers.name as provider_name',
+                    'providers.phone as provider_phone',
+                );
+
+
+
+            return DataTables::of($query)
+                ->addColumn('canceled_at', '{{@format_datetime($canceled_at)}}')
+                ->editColumn('suggested_price', '{{@num_format($suggested_price)}}')
+                ->editColumn('grand_total', '{{@num_format($grand_total)}}')
+                ->editColumn('discount_amount', '{{@num_format($discount_amount)}}')
+                ->editColumn('final_total', '{{@num_format($final_total)}}')
+                ->editColumn('cancel_reason', function ($row) {
+                    return $row->cancellation_record->cancel_reason? $row->cancellation_record->cancel_reason->title:'';
+                })
+
+                ->addColumn('service_title', function ($row) {
+                    return $row->category?->title;
+                })
+                ->rawColumns([
+                    'created_at',
+                ])
+                ->make(true);
+        }
+
+
+        $categories = Category::listsTranslations('title as name')->pluck('name','id');
+        $cities = City::listsTranslations('title as name')->pluck('name','id');
+        $areas = Area::listsTranslations('title as name')->pluck('name','id');
+        $users = User::pluck('name','id');
+        $providers = Provider::pluck('name','id');
+
+        return view('back-end.orders.index-canceled-provider')->with([
+            'status'=>$status,
+            'categories'=>$categories,
+            'cities'=>$cities,
+            'areas'=>$areas,
+            'users'=>$users,
+            'providers'=>$providers,
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *

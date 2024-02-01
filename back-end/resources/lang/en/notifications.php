@@ -83,4 +83,9 @@ return [
         'body' => 'The report for request #:code has been approved. You can now start the maintenance process.',
     ],
 
+    'order_step10' => [
+        'title'=>'Searching for another service provider',
+        'body'=>'Your request has been canceled and we are looking for another service provider. Thank you for choosing Nafhasuha',
+    ],
+
 ];

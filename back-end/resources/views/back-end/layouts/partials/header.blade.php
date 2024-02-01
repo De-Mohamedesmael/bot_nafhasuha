@@ -1,17 +1,25 @@
 @php
     $logo = \Settings::get('logo');;
+    $logo_footer = \Settings::get('logo_footer');
     $site_title = App\Models\System::getProperty('site_title');
     $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
 @endphp
 <header class="header no-print">
     <nav class="navbar">
-        <div class="container-fluid">
+        <div class="container-fluid ">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
-                <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars" style="margin-top: 10px !important;"> </i></a>
-                <span class="brand-big">@if($logo)<img src="{{asset('/assets/images/settings/'.$logo)}}"
-                        width="120">&nbsp;&nbsp;@endif<a href="{{url('/')}}">
+                <div class="logo-div " >
+                    <a id="toggle-btn" href="#" class="menu-btn">
+                        <i class="fa fa-bars" style="margin-top: 5px !important;">
+                        </i>
+                    </a>
+                    <span class="brand-big"><img src="{{$logo_footer != null ? asset('assets/images/settings/'.$logo_footer) :asset('assets/front-end/public/images/footer_logo.svg')}}"
+                                                 width="120">&nbsp;&nbsp;<a href="{{url('/')}}">
                         <h1 class="d-inline">{{$site_title}}</h1>
                     </a></span>
+                </div>
+
+
 
                 <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
                     <li class="nav-item">
@@ -55,17 +63,18 @@
                     </li> --}}
                     <li class="nav-item">
                         <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i>
-                            <span>{{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
+                            aria-expanded="false" class="nav-link dropdown-item">
+                            @php
+                                $employee =  Auth::guard('admin')->user();
+                            @endphp
+                            <img src="@if(!empty($employee->getFirstMediaUrl('image'))){{$employee->getFirstMediaUrl('image')}}@else{{asset('assets/images/default.jpg')}}@endif"
+                                 style="width: 50px; height: 50px; border: 2px solid #fff; padding: 5px; border-radius: 50%;     background-color: #e4e7f1;" />
+
+                            <span>@lang('lang.welcome') : {{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                            @php
-                            $employee =  Auth::guard('admin')->user();
-                            @endphp
-                            <li style="text-align: center">
-                                <img src="@if(!empty($employee->getFirstMediaUrl('image'))){{$employee->getFirstMediaUrl('image')}}@else{{asset('images/default.jpg')}}@endif"
-                                    style="width: 60px; border: 2px solid #fff; padding: 4px; border-radius: 50%;" />
-                            </li>
+
+
                             <li>
                                 <a href="{{route('admin.getProfile')}}"><i class="dripicons-user"></i>
                                     @lang('lang.profile')</a>

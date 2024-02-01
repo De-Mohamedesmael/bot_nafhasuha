@@ -107,10 +107,11 @@ function generate_qr_code($invoice_no)
         if (!Storage::disk('qr')->exists($filename)) {
             $logo = 'assets/images/settings/' . \Settings::get('logo');
             $logoPath = public_path($logo);
+            $logoPath= str_replace('back-end/public/', '', $logoPath);
             $link = route('front.invoice.index',$invoice_no);
             if (file_exists($logoPath)) {
                 $image =QrCode::format('png')
-                    ->merge(public_path($logo), 0.5, true)
+                    ->merge($logoPath, 0.5, true)
                     ->size(500)
                     ->errorCorrection('H')
                     ->generate($link);

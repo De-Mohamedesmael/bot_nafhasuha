@@ -117,6 +117,7 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
     });
 
     Route::group(['prefix'=>'orders','as'=>'order.'], function () {
+        Route::get('/canceled-provider', [OrderController::class,'indexCanceledProvider'])->name('canceled-provider');
         Route::get('/{status?}', [OrderController::class,'index'])->name('index');
         Route::post('/{status?}', [OrderController::class,'index'])->name('index');
         Route::get('create', [OrderController::class,'create'])->name('create');

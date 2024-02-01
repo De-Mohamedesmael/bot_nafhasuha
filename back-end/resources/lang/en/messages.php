@@ -124,4 +124,5 @@
   'web_user' => 'Web user',
   'links' => 'Links',
   'Terms and Conditions' => 'Terms and Conditions',
+    'activation code' => 'Your activation code is: :code',
 );

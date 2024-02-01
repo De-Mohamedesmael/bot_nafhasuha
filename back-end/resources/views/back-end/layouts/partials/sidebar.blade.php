@@ -3,14 +3,20 @@
     $module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
 @endphp
 <!-- Side Navbar -->
-<nav class="side-navbar no-print @if(request()->segment(1) == 'pos') shrink @endif">
+<nav class="side-navbar no-print  ">
     <div class="side-navbar-wrapper">
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
             <ul id="side-main-menu" class="side-menu list-unstyled">
 
-                <li><a href="{{route('admin.home')}}"> <i class="dripicons-meter"></i><span>{{ __('lang.dashboard')
-                            }}</span></a></li>
+                <li class=" @if(request()->segment(2)=='home') active @endif">
+                    <a href="{{route('admin.home')}}">
+                        <i class="dripicons-meter"></i>
+                        <span>{{ __('lang.dashboard')
+                            }}
+                        </span>
+                    </a>
+                </li>
                  @if( !empty($module_settings['order_module']) )
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
@@ -43,6 +49,10 @@
                             <a href="{{route('admin.order.index','completed')}}">{{__('lang.view_all_orders_completed')}}<span class="count-span-side-bar completed" >{{($side_counts_orders['completed']??0 )+ ($side_counts_orders['received']??0 ) }}</span></a>
                         </li>
                         <li
+                            class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled-provider') active @endif">
+                            <a href="{{route('admin.order.canceled-provider')}}">{{__('lang.view_all_orders_canceled-provider')}}<span class="count-span-side-bar canceled" >{{\App\Models\CancellationRecord::count() }}</span></a>
+                        </li>
+                            <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled') active @endif">
                             <a href="{{route('admin.order.index','canceled')}}">{{__('lang.view_all_orders_canceled')}}<span class="count-span-side-bar canceled" >{{($side_counts_orders['declined']??0 )+($side_counts_orders['canceled']??0 ) }}</span></a>
                         </li>
@@ -595,10 +605,10 @@
                 </li>
                        @endif
                  @endif
-                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">
-                    <a href="#"><i
-                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>
-                </li>
+{{--                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">--}}
+{{--                    <a href="#"><i--}}
+{{--                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>--}}
+{{--                </li>--}}
             </ul>
         </div>
     </div>

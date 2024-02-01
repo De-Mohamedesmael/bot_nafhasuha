@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Models\CancellationRecord;
 use App\Models\CyPeriodicProvider;
 use App\Models\OrderService;
 use App\Models\PriceRequest;
@@ -405,18 +406,65 @@ class ServiceUtil
             ];
             return $data;
         }
-        $order->update([
-            'status'=>'canceled',
-            'canceled_by'=>$canceled_by,
-            'canceled_type'=>$type,
+
+
+      $canceled_record=  CancellationRecord::create([
+            'provider_id'=>$canceled_by,
+            'order_service_id'=>$order_id,
             'cancel_reason_id'=>$cancel_reason_id,
         ]);
-        $order->transaction->update([
-            'status'=>'canceled',
+
+        $order->update([
+            'status'=>'pending',
+            'provider_id'=>null,
+
         ]);
-        $count_cancel_for_day=OrderService::where('status','canceled')
-            ->where('canceled_type',$type)
-            ->where('canceled_by',$canceled_by)
+
+      $transaction=  $order->transaction;
+        $transaction->update([
+            'status'=>'pending',
+            'provider_id'=>null,
+        ]);
+        if($type == 'PeriodicInspection'){
+            $providers_id=CyPeriodicProvider::where('cy_periodic_id',$order->cy_periodic_id)
+                ->pluck('provider_id')->toArray();
+
+        }else{
+            $arr_More_than_one = OrderService::GetIsMoreThanOne();
+            $max_distance=\Settings::get('max_distance',500);
+            $sqlDistance = DB::raw('( 111.045 * acos( cos( radians(' .$order->lat . ') )
+               * cos( radians( `lat` ) )
+               * cos( radians( `long` )
+               - radians(' . $order->long  . ') )
+               + sin( radians(' . $order->lat  . ') )
+               * sin( radians( `lat` ) ) ) )');
+            // Get providers id
+            $providers_id = Provider::Active()->where('get_orders',1)
+                ->select('providers.id')
+                ->selectRaw("{$sqlDistance} as distance")
+                ->where('id','!=',$canceled_by)
+                ->when(!in_array($type,$arr_More_than_one),function ($q){
+                    return  $q->whereDoesntHave('orders',function ($q2){
+                        return  $q2->wherein('status',  ['pending', 'approved','PickUp','received']);
+                    });
+                })
+                ->when($type == 'TransportVehicle',function ($q) use($transaction){
+                    $q->where('providers.transporter_id',$transaction->type_id);
+                })
+                ->wherehas('categories',function ($q) use($order){
+                    $q->where('categories.id',$order->category_id);
+                })->having('distance', '<=', $max_distance)
+                ->pluck('providers.id')->toArray();
+
+        }
+        if($providers_id){
+
+            UserRequest::where('order_service_id',$order->id)->update([
+                'providers_id'=>json_encode($providers_id)
+            ]);
+        }
+
+        $count_cancel_for_day=CancellationRecord::where('provider_id',$canceled_by)
            ->whereDate('updated_at', date('Y-m-d'))->count();
         $limit_cancel=\Settings::get('limit_cancel',2);
         $is_block= $count_cancel_for_day+1 >= $limit_cancel;
