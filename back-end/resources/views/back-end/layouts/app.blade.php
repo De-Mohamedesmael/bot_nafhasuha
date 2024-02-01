@@ -124,6 +124,61 @@
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+{{--    new di--}}
+    <style>
+        .logo-div {
+            width: 220px;
+            padding: 0 5px;
+            background-color: #013E6B;
+        }
+        header .container-fluid {
+            padding: 0;
+        }
+        .brand-big {
+            left: auto !important;
+            right: 0;
+        }
+        nav.navbar a.menu-btn {
+            width: 25px;
+            height: 25px;
+            line-height: 28px;
+        }
+        nav.navbar a.menu-btn {
+            border: 1px solid #ffffff;
+            color: #ffffff;
+        }
+        nav.navbar a.menu-btn:hover {
+            background: #ffffff;
+            border: 1px solid #ffffff;
+            color: #013E6B;
+        }
+        .side-navbar {
+            width: 220px;
+        }
+        .page {
+            margin-right: 220px;
+        }
+        .side-navbar li a {
+
+            margin: 3px 6px;
+            padding: 5px 6px;
+        }
+        .side-navbar {
+            background-color: #013e6b;
+        }
+        .side-navbar li a,.side-navbar li a i {
+            color: #ffffff;
+        }
+        .side-navbar li a:focus, .side-navbar li a:hover, .side-navbar li.active > a, .side-navbar li a[aria-expanded="true"] {
+            color: #013e6b !important;
+        }
+        .side-navbar li a:focus i , .side-navbar li a:hover i , .side-navbar li.active > a i  {
+            color: #013e6b;
+        }
+
+   </style>
+
     <style>
         .preview-category-container {
             /* display: flex;

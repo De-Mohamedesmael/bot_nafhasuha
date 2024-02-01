@@ -3,14 +3,20 @@
     $module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
 @endphp
 <!-- Side Navbar -->
-<nav class="side-navbar no-print @if(request()->segment(1) == 'pos') shrink @endif">
+<nav class="side-navbar no-print  ">
     <div class="side-navbar-wrapper">
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
             <ul id="side-main-menu" class="side-menu list-unstyled">
 
-                <li><a href="{{route('admin.home')}}"> <i class="dripicons-meter"></i><span>{{ __('lang.dashboard')
-                            }}</span></a></li>
+                <li class=" @if(request()->segment(2)=='home') active @endif">
+                    <a href="{{route('admin.home')}}">
+                        <i class="dripicons-meter"></i>
+                        <span>{{ __('lang.dashboard')
+                            }}
+                        </span>
+                    </a>
+                </li>
                  @if( !empty($module_settings['order_module']) )
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
@@ -593,10 +599,10 @@
                 </li>
                        @endif
                  @endif
-                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">
-                    <a href="#"><i
-                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>
-                </li>
+{{--                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">--}}
+{{--                    <a href="#"><i--}}
+{{--                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>--}}
+{{--                </li>--}}
             </ul>
         </div>
     </div>

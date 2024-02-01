@@ -19,7 +19,7 @@ return [
     | If enabled, all settings are cached after accessing them.
     |
     */
-    'cache' => true,
+    'cache' => false,
 
     /*
     |--------------------------------------------------------------------------
