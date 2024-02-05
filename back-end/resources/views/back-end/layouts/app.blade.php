@@ -254,10 +254,8 @@
             font-weight: 500;
         }
         ul#orders {
-            padding: 5px 30px 5px 10px;
+           
             margin: 0 ;
-            border-radius: 0;
-            background-color: #013e6b;
         }
         .next-active-children {
             border-radius: 20px 0 0 !important;
@@ -265,6 +263,22 @@
         .li-item li.active,.li-item li.active a {
             color: #ffffff !important;
             background: #013e6b !important;
+        }
+        .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
+            padding-right: 10px !important;
+            color: #013e6b !important;
+            background-color: #f8f8f8 !important;
+        }
+        .next-active-children li:last-child {
+            border-radius: 0 0 18px 0;
+        }
+
+        .li-item li::before{
+            background-color: #013E6B;
+        }
+        .li-item li.active::before {
+            background-color: #7a0d0d !important;
+            box-shadow: 0px 0px 5px 2px #2b2b2bb5;
         }
         .side-navbar li ul li a {
 
@@ -369,22 +383,7 @@
         nav.navbar .nav-item a i {
             font-size: 20px;
         }
-        .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
-            padding-right: 10px !important;
-            color: #013e6b !important;
-            background-color: #f8f8f8 !important;
-        }
-        .next-active-children li:last-child {
-            border-radius: 0 0 18px 0;
-        }
 
-        .li-item li::before{
-            background-color: #013E6B;
-        }
-        .li-item li.active::before {
-            background-color: #7a0d0d !important;
-            box-shadow: 0px 0px 5px 2px #2b2b2bb5;
-        }
     </style>
 <style>
 
