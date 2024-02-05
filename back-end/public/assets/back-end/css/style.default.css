@@ -404,7 +404,7 @@ nav.navbar a.menu-btn i[class*="icon-"] {
 }
 
 .side-navbar li a i {
-    color: #7c5cc4;
+    color: #013e6b;
     font-size: 15px;
     line-height: 10px;
     margin-right: 10px;
@@ -1889,7 +1889,7 @@ STYLE SWITCHER FOR DEMO
 .btn-default {
     color: color-yiq(#ced4da);
     background-color: #ced4da;
-    border-color: #7c5cc4;
+    border-color: #013e6b;
 }
 
 .btn-default:hover {

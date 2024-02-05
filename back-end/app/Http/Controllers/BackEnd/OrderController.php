@@ -214,7 +214,9 @@ class OrderController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
+                        $html='';
+                        if($row->isOfferPrice() || $row->status == 'pending'  ) {
+                            $html = ' <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
                                 <span class="caret"></span>
@@ -222,27 +224,29 @@ class OrderController extends Controller
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
 
-                        $html .= '<li class="divider"></li>';
-                        if($row->isOfferPrice() && $row->status == 'pending'  ){
+                            $html .= '<li class="divider"></li>';
+                            if ($row->isOfferPrice() && $row->status == 'pending') {
 
 
-    //                        if (auth()->user()->can('customer_module.customer.edit')){
-                            $html .='<li >
-                                                        <a data-href = "'. route('admin.order.get-send-offer',  ['order_id'=>$row->id]).'"
+                                //                        if (auth()->user()->can('customer_module.customer.edit')){
+                                $html .= '<li >
+                                                        <a data-href = "' . route('admin.order.get-send-offer', ['order_id' => $row->id]) . '"
                                                             class="btn-modal" data-container = ".view_modal" ><i
-                                                                class="fa fa-money btn" ></i > '. __('lang.send_offer').' </a >
+                                                                class="fa fa-money btn" ></i > ' . __('lang.send_offer') . ' </a >
                                                     </li >';
 
-    //                        }
-                        }elseif($row->status == 'pending'){
-                            $html .='<li >
-                                                        <a data-href = "'. route('admin.order.get-send-offer',  ['order_id'=>$row->id]).'"
+                                //                        }
+                            } elseif ($row->status == 'pending') {
+                                $html .= '<li >
+                                                        <a data-href = "' . route('admin.order.get-send-offer', ['order_id' => $row->id]) . '"
                                                             class="btn-modal" data-container = ".view_modal" ><i
-                                                                class="fa fa-check-circle btn" ></i > '. __('lang.accept').' </a >
+                                                                class="fa fa-check-circle btn" ></i > ' . __('lang.accept') . ' </a >
                                                     </li >';
+                            }
+
+                            $html .= '</ul></div>';
+
                         }
-
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

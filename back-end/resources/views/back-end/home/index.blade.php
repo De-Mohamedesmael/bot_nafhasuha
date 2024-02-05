@@ -121,7 +121,44 @@
         .counter {
             padding: 5px !important;
         }
+
+        .wrapper.count-title.text-center {
+            display: flex;
+        }
+        .icon {
+            margin: auto;
+        }
+        .count-row{
+        background-color: #fff;
+        padding: 15px 10px;
+        }
+        .count-title .count-number {
+            font-size: 1.5em;
+            margin-top: 0;
+        }
+        .count-title {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: none;
+            padding: 0;
+            padding-left: 0px;
+        }
+        .count-img{
+            width: 38px;
+        }
+        .name strong {
+            font-size: 13px;
+        }
     </style>
+    <style>
+        #chartdiv {
+            width: 100%;
+            height: 650px;
+        }
+    </style>
+@endsection
+@section('sli_li')
+    {{__('lang.dashboard')}}
 @endsection
 @section('content')
     <div class="row">
@@ -131,33 +168,33 @@
                 <div class="filter-toggle btn-group">
                     <div class="row">
                         <div class="col-md-2">
-                            <label for="city_id"><b>@lang('lang.city')</b></label>
+                            <label class="sp-label" for="city_id"><b>@lang('lang.city')</b></label>
                             {!! Form::select('city_id', $cities,  false, ['class' => 'form-control ','data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'id' => 'city_id']) !!}
                         </div>
                         <div class="col-md-2">
-                            <label for="area_id"><b>@lang('lang.area')</b></label>
+                            <label class="sp-label"  for="area_id"><b>@lang('lang.area')</b></label>
                             {!! Form::select('area_id', [],false, ['class' => 'form-control ','data-live-search' => 'true', 'id' => 'area_id']) !!}
                         </div>
                         <div class="col-md-2">
-                            <label for="from_date"><b>@lang('lang.from_date')</b></label>
+                            <label class="sp-label"  for="from_date"><b>@lang('lang.from_date')</b></label>
                             <input type="date" class="form-control filter" name="from_date" id="from_date"
                                    value="{{ date('Y-01-01') }}" placeholder="{{ __('lang.from_date') }}">
 
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="start_time"><b>@lang('lang.start_time')</b></label>
+                                <label  class="sp-label" for="start_time"><b>@lang('lang.start_time')</b></label>
                                 {!! Form::text('start_time', null, ['class' => 'form-control time_picker filter', 'id' => 'start_time']) !!}
                             </div>
                         </div>
                         <div class="col-md-2">
-                            <label for="to_date"><b>@lang('lang.to_date')</b></label>
+                            <label class="sp-label"  for="to_date"><b>@lang('lang.to_date')</b></label>
                             <input type="date" class="form-control filter" name="to_date" id="to_date"
                                    value="{{ date('Y-m-t') }}" placeholder="{{ __('lang.to_date') }}">
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="end_time"><b>@lang('lang.end_time')</b></label>
+                                <label class="sp-label"  for="end_time"><b>@lang('lang.end_time')</b></label>
                                 {!! Form::text('end_time', null, ['class' => 'form-control time_picker filter', 'id' => 'end_time']) !!}
                             </div>
                         </div>
@@ -169,31 +206,35 @@
     <div class="row">
         <div class="container-fluid mt-4">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row count-row">
                     <div class="col-md-4 row ">
-                        <div class="col-sm-6 counter">
+                        <div class="col-sm-5 counter">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-user-group" style="color: #498636"></i>
+                                <div class="icon">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/user.png')}}">
 
                                 </div>
                                 <div class="name"><strong
                                         style="color: #498636">{{\App\CPU\translate('count_users')}}</strong>
+                                    <div class="count-number current_users_value-data">
+                                        {{ 0 }}</div>
                                 </div>
-                                <div class="count-number current_users_value-data">
-                                    {{ 0 }}</div>
+
                             </div>
                         </div>
                         <!-- Count item widget-->
-                        <div class="col-sm-6 counter">
+                        <div class="col-sm-7 counter">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-disc"
-                                                     style="color: #733686"></i>
+                                <div class="icon">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/provider.png')}}">
+
                                 </div>
                                 <div class="name"><strong
                                         style="color: #733686">{{\App\CPU\translate('count_providers')}}</strong>
+                                    <div class="count-number count_providers-data">{{0 }}
+                                    </div>
                                 </div>
-                                <div class="count-number count_providers-data">{{0 }}
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -201,47 +242,52 @@
                         <!-- Count item widget-->
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-stopwatch" style="color: #ff8952"></i>
+                                <div class="icon">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/pending.png')}}">
                                 </div>
                                 <div class="name"><strong
                                         style="color: #ff8952">{{\App\CPU\translate('total_orders_pending')}}</strong>
+                                    <div class="count-number">
+                                        <span class="total_orders_pending-data">   {{ @num_format(0) }}</span> SAR
+                                    </div>
                                 </div>
-                                <div class="count-number">
-                                    <span class="total_orders_pending-data">   {{ @num_format(0) }}</span> SAR
-                                </div>
+
                             </div>
                         </div>
                         <!-- Count item widget-->
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-wallet" style="color: #297ff9"></i>
+                                <div class="icon">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/complete.png')}}">
                                 </div>
                                 <div class="name"><strong
                                         style="color: #297ff9">{{\App\CPU\translate('total_orders_completed')}}</strong>
+                                    <div class="count-number "> <span class="total_orders_completed-data">{{ @num_format(0) }}</span> SAR
+                                    </div>
                                 </div>
-                                <div class="count-number "> <span class="total_orders_completed-data">{{ @num_format(0) }}</span> SAR
-                                </div>
+
                             </div>
                         </div>
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
-                                <div class="icon"><i class="dripicons-wrong" style="color: #f92929"></i>
+                                <div class="icon">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/cancele.png')}}">
+
                                 </div>
                                 <div class="name"><strong
                                         style="color: #f92929">{{\App\CPU\translate('total_orders_canceled')}}</strong>
+                                    <div class="count-number "> <span class="total_orders_canceled-data">{{ @num_format(0) }}</span> SAR
+                                    </div>
                                 </div>
-                                <div class="count-number "> <span class="total_orders_canceled-data">{{ @num_format(0) }}</span> SAR
-                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div id="map">
-
-                </div>
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-md-6">
                         <div class="card">
+
                             <div class="card-body">
 
                                 <h4 class="card-title mb-4">{{\App\CPU\translate('users_registration')}}</h4>
@@ -260,6 +306,13 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id="map">
+
+                </div>
+
+                <div class="row">
+
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">

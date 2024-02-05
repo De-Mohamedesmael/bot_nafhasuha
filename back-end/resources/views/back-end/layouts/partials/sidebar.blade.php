@@ -3,13 +3,15 @@
     $module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
 @endphp
 <!-- Side Navbar -->
-<nav class="side-navbar no-print  ">
+<nav class="side-navbar no-print  " style="    height: 100%;">
     <div class="side-navbar-wrapper">
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
             <ul id="side-main-menu" class="side-menu list-unstyled">
-
-                <li class=" @if(request()->segment(2)=='home') active @endif">
+                <li class="li-item">
+                    &nbsp;
+                </li>
+                <li class="li-item @if(request()->segment(2)=='home') active @endif">
                     <a href="{{route('admin.home')}}">
                         <i class="dripicons-meter"></i>
                         <span>{{ __('lang.dashboard')
@@ -21,7 +23,7 @@
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
                                    auth()->user()->can('order_module.order.edit')  )
-                <li>
+                <li class="li-item have-children @if(in_array(request()->segment(2), ['orders'])) active @endif">
                     <a href="#orders" aria-expanded="false" data-toggle="collapse">
                         <i
                             class="dripicons-card"></i>
@@ -34,7 +36,9 @@
                           @can('order_module.order.view')
                         <li
                             class="@if(request()->segment(2) == 'orders' && empty(request()->segment(3))) active @endif">
-                            <a href="{{route('admin.order.index')}}">{{__('lang.view_all_orders')}} <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
+                            <a href="{{route('admin.order.index')}}">
+                                <span ></span>
+                                {{__('lang.view_all_orders')}} <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='pending') active @endif">

@@ -1,5 +1,5 @@
 @extends('back-end.layouts.app')
-@section('title', __('lang.provider'))
+@section('title', __('lang.view_all_orders_canceled'))
 @section('styles')
 <style>
     input[type="checkbox"] {
@@ -67,21 +67,18 @@
     }
 </style>
 @endsection
+
+@section('sli_li')
+    <span class="parent"> < {{__('lang.orders')}} / </span>@lang('lang.view_all_orders_canceled-provider')
+@endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">
-                @lang('lang.view_all_orders_canceled-provider')
-
-            </h3>
-        </div>
 
 
-        @php
-            $url=  route("admin.order.canceled-provider");
 
-        @endphp
-    </div>
+    @php
+        $url=  route("admin.order.canceled-provider");
+
+    @endphp
     {{--<div class="card mt-3 pt-2 pb-1">
         <div class="col-md-12">
             <div class="row">
@@ -195,7 +192,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table id="order_table" class="table">
+        <table id="order_table" class="table   table-striped">
             <thead>
                 <tr>
                     <th>@lang('lang.invoice_no')</th>

@@ -22,30 +22,24 @@
 
 
                 <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-                    <li class="nav-item">
-                        {{-- <a target="_blank" href="{{action('ContactUsController@getUserContactUs')}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
-                            style="background-image: url('{{asset('images/handshake.jpg')}}');" class="btn no-print">
-                        </a> --}}
-                        <a target="_blank" href="https://api.whatsapp.com/send?phone={{$watsapp_numbers}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
-                            style="background-image: url('{{asset('images/watsapp.jpg')}}');background-size: 40px;" class="btn no-print">
-                        </a>
+                    <li class="sli_li">
+                        @yield('sli_li')
                     </li>
-                    <li class="nav-item"><button class="btn-danger btn-sm hide" id="power_off_btn"  data-toggle="tooltip" data-title="@lang('lang.shut_down')"><i
-                                class="fa fa-power-off"></i></button></li>
-
-                    <li class="nav-item"><a id="btnFullscreen"><i class="dripicons-expand"></i></a></li>
-                    @include('back-end.layouts.partials.notification_list')
                     @php
-                    $config_languages = config('constants.langs');
-                    $languages = [];
-                    foreach ($config_languages as $key => $value) {
-                    $languages[$key] = $value['full_name'];
-                    }
+                        $config_languages = config('constants.langs');
+                        $languages = [];
+                        foreach ($config_languages as $key => $value) {
+                        $languages[$key] = $value['full_name'];
+                        }
                     @endphp
                     <li class="nav-item">
-                        <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-web"></i>
-                            <span>{{__('lang.language')}}</span> <i class="fa fa-angle-down"></i></a>
+                        <a href="{{route('admin.switchLanguage', app()->getLocale() =="ar"?'en':'ar') }}" class="btn btn-link" data-toggle="tooltip" data-title="{{app()->getLocale() =="ar"?$languages['en']:$languages['ar']}}">
+                            <img src="{{asset('assets/back-end/images/design/flag-'.(app()->getLocale() =="ar"?'en':'ar').'.png')}}">
+                        </a>
+                       {{--  <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false" class="nav-link dropdown-item">
+                            <img src="{{asset('assets/back-end/images/design/flag-'.app()->getLocale().'.png')}}">
+                           </a>
                         <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                             @foreach ($languages as $key => $lang)
                                 <li>
@@ -54,8 +48,23 @@
                                 </li>
                             @endforeach
 
-                        </ul>
+                        </ul>--}}
                     </li>
+                    {{--    <li class="nav-item">
+                           <a target="_blank" href="{{action('ContactUsController@getUserContactUs')}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
+                               style="background-image: url('{{asset('images/handshake.jpg')}}');" class="btn no-print">
+                           </a>
+                           <a target="_blank" href="https://api.whatsapp.com/send?phone={{$watsapp_numbers}}" id="contact_us_btn" data-toggle="tooltip" data-title="@lang('lang.contact_us')"
+                               style="background-image: url('{{asset('images/watsapp.jpg')}}');background-size: 40px;" class="btn no-print">
+                           </a>
+                       </li>--}}
+
+
+                    <li class="nav-item">
+                        <a id="btnFullscreen">
+                            <i class="dripicons-expand"></i></a></li>
+                    @include('back-end.layouts.partials.notification_list')
+
 
                     {{-- <li class="nav-item">
                         <a class="dropdown-item" href="{{action('HomeController@getHelp')}}" target="_blank"><i
@@ -63,14 +72,26 @@
                     </li> --}}
                     <li class="nav-item">
                         <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-item">
+                            aria-expanded="false" class="nav-link dropdown-item" style="    height: 50px;">
                             @php
                                 $employee =  Auth::guard('admin')->user();
                             @endphp
                             <img src="@if(!empty($employee->getFirstMediaUrl('image'))){{$employee->getFirstMediaUrl('image')}}@else{{asset('assets/images/default.jpg')}}@endif"
-                                 style="width: 50px; height: 50px; border: 2px solid #fff; padding: 5px; border-radius: 50%;     background-color: #e4e7f1;" />
+                                 style="width: 50px; height: 50px; border: 2px solid #fff; padding: 5px; border-radius: 50%;     background-color: #e4e7f1;    margin-top: -18px;" />
 
-                            <span>@lang('lang.welcome') : {{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
+                            <span style="    line-height: 15px;">
+                                <span >
+                                @lang('lang.welcome') : {{ucfirst(Auth::user()->name)}} <i class="fa fa-angle-down"></i>
+                                </span>
+                                    <br>
+                            <span>
+                                {{Auth::user()->email}}
+                            </span>
+
+                            </span>
+
+
+
                         </a>
                         <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
 

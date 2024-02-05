@@ -205,12 +205,16 @@ $("#method").change(function () {
     }
 });
 var language = $("#__language").val();
-
+title_print="print";
+title_copy="copy";
 if (language == "en") {
+
     dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/en.json";
 } else if (language == "fr") {
     dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/fr.json";
 } else if (language == "ar") {
+    title_print="طباعة";
+    title_copy="نسخ";
     dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/ar.json";
 } else if (language == "hi") {
     dt_lang_url = base_path + "/assets/back-end/js/datatables_lang/hi.json";
@@ -231,6 +235,7 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         footer: true,
+        text: '<img src="/assets/back-end/images/design/flat-color-icons_print.png" class="icon-export"> <span>'+title_print+'</span>',
         title: $('title').text(),
         exportOptions: {
             columns: ":visible:not(.notexport)",
@@ -241,6 +246,8 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         footer: true,
+        text: '<img src="/assets/back-end/images/design/svg.png" class="icon-export"> <span>excel</span>',
+
         title: $('title').text(),
         exportOptions: {
             columns: ":visible:not(.notexport)",
@@ -252,13 +259,17 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         title: $('title').text(),
+        text: '<img src="/assets/back-end/images/design/svg.png" class="icon-export"> <span>svg</span>',
+
         messageTop: $('title').text(),
         exportOptions: {
             columns: ":visible:not(.notexport)",
 
         },
     },
-    { text: 'pdf' , action: function () {
+    { text: 'pdf' ,
+        text: '<img src="/assets/back-end/images/design/pdf.png" class="icon-export"> <span>pdf</span>',
+        action: function () {
 
             // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
@@ -339,6 +350,8 @@ var buttons = [
         footer: true,
         charset: 'UTF-8',
         bom: true,
+        text: '<img src="/assets/back-end/images/design/copy.png" class="icon-export"> <span>'+title_copy+'</span>',
+
         title:$('title').text(),
         exportOptions: {
             columns: ":visible:not(.notexport)",
