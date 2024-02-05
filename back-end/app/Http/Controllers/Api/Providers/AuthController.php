@@ -91,7 +91,7 @@ class AuthController extends ApiController
 
             'name' => 'required|string|between:2,200',
             'phone' => 'required|string|max:20|unique:providers',
-            'email' => 'nullable|string|max:20|unique:providers',
+            'email' => 'nullable|string|max:200|unique:providers',
             'address' => 'required|string|max:255',
             'lat' => 'required|string|max:255',
             'long' => 'required|string|max:255',
@@ -99,7 +99,7 @@ class AuthController extends ApiController
             'city_id' => 'required|integer|exists:cities,id',
             'area_id' => 'required|integer|exists:areas,id',
             'password' => 'required|string|min:4|max:255',
-            'services_from_home' => 'required|string|in:1,0',
+            'services_from_home' => 'nullable',
             'commercial_register' => 'required|Image|mimes:jpeg,jpg,png,gif',
             'categories' => 'required|array',
             'categories.*' =>'required|integer|exists:categories,id',
@@ -180,14 +180,14 @@ class AuthController extends ApiController
             'transporter_id' => 'nullable|integer',
 
             'name' => 'required|string|between:2,200',
-            'email' => 'nullable|string|email|max:100|unique:providers,email,' . auth()->id(),
+            'email' => 'nullable|string|email|max:200|unique:providers,email,' . auth()->id(),
             'address' => 'required|string|max:255',
             'lat' => 'required|string|max:255',
             'long' => 'required|string|max:255',
             'country_id' => 'required|integer|exists:countries,id',
             'city_id' => 'required|integer|exists:cities,id',
             'area_id' => 'required|integer|exists:areas,id',
-            'services_from_home' => 'required|string|in:1,0',
+            'services_from_home' => 'nullable',
             'commercial_register' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
             'categories' => 'nullable|array',
             'categories.*' =>'nullable|integer|exists:categories,id',
@@ -208,7 +208,7 @@ class AuthController extends ApiController
             'country_id'=>$request->country_id,
             'city_id'=>$request->city_id,
             'area_id'=>$request->area_id,
-            'services_from_home'=>$request->services_from_home,
+            'services_from_home'=>$request->services_from_home?:0,
         ]);
 
         if($request->has('image')){
