@@ -155,6 +155,35 @@
             width: 100%;
             height: 650px;
         }
+        span.icon-chart {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 10px;
+        }
+        span.user_total {
+            background-color: #da031d;
+        }
+        span.new_customers {
+            background-color: #0E5183;
+        }
+        span.have_cars {
+            background-color: #5C59E8;
+        }
+        span.have_orders {
+            background-color: #20C745;
+        }
+        .item-chart span {
+            color: #000;
+        }
+        .item-chart {
+            width: 100%;
+            margin: 12px 0 12px 5px;
+        }
+        .span-count-chart {
+            float: left;
+            color: #575757 !important;
+        }
     </style>
 @endsection
 @section('sli_li')
@@ -290,23 +319,36 @@
 
                             <div class="card-body">
 
-                                <h4 class="card-title mb-4">{{\App\CPU\translate('users_registration')}}</h4>
+                                <h4 class="card-title mb-4">{{\App\CPU\translate('Customer statistics')}}</h4>
                                 <div class="row m-0">
-                                    <div class="col-md-5">
-                                        <div>
-                                            <span>{{\App\CPU\translate('user_total')}}</span>
-                                            <span id="user_total"></span>
+                                    <div class="col-md-6 p-0 mt-3">
+
+                                        <div class="item-chart">
+                                            <span class="icon-chart user_total"></span>
+                                            <span>{{\App\CPU\translate('All customers')}}</span>
+                                            <span class="span-count-chart"  id="user_total"></span>
+                                        </div>
+                                        <div class="item-chart">
+                                            <span class="icon-chart new_customers"></span>
+                                            <span>{{\App\CPU\translate('New customers')}}</span>
+                                            <span  class="span-count-chart" id="new_customers"></span>
+                                        </div>
+                                        <div class="item-chart">
+                                            <span class="icon-chart have_cars"></span>
+                                            <span>{{\App\CPU\translate('have cars')}}</span>
+                                            <span class="span-count-chart"  id="have_cars"></span>
+                                        </div>
+                                        <div class="item-chart">
+                                            <span class="icon-chart have_orders"></span>
+                                            <span>{{\App\CPU\translate('ask services')}}</span>
+                                            <span class="span-count-chart" id="have_orders"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-7">
-                                        <div id="bar_new" ></div>
+                                    <div class="col-md-6 p-0 m-0 "style="margin-top: -30px !important;height: 295px;">
+                                        <div id="bar_new"></div>
                                     </div>
 
                                 </div>
-
-
-                                <canvas id="bar" height="150"></canvas>
-
                             </div>
                         </div>
                     </div> <!-- end col -->
@@ -314,9 +356,8 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <h4 class="card-title mb-4">{{\App\CPU\translate('providers_registration')}}</h4>
-                                <canvas id="bar_providers" height="150"></canvas>
-
+                                <h4 class="card-title mb-4">{{\App\CPU\translate('provider statistics by Month')}}</h4>
+                                <div id="new_bar_providers"></div>
                             </div>
                         </div>
                     </div>
@@ -433,12 +474,13 @@
 
 
 
-        function initializeUserChart(userCounts,userCounts_all,userCounts_haveOrder,total) {
-
+        function initializeUserChart(userCounts,user_have_cars,userCounts_haveOrder,total) {
+            $('#bar_new').html('');
             var options = {
-                series: [userCounts, userCounts_all, userCounts_haveOrder],
+                series: [userCounts, user_have_cars, userCounts_haveOrder],
+                colors: ['#0E5183', '#5C59E8', '#20C745'],
                 chart: {
-                    height: 300,
+                    height: 280,
                     type: 'radialBar',
                 },
                 plotOptions: {
@@ -452,6 +494,7 @@
                             },
                             total: {
                                 show: true,
+                                color: '#da031d',
                                 label: 'Total',
                                 formatter: function (w) {
                                     return total
@@ -466,68 +509,50 @@
             var chart = new ApexCharts(document.querySelector("#bar_new"), options);
             chart.render();
 
-
-
-
-
-            var ctx = document.getElementById('bar').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: '',
-                        data: userCounts,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: '',
-                        data: userCounts_all,
-                        backgroundColor: 'rgba(54,235,229,0.2)',
-                        borderColor: 'rgb(54,235,235)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
         }
-        function initializeProviderChart(providerCountsString,providerCountsAllString) {
+        function initializeProviderChart(providerCountsString,providerCountsHaveOrderString) {
+
             var providerCounts = JSON.parse(providerCountsString);
-            var providerCounts_all = JSON.parse(providerCountsAllString);
-            var ctx = document.getElementById('bar_providers').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
-                        data: providerCounts,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }, {
-                        label: '{{\App\CPU\translate('Number of registered users')}}',
-                        data: providerCounts_all,
-                        backgroundColor: 'rgba(54,235,229,0.2)',
-                        borderColor: 'rgb(54,235,235)',
-                        borderWidth: 1
-                    }]
+            var providerCounts_have_order = JSON.parse(providerCountsHaveOrderString);
+            var options = {
+                series: [{
+                    name: "{{\App\CPU\translate('registered provider')}}",
+                    data: providerCounts,
+                    color: '#0E5183',
+                },{
+                    name: "{{\App\CPU\translate('providerCounts_have_order')}}",
+                    data: providerCounts_have_order,
+                    color: '#FF285C',
+                }],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: true
+                    },
+
                 },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                grid: {
+                    row: {
+                        colors: ['#ffffff', 'transparent'],
+                        // takes an array which will be repeated on columns
+                        opacity: 1
+                    },
+                },
+                xaxis: {
+                    categories: months,
                 }
-            });
+            };
+
+            var chart = new ApexCharts(document.querySelector("#new_bar_providers"), options);
+            chart.render();
+
         }
         function initializeOrderChart(CompleteString,CanceledString,PendingString) {
 
@@ -613,6 +638,9 @@
                         $('#TotalAmount').html(TotalAmount);
                         initializeUserChart(10,20,30,1250);
                         $('#user_total').html('1250');
+                        $('#new_customers').html('10%');
+                        $('#have_cars').html('20%');
+                        $('#have_orders').html('30%');
                         initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
                         initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
                     }
