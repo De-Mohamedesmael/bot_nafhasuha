@@ -1,5 +1,6 @@
 @php
         $logo = \Settings::get('logo');
+        $watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
 @endphp
     <!DOCTYPE html>
 <html>
