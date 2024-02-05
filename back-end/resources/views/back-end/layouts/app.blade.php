@@ -113,15 +113,7 @@
     @endif
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        .mCSB_draggerRail {
-            width: 16px !important;
-        }
 
-        .mCSB_dragger_bar {
-            width: 10px !important;
-        }
-    </style>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
@@ -187,9 +179,15 @@
         .main-menu li {
             background-color: #013e6b;
         }
-        li.active,nav.navbar {
+        nav.navbar {
             background: #f5f5f5!important;
             border-bottom: none;
+        }
+        .side-navbar li.li-item.active ul a {
+            background: none;
+        }
+        .side-navbar li.li-item.active ul a:hover {
+            background: #f5f5f5;
         }
         .mCS-dir-rtl > .mCSB_inside > .mCSB_container {
             margin-right: 0;
@@ -202,7 +200,16 @@
         .main-menu {
             background-color: #f8f8f8;
         }
-
+        .main-menu ,li.li-item.active {
+            background: linear-gradient( to right, #f8f8f8 0%, #f8f8f8 50%,  #013e6b 50%,  #013e6b 100% );
+        }
+        li.li-item.active a {
+            margin-right: 20px;
+            border-radius: 25px;
+        }
+        .side-navbar li.li-item.active a {
+            background: #f8f8f8;
+        }
         .side-navbar li ul{
             padding: 0 !important;
         }
@@ -321,6 +328,36 @@
         }
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #F6F5FD !important;
+        }
+        .name strong {
+            font-size: 13px;
+            color: #00000063 !important;
+        }
+        .sp-label {
+            font-size: 13px;
+        }
+        .count-title .count-number {
+            font-size: 18px !important;
+        }
+        .page {
+
+            width: calc(100% - 220px);
+        }
+        .mCSB_scrollTools {
+            width: 10px !important;
+        }
+        .mCSB_dragger_bar {
+            width: 7px !important;
+        }
+        .mCS-dir-rtl > .mCSB_inside > .mCSB_scrollTools, .mCS-dir-rtl > .mCSB_outside + .mCSB_scrollTools {
+            right: 0;
+            left: auto;
+        }
+        ul.nav-menu.list-unstyled.d-flex.flex-md-row.align-items-md-center img {
+            width: 30px;
+        }
+        nav.navbar .nav-item a i {
+            font-size: 20px;
         }
     </style>
 <style>

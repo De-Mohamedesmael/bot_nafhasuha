@@ -72,7 +72,7 @@
                     </li> --}}
                     <li class="nav-item">
                         <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false" class="nav-link dropdown-item" style="    height: 50px;">
+                            aria-expanded="false" class="nav-link dropdown-item" style="    height: 42px;">
                             @php
                                 $employee =  Auth::guard('admin')->user();
                             @endphp
