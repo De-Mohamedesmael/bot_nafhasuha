@@ -37,6 +37,10 @@ class AuthController extends ApiController
             ['except' => ['login', 'register', 'forgotPassword',
                 'checkPhone','checkCode', 'SendCode',
                 'customRemoveAccount','ActiveRemoveAccount']]);
+        if(\request()->header('authorization')){
+            $this->middleware('auth.guard:api')->only('checkCode');
+
+        }
     }
 
 
