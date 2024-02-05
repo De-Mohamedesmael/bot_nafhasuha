@@ -205,10 +205,13 @@
         }
         li.li-item.active a {
             margin-right: 20px;
-            border-radius: 25px;
+            border-radius: 0 25px;
         }
         .side-navbar li.li-item.active a {
             background: #f8f8f8;
+        }
+        .side-navbar li ul li a{
+            border-radius: 20px !important;
         }
         .side-navbar li ul{
             padding: 0 !important;
@@ -233,6 +236,13 @@
         whitesmoke 100%
         );
         }
+        .next-active-children {
+            border-radius: 20px 0 0 !important;
+            padding-right: 10px !important;
+            margin-right: 20px !important;
+            background-color: #013E6B !important;
+        }
+
         .form-control, .input-group-text, .bootstrap-select.form-control {
             border-color: #9c9f9c;
         }
@@ -244,10 +254,8 @@
             font-weight: 500;
         }
         ul#orders {
-            padding: 5px 10px !important;
-            margin: 0 !important;
-            border-radius: 0;
-            background-color: #013e6b;
+           
+            margin: 0 ;
         }
         .next-active-children {
             border-radius: 20px 0 0 !important;
@@ -255,6 +263,22 @@
         .li-item li.active,.li-item li.active a {
             color: #ffffff !important;
             background: #013e6b !important;
+        }
+        .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
+            padding-right: 10px !important;
+            color: #013e6b !important;
+            background-color: #f8f8f8 !important;
+        }
+        .next-active-children li:last-child {
+            border-radius: 0 0 18px 0;
+        }
+
+        .li-item li::before{
+            background-color: #013E6B;
+        }
+        .li-item li.active::before {
+            background-color: #7a0d0d !important;
+            box-shadow: 0px 0px 5px 2px #2b2b2bb5;
         }
         .side-navbar li ul li a {
 
@@ -266,7 +290,7 @@
         }
         .li-item li::before {
             content: ' ';
-            right: 0;
+            right: 10px;
             top: 13px;
             height: 8px;
             width: 8px;
@@ -359,6 +383,7 @@
         nav.navbar .nav-item a i {
             font-size: 20px;
         }
+
     </style>
 <style>
 
@@ -448,6 +473,7 @@
             background: transparent;
             color: #007bff;
         }
+
     </style>
     <style>
         .variants {
@@ -682,10 +708,8 @@
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
         $('#side-main-menu .li-item.active').prev().addClass("previous-active");
-
-        if(!$('#side-main-menu .li-item.active').hasClass('have-children')) {
-            $('#side-main-menu .li-item.active').next().addClass("next-active");
-        }else {
+        $('#side-main-menu .li-item.active').next().addClass("next-active");
+        if($('#side-main-menu .li-item.active').hasClass('have-children')) {
             $('#side-main-menu .li-item.active ul').addClass('next-active-children');
         }
         $.ajaxSetup({
