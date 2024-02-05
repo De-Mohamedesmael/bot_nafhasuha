@@ -46,6 +46,8 @@
 $logo = asset('assets\images\settings\\'.\Settings::get('logo','logo.svg'));
 $site_title = \Settings::get('site_title',env('APP_NAME'));
 $config_languages = config('constants.langs');
+$watsapp_numbers = App\Models\System::getProperty('watsapp_numbers');
+
 $languages = [];
 foreach ($config_languages as $key => $value) {
 $languages[$key] = $value['full_name'];
