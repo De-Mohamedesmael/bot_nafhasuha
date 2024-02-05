@@ -291,6 +291,20 @@
                             <div class="card-body">
 
                                 <h4 class="card-title mb-4">{{\App\CPU\translate('users_registration')}}</h4>
+                                <div class="row m-0">
+                                    <div class="col-md-5">
+                                        <div>
+                                            <span>{{\App\CPU\translate('user_total')}}</span>
+                                            <span id="user_total"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div id="bar_new" ></div>
+                                    </div>
+
+                                </div>
+
+
                                 <canvas id="bar" height="150"></canvas>
 
                             </div>
@@ -355,7 +369,8 @@
 
 @section('javascript')
     @if (auth()->user()->can('dashboard.details.view'))
-    <script src="{{ URL::asset('assets/back-end/libs/chart.js/Chart.bundle.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <script>
         $(document).ready(function() {
             $('#city_id').change();
@@ -418,22 +433,56 @@
 
 
 
-        function initializeUserChart(userCountsString,userCountsAllString) {
-            var userCounts = JSON.parse(userCountsString);
-            var userCounts_all = JSON.parse(userCountsAllString);
+        function initializeUserChart(userCounts,userCounts_all,userCounts_haveOrder,total) {
+
+            var options = {
+                series: [userCounts, userCounts_all, userCounts_haveOrder],
+                chart: {
+                    height: 300,
+                    type: 'radialBar',
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '18px',
+                            },
+                            value: {
+                                fontSize: '14px',
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                formatter: function (w) {
+                                    return total
+                                }
+                            }
+                        }
+                    }
+                },
+                labels: ['{{\App\CPU\translate('All customers')}}', '{{\App\CPU\translate('New customers')}}', '{{\App\CPU\translate('ask services')}}'],
+            };
+
+            var chart = new ApexCharts(document.querySelector("#bar_new"), options);
+            chart.render();
+
+
+
+
+
             var ctx = document.getElementById('bar').getContext('2d');
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: months,
                     datasets: [{
-                        label: '{{\App\CPU\translate('This year the number of registered users')}}',
+                        label: '',
                         data: userCounts,
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
                     }, {
-                        label: '{{\App\CPU\translate('Number of registered users')}}',
+                        label: '',
                         data: userCounts_all,
                         backgroundColor: 'rgba(54,235,229,0.2)',
                         borderColor: 'rgb(54,235,235)',
@@ -562,7 +611,8 @@
                         $('#AmountCanceled').html(result.AmountCanceled);
                         TotalAmount = result.AmountCanceled+result.AmountPending+result.AmountCompleted;
                         $('#TotalAmount').html(TotalAmount);
-                        initializeUserChart(result.userCountsString, result.userCountsAllString);
+                        initializeUserChart(10,20,30,1250);
+                        $('#user_total').html('1250');
                         initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
                         initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
                     }

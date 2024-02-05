@@ -30,6 +30,10 @@ class AuthController extends ApiController
         $this->TransactionUtil = $trnUit;
         $this->commonUtil = $commonUtil;
         $this->middleware('auth.guard:api', ['except' => ['login', 'register', 'forgotPassword', 'checkPhone','checkCode', 'SendCode','customRemoveAccount','ActiveRemoveAccount']]);
+        if(\request()->header('authorization')){
+            $this->middleware('auth.guard:api')->only('checkCode');
+
+        }
     }
 
 
@@ -293,6 +297,7 @@ class AuthController extends ApiController
         try {
             DB::beginTransaction();
             $user = User::where('id', $request->user_id)->first();
+            $data=$user->id;
             if($user->activation_code ==  $request->code){
                 $user->activation_code=null;
                 if($user->activation_at == null ){
@@ -303,14 +308,19 @@ class AuthController extends ApiController
                    if($user->invite_by){
                        $this->TransactionUtil->ActiveInvitationBonus($user->invite_by,$user->id);
                    }
+
                 }
                 $user->save();
+                if(\request()->header('authorization')){
+                    $data= $this->createNewToken(\request()->header('authorization'));
+                }
                 DB::commit();
-              return responseApi(200, translate('return success'), $user->id);
+              return responseApi(200, translate('return success'),$data );
             }
             DB::commit();
             return responseApiFalse(500, translate('activation code is incorrect'));
         }catch (\Exception $exception){
+            dd($exception);
             DB::rollBack();
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));

@@ -180,4 +180,9 @@
   'Terms and Conditions' => 'الشروط والاحكام',
   'Price quote cannot be accepted as it has been declined' => 'Price quote cannot be accepted as it has been declined',
   'Maintenance Report cannot be accepted as it has been declined' => 'Maintenance Report cannot be accepted as it has been declined',
+  'They ask for services' => 'They ask for services',
+  'ask services' => 'Ask services',
+  'New customers' => 'New customers',
+  'All customers' => 'All customers',
+  'user_total' => 'User total',
 );

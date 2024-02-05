@@ -37,6 +37,10 @@ class AuthController extends ApiController
             ['except' => ['login', 'register', 'forgotPassword',
                 'checkPhone','checkCode', 'SendCode',
                 'customRemoveAccount','ActiveRemoveAccount']]);
+        if(\request()->header('authorization')){
+            $this->middleware('auth.guard:api')->only('checkCode');
+
+        }
     }
 
 
@@ -108,7 +112,7 @@ class AuthController extends ApiController
             DB::beginTransaction();
             $inputs = $request->except('categories','commercial_register','transporter_id');
             $provider = Provider::create($inputs);
-            
+
             if($request->transporter_id > 0 ){
                $provider-> transporter_id=$request->transporter_id;
                $provider->save();
@@ -314,14 +318,18 @@ class AuthController extends ApiController
         try {
             DB::beginTransaction();
             $provider = Provider::where('id', $request->provider_id)->first();
+            $data=$provider->id;
             if($provider->activation_code ==  $request->code){
                 $provider->activation_code=null;
                 if($provider->activation_at == null ){
                     $provider->activation_at=now();
                 }
                 $provider->save();
+                if(\request()->header('authorization')){
+                    $data= $this->createNewToken(\request()->header('authorization'));
+                }
                 DB::commit();
-              return responseApi(200, translate('return success'), $provider->id);
+              return responseApi(200, translate('return success'), $data);
             }
             DB::commit();
             return responseApiFalse(500, translate('activation code is incorrect'));
