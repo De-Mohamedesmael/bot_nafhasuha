@@ -101,7 +101,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                    <th colspan="2" style="font-size: 1.2 rem; color: #013e6b;">
                                         <h3>@lang('lang.orders')</h3>
                                     </th>
 
@@ -126,7 +126,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                <th colspan="2" style="font-size: 1.2 rem; color: #013e6b;">
                                     <h3>@lang('lang.total_orders')</h3>
                                 </th>
 
@@ -158,7 +158,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                <th colspan="2" style="font-size: 1.2 rem; color: #013e6b;">
                                     <h3>@lang('lang.wallet_customer')</h3>
                                 </th>
 
@@ -191,7 +191,7 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th colspan="2" style="font-size: 1.2 rem; color: #7c5cc4;">
+                                <th colspan="2" style="font-size: 1.2 rem; color: #013e6b;">
                                     <h3>@lang('lang.payment_types_report')</h3>
                                 </th>
 

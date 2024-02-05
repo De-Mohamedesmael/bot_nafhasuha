@@ -15,6 +15,7 @@
     <link rel="icon" type="image/png" href="{{asset('/assets/images/settings/'.$logo)}}" />
     <!-- Bootstrap CSS-->
     @include('back-end.layouts.partials.css')
+    @yield('styles')
 </head>
 
 <body>

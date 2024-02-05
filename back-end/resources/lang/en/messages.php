@@ -124,5 +124,11 @@
   'web_user' => 'Web user',
   'links' => 'Links',
   'Terms and Conditions' => 'Terms and Conditions',
-    'activation code' => 'Your activation code is: :code',
+  'activation code' => 'Your activation code is: :code',
+  'chart_Canceled' => 'Chart Canceled',
+  'chart_Pending' => 'Chart Pending',
+  'chart_Completed' => 'Chart Completed',
+  'Number of registered users' => 'Number of registered users',
+  'This year the number of registered users' => 'This year the number of registered users',
+  'total_amount' => 'Total amount',
 );

@@ -42,6 +42,9 @@ type="text/css">
 <link rel="stylesheet" href="{{asset('assets/back-end/css/custom-default.css') }}" type="text/css" id="custom-style">
 
 <style>
+    nav.navbar .nav-item a i {
+        font-size: 25px;
+    }
     .my-group .form-control {
         width: 50% !important;
     }
@@ -62,3 +65,5 @@ type="text/css">
         display: none !important;
     }
 </style>
+
+

@@ -266,7 +266,7 @@ return [
     'purchase_order' => 'أمر شراء',
     'list_purchase_order' => 'قائمة أوامر الشراء',
     'draft_purchase_order' => 'مسودة طلب الشراء',
-    'status' => 'حالة',
+    'status' => '  حــــــــــــــــالـــــــــة  ',
     'sub_total' => 'المجموع الفرعي',
     'send_to_admin' => 'أرسل إلى المسؤول',
     'send_to_supplier' => 'أرسل إلى المورد',
@@ -536,7 +536,6 @@ return [
     'filter' => 'تصفية',
     'leave_balance' => 'رصيد الاجازات',
     'joining_date' => 'تاريخ الانضمام',
-    'status' => 'حالة',
     'something_went_wrong' => 'هناك خطأ ما',
     'leave_updated' => 'تم تحديث الإجازة',
     'leave_deleted' => 'تم حذف الإجازة',
@@ -1674,5 +1673,5 @@ return [
     'cancellation_end_date'=>'تاريخ الالغاء الي :',
     'cancellation_start_time'=>'وقت الالغاء من :',
     'cancellation_end_time'=>'وقت الالغاء الي:',
-    'view_all_orders_canceled-provider'=>' جميع طلبات مقدمي الخدمة الملغية',
+    'view_all_orders_canceled-provider'=>'مقدمي الخدمة الملغية',
 ];

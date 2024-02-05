@@ -32,7 +32,7 @@ header nav .btn-company {
     height: 40px;
     flex-shrink: 0;
     border-radius: 218px;
-    background: #013E6B;
+    background: #013e6b;
     text-align: center;
     line-height: 35px;
 }
@@ -352,7 +352,7 @@ header nav .btn-company a {
 }
 
 #review .items {
-    background: #013E6B;
+    background: #013e6b;
     height: 350px;
     text-align: center;
 }
@@ -468,7 +468,7 @@ display: none;
 #our-client .row .owl-carousel .owl-dot.active
 {
     width: 30px;
-    background-color: #013E6B;
+    background-color: #013e6b;
     height: 10px;
     border-radius: 50px;
 }
@@ -636,7 +636,7 @@ padding: 50px 0;
 
 #newspaper .container {
     border-radius: 14px;
-    background: #013E6B;
+    background: #013e6b;
     height: 350px;
     text-align: center;
 }
@@ -759,7 +759,7 @@ footer .btn-company {
     height: 40px;
     flex-shrink: 0;
     border-radius: 218px;
-    background: #013E6B;
+    background: #013e6b;
     text-align: center;
     line-height: 40px;
 }

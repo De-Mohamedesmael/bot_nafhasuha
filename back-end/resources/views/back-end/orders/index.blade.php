@@ -1,5 +1,8 @@
 @extends('back-end.layouts.app')
-@section('title', __('lang.provider'))
+@section('title')
+    @if(!isset($status))  @lang('lang.view_all_orders')@else @lang('lang.view_all_orders_'.$status) @endif
+
+@endsection
 @section('styles')
 <style>
     input[type="checkbox"] {
@@ -67,21 +70,16 @@
     }
 </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.orders')}} / </span>@if(!isset($status))  @lang('lang.view_all_orders')@else @lang('lang.view_all_orders_'.$status) @endif
+@endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">
-               @if(!isset($status))  @lang('lang.view_all_orders')@else @lang('lang.view_all_orders_'.$status) @endif
-
-            </h3>
-        </div>
 
 
         @php
             $url=  route("admin.order.index",$status);
 
         @endphp
-    </div>
     <div class="card mt-3 pt-2 pb-1">
         <div class="col-md-12">
             <div class="row">
@@ -240,7 +238,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table id="order_table" class="table">
+        <table id="order_table" class="table  table-striped">
             <thead>
                 <tr>
                     <th>@lang('lang.invoice_no')</th>

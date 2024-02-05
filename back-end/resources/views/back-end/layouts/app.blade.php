@@ -130,7 +130,7 @@
         .logo-div {
             width: 220px;
             padding: 0 5px;
-            background-color: #013E6B;
+            background-color: #013e6b;
         }
         header .container-fluid {
             padding: 0;
@@ -151,7 +151,7 @@
         nav.navbar a.menu-btn:hover {
             background: #ffffff;
             border: 1px solid #ffffff;
-            color: #013E6B;
+            color: #013e6b;
         }
         .side-navbar {
             width: 220px;
@@ -160,9 +160,8 @@
             margin-right: 220px;
         }
         .side-navbar li a {
-
-            margin: 3px 6px;
-            padding: 5px 6px;
+            margin: 0;
+            padding: 8px 12px;
         }
         .side-navbar {
             background-color: #013e6b;
@@ -176,9 +175,157 @@
         .side-navbar li a:focus i , .side-navbar li a:hover i , .side-navbar li.active > a i  {
             color: #013e6b;
         }
+        .logo-div {
+            width: 220px;
+            padding: 0 5px;
+            background-color: #013e6b;
+            height: 65px;
+        }
+        .side-navbar{
+            padding-left: 0!important;
+        }
+        .main-menu li {
+            background-color: #013e6b;
+        }
+        li.active,nav.navbar {
+            background: #f5f5f5!important;
+            border-bottom: none;
+        }
+        .mCS-dir-rtl > .mCSB_inside > .mCSB_container {
+            margin-right: 0;
+            margin-left: 0 !important;
+        }
+        div#content {
+            background-color: #f5f5f5!important;
+            padding-top: 20px;
+        }
+        .main-menu {
+            background-color: #f8f8f8;
+        }
 
-   </style>
+        .side-navbar li ul{
+            padding: 0 !important;
+        }
+        .next-active {
+            border-radius: 20px 0 0;
+        }
+        .previous-active {
+            border-radius:  0  0 0 20px;
+        }
+        .sp-label {
+            position: absolute;
+            top: -10px;
+            right: 25px;
+            padding: 0 10px;
+            z-index: 2;
+            background: linear-gradient(
+        to top,
+        #fdfdff 0%,
+        #fdfdff 50%,
+        whitesmoke 50%,
+        whitesmoke 100%
+        );
+        }
+        .form-control, .input-group-text, .bootstrap-select.form-control {
+            border-color: #9c9f9c;
+        }
+        li.sli_li {
+            right: 20%;
+            position: absolute;
+            color: #013E6B;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        ul#orders {
+            padding: 5px 10px !important;
+            margin: 0 !important;
+            border-radius: 0;
+            background-color: #013e6b;
+        }
+        .next-active-children {
+            border-radius: 20px 0 0 !important;
+        }
+        .li-item li.active,.li-item li.active a {
+            color: #ffffff !important;
+            background: #013e6b !important;
+        }
+        .side-navbar li ul li a {
 
+            margin-right: 13px;
+        }
+        .li-item  li::before, .li-item li::after {
+            position: absolute;
+            display: flex;
+        }
+        .li-item li::before {
+            content: ' ';
+            right: 0;
+            top: 13px;
+            height: 8px;
+            width: 8px;
+            background-color: #fff;
+            align-items: center;
+            border-radius: 50%;
+            justify-content: center;
+        }
+        .li-item li.active::before {
+            background-color: #7a0d0d !important;
+            box-shadow: 0px 0px 5px 2px #ffffffb5;
+        }
+        li.sli_li span.parent {
+            color: #7a7a7a;
+        }
+        .badge-primary {
+            color: #013E6B !important;
+            background-color: #D6E7FE;
+            font-weight: 800;
+            border: 0;
+            padding: 5px;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        .badge-warning{
+            color: #D6E7FE !important;
+            background-color: #013E6B;
+            font-weight: 800;
+            border: 0;
+            padding: 5px;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+       .dataTables_length, .dt-buttons {
+
+            width: 20%;
+        }
+        .dt-buttons.btn-group {
+            border: 1px solid #0000003d;
+            border-radius: 20px;
+            margin: 0 15px;
+        }
+        .dt-buttons button span {
+            color: #000;
+        }
+        .buttons-print,.buttons-csv,.dt-buttons.btn-group .btn-secondary {
+            background: none;
+            border-left: 1px solid #00000045 !important;
+            color: #000 !important;
+            border-radius: 0;
+            border: none;
+        }
+        button.btn.btn-secondary.buttons-collection.dropdown-toggle.buttons-colvis {
+            border-left: none !important;
+        }
+        .dt-buttons {
+
+            width: 45%;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #F6F5FD !important;
+        }
+    </style>
+<style>
+
+</style>
     <style>
         .preview-category-container {
             /* display: flex;
@@ -408,6 +555,14 @@
             }
         }
     </style>
+    @if(app()->getLocale() =="en")
+        <style>
+            .brand-big {
+                right: auto !important;
+                left: 10% !important;
+            }
+        </style>
+    @endif
     @yield('styles')
 </head>
 
@@ -481,6 +636,7 @@
     </div>
 
     <script type="text/javascript">
+
         base_path = "{{ url('/') }}";
         current_url = "{{ url()->current() }}";
     </script>
@@ -488,6 +644,13 @@
     @include('back-end.layouts.partials.javascript')
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
+        $('#side-main-menu .li-item.active').prev().addClass("previous-active");
+
+        if(!$('#side-main-menu .li-item.active').hasClass('have-children')) {
+            $('#side-main-menu .li-item.active').next().addClass("next-active");
+        }else {
+            $('#side-main-menu .li-item.active ul').addClass('next-active-children');
+        }
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
