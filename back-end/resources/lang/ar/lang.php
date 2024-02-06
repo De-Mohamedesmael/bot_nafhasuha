@@ -1674,4 +1674,5 @@ return [
     'cancellation_start_time'=>'وقت الالغاء من :',
     'cancellation_end_time'=>'وقت الالغاء الي:',
     'view_all_orders_canceled-provider'=>'مقدمي الخدمة الملغية',
+    'enter_email'=>'ادخل بريدك الالكتروني',
 ];
