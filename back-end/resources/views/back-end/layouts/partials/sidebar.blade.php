@@ -31,34 +31,52 @@
 
                     </a>
                     <ul id="orders"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])) show @endif active-children">
 
                           @can('order_module.order.view')
                         <li
                             class="@if(request()->segment(2) == 'orders' && empty(request()->segment(3))) active @endif">
                             <a href="{{route('admin.order.index')}}">
-                                <span ></span>
-                                {{__('lang.view_all_orders')}} <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
+
+                                <span class="title-collapse">
+                                   {{__('lang.view_all_orders')}}
+                                </span>
+
+
+                                <span class="count-span-side-bar all_orders" >{{array_sum($side_counts_orders)}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='pending') active @endif">
-                            <a href="{{route('admin.order.index','pending')}}">{{__('lang.view_all_orders_pending')}}<span class="count-span-side-bar pending" >{{$side_counts_orders['pending']??0}}</span></a>
+                            <a href="{{route('admin.order.index','pending')}}">
+                                <span class="title-collapse">
+                                {{__('lang.view_all_orders_pending')}}
+                                </span>
+                                <span class="count-span-side-bar pending" >{{$side_counts_orders['pending']??0}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'orders' &&  request()->segment(3)=='approved') active @endif">
-                            <a href="{{route('admin.order.index','approved')}}">{{__('lang.view_all_orders_approved')}}<span class="count-span-side-bar approved" >{{$side_counts_orders['approved']??0}}</span></a>
+                            <a href="{{route('admin.order.index','approved')}}">
+                                <span class="title-collapse">{{__('lang.view_all_orders_approved')}}
+                                </span>
+                                <span class="count-span-side-bar approved" >{{$side_counts_orders['approved']??0}}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='completed') active @endif">
-                            <a href="{{route('admin.order.index','completed')}}">{{__('lang.view_all_orders_completed')}}<span class="count-span-side-bar completed" >{{($side_counts_orders['completed']??0 )+ ($side_counts_orders['received']??0 ) }}</span></a>
+                            <a href="{{route('admin.order.index','completed')}}">
+                                <span class="title-collapse">{{__('lang.view_all_orders_completed')}}</span>
+                                <span class="count-span-side-bar completed" >{{($side_counts_orders['completed']??0 )+ ($side_counts_orders['received']??0 ) }}</span></a>
                         </li>
                         <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled-provider') active @endif">
-                            <a href="{{route('admin.order.canceled-provider')}}">{{__('lang.view_all_orders_canceled-provider')}}<span class="count-span-side-bar canceled" >{{\App\Models\CancellationRecord::count() }}</span></a>
+                            <a href="{{route('admin.order.canceled-provider')}}">
+                                <span class="title-collapse">{{__('lang.view_all_orders_canceled-provider')}}</span>
+                                <span class="count-span-side-bar canceled" >{{\App\Models\CancellationRecord::count() }}</span></a>
                         </li>
                             <li
                             class="@if(request()->segment(2) == 'orders' && request()->segment(3)=='canceled') active @endif">
-                            <a href="{{route('admin.order.index','canceled')}}">{{__('lang.view_all_orders_canceled')}}<span class="count-span-side-bar canceled" >{{($side_counts_orders['declined']??0 )+($side_counts_orders['canceled']??0 ) }}</span></a>
+                            <a href="{{route('admin.order.index','canceled')}}">
+                                <span class="title-collapse">{{__('lang.view_all_orders_canceled')}}</span>
+                                <span class="count-span-side-bar canceled" >{{($side_counts_orders['declined']??0 )+($side_counts_orders['canceled']??0 ) }}</span></a>
                         </li>
                           @endcan
 
@@ -80,7 +98,7 @@
 
                     </a>
                     <ul id="transactions"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions'])) show @endif active-children">
 
                           @can('order_module.order.view')
                         <li
