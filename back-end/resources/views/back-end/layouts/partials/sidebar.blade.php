@@ -12,7 +12,7 @@
                     &nbsp;
                 </li>
                 <li class="li-item @if(request()->segment(2)=='home') active @endif">
-                    <a href="{{route('admin.home')}}">
+                    <a href="{{route('admin.home')}}" class="a-itemOne">
                         <i class="dripicons-meter"></i>
                         <span>{{ __('lang.dashboard')
                             }}
@@ -24,7 +24,7 @@
                                    auth()->user()->can('order_module.order.create')||
                                    auth()->user()->can('order_module.order.edit')  )
                 <li class="li-item have-children @if(in_array(request()->segment(2), ['orders'])) active @endif">
-                    <a href="#orders" aria-expanded="false" data-toggle="collapse">
+                    <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld">
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>

@@ -128,9 +128,15 @@
         .icon {
             margin: auto;
         }
-        .count-row{
-        background-color: #fff;
-        padding: 15px 10px;
+        .count-row {
+            background-color: #fff;
+            padding: 15px 10px;
+            margin: 0 2%;
+            border-radius: 15px;
+        }
+        .chart-row {
+            margin: auto 1%;
+            border-radius: 15px;
         }
         .count-title .count-number {
             font-size: 1.5em;
@@ -151,9 +157,10 @@
         }
     </style>
     <style>
-        #chartdiv {
+        #new_bar_providers {
             width: 100%;
-            height: 650px;
+            max-height: 285px !important;
+            height: 285px !important;
         }
         span.icon-chart {
             width: 10px;
@@ -184,6 +191,9 @@
             float: left;
             color: #575757 !important;
         }
+        .card {
+            border-radius: 15px;
+        }
     </style>
 @endsection
 @section('sli_li')
@@ -194,8 +204,8 @@
         <div class="container-fluid">
             <div class="col-md-12">
 
-                <div class="filter-toggle btn-group">
-                    <div class="row">
+                <div class="filter-toggle btn-group w-100">
+                    <div class="row  w-100" style="margin: 0 1%;">
                         <div class="col-md-2">
                             <label class="sp-label" for="city_id"><b>@lang('lang.city')</b></label>
                             {!! Form::select('city_id', $cities,  false, ['class' => 'form-control ','data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'id' => 'city_id']) !!}
@@ -313,7 +323,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-3 chart-row">
                     <div class="col-md-6">
                         <div class="card">
 
@@ -321,7 +331,7 @@
 
                                 <h4 class="card-title mb-4">{{\App\CPU\translate('Customer statistics')}}</h4>
                                 <div class="row m-0">
-                                    <div class="col-md-6 p-0 mt-3">
+                                    <div class="col-md-6 p-0 mt-5">
 
                                         <div class="item-chart">
                                             <span class="icon-chart user_total"></span>
@@ -344,7 +354,7 @@
                                             <span class="span-count-chart" id="have_orders"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 p-0 m-0 "style="margin-top: -30px !important;height: 295px;">
+                                    <div class="col-md-6 p-0 m-0 "style="margin-top: -15px !important;height: 300px;">
                                         <div id="bar_new"></div>
                                     </div>
 
@@ -357,49 +367,12 @@
                             <div class="card-body">
 
                                 <h4 class="card-title mb-4">{{\App\CPU\translate('provider statistics by Month')}}</h4>
-                                <div id="new_bar_providers"></div>
+                                <canvas id="new_bar_providers"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div id="map">
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <h4 class="card-title mb-4">{{\App\CPU\translate('amount_Subscribe')}}</h4>
-
-                                <div class="row text-center">
-                                    <div class="col-3">
-                                        <h5 class="mb-0" id="AmountCompleted">{{$AmountCompleted??0}}</h5>
-                                        <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Completed')}}</p>
-                                    </div>
-                                    <div class="col-3">
-                                        <h5 class="mb-0 " id="AmountPending">{{$AmountPending??0}}</h5>
-                                        <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Pending')}}</p>
-                                    </div>
-                                    <div class="col-3">
-                                        <h5 class="mb-0" id="AmountCanceled">{{$AmountCanceled??0}}</h5>
-                                        <p class="text-muted text-truncate">{{\App\CPU\translate('chart_Canceled')}}</p>
-                                    </div>
-                                    <div class="col-3">
-                                        <h5 class="mb-0" id="TotalAmount">{{--$AmountCompleted+$AmountPending+$AmountCanceled--}}</h5>
-                                        <p class="text-muted text-truncate">{{\App\CPU\translate('total_amount')}}</p>
-                                    </div>
-                                </div>
-
-                                <canvas id="lineChart" height="150"></canvas>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- end col -->
 
                 </div>
             </div>
@@ -514,86 +487,47 @@
 
             var providerCounts = JSON.parse(providerCountsString);
             var providerCounts_have_order = JSON.parse(providerCountsHaveOrderString);
-            var options = {
-                series: [{
-                    name: "{{\App\CPU\translate('registered provider')}}",
-                    data: providerCounts,
-                    color: '#0E5183',
-                },{
-                    name: "{{\App\CPU\translate('providerCounts_have_order')}}",
-                    data: providerCounts_have_order,
-                    color: '#FF285C',
-                }],
-                chart: {
-                    height: 250,
+
+
+                var ctx = document.getElementById('new_bar_providers').getContext('2d');
+                var myChart = new Chart(ctx, {
                     type: 'line',
-                    zoom: {
-                        enabled: true
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: "{{\App\CPU\translate('registered provider')}}",
+                                data: providerCounts,
+                                backgroundColor: 'rgba(14,81,131,0)',
+                                borderColor: '#0E5183',
+                                borderWidth: 3
+                            },{
+                                label: "{{\App\CPU\translate('providerCounts_have_order')}}",
+                                data: providerCounts_have_order,
+                                backgroundColor: 'rgba(255,40,92,0)',
+                                borderColor: '#FF285C',
+                                borderWidth: 3
+                            }
+                        ]
                     },
+                    options: {
 
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'straight'
-                },
-                grid: {
-                    row: {
-                        colors: ['#ffffff', 'transparent'],
-                        // takes an array which will be repeated on columns
-                        opacity: 1
-                    },
-                },
-                xaxis: {
-                    categories: months,
-                }
-            };
-
-            var chart = new ApexCharts(document.querySelector("#new_bar_providers"), options);
-            chart.render();
-
-        }
-        function initializeOrderChart(CompleteString,CanceledString,PendingString) {
-
-            var Completed =JSON.parse(CompleteString);
-            var Canceled = JSON.parse(CanceledString);
-            var Pending = JSON.parse(PendingString);
-
-            var ctx = document.getElementById('lineChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: months,
-                    datasets: [{
-                        label: '{{\App\CPU\translate('chart_Completed')}}',
-                        data: Completed,
-                        backgroundColor: 'rgba(72,234,18,0.2)',
-                        borderColor: 'rgb(66,235,54)',
-                        borderWidth: 1
-                    },{
-                        label: '{{\App\CPU\translate('chart_Pending')}}',
-                        data: Pending,
-                        backgroundColor: 'rgba(54,235,229,0.2)',
-                        borderColor: 'rgb(54,235,235)',
-                        borderWidth: 1
-                    },{
-                        label: '{{\App\CPU\translate('chart_Canceled')}}',
-                        data: Canceled,
-                        backgroundColor: 'rgba(235,54,54,0.2)',
-                        borderColor: 'rgb(235,54,54)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Chart.js Line Chart'
+                            }
                         }
                     }
-                }
-            });
+                });
+
+
         }
+
 
         function getDashboardData(start_date, end_date,city_id,area_id) {
             $.ajax({
@@ -626,23 +560,12 @@
                 },
                 success: function (result) {
                     if (result.success) {
-                        console.log('dd');
-                        TotalAmount
-                        AmountCanceled
-                        AmountPending
-                        AmountCompleted
-                        $('#AmountCompleted').html(result.AmountCompleted);
-                        $('#AmountPending').html(result.AmountPending);
-                        $('#AmountCanceled').html(result.AmountCanceled);
-                        TotalAmount = result.AmountCanceled+result.AmountPending+result.AmountCompleted;
-                        $('#TotalAmount').html(TotalAmount);
                         initializeUserChart(10,20,30,1250);
                         $('#user_total').html('1250');
                         $('#new_customers').html('10%');
                         $('#have_cars').html('20%');
                         $('#have_orders').html('30%');
                         initializeProviderChart(result.providerCountsString, result.providerCountsAllString);
-                        initializeOrderChart(result.CompleteString, result.CanceledString, result.PendingString)
                     }
                 },
             });

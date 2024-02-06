@@ -19,6 +19,9 @@
         .red {
             color: #b90000;
         }
+        body{
+            background-color: #013e6b;
+        }
         span.count-span-side-bar {
             float: right;
             color: #fff;
@@ -203,10 +206,15 @@
         .main-menu ,li.li-item.active {
             background: linear-gradient( to right, #f8f8f8 0%, #f8f8f8 50%,  #013e6b 50%,  #013e6b 100% );
         }
-        li.li-item.active a {
+        li.li-item.active a.a-itemOne {
+            margin-right: 20px;
+            border-radius: 25px;
+        }
+        li.li-item.active a.a-itemhavecheld {
             margin-right: 20px;
             border-radius: 0 25px;
         }
+
         .side-navbar li.li-item.active a {
             background: #f8f8f8;
         }
@@ -254,7 +262,7 @@
             font-weight: 500;
         }
         ul#orders {
-           
+
             margin: 0 ;
         }
         .next-active-children {
