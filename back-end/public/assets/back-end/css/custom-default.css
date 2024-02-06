@@ -25,10 +25,7 @@ nav.navbar a.menu-btn:hover {
     top: 0;
 }
 
-.side-navbar li a:focus,
-.side-navbar li a:hover,
-.side-navbar li.active > a,
-.side-navbar li a[aria-expanded="true"] {
+.side-navbar li.active > a {
     background: #f8f8f8;
     color: #013e6b;
     text-decoration: none;

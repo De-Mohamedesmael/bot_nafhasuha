@@ -148,6 +148,9 @@
             border: 1px solid #ffffff;
             color: #013e6b;
         }
+        ul#side-main-menu {
+            background-color: #013e6b;
+        }
         .side-navbar {
             width: 220px;
         }
@@ -164,10 +167,10 @@
         .side-navbar li a,.side-navbar li a i {
             color: #ffffff;
         }
-        .side-navbar li a:focus, .side-navbar li a:hover, .side-navbar li.active > a, .side-navbar li a[aria-expanded="true"] {
+         .side-navbar li.active > a{
             color: #013e6b !important;
         }
-        .side-navbar li a:focus i , .side-navbar li a:hover i , .side-navbar li.active > a i  {
+         .side-navbar li.active > a i  {
             color: #013e6b;
         }
         .logo-div {
@@ -179,8 +182,14 @@
         .side-navbar{
             padding-left: 0!important;
         }
-        .main-menu li {
-            background-color: #013e6b;
+
+
+        /*.main-menu .next-active-children li*/
+        .main-menu  .active-children li  ,.main-menu  .next-active-children li {
+            background-color: #f5f5f5 !important;
+        }
+        .main-menu  li {
+            background-color: #013e6b !important;
         }
         nav.navbar {
             background: #f5f5f5!important;
@@ -244,7 +253,7 @@
         whitesmoke 100%
         );
         }
-        .next-active-children {
+        .active-children ,.next-active-children {
             border-radius: 20px 0 0 !important;
             padding-right: 10px !important;
             margin-right: 20px !important;
@@ -265,19 +274,19 @@
 
             margin: 0 ;
         }
-        .next-active-children {
+        .next-active-children , .active-children {
             border-radius: 20px 0 0 !important;
         }
         .li-item li.active,.li-item li.active a {
             color: #ffffff !important;
             background: #013e6b !important;
         }
-        .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
+        .active-children li , .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
             padding-right: 10px !important;
             color: #013e6b !important;
             background-color: #f8f8f8 !important;
         }
-        .next-active-children li:last-child {
+        .active-children li:last-child  ,.next-active-children li:last-child {
             border-radius: 0 0 18px 0;
         }
 
@@ -286,7 +295,7 @@
         }
         .li-item li.active::before {
             background-color: #7a0d0d !important;
-            box-shadow: 0px 0px 5px 2px #2b2b2bb5;
+            box-shadow: 0px 0px 5px 2px #013e6b91;
         }
         .side-navbar li ul li a {
 
@@ -307,9 +316,12 @@
             border-radius: 50%;
             justify-content: center;
         }
+        .li-item li::before {
+            background-color: #013e6a;
+        }
         .li-item li.active::before {
             background-color: #7a0d0d !important;
-            box-shadow: 0px 0px 5px 2px #ffffffb5;
+            box-shadow: 0px 0px 5px 2px #013e6b91;
         }
         li.sli_li span.parent {
             color: #7a7a7a;
@@ -391,7 +403,20 @@
         nav.navbar .nav-item a i {
             font-size: 20px;
         }
-
+        span.title-collapse {
+            padding: 0 5px;
+        }
+        .side-navbar li:hover > a:hover,.side-navbar li:focus > a:hover {
+            text-shadow: 2px 2px #df2237;
+        }
+        li.li-item.active:hover > a:hover,li.li-item.active:focus > a:hover ,
+        .side-navbar li.li-item.active li:hover > a:hover, .side-navbar li.li-item.active li:focus > a:hover{
+            text-shadow: none !important;
+        }
+        .side-navbar li:hover::before, .side-navbar li:focus::before{
+            background-color: #7a0d0d !important;
+            box-shadow: 0px 0px 5px 2px #013e6b91;
+        }
     </style>
 <style>
 
@@ -711,15 +736,17 @@
         base_path = "{{ url('/') }}";
         current_url = "{{ url()->current() }}";
     </script>
-
-    @include('back-end.layouts.partials.javascript')
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
     <script>
         $('#side-main-menu .li-item.active').prev().addClass("previous-active");
         $('#side-main-menu .li-item.active').next().addClass("next-active");
-        if($('#side-main-menu .li-item.active').hasClass('have-children')) {
-            $('#side-main-menu .li-item.active ul').addClass('next-active-children');
-        }
+        $('#side-main-menu .li-item.active ul').addClass('next-active-children');
+        $('#side-main-menu li ul').removeClass('active-children');
+    </script>
+    @include('back-end.layouts.partials.javascript')
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

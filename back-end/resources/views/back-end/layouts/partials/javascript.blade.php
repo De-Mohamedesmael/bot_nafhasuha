@@ -5,7 +5,7 @@ $moment_time_format = App\Models\System::getProperty('time_format') == '12' ? 'h
     var moment_time_format = "{{$moment_time_format}}";
 </script>
 <script type="text/javascript" src="{{asset('assets/back-end/js/lang/'.app()->getLocale().'.js') }}"></script>
-<script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
+
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.timepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/popper.js/umd/popper.min.js') }}">
