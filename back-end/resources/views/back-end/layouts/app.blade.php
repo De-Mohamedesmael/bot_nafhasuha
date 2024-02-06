@@ -149,7 +149,7 @@
             color: #013e6b;
         }
         ul#side-main-menu {
-            background-color: #013e6b;
+            background-color: #ffffff00;
         }
         .side-navbar {
             width: 220px;
