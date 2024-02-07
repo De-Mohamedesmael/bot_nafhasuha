@@ -417,8 +417,10 @@
             background-color: #7a0d0d !important;
             box-shadow: 0px 0px 5px 2px #013e6b91;
         }
-        .side-navbar{
+        {
             direction: ltr;
+        }
+        .side-navbar.overflow{
             overflow-y: auto !important;
         }
         .side-navbar-wrapper {
@@ -756,6 +758,8 @@
 
     </script>
     <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
+    <script type="text/javascript"
+            src="{{asset('assets/back-end/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js') }}"></script>
     <script>
 
         $('#toggle-btn').click(function(){
@@ -923,6 +927,7 @@
         function showPage() {
             document.getElementById("loader").style.display = "none";
             document.getElementById("content").style.display = "block";
+            document.getElementsByClassName("side-navbar").classList.add("overflow");
         }
 
         $("div.alert").delay(3000).slideUp(750);
