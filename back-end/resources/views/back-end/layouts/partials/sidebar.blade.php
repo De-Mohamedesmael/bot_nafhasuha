@@ -23,8 +23,8 @@
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
                                    auth()->user()->can('order_module.order.edit')  )
-                <li class="li-item have-children @if(in_array(request()->segment(2), ['orders'])) active @endif">
-                    <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld">
+                <li class="li-item have-children @if(in_array(request()->segment(2), ['orders'])) active @endif" >
+                    <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld"  d-hrf="{{route('admin.order.index')}}">
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>
@@ -91,7 +91,7 @@
                                   auth()->user()->can('transactions_module.transactions.edit'))
 
                 <li>
-                    <a href="#transactions" aria-expanded="false" data-toggle="collapse">
+                    <a href="#transactions" aria-expanded="false" data-toggle="collapse" d-hrf="{{route('admin.transaction.index')}}">
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.transactions')}}</span>
