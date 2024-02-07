@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+@php
+    $logo = \Settings::get('logo','logo.svg');
+    $logo_footer = \Settings::get('logo_footer','footer_logo.svg');
+@endphp
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -415,10 +418,22 @@
             box-shadow: 0px 0px 5px 2px #013e6b91;
         }
         .side-navbar{
+            direction: ltr;
             overflow-y: auto !important;
+        }
+        .side-navbar-wrapper {
+            direction: rtl;
         }
         a.a-itemhavecheld.collapsed {
             border-radius: 25px !important;
+        }
+        .logo-div.active {
+            background-color: #f5f5f5;
+            color: #013e6b;
+        }
+        .menu-btn.active {
+            border: 1px solid #013e6b !important;
+            color: #013e6b !important;
         }
     </style>
 <style>
@@ -742,6 +757,21 @@
     </script>
     <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
     <script>
+
+        $('#toggle-btn').click(function(){
+            image="{{asset('assets/images/settings/'.$logo_footer)}}";
+            if($(this).attr('is-active') == 'true'){
+                $('.logo-div').removeClass('active');
+                $(this).removeClass('active');
+                $(this).attr('is-active','false');
+            }else{
+                image="{{asset('assets/images/settings/'.$logo)}}";
+                $('.logo-div').addClass('active');
+                $(this).addClass('active');
+                $(this).attr('is-active','true');
+            }
+            $('.brand-big img').attr('src',image);
+        });
         $('.a-itemhavecheld').click(function(){
             if($(this).parent().find('.active').length <= 0){
                 $(this).parent().addClass('active');
