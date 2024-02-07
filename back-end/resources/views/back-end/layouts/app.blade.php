@@ -277,10 +277,7 @@
         .next-active-children , .active-children {
             border-radius: 20px 0 0 !important;
         }
-        .li-item li.active,.li-item li.active a {
-            color: #ffffff !important;
-            background: #013e6b !important;
-        }
+
         .active-children li , .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
             padding-right: 10px !important;
             color: #013e6b !important;
@@ -290,7 +287,7 @@
             border-radius: 0 0 18px 0;
         }
 
-        .li-item li::before{
+        .li-item li.active::before{
             background-color: #013E6B;
         }
         .li-item li.active::before {
@@ -416,6 +413,12 @@
         .side-navbar li:hover::before, .side-navbar li:focus::before{
             background-color: #7a0d0d !important;
             box-shadow: 0px 0px 5px 2px #013e6b91;
+        }
+        .side-navbar{
+            overflow-y: auto !important;
+        }
+        a.a-itemhavecheld.collapsed {
+            border-radius: 25px !important;
         }
     </style>
 <style>
@@ -735,9 +738,23 @@
 
         base_path = "{{ url('/') }}";
         current_url = "{{ url()->current() }}";
+
     </script>
     <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
     <script>
+        $('.a-itemhavecheld').click(function(){
+            if($(this).parent().find('.active').length <= 0){
+                $(this).parent().addClass('active');
+                $(this).parent().removeClass('next-active');
+                $(this).parent().prev().addClass("previous-active");
+                $(this).parent().next().addClass("next-active");
+                $(this).parent().children('ul').addClass("next-active-children");
+                $('#side-main-menu li ul').removeClass('active-children');
+                url = $(this).attr('d-hrf');
+                window.location.href = url;
+            }
+
+        });
         $('#side-main-menu .li-item.active').prev().addClass("previous-active");
         $('#side-main-menu .li-item.active').next().addClass("next-active");
         $('#side-main-menu .li-item.active ul').addClass('next-active-children');

@@ -18,7 +18,7 @@ nav.navbar a.menu-btn:hover {
     text-align: left;
     transition: all 0.1s linear;
     z-index: 1000;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .pos-page .side-navbar {
