@@ -9,7 +9,7 @@
         <div class="container-fluid ">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
                 <div class="logo-div " >
-                    <a id="toggle-btn" href="#" class="menu-btn">
+                    <a id="toggle-btn" href="#" is-active="false" class="menu-btn">
                         <i class="fa fa-bars" style="margin-top: 5px !important;">
                         </i>
                     </a>
