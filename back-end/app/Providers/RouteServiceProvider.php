@@ -51,6 +51,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-provider.php'));
 
+            Route::prefix('api/web/V1')
+                ->middleware(['apiLocale'])
+                ->namespace($this->namespace)
+                ->group(base_path('routes/api-web.php'));
+
             Route::as('front.')
                 ->middleware(['web', 'locale'])
                 ->namespace($this->namespace)

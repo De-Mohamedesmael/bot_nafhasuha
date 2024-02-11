@@ -26,7 +26,6 @@ class HomeController extends Controller
         $companies= Company::get();
         $reviews= Review::get();
         $screens= AppScreen::where('type','User')->get();
-//        dd($screens->first()->getFirstMedia('images')->getUrl());
         return view('front-end.home')->with([
             'categories'=>$categories,
             'services'=>$services,
@@ -35,6 +34,12 @@ class HomeController extends Controller
             'screens'=>$screens,
         ]);
     }
+
+
+
+
+
+
 
 
     public function showInvoice($invoice_no)
@@ -54,7 +59,6 @@ class HomeController extends Controller
         $companies= Company::get();
         $reviews= Review::get();
         $screens= AppScreen::where('type','Provider')->get();
-//        dd($screens->first()->getFirstMedia('images')->getUrl());
         return view('front-end.provider.home')->with([
             'categories'=>$categories,
             'services'=>$services,
