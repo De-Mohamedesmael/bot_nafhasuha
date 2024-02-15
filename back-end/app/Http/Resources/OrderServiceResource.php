@@ -41,10 +41,13 @@ class OrderServiceResource extends JsonResource
             'is_tracking'=>$is_tracking,
             'canceled_type'=>$this->canceled_type,
             'is_rate_order'=> $this->is_rate,
-
+            'suggested_price'=>(int)$transaction->suggested_price??0,
             'reason'=>$this->cancel_reason? $this->cancel_reason->title:'',
             'canceled_by'=>new CanceledByResource($this->canceledby),
             'is_maintenance_report'=>(boolean)$this->maintenance_report,
+            'discount_amount'=>(int)$transaction->discount_amount??0,
+            'grand_total'=>(int)$transaction->grand_total??0,
+            'final_total'=>(int)$transaction->final_total??0,
             'maintenance_report'=>$this->maintenance_report? new MaintenanceReportResource($this->maintenance_report):null,
         ];
     }

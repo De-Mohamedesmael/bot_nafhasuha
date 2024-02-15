@@ -76,8 +76,8 @@ y-axis
 
 	.mCS-dir-rtl > .mCSB_inside > .mCSB_scrollTools,
 	.mCS-dir-rtl > .mCSB_outside + .mCSB_scrollTools{ /* RTL direction/left-side scrollbar */
-		right: auto;
-		left: 0;
+		right:  0;
+		left: auto;
 	}
 
 	.mCS-dir-rtl > .mCSB_outside + .mCSB_scrollTools{ left: -26px; } /* RTL direction/left-side scrollbar (scrollbar position: outside) */
