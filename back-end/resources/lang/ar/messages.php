@@ -190,4 +190,5 @@
   'providerCounts_have_order' => 'لديه طلبات',
   'registered provider' => 'انضم لنا',
   'provider statistics by Month' => 'احصائيات مزودي الخدمات',
+  'Provider profile update' => 'Provider profile update',
 );
