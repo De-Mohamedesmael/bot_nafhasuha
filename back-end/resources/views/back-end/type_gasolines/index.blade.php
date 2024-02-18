@@ -12,9 +12,9 @@
         .check {
             position: relative;
             display: block;
-            width: 70px;
-            height: 30px;
-            background-color: #f46a6a;
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
             cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
@@ -22,7 +22,7 @@
         }
 
         input:checked[type="checkbox"] ~ .check {
-            background-color: #34c38f;
+            background-color: #013e6b;
             /*   box-shadow: 0 0 0 1200px #092c3e; */
         }
 
@@ -32,8 +32,8 @@
             top: 3px;
             left: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transition: all 0.5s;
         }
@@ -48,8 +48,8 @@
             top: 3px;
             right: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transform: translateX(50px);
             transition: all 0.5s;
@@ -62,18 +62,36 @@
         .btn-modal {
             cursor: pointer;
         }
+        a.btn.a-image {
+            margin: 0 10px;
+        }
     </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.type_gasolines')}} / </span>    @lang('lang.all_type_gasolines')
 @endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_type_gasolines')</h3>
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_type_gasolines')
+
+            </div>
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.type_gasolines.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.add_type_gasoline')
+                </a>
+            </div>
+
         </div>
-        <a style="color: white" href="{{ route('admin.type_gasolines.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.add_type_gasoline')</a>
+
+
 
     </div>
+
     <div class="table-responsive">
         <table id="type_gasoline_table" class="table">
             <thead>
@@ -88,14 +106,7 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tfoot>
+
         </table>
     </div>
 @endsection

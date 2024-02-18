@@ -11,16 +11,29 @@
             width: 125px;
             height: 55px;
         }
+             div#content {
+                 padding-top: 0;
+             }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
     </style>
 @endsection
-@section('content')
-    <section class="forms">
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.transporters.index")}}"> {{__('lang.transporters')}} </a> / </span>  @lang('lang.edit_transporter')
+@endsection
+@section('content')<section class="forms p-0">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.edit_transporter')</h4>
+                            <div class="print-title">@lang('lang.edit_transporter')</div>
+
                         </div>
                         <div class="card-body">
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -32,7 +45,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('title', __('lang.title') . ':*') !!}
+                                        {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                         <div class="input-group my-group">
                                             {!! Form::text('title', $transporter->title , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                                             <span class="input-group-btn">
@@ -51,33 +64,33 @@
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('price', __('lang.minimum_price') . ':') !!}
+                                        {!! Form::label('price', __('lang.minimum_price') . ':',[ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::number('price', $transporter->price, ['class' => 'form-control','required', 'placeholder' => __('lang.minimum_price')]) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('price_for_minute', __('lang.price_for_minute') . ':') !!}
+                                        {!! Form::label('price_for_minute', __('lang.price_for_minute') . ':',[ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::number('price_for_minute', $transporter->price_for_minute, ['class' => 'form-control','required', 'placeholder' => __('lang.price_for_minute')]) !!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('price_for_kilo', __('lang.price_for_kilo') . ':') !!}
+                                        {!! Form::label('price_for_kilo', __('lang.price_for_kilo') . ':',[ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::number('price_for_kilo', $transporter->price_for_kilo, ['class' => 'form-control','required', 'placeholder' => __('lang.price_for_kilo')]) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        {!! Form::label('sort', __('lang.sort') . ':') !!}
+                                        {!! Form::label('sort', __('lang.sort') . ':',[ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::number('sort', $transporter->sort, ['class' => 'form-control','required', 'placeholder' => __('lang.sort')]) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-4 " style="margin: 10px 0;">
 
                                     <div class="container mt-3">
-                                        <div class="red">(125px×55px)</div>
+                                        <div class="red sp-label new-des" style="top: 5px !important;">(125px×55px)</div>
                                         <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                                             <div class="col-12">
                                                 <div class="mt-3">
@@ -130,7 +143,7 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <div class="form-group justify-cont">
                                         <input type="submit" value="{{trans('lang.save')}}" id="submit-btn"
                                                class="btn btn-primary">
                                     </div>

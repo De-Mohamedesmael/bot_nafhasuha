@@ -2,14 +2,23 @@
 @section('title', __('lang.add_icon'))
 @section('styles')
     <style>
-        label#body-error , label#title-error {
-            position: absolute;
-            left: 10px;
+        div#content {
+            padding-top: 0;
         }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
     </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.tires.index")}}"> {{__('lang.tires')}} </a> / </span>  @lang('lang.add_provider')
+@endsection
 @section('content')
-    <section class="forms">
+    <section class="forms p-0">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">

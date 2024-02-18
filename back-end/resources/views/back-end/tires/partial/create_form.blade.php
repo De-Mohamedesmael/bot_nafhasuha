@@ -3,7 +3,7 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('title', __('lang.title') . ':*') !!}
+            {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('title', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                 <span class="input-group-btn">
@@ -22,7 +22,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('price', __('lang.price') . ':') !!}
+            {!! Form::label('price', __('lang.price') . ':',[ 'class'=>"sp-label new-des"]) !!}
             {!! Form::number('price', null, ['class' => 'form-control','required', 'placeholder' => __('lang.price')]) !!}
         </div>
     </div>
@@ -37,7 +37,7 @@
                 <div class="col-12">
                     <div class="mt-3">
                         <div class="row">
-                            <div class="col-10 offset-1">
+                            <div class="col-12 offset-1">
                                 <div class="variants">
                                     <div class='file file--upload w-100'>
                                         <label for='file-input' class="w-100">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-10 offset-1">
+                <div class="col-12 offset-1">
                     <div class="preview-container"></div>
                 </div>
             </div>
