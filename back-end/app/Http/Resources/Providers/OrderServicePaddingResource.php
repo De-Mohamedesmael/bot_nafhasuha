@@ -44,9 +44,12 @@ class OrderServicePaddingResource extends JsonResource
         if(in_array($this->type,$not_request_price) || ($this->type == 'TransportVehicle' &&  $this->parent_id != null)){
             $is_offer_price=0;
         }
+         $first_children=$this->children()->wherein('status',['pending', 'PickUp','approved'])->first() ?:null;
+     
         return [
             'id'=>$this->id,
             'status'=>$this->status,
+            'second_status'=> $first_children ? $first_children->status : '',
             'type'=>$this->type,
             'type_from'=>$this->type_from,
              "distance" => number_format($this->distance, 2, '.', ''),//round(, 2),

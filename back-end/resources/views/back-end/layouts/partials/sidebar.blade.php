@@ -23,15 +23,19 @@
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
                                    auth()->user()->can('order_module.order.edit')  )
+
                 <li class="li-item have-children @if(in_array(request()->segment(2), ['orders']) ) active @endif" >
                     <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld @if(in_array(request()->segment(2), ['orders']) && request()->segment(3) == 'show')  collapsed @endif"  d-hrf="{{route('admin.order.index')}}">
+r
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>
 
                     </a>
                     <ul id="orders"
+
                         class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])&& request()->segment(3) != 'show') show @endif active-children">
+
 
                           @can('order_module.order.view')
                         <li
@@ -90,15 +94,19 @@
                                   auth()->user()->can('transactions_module.transactions.view') ||
                                   auth()->user()->can('transactions_module.transactions.edit'))
 
+
                 <li  class="li-item have-children @if(in_array(request()->segment(2), ['transactions']) ) active @endif" >
                     <a href="#transactions" aria-expanded="false" class="a-itemhavecheld @if(in_array(request()->segment(2), ['transactions']) && request()->segment(3) == 'create')  collapsed @endif" data-toggle="collapse" d-hrf="{{route('admin.transaction.index')}}">
+
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.transactions')}}</span>
 
                     </a>
                     <ul id="transactions"
+
                         class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions']) && request()->segment(3) != 'create') show @endif active-children">
+
 
                           @can('order_module.order.view')
                         <li

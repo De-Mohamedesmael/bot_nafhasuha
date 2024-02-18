@@ -238,7 +238,9 @@
 
         /*.main-menu .next-active-children li*/
         .main-menu  .active-children li  ,.main-menu  .next-active-children li {
+
             background-color: #f8f8f8 !important;
+
         }
         .main-menu  li {
             background-color: #013e6b !important;
@@ -322,7 +324,9 @@
             font-size: 20px;
             font-weight: 500;
         }
+
         .side-navbar li ul {
+
 
             margin: 0 ;
         }
@@ -479,13 +483,16 @@
             border-radius: 25px !important;
         }
         .logo-div.active {
+
             background-color: #f8f8f8;
+
             color: #013e6b;
         }
         .menu-btn.active {
             border: 1px solid #013e6b !important;
             color: #013e6b !important;
         }
+
         .form-group {
             margin: 10px;
         }
@@ -559,6 +566,7 @@
         .swal-footer {
             text-align: center;
         }
+
     </style>
 <style>
 
@@ -883,6 +891,7 @@
     <script type="text/javascript"
             src="{{asset('assets/back-end/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js') }}"></script>
     <script>
+
 
         $('#toggle-btn').click(function(){
             image="{{asset('assets/images/settings/'.$logo_footer)}}";

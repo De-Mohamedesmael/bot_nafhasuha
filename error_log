@@ -44,3 +44,20 @@ Stack trace:
 [25-Nov-2021 15:41:27 UTC] PHP Parse error:  syntax error, unexpected end of file, expecting ')' in /home/bluezonekw/mall/vendor/composer/autoload_static.php on line 6134
 [25-Nov-2021 15:41:28 UTC] PHP Parse error:  syntax error, unexpected ''/symfony/p' (T_ENCAPSED_AND_WHITESPACE) in /home/bluezonekw/mall/vendor/composer/autoload_static.php on line 6166
 [25-Nov-2021 15:41:28 UTC] PHP Parse error:  syntax error, unexpected ''/symfony/p' (T_ENCAPSED_AND_WHITESPACE) in /home/bluezonekw/mall/vendor/composer/autoload_static.php on line 6166
+[24-Oct-2023 15:10:25 Asia/Riyadh] PHP Fatal error:  Cannot declare class App\Http\Controllers\Api\Providers\HomeController, because the name is already in use in /home/nafhasuha/public_html/back-end/app/Http/Controllers/Api/Providers/OrderController.php on line 17
+[30-Oct-2023 04:03:18 UTC] PHP Warning:  require(/home/nafhasuha/public_html/back-end/vendor/composer/../phpunit/phpunit/src/Framework/Assert/Functions.php): Failed to open stream: No such file or directory in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php on line 71
+[30-Oct-2023 04:03:18 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/nafhasuha/public_html/back-end/vendor/composer/../phpunit/phpunit/src/Framework/Assert/Functions.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php(61): composerRequire58e819b2f957f685cbcaf8303d017a15('ec07570ca5a8121...', '/home/nafhasuha...')
+#1 /home/nafhasuha/public_html/back-end/vendor/autoload.php(7): ComposerAutoloaderInit58e819b2f957f685cbcaf8303d017a15::getLoader()
+#2 /home/nafhasuha/public_html/index.php(33): require('/home/nafhasuha...')
+#3 {main}
+  thrown in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php on line 71
+[30-Oct-2023 04:03:19 UTC] PHP Warning:  require(/home/nafhasuha/public_html/back-end/vendor/composer/../phpunit/phpunit/src/Framework/Assert/Functions.php): Failed to open stream: No such file or directory in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php on line 71
+[30-Oct-2023 04:03:19 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/nafhasuha/public_html/back-end/vendor/composer/../phpunit/phpunit/src/Framework/Assert/Functions.php' (include_path='.:/opt/cpanel/ea-php80/root/usr/share/pear') in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php:71
+Stack trace:
+#0 /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php(61): composerRequire58e819b2f957f685cbcaf8303d017a15('ec07570ca5a8121...', '/home/nafhasuha...')
+#1 /home/nafhasuha/public_html/back-end/vendor/autoload.php(7): ComposerAutoloaderInit58e819b2f957f685cbcaf8303d017a15::getLoader()
+#2 /home/nafhasuha/public_html/index.php(33): require('/home/nafhasuha...')
+#3 {main}
+  thrown in /home/nafhasuha/public_html/back-end/vendor/composer/autoload_real.php on line 71
