@@ -8,12 +8,12 @@
             top: 20px;
         }
         .login-page, .register-page{
-            background-image: url("{{asset('assets/back-end/images/design/Login.svg')}}");
+            background-image: url("{{asset('assets/back-end/images/design/login.svg')}}");
             background-size: cover;
             background-repeat: no-repeat;
         }
         .login-page .form-outer, .register-page .form-outer {
-            min-height: 100vh;
+            height: 100vh;
             max-width: 550px;
             margin: 0;
             left: 8%;
@@ -22,13 +22,13 @@
         }
         .login-page .form-inner, .register-page .form-inner {
             border-radius: 15px;
-            padding: 40px 60px;
+            padding: 25px 50px;
             background: #fff;
             box-shadow: 0 0 35px rgba(0, 0, 0, 0.1);
             margin-bottom: 15px;
             width: 100%;
             margin-top: 15px;
-            height: 70%;
+            height: 100%;
         }
         a.forgot-pass {
             color: #000 !important;
@@ -40,7 +40,7 @@
             border-color: #013e6b;
         }
         .login-page .logo, .register-page .logo {
-            margin: 35px !important;
+            margin: 25px !important;
         }
         label.label-input {
             text-align: start;
