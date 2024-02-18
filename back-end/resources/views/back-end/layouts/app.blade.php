@@ -566,6 +566,41 @@
         .swal-footer {
             text-align: center;
         }
+        div.dataTables_wrapper div.dataTables_filter {
+            float: right !important;
+            text-align: right;
+        }
+        button.close {
+            float: left !important;
+            margin: auto auto auto 0 !important;
+            padding: 0 !important;
+            color: #a30000 !important;
+            font-weight: 800;
+        }
+        .modal-footer {
+            width: 100%;
+            justify-content: center;
+        }
+        .modal-footer button {
+            margin: auto 10px;
+            min-width: 100px;
+        }
+        td.dataTables_empty {
+            padding: 30px 0;
+        }
+        div.dataTables_wrapper div.dataTables_processing {
+            background-color: #fff0 !important;
+            top: 10% !important;
+        }
+        @media screen and ( min-width: 1600px) {
+            .dt-buttons {
+                width: 31%;
+                margin: 0 6%  0 10%!important;
+            }
+            li.sli_li {
+                right: 14%;
+            }
+        }
 
     </style>
 <style>
@@ -801,15 +836,86 @@
             }
         }
     </style>
+
+    @yield('styles')
     @if(app()->getLocale() =="en")
         <style>
+            button.close {
+                float: right !important;
+                margin: auto 0 auto auto !important;
+                padding: 0 !important;
+                color: #a30000 !important;
+                font-weight: 800;
+            }
             .brand-big {
                 right: auto !important;
                 left: 10% !important;
             }
+            .brand-big {
+                right: auto !important;
+                left: 8% !important;
+            }
+            li.sli_li {
+                left: 20% !important;
+                right: auto !important;
+            }
+            .main-menu {
+                direction: ltr !important;
+            }
+            .mCSB_scrollTools {
+                left: 0 !important;
+                right: auto !important;
+            }
+            .page {
+                margin-right: auto !important;
+                margin-left: 220px !important;
+            }
+            li.li-item.active a.a-itemhavecheld {
+                margin-right: auto !important;
+                margin-left: 20px;
+                border-radius: 25px 0;
+            }
+
+            .next-active-children, .active-children {
+                border-radius: 20px 0 0 !important;
+            }
+            .active-children, .next-active-children{
+                margin-right: auto !important;
+                margin-left: 20px !important;
+            }
+            .next-active {
+                border-radius:  0 0 20px !important;
+            }
+            .previous-active {
+                border-radius: 0 0 20px !important;
+            }
+            .active-children li, .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
+                padding-right: 0 !important;
+                padding-left: 15px !important;
+                margin-right: 0px !important;
+            }
+            .li-item li::before {
+                right: 0;
+                left: 5px;
+            }
+            .main-menu, li.li-item.active {
+                background: linear-gradient( to right, #013e6b 0%, #013e6b 50%, #f8f8f8 50%, #f8f8f8 100% );
+            }
+            .next-active {
+                border-radius: 0 20px !important;
+            }
+            .active-children li:last-child, .next-active-children li:last-child {
+                border-radius: 0 0 0 18px;
+            }
+            @media screen and ( min-width: 1600px) {
+
+                li.sli_li {
+                    left: 14% !important;
+                    right: auto !important;
+                }
+            }
         </style>
     @endif
-    @yield('styles')
 </head>
 
 <body onload="myFunction()">
@@ -928,7 +1034,77 @@
     @include('back-end.layouts.partials.javascript')
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
+        var datatable_params = {
+            lengthChange: true,
+            paging: true,
+            info: false,
+            bAutoWidth: false,
+            order: [],
+            language: {
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
 
+            },
+            lengthMenu: [
+                [10, 25, 50, 75, 100, 200, 500, -1],
+                [10, 25, 50, 75, 100, 200, 500, "All"],
+            ],
+
+            columnDefs: [
+                {
+                    targets: "date",
+                    type: "date-eu",
+                },
+            ],
+            initComplete: function () {
+                $(this.api().table().container())
+                    .find("input")
+                    .parent()
+                    .wrap("<form>")
+                    .parent()
+                    .attr("autocomplete", "off");
+            },
+            dom: "lBfrtip",
+            stateSave: true,
+            buttons: buttons,
+            footerCallback: function (row, data, start, end, display) {
+                var intVal = function (i) {
+                    return typeof i === "string"
+                        ? i.replace(/[\$,]/g, "") * 1
+                        : typeof i === "number"
+                            ? i
+                            : 0;
+                };
+
+                this.api()
+                    .columns(".sum", { page: "current" })
+                    .every(function () {
+                        var column = this;
+                        if (column.data().count()) {
+                            var sum = column.data().reduce(function (a, b) {
+                                a = intVal(a);
+                                if (isNaN(a)) {
+                                    a = 0;
+                                }
+
+                                b = intVal(b);
+                                if (isNaN(b)) {
+                                    b = 0;
+                                }
+
+                                return a + b;
+                            });
+                            $(column.footer()).html(
+                                __currency_trans_from_en(sum, false)
+                            );
+                        }
+                    });
+            },
+        };
+        var table = $(".dataTable").DataTable(datatable_params);
+        table.columns(".hidden").visible(false);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -957,74 +1133,7 @@
                     "error"
                 @endif );
         @endif
-        $(document).ready(function() {
-            let cash_register_id = $('#cash_register_id').val();
 
-            if (cash_register_id) {
-                $('#power_off_btn').removeClass('hide');
-            }
-
-            $(document).on('hidden.bs.modal', '#closing_cash_modal', function() {
-                $('#print_closing_cash').html('');
-            });
-            $(document).on('click', '#print-closing-cash-btn', function() {
-                let cash_register_id = parseInt($(this).data('cash_register_id'));
-                console.log('/cash/print-closing-cash/' + cash_register_id, 'cash_register_id');
-                $.ajax({
-                    method: 'GET',
-                    url: '/cash/print-closing-cash/' + cash_register_id,
-                    data: {},
-                    success: function(result) {
-                        $('#print_closing_cash').html(result);
-                        $('#print_closing_cash').printThis({
-                            importCSS: true,
-                            importStyle: true,
-                            loadCSS: "",
-                            header: "<h1>@lang('lang.closing_cash')</h1>",
-                            footer: "",
-                            base: true,
-                            pageTitle: "Closing Cash",
-                            removeInline: false,
-                            printDelay: 333,
-                            header: null,
-                            formValues: true,
-                            canvas: true,
-                            base: null,
-                            doctypeString: '<!DOCTYPE html>',
-                            removeScripts: true,
-                            copyTagClasses: true,
-                            beforePrintEvent: null,
-                            beforePrint: null,
-                            afterPrint: null,
-                            afterPrintEvent: null,
-                            canvas: false,
-                            noPrintSelector: ".no-print",
-                            iframe: false,
-                            append: null,
-                            prepend: null,
-                            noPrintClass: "no-print",
-                            importNode: true,
-                            pagebreak: {
-                                avoid: "",
-                                after: "",
-                                before: "",
-                                mode: "css",
-                                pageBreak: "auto",
-                                pageSelector: "",
-                                styles: "",
-                                selector: "",
-                                validSelectors: [],
-                                validTags: [],
-                                width: "",
-                                height: ""
-                            },
-
-                        });
-                        // __print_receipt("print_closing_cash");
-                    },
-                });
-            })
-        })
 
         jQuery.validator.setDefaults({
             errorPlacement: function(error, element) {
@@ -1058,7 +1167,21 @@
         function showPage() {
             document.getElementById("loader").style.display = "none";
             document.getElementById("content").style.display = "block";
-            document.getElementsByClassName("side-navbar").classList.add("overflow");
+            document.addEventListener("DOMContentLoaded", function() {
+                // Find the elements with the class name "side-navbar"
+                var sideNavbars = document.getElementsByClassName("side-navbar");
+
+                // Check if any elements were found
+                if (sideNavbars.length > 0) {
+                    // Add the "overflow" class to each found element
+                    for (var i = 0; i < sideNavbars.length; i++) {
+                        sideNavbars[i].classList.add("overflow");
+                    }
+                } else {
+                    // Log an error if no elements were found
+                    console.error("No elements with class 'side-navbar' found.");
+                }
+            });
         }
 
         $("div.alert").delay(3000).slideUp(750);

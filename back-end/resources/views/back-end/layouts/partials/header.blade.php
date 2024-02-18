@@ -76,7 +76,7 @@
                             @php
                                 $employee =  Auth::guard('admin')->user();
                             @endphp
-                            <img src="@if(!empty($employee->getFirstMediaUrl('image'))){{$employee->getFirstMediaUrl('image')}}@else{{asset('assets/images/default.jpg')}}@endif"
+                            <img src="@if(!empty($employee->getFirstMediaUrl('photo'))){{$employee->getFirstMediaUrl('photo')}}@else{{asset('assets/images/default.jpg')}}@endif"
                                  style="width: 50px; height: 50px; border: 2px solid #fff; padding: 5px; border-radius: 50%;     background-color: #e4e7f1;    margin-top: -18px;" />
 
                             <span style="    line-height: 15px;">

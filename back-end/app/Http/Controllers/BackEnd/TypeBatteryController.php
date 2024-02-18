@@ -67,39 +67,22 @@ class TypeBatteryController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" slider="menu">';
+                        $html = ' ';
+//                        if (auth()->user()->can('admin_module.areas.edit')) {
+                        $html .= '<a href="' . route('admin.type_batteries.edit', $row->id) . '"
+                                     class="btn edit_employee a-image" title="' . __('lang.edit') . '">
+                                            <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
 
-                        $html .= '<li class="divider"></li>';
-
-
-//                        if (auth()->slider()->can('slider_module.slider.add_balen')){
-                        $html .='<li>
-                                                <a href="'. route('admin.type_batteries.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
-
+                                    </a>';
 //                        }
-                        $html .= '<li class="divider"></li>';
+//                        if (auth()->user()->can('admin_module.areas.delete')) {
+                        $html .= '<a data-href="' . route('admin.type_batteries.delete', $row->id) . '"
+                                    data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
+                                    class="btn delete_item text-red" title="' . __('lang.delete') . '"><i
+                                        class="dripicons-trash"></i>
+                                    </a>';
+//                        }
 
-//                            if (auth()->slider()->can('slider_module.slider.delete')) {
-                                $html .=
-                                    '<li>
-                                    <a data-href="' . route('admin.type_batteries.delete', $row->id)  . '"
-                                        data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
-//                            }
-
-
-
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

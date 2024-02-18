@@ -1,7 +1,24 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.edit_icon'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.tires.index")}}"> {{__('lang.tires')}} </a> / </span>  @lang('lang.add_provider')
+@endsection
 @section('content')
-<section class="forms">
+    <section class="forms p-0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -20,7 +37,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('title', __('lang.title') . ':*') !!}
+                                    {!! Form::label('title', __('lang.title') . ':*', [ 'class'=>"sp-label new-des"]) !!}
                                     <div class="input-group my-group">
                                         {!! Form::text('title', $icon->title , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
 
@@ -29,7 +46,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('link', __('lang.link') . ':') !!}
+                                    {!! Form::label('link', __('lang.link') . ':', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::text('link', $icon->link, ['class' => 'form-control','required', 'placeholder' => __('lang.link')]) !!}
                                 </div>
                             </div>

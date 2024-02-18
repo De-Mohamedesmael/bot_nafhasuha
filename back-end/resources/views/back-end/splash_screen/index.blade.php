@@ -12,9 +12,9 @@
         .check {
             position: relative;
             display: block;
-            width: 70px;
-            height: 30px;
-            background-color: #f46a6a;
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
             cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
@@ -22,7 +22,7 @@
         }
 
         input:checked[type="checkbox"] ~ .check {
-            background-color: #34c38f;
+            background-color: #013e6b;
             /*   box-shadow: 0 0 0 1200px #092c3e; */
         }
 
@@ -32,8 +32,8 @@
             top: 3px;
             left: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transition: all 0.5s;
         }
@@ -48,8 +48,8 @@
             top: 3px;
             right: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transform: translateX(50px);
             transition: all 0.5s;
@@ -62,92 +62,84 @@
         .btn-modal {
             cursor: pointer;
         }
+        a.btn.a-image {
+            margin: 0 10px;
+        }
     </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.splash_screens')}} / </span>    @lang('lang.all_splash_screens')
 @endsection
 @section('content')
     <div class="container-fluid">
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_splash_screens')
+
+            </div>
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.splash_screen.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.add_splash_screen')
+                </a>
+            </div>
+
+        </div>
+
 
 
     </div>
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.splash_screens')</h3>
-        </div>
-        <a style="color: white" href="{{ route('admin.splash_screen.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.add_splash_screen')</a>
-            <div class="card">
 
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="splash_screen_table" class="table dataTable">
-                            <thead>
-                            <tr>
-                                <th>@lang('lang.image')</th>
-                                <th>@lang('lang.name')</th>
-                                <th>@lang('lang.description')</th>
-                                <th>@lang('lang.status')</th>
-                                <th class="notexport">@lang('lang.action')</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($splash_screens as $splash_screen)
-                                <tr>
-                                    <td><img src="@if($splash_screen->getFirstMedia('images')){{$splash_screen->getFirstMedia('images')->getUrl()}}@else{{asset('/uploads/'.session('logo'))}}@endif"
-                                             alt="photo" width="50" height="50">
-                                    </td>
-                                    <td>{{$splash_screen->title}}</td>
-                                    <td>
-                                        {!! $splash_screen->description !!}
-                                    </td>
-                                    <td>
-                                        <label>
-                                            <input class="update_status check" type="checkbox" id="switch{{$splash_screen->id}}" data-id="{{$splash_screen->id}}" switch="bool" {{$splash_screen->is_active?'checked':''}} />
-                                            <label for="switch{{$splash_screen->id}}" data-on-label="{{__('translation.active')}}" ></label>
-                                            <span class="check"></span>
-                                        </label>
-                                    </td>
+    <div class="table-responsive">
+        <table id="splash_screen_table" class="table dataTable">
+            <thead>
+            <tr>
+                <th>@lang('lang.image')</th>
+                <th>@lang('lang.name')</th>
+                <th>@lang('lang.description')</th>
+                <th>@lang('lang.status')</th>
+                <th class="notexport">@lang('lang.action')</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($splash_screens as $splash_screen)
+                <tr>
+                    <td><img src="@if($splash_screen->getFirstMedia('images')){{$splash_screen->getFirstMedia('images')->getUrl()}}@else{{asset('/uploads/'.session('logo'))}}@endif"
+                             alt="photo" width="50" height="50">
+                    </td>
+                    <td>{{$splash_screen->title}}</td>
+                    <td>
+                        {!! $splash_screen->description !!}
+                    </td>
+                    <td>
+                        <label>
+                            <input class="update_status check" type="checkbox" id="switch{{$splash_screen->id}}" data-id="{{$splash_screen->id}}" switch="bool" {{$splash_screen->is_active?'checked':''}} />
+                            <label for="switch{{$splash_screen->id}}" data-on-label="{{__('translation.active')}}" ></label>
+                            <span class="check"></span>
+                        </label>
+                    </td>
 
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-sm dropdown-toggle"
-                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false">@lang('lang.action')
-                                                <span class="caret"></span>
-                                                <span class="sr-only">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default"
-                                                user="menu">
-                                                {{--                                            @can('product_module.splash_screen.edit')--}}
-                                                <li>
+                    <td>
 
-                                                    <a data-href="{{route('admin.splash_screen.edit', $splash_screen->id)}}?type=splash_screen"
-                                                       data-container=".view_modal" class="btn btn-modal"><i
-                                                            class="dripicons-document-edit"></i> @lang('lang.edit')</a>
-                                                </li>
-                                                <li class="divider"></li>
-                                                {{--                                            @endcan--}}
-                                                {{--                                            @can('product_module.splash_screen.delete')--}}
+                        <a data-href="{{route('admin.splash_screen.edit', $splash_screen->id)}}"
+                           data-container=".view_modal" class="btn btn-modal a-image" title="@lang('lang.edit')">
+                            <img class="icon-action" src="{{asset('assets/back-end/images/design/edit.svg')}}">
 
-                                                <li>
-                                                    <a data-href="{{route('admin.splash_screen.delete', $splash_screen->id)}}"
-                                                       data-check_password="{{route('admin.checkPassword', Auth::id()) }}"
-                                                       class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                                        {{ __('lang.delete') }}</a>
-                                                </li>
-                                                {{--                                            @endcan--}}
+                        </a>
 
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                        <a data-href="{{route('admin.splash_screen.delete', $splash_screen->id)}}"
+                           data-check_password="{{route('admin.checkPassword', Auth::id()) }}"
+                           class="btn text-red delete_item" title="{{ __('lang.delete') }}"><i class="dripicons-trash"></i>
+                        </a>
 
-                            @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                </tr>
+
+            @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection
 

@@ -147,4 +147,6 @@
   'providerCounts_have_order' => 'ProviderCounts have order',
   'Your vehicle has been successfully deleted' => 'Your vehicle has been successfully deleted',
   'Not found Provider' => 'Not found Provider',
+  'Look for...' => 'Look for...',
+  'entries' => 'Entries',
 );

@@ -1,79 +1,97 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.countries'))
 @section('styles')
-<style>
-    input[type="checkbox"] {
-        -webkit-appearance: none;
-        appearance: none;
-        visibility: hidden;
-        display: none;
-    }
+    <style>
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            visibility: hidden;
+            display: none;
+        }
 
-    .check {
-        position: relative;
-        display: block;
-        width: 70px;
-        height: 30px;
-        background-color: #f46a6a;
-        cursor: pointer;
-        border-radius: 20px;
-        overflow: hidden;
-        transition: ease-in 0.5s;
-    }
+        .check {
+            position: relative;
+            display: block;
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
+            cursor: pointer;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: ease-in 0.5s;
+        }
 
-    input:checked[type="checkbox"] ~ .check {
-        background-color: #34c38f;
-        /*   box-shadow: 0 0 0 1200px #092c3e; */
-    }
+        input:checked[type="checkbox"] ~ .check {
+            background-color: #013e6b;
+            /*   box-shadow: 0 0 0 1200px #092c3e; */
+        }
 
-    .check:before {
-        content: '';
-        position: absolute;
-        top: 3px;
-        left: 4px;
-        background-color: #eff2f7;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        transition: all 0.5s;
-    }
+        .check:before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 4px;
+            background-color: #eff2f7;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            transition: all 0.5s;
+        }
 
-    input:checked[type="checkbox"] ~ .check:before {
-        transform: translateX(-50px);
-    }
+        input:checked[type="checkbox"] ~ .check:before {
+            transform: translateX(-50px);
+        }
 
-    .check:after {
-        content: '';
-        position: absolute;
-        top: 3px;
-        right: 4px;
-        background-color: #eff2f7;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        transform: translateX(50px);
-        transition: all 0.5s;
+        .check:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            right: 4px;
+            background-color: #eff2f7;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            transform: translateX(50px);
+            transition: all 0.5s;
 
-    }
+        }
 
-    input:checked[type="checkbox"] ~ .check:after {
-        transform: translateX(0px);
-    }
-    .btn-modal {
-        cursor: pointer;
-    }
-</style>
+        input:checked[type="checkbox"] ~ .check:after {
+            transform: translateX(0px);
+        }
+        .btn-modal {
+            cursor: pointer;
+        }
+        a.btn.a-image {
+            margin: 0 10px;
+        }
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.countries')}} / </span>    @lang('lang.all_countries')
 @endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_countries')</h3>
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_customers')
+
+            </div>
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.countries.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.create') @lang('lang.customer')
+                </a>
+            </div>
+
         </div>
-        <a style="color: white" href="{{ route('admin.countries.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.add_country')</a>
+
+
 
     </div>
+
     <div class="table-responsive">
         <table id="country_table" class="table">
             <thead>

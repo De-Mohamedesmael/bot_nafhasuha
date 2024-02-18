@@ -60,13 +60,7 @@ class AdminController extends Controller
     {
         $query = Admin::select('admins.*');
 
-        if (!auth()->user()->can('superadmin') && auth()->user()->is_admin != 1) {
-            $query->where('is_superadmin', 0);
-        }
-        if ( auth()->user()->email != env( 'SYSTEM_SUPERADMIN')) {
-            $query->where('email', '!=',env( 'SYSTEM_SUPERADMIN'));
-
-        }
+        
         $employees =  $query->groupBy('admins.id');
 
         if (request()->ajax()) {

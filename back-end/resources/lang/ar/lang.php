@@ -1681,5 +1681,14 @@ return [
     'show'=>'عرض الطلب',
     'edit_provider'=>'تعديل مقدم خدمة',
     'add_provider'=>'اضافة مقدم خدمة',
+    'all_services'=>'جميع الخدمات',
+    'edit_service'=>'تعديل خدمة',
+    'all_categories'=>'جميع التصنيفات',
+
+    'all_splash_screens'=>'جميع شاشات البداية',
+    'all_sliders'=>'جميع الشرائح',
+    'sliders'=>'جميع الشرائح',
+    'edit_slider'=>'تعديل شريحة',
+    'add_slider'=>'اضافة شريحة',
 
 ];

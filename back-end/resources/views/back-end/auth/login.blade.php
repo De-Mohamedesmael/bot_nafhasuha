@@ -67,6 +67,29 @@
             padding: 15px;
             border-radius: 15px;
         }
+
+        @media screen and ( min-width: 1600px) {
+
+                .login-page .form-outer, .register-page .form-outer {
+                    height: 100vh;
+                    max-width: 550px;
+                    margin: 0;
+                    left: 8%;
+                    padding: 20px 0;
+                    position: relative;
+                }
+            .login-page .form-inner, .register-page .form-inner {
+                border-radius: 15px;
+                padding: 25px 50px;
+                background: #fff;
+                box-shadow: 0 0 35px rgba(0, 0, 0, 0.1);
+                margin-bottom: 15px;
+                width: 100%;
+                margin-top: 10%;
+                height: 80%;
+            }
+
+        }
     </style>
     @if(app()->getLocale())
         <style>

@@ -362,73 +362,8 @@ var buttons = [
         columns: ":gt(0)",
     },
 ];
-var datatable_params = {
-    lengthChange: true,
-    paging: true,
-    info: false,
-    bAutoWidth: false,
-    order: [],
-    language: {
-        url: dt_lang_url,
-    },
-    lengthMenu: [
-        [10, 25, 50, 75, 100, 200, 500, -1],
-        [10, 25, 50, 75, 100, 200, 500, "All"],
-    ],
 
-    columnDefs: [
-        {
-            targets: "date",
-            type: "date-eu",
-        },
-    ],
-    initComplete: function () {
-        $(this.api().table().container())
-            .find("input")
-            .parent()
-            .wrap("<form>")
-            .parent()
-            .attr("autocomplete", "off");
-    },
-    dom: "lBfrtip",
-    stateSave: true,
-    buttons: buttons,
-    footerCallback: function (row, data, start, end, display) {
-        var intVal = function (i) {
-            return typeof i === "string"
-                ? i.replace(/[\$,]/g, "") * 1
-                : typeof i === "number"
-                ? i
-                : 0;
-        };
 
-        this.api()
-            .columns(".sum", { page: "current" })
-            .every(function () {
-                var column = this;
-                if (column.data().count()) {
-                    var sum = column.data().reduce(function (a, b) {
-                        a = intVal(a);
-                        if (isNaN(a)) {
-                            a = 0;
-                        }
-
-                        b = intVal(b);
-                        if (isNaN(b)) {
-                            b = 0;
-                        }
-
-                        return a + b;
-                    });
-                    $(column.footer()).html(
-                        __currency_trans_from_en(sum, false)
-                    );
-                }
-            });
-    },
-};
-var table = $(".dataTable").DataTable(datatable_params);
-table.columns(".hidden").visible(false);
 function sum_table_col(table, class_name) {
     var sum = 0;
     table
