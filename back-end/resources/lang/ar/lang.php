@@ -1676,8 +1676,10 @@ return [
     'cancellation_end_time'=>'وقت الالغاء الي:',
     'view_all_orders_canceled-provider'=>'مقدمي الخدمة الملغية',
     'enter_email'=>'ادخل بريدك الالكتروني',
+
     'comment'=>'تعليق',
     'show'=>'عرض الطلب',
     'edit_provider'=>'تعديل مقدم خدمة',
     'add_provider'=>'اضافة مقدم خدمة',
+
 ];

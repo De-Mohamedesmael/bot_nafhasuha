@@ -33,12 +33,12 @@ class OrderController extends ApiController
     public function indexPending(Request $request)
     {
         $count_paginate=$request->count_paginate?:$this->count_paginate;
-        $orders= auth()->user()->orders()->where(function ($pq){
-            $pq->whereNull('parent_id')->withcount(['price_requests'=>function ($q){
+        $orders= auth()->user()->orders()->withcount(['price_requests'=>function ($q){
                 $q->whereNull('status');
-            }])->NotCompleted();
+            }])->where(function ($pq){
+            $pq->whereNull('parent_id')->NotCompleted();
         })->orwhere(function ($pq){
-            $pq->wherein('status',  ['completed'])->wherehas('children',function ($q){
+            $pq->wherein('status',  ['completed','canceled'])->wherehas('children',function ($q){
                 $q->whereIn('status', ['pending', 'approved', 'PickUp', 'received']);
             });
         })->latest();
@@ -288,7 +288,7 @@ class OrderController extends ApiController
             $this->pushNotof('Order',$OrderService,$order->user_id,1);
 
             DB::commit();
-            return  responseApi(200, translate('The request has been successfully cancelled'));
+            return  responseApi(200, translate('The request has been successfully cancelled'),$request->order_id);
         }catch (\Exception $exception){
             
             dd($exception);
