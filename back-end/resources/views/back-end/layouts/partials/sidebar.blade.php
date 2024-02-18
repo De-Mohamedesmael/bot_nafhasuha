@@ -26,7 +26,6 @@
 
                 <li class="li-item have-children @if(in_array(request()->segment(2), ['orders']) ) active @endif" >
                     <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld @if(in_array(request()->segment(2), ['orders']) && request()->segment(3) == 'show')  collapsed @endif"  d-hrf="{{route('admin.order.index')}}">
-r
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>
