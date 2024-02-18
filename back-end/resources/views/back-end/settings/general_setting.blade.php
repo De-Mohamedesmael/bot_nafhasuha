@@ -76,6 +76,11 @@
     </style>
 
     <style>
+        .card {
+            border-radius: 10px;
+            border: none;
+            margin: 0 25px;
+        }
         .variants {
             display: flex;
             justify-content: center;
@@ -209,6 +214,7 @@
             height: auto !important;
         }
 
+
         @keyframes pulse {
             0% {
                 color: hsl(48, 100%, 67%);
@@ -223,75 +229,121 @@
             }
         }
     </style>
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+        .sp-label.new-des.logo {
+            top: -43px !important;
+        }
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  {{__('lang.settings')}} / </span>  @lang('lang.general_settings')
 @endsection
 @section('content')
-    <div class="col-md-12  no-print">
+
         <div class="card">
             <div class="card-header d-flex align-items-center">
-                <h4>@lang('lang.general_settings')</h4>
+                <div class="print-title">@lang('lang.general_settings')</div>
+
             </div>
             <div class="card-body">
                 {!! Form::open(['url' => route('admin.settings.updateGeneralSetting'), 'method' => 'post','id'=>'setting_form', 'enctype' => 'multipart/form-data']) !!}
                 <div class="row">
                     <div class="col-md-3">
-                        {!! Form::label('site_title', __('lang.site_title'), []) !!}
-                        {!! Form::text('site_title', \Settings::get('site_title','Nafhasuha'), ['class' => 'form-control']) !!}
+                        <div class="form-group">
+                            {!! Form::label('site_title', __('lang.site_title'), [ 'class'=>"sp-label new-des"]) !!}
+                            {!! Form::text('site_title', \Settings::get('site_title','Nafhasuha'), ['class' => 'form-control']) !!}
+                        </div>
                     </div>
 
                     <div class="col-md-3">
-                        {!! Form::label('JoiningBonusValue', __('lang.JoiningBonusValue'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('JoiningBonusValue', __('lang.JoiningBonusValue'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('JoiningBonusValue', \Settings::get('JoiningBonusValue') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('InvitationBonusValue', __('lang.InvitationBonusValue'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('InvitationBonusValue', __('lang.InvitationBonusValue'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('InvitationBonusValue', \Settings::get('InvitationBonusValue') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('change_price', __('lang.change_price'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('change_price', __('lang.change_price'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('change_price', \Settings::get('change_price') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('subscription_price', __('lang.subscription_price'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('subscription_price', __('lang.subscription_price'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('subscription_price', \Settings::get('subscription_price') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
 
                     @foreach ($arr_types as $arr_type)
                         <div class="col-md-3">
-                            {!! Form::label('percent_'.$arr_type, \App\CPU\translate('percent_'.$arr_type), []) !!}
+                            <div class="form-group">
+                            {!! Form::label('percent_'.$arr_type, \App\CPU\translate('percent_'.$arr_type), [ 'class'=>"sp-label new-des"]) !!}
                             {!! Form::number('percent_'.$arr_type, \Settings::get('percent_'.$arr_type,10) , ['class' => 'form-control']) !!}
+                            </div>
                         </div>
                     @endforeach
                     <div class="col-md-3">
-                        {!! Form::label('limit_cancel', __('lang.limit_cancel'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('limit_cancel', __('lang.limit_cancel'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('limit_cancel', \Settings::get('limit_cancel') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('max_distance', __('lang.max_distance'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('max_distance', __('lang.max_distance'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::number('max_distance', \Settings::get('max_distance') , ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('IFTrueHome', __('lang.IFTrueHome'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('IFTrueHome', __('lang.IFTrueHome'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::select('IFTrueHome', [ '1' => __('lang.yes'),'0' => __('lang.yes')],  \Settings::get('IFTrueHome',1), ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('IFTrueCenter', __('lang.IFTrueCenter'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('IFTrueCenter', __('lang.IFTrueCenter'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::select('IFTrueCenter', [ '1' => __('lang.yes'),'0' => __('lang.yes')],  \Settings::get('IFTrueCenter',1), ['class' => 'form-control selectpicker', 'data-live-search' => 'true']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('update_version_IOS', __('lang.update_version_IOS'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('update_version_IOS', __('lang.update_version_IOS'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::text('update_version_IOS', \Settings::get('update_version_IOS','1.0'), ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('update_version_Android', __('lang.update_version_Android'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('update_version_Android', __('lang.update_version_Android'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::text('update_version_Android', \Settings::get('update_version_Android','1.0'), ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('update_version_Provider_IOS', __('lang.update_version_Provider_IOS'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('update_version_Provider_IOS', __('lang.update_version_Provider_IOS'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::text('update_version_Provider_IOS', \Settings::get('update_version_Provider_IOS','1.0'), ['class' => 'form-control']) !!}
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('update_version_Provider_Android', __('lang.update_version_Provider_Android'), []) !!}
+                        <div class="form-group">
+                        {!! Form::label('update_version_Provider_Android', __('lang.update_version_Provider_Android'), [ 'class'=>"sp-label new-des"]) !!}
                         {!! Form::text('update_version_Provider_Android', \Settings::get('update_version_Provider_Android','1.0'), ['class' => 'form-control']) !!}
+                        </div>
                     </div>
 
 
@@ -301,11 +353,13 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label for="projectinput2"> {{ __('lang.logo') }}</label>
+
                             <div class="container mt-3">
                                 <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                                     <div class="col-12">
+                                        <label for="projectinput2" class="sp-label new-des logo"> {{ __('lang.logo') }}</label>
                                         <div class="mt-3">
+
                                             <div class="row">
                                                 <div class="col-10 offset-1">
                                                     <div class="variants">
@@ -345,13 +399,15 @@
                 <br>
 
                 <div class="col-md-12">
-                    <button id="submit-btn" class="btn btn-primary">@lang('lang.save')</button>
+                    <div class="form-group justify-cont">
+                        <button id="submit-btn" class="btn btn-primary">@lang('lang.save')</button>
+                    </div>
                 </div>
                 <div id="cropped_logo_images"></div>
                 {!! Form::close() !!}
             </div>
-        </div>
-    </div>
+</div>
+
     <div class="modal fade" id="logoModal"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('title', __('lang.title') . ':*') !!}
+            {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('title', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                 <span class="input-group-btn">
@@ -20,7 +20,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('providers', __('lang.provider') . ':*') !!}
+            {!! Form::label('providers', __('lang.provider') . ':*',[ 'class'=>"sp-label new-des"]) !!}
             {!! Form::select('providers[]', $providers, false, [
                 'class' => 'selectpicker
                         form-control ',
@@ -32,20 +32,20 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('price', __('lang.price') . ':') !!}
+            {!! Form::label('price', __('lang.price') . ':',[ 'class'=>"sp-label new-des"]) !!}
             {!! Form::number('price', false, ['class' => 'form-control','required', 'placeholder' => __('lang.price')]) !!}
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('sort', __('lang.sort') . ':') !!}
+            {!! Form::label('sort', __('lang.sort') . ':',[ 'class'=>"sp-label new-des"]) !!}
             {!! Form::number('sort', false, ['class' => 'form-control','required', 'placeholder' => __('lang.sort')]) !!}
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="form-group ">
-            {!! Form::label('city_id', __('lang.city') . ':') !!}
+            {!! Form::label('city_id', __('lang.city') . ':',[ 'class'=>"sp-label new-des"]) !!}
             {!! Form::select('city_id', $cities, false, ['class' => 'form-control', 'data-live-search' => 'true','style' => 'width: 100%', 'placeholder' => __('lang.please_select')]) !!}
         </div>
     </div>

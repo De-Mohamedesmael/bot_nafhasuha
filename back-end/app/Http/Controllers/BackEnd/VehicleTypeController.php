@@ -65,36 +65,22 @@ class VehicleTypeController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" vehicle_type="menu">';
+                        $html = ' ';
+//                        if (auth()->user()->can('admin_module.areas.edit')) {
+                        $html .= '<a href="' . route('admin.vehicle_types.edit', $row->id) . '"
+                                     class="btn edit_employee a-image" title="' . __('lang.edit') . '">
+                                            <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
 
-//                            if (auth()->vehicle_type()->can('vehicle_type_module.vehicle_type.delete')) {
-                        $html .='<li>
-                                                <a href="'. route('admin.vehicle_types.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
-//                            }
+                                    </a>';
+//                        }
+//                        if (auth()->user()->can('admin_module.areas.delete')) {
+                        $html .= '<a data-href="' . route('admin.vehicle_types.delete', $row->id) . '"
+                                    data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
+                                    class="btn delete_item text-red" title="' . __('lang.delete') . '"><i
+                                        class="dripicons-trash"></i>
+                                    </a>';
+//                        }
 
-                        $html .= '<li class="divider"></li>';
-
-//                            if (auth()->vehicle_type()->can('vehicle_type_module.vehicle_type.delete')) {
-                        $html .=
-                            '<li>
-                                    <a data-href="' . route('admin.vehicle_types.delete', $row->id)  . '"
-                                        data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
-//                            }
-
-
-
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

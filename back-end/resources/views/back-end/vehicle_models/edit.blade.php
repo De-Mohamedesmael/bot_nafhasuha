@@ -1,13 +1,31 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.edit_vehicle_model'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.vehicle_models.index")}}"> {{__('lang.vehicle_models')}} </a> / </span>  @lang('lang.edit_vehicle_model')
+@endsection
 @section('content')
-<section class="forms">
+<section class="forms p-0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_vehicle_model')</h4>
+                        <div class="print-title">@lang('lang.edit_vehicle_model')</div>
+
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -20,7 +38,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('title', __('lang.title') . ':*') !!}
+                                    {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     <div class="input-group my-group">
                                         {!! Form::text('title', $vehicle_model->title , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                                         <span class="input-group-btn">
@@ -42,7 +60,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('vehicle_brand_id', __('lang.vehicle_brand') . ':*') !!}
+                                    {!! Form::label('vehicle_brand_id', __('lang.vehicle_brand') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('vehicle_brand_id', $vehicle_brands, $vehicle_model->vehicle_brand_id, [
                             'class' => 'selectpicker
                                     form-control',
@@ -58,7 +76,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group justify-cont">
                                     <input type="submit" value="{{trans('lang.save')}}" id="submit-btn"
                                         class="btn btn-primary">
                                 </div>

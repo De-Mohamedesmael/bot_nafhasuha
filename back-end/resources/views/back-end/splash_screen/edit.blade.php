@@ -62,6 +62,15 @@
         background: transparent;
         color: #007bff;
     }
+    div#content {
+        padding-top: 0;
+    }
+    .sp-label.new-des {
+        top: -1px !important;
+    }
+    .sp-label.new-des.back-e9 {
+        background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+    }
 </style>
 <style>
     .variants {
@@ -269,12 +278,14 @@
 
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="projectinput2">{{ __('lang.image') }}</label>
                     {{--                                                        <input type="file" id="projectinput2"  class="form-control img" name="image" accept="image/*" />--}}
                     <div class="container mt-3">
+
                         <div class="row mx-0"
                              style="border: 1px solid #ddd;padding: 30px 0px;">
                             <div class="col-12">
+                                <label for="projectinput2 sp-label new-des logo">{{ __('lang.image') }}</label>
+
                                 <div class="mt-3">
                                     <div class="row">
                                         <div class="col-10 offset-1">

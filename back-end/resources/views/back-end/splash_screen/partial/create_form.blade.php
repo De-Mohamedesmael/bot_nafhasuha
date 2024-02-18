@@ -3,7 +3,7 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('name', __('lang.name') . ':*') !!}
+            {!! Form::label('name', __('lang.name') . ':*', [ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('name', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                 <span class="input-group-btn">
@@ -21,7 +21,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('description', __('lang.description') . ':*') !!}
+            {!! Form::label('description', __('lang.description') . ':*', [ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('description', false, ['class' => 'form-control', 'placeholder' => __('lang.description'), 'required']) !!}
                 <span class="input-group-btn">
@@ -40,7 +40,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('sort', __('lang.sort') . ':') !!}
+            {!! Form::label('sort', __('lang.sort') . ':', [ 'class'=>"sp-label new-des"]) !!}
             {!! Form::number('sort', null, ['class' => 'form-control','required', 'placeholder' => __('lang.sort')]) !!}
         </div>
     </div>
@@ -50,7 +50,7 @@
 
     <div class="col-md-4 " style="margin-top: 10px;">
         <div class="container mt-3">
-            <div class="red">(200px×200px)</div>
+            <div class="red sp-label new-des" style="top: 5px !important;">(200px×200px)</div>
             <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                 <div class="col-12">
                     <div class="mt-3">

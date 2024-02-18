@@ -1,13 +1,31 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.slider'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.slider.index")}}"> {{__('lang.slider')}} </a> / </span>  @lang('lang.edit_slider')
+@endsection
 @section('content')
-<section class="forms">
+    <section class="forms p-0">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_slider')</h4>
+                        <div class="print-title">@lang('lang.edit_slider')</div>
+
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -21,7 +39,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('type', __('lang.type') . ':*') !!}
+                                    {!! Form::label('type', __('lang.type') . ':*', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('type', ['OutSite'=>__('lang.OutSite'),'Service'=>__('lang.Service'),'Info'=>__('lang.Info'),], $slider->type, [
                             'class' => 'selectpicker
                                     form-control',
@@ -32,7 +50,7 @@
                             </div>
                             <div class="col-md-4 @if($slider->type != 'Service' ) hide @endif div_type_id"id="div_Service">
                                 <div class="form-group">
-                                    {!! Form::label('service_id', __('lang.service') . ':*') !!}
+                                    {!! Form::label('service_id', __('lang.service') . ':*', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('service_id', $categories, $slider->type_id, [
                             'class' => 'selectpicker
                                     form-control input_Service',
@@ -43,7 +61,7 @@
                             </div>
                             <div class="col-md-4  @if($slider->type != 'Info' ) hide @endif div_type_id" id="div_Info">
                                 <div class="form-group">
-                                    {!! Form::label('info_id', __('lang.page') . ':*') !!}
+                                    {!! Form::label('info_id', __('lang.page') . ':*', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('info_id', $infos, $type_id, [
                             'class' => 'selectpicker
                                     form-control input_Info',
@@ -54,30 +72,29 @@
                             </div>
                             <div class="col-md-4 div_type_id  @if($slider->type != 'OutSite' ) hide @endif"id="div_OutSite">
                                 <div class="form-group">
-                                    {!! Form::label('url', __('lang.url') . ':*') !!}
+                                    {!! Form::label('url', __('lang.url') . ':*', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::url('url', ($slider->type == 'OutSite' ? $slider->type_id :false), ['class' => 'form-control input_OutSite', 'required','placeholder' => __('lang.url')]) !!}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('sort', __('lang.sort') . ':') !!}
+                                    {!! Form::label('sort', __('lang.sort') . ':', [ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::number('sort', $slider->sort, ['class' => 'form-control','required', 'placeholder' => __('lang.sort')]) !!}
                                 </div>
                             </div>
 
 
-                            <div class="row mt-4">
-                                <div class="col-sm-6">
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        {!! Form::label('start_at', __('lang.start_at'). ':', []) !!} <br>
+                                        {!! Form::label('start_at', __('lang.start_at'). ':', [ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::text('start_at',$slider->start_at!= null? @format_date($slider->start_at):false, ['class' => 'form-control datepicker',
                                          'required',
                                         'placeholder' => __('lang.payment_date')]) !!}
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-md-2">
                                     <div class="form-group">
-                                        {!! Form::label('end_at', __('lang.end_at'). ':', []) !!} <br>
+                                        {!! Form::label('end_at', __('lang.end_at'). ':', [ 'class'=>"sp-label new-des"]) !!}
                                         {!! Form::text('end_at',$slider->end_at!= null? @format_date($slider->end_at):false, ['class' => 'form-control datepicker',
 
                                         'placeholder' => __('lang.end_at')]) !!}
@@ -85,13 +102,10 @@
                                 </div>
 
 
-                            </div>
-
-
                             <div class="col-md-4 " style="margin-top: 10px;">
 
                                 <div class="container mt-3">
-                                    <div class="red">(655px×320px)</div>
+                                    <div class="red sp-label new-des" style="top: 5px !important;">(655px×320px)</div>
                                     <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                                         <div class="col-12">
                                             <div class="mt-3">
@@ -144,7 +158,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group justify-cont">
                                     <input type="submit" value="{{trans('lang.save')}}" id="submit-btn"
                                         class="btn btn-primary">
                                 </div>

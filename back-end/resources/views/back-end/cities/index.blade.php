@@ -12,9 +12,9 @@
         .check {
             position: relative;
             display: block;
-            width: 70px;
-            height: 30px;
-            background-color: #f46a6a;
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
             cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
@@ -22,7 +22,7 @@
         }
 
         input:checked[type="checkbox"] ~ .check {
-            background-color: #34c38f;
+            background-color: #013e6b;
             /*   box-shadow: 0 0 0 1200px #092c3e; */
         }
 
@@ -32,8 +32,8 @@
             top: 3px;
             left: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transition: all 0.5s;
         }
@@ -48,8 +48,8 @@
             top: 3px;
             right: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transform: translateX(50px);
             transition: all 0.5s;
@@ -62,45 +62,53 @@
         .btn-modal {
             cursor: pointer;
         }
+        a.btn.a-image {
+            margin: 0 10px;
+        }
     </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.cities')}} / </span>    @lang('lang.all_cities')
+@endsection
 @section('content')
+    <div class="container-fluid">
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_cities')
 
-    <div class="table-responsive">
-        <div class="container-fluid">
-            <div class=" d-flex align-items-center">
-                <h3 class="print-title">@lang('lang.all_cities')</h3>
             </div>
-            <a style="color: white" href="{{ route('admin.city.create') }}" class="btn btn-info"><i
-                    class="dripicons-plus"></i>
-                @lang('lang.add_city')</a>
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.city.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                     @lang('lang.add_city')
+                </a>
+            </div>
 
         </div>
-        <table id="city_table" class="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>@lang('lang.name')</th>
-                <th>@lang('lang.country')</th>
-                <th>@lang('lang.status')</th>
-                <th>@lang('lang.created_at')</th>
 
-                <th class="notexport">@lang('lang.action')</th>
-            </tr>
-            </thead>
-            <tbody>
 
-            </tbody>
-            <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tfoot>
-        </table>
+
     </div>
+
+    <table id="city_table" class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>@lang('lang.name')</th>
+            <th>@lang('lang.country')</th>
+            <th>@lang('lang.status')</th>
+            <th>@lang('lang.created_at')</th>
+
+            <th class="notexport">@lang('lang.action')</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+    </table>
 @endsection
 
 @section('javascript')

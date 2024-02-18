@@ -406,13 +406,13 @@
                                 @endif
 
                 @if( !empty($module_settings['settings']) )
-                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas']) ) active @endif" >
+                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['service','banks','icons','settings', 'category','slider','splash_screen','countries','city','areas']) ) active @endif" >
                         <a href="#setting"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.service.index')}}">
                             <i class="dripicons-gear"></i>
                             <span>@lang('lang.settings')</span>
                         </a>
                         <ul id="setting"
-                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif  active-children">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','settings','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif  active-children">
 
 
                                 @can('settings.service.view')
@@ -448,7 +448,7 @@
                                     @can('settings.splash_screen.create')
                                         <li
                                             class="@if(request()->segment(2) == 'splash_screen' && request()->segment(3) == 'create') active @endif">
-                                            <a href="{{route('admin.splash_screen.create')}}">{{__('lang.add_splash_screen')}}</a>
+                                            <a href="{{route('admin.splash_screen.create')}}">{{__('lang.add_splash_screen_')}}</a>
                                         </li>
                                     @endcan
                                 @can('settings.icons.view')
@@ -514,7 +514,7 @@
                                     @endcan
                                 @can('settings.general_settings.view')
                                     <li
-                                        class="@if(request()->segment(1) == 'settings' && request()->segment(2) == 'get-general-setting') active @endif">
+                                        class="@if(request()->segment(2) == 'settings' && request()->segment(3) == 'general-setting') active @endif">
                                         <a
                                             href="{{route('admin.settings.getGeneralSetting')}}">{{__('lang.general_settings')}}</a>
                                     </li>
