@@ -58,34 +58,19 @@ class ContactUsController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" contact_us="menu">';
-
-
-
-
-
-
-//                        }
-                        $html .= '<li class="divider"></li>';
+                        $html = '';
 //                            if (auth()->contact_us()->can('contact_us_module.contact_us.delete')) {
                                 $html .=
-                                    '<li>
+                                    '
                                     <a data-href="' . route('admin.contact_us.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
+                                        class="btn text-red delete_item" title="' . __('lang.delete') . '"><i class="dripicons-trash"></i>
+                                        </a>
+                                    ';
 //                            }
 
 
 
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

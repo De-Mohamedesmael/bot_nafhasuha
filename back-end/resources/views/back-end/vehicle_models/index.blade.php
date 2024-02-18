@@ -109,7 +109,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

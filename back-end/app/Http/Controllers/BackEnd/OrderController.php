@@ -65,15 +65,8 @@ class OrderController extends Controller
                 ->leftJoin('providers', 'providers.id', '=', 'order_services.provider_id')
                 ->select('order_services.*',
                 'transactions.invoice_no',
-                'transactions.invoice_no',
-                'transactions.final_total',
-                'transactions.grand_total',
-                'transactions.discount_amount',
-                'transactions.suggested_price',
                 'users.name as client_name',
-                'users.phone as client_phone',
                 'providers.name as provider_name',
-                'providers.phone as provider_phone',
             );
             ///'pending','approved','PickUp','received','completed','declined','canceled'
             if($status){
@@ -144,26 +137,6 @@ class OrderController extends Controller
 
             return DataTables::of($query)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
-                ->editColumn('updated_at', '{{@format_datetime($updated_at)}}')
-                ->editColumn('suggested_price', '{{@num_format($suggested_price)}}')
-                ->editColumn('grand_total', '{{@num_format($grand_total)}}')
-                ->editColumn('discount_amount', '{{@num_format($discount_amount)}}')
-                ->editColumn('final_total', '{{@num_format($final_total)}}')
-                ->editColumn('payment_method', function ($row) {
-                   $payment_method= $row->payment_method?:'not_pay';
-                    return '<span class="payment_method'.$payment_method.'">' . __('lang.'.$payment_method).'</span>';
-                })
-                ->editColumn('canceled_by', function ($row) {
-                    if (!in_array($row->status,['declined','canceled']))
-                        return'';
-
-                    $type=$row->canceled_type;
-                    $name=$row->canceledby?->name;
-                    return __('lang.'.$type).' => '.$name;
-                })
-                ->editColumn('cancel_reason', function ($row) {
-                return $row->cancel_reason? $row->cancel_reason->title:'';
-                })
                 ->editColumn('payment_method', function ($row) {
                    $payment_method= $row->payment_method?:'not_pay';
                     return '<span class="payment_method'.$payment_method.'">' . __('lang.'.$payment_method).'</span>';
@@ -191,60 +164,34 @@ class OrderController extends Controller
 
                     return $html;
                 })
-                ->addColumn('image', function ($row) {
-                    $images = $row->getMedia('images');
-                    $html='';
-                    foreach ($images as $image) {
-                        $html.= '<div class="image-order" ><img src="' . $image->getUrl() . '" height="50px" width="50px"></div>';
-                    }
-                    return$html;
-                })
-                ->addColumn('service_title', function ($row) {
-                        return $row->category?->title;
-                })
-//                ->addColumn('client_name', function ($row) {
-//                        return $row->category?->title;
-//                })->addColumn('client_phone', function ($row) {
-//                        return $row->category?->title;
-//                })->addColumn('provider_name', function ($row) {
-//                        return $row->category?->title;
-//                })->addColumn('provider_phone', function ($row) {
-//                        return $row->category?->title;
-//                })
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html='';
-                        if($row->isOfferPrice() || $row->status == 'pending'  ) {
-                            $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
+                        $html = ' <a href = "' . route('admin.order.show', ['order_id' => $row->id]) . '"
+                                                             title="' . __('lang.show') . ' "><i class="far fa-eye"></i> </a>';
 
-                            $html .= '<li class="divider"></li>';
+                        if($row->isOfferPrice() || $row->status == 'pending'  ) {
+
                             if ($row->isOfferPrice() && $row->status == 'pending') {
 
 
                                 //                        if (auth()->user()->can('customer_module.customer.edit')){
-                                $html .= '<li >
+                                $html .= '
                                                         <a data-href = "' . route('admin.order.get-send-offer', ['order_id' => $row->id]) . '"
-                                                            class="btn-modal" data-container = ".view_modal" ><i
-                                                                class="fa fa-money btn" ></i > ' . __('lang.send_offer') . ' </a >
-                                                    </li >';
+                                                            class="btn-modal" data-container = ".view_modal" title="' . __('lang.send_offer') . ' " ><i
+                                                                class="fa fa-money" ></i > </a >
+                                                    ';
 
                                 //                        }
                             } elseif ($row->status == 'pending') {
-                                $html .= '<li >
+                                $html .= '
                                                         <a data-href = "' . route('admin.order.get-send-offer', ['order_id' => $row->id]) . '"
-                                                            class="btn-modal" data-container = ".view_modal" ><i
-                                                                class="fa fa-check-circle btn" ></i > ' . __('lang.accept') . ' </a >
-                                                    </li >';
+                                                            class="btn-modal" data-container = ".view_modal" title="' . __('lang.accept') . '" ><i
+                                                                class="fa fa-check-circle" ></i >  </a >
+                                                    ';
                             }
 
-                            $html .= '</ul></div>';
+                            $html .= '';
 
                         }
                         return $html;
@@ -254,9 +201,7 @@ class OrderController extends Controller
                     'action',
                     'payment_method',
                     'status',
-                    'image',
                     'created_at',
-                    'updated_at',
                 ])
                 ->make(true);
         }
@@ -295,30 +240,16 @@ class OrderController extends Controller
                     'cancellation_records.created_at as canceled_at',
                     'cancellation_records.cancel_reason_id as cancellation_cancel_reason_id',
                     'transactions.invoice_no',
-                    'transactions.final_total',
-                    'transactions.grand_total',
-                    'transactions.discount_amount',
-                    'transactions.suggested_price',
                     'users.name as client_name',
-                    'users.phone as client_phone',
                     'providers.name as provider_name',
-                    'providers.phone as provider_phone',
                 );
 
 
 
             return DataTables::of($query)
                 ->addColumn('canceled_at', '{{@format_datetime($canceled_at)}}')
-                ->editColumn('suggested_price', '{{@num_format($suggested_price)}}')
-                ->editColumn('grand_total', '{{@num_format($grand_total)}}')
-                ->editColumn('discount_amount', '{{@num_format($discount_amount)}}')
-                ->editColumn('final_total', '{{@num_format($final_total)}}')
                 ->editColumn('cancel_reason', function ($row) {
                     return $row->cancellation_record->cancel_reason? $row->cancellation_record->cancel_reason->title:'';
-                })
-
-                ->addColumn('service_title', function ($row) {
-                    return $row->category?->title;
                 })
                 ->rawColumns([
                     'created_at',
@@ -451,6 +382,53 @@ class OrderController extends Controller
 
 
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $OrderService = OrderService::with('user','provider')->find($id);
+        $back_end_markers=[];
+        $provider=$OrderService->provider;
+        $user=$OrderService->user;
+        if($provider) {
+            $back_end_markers[] = [
+                'id' => 1,
+                'lat' => $provider->lat,
+                'long' => $provider->long,
+                'img' => asset('assets/back-end/images/icon-car.png'),
+                'name' => $provider->name,
+            ];
+        }
+        if($OrderService->long != null & $OrderService->lat != null){
+            $back_end_markers[]=[
+                'id'=>2,
+                'lat'=>$OrderService->lat,
+                'long'=>$OrderService->long,
+                'img'=>asset('assets/back-end/images/map-a-icon.png'),
+                'name'=>$user->name,
+            ];
+        }
+        if($OrderService->lat_to & $OrderService->long_to){
+            $back_end_markers[]=[
+                'id'=>3,
+                'lat'=>$OrderService->lat_to,
+                'long'=>$OrderService->long_to,
+                'img'=>asset('assets/back-end/images/map-b-icon.png'),
+                'name'=>'To',
+            ];
+        }
+        $back_end_markers=json_encode($back_end_markers);
+        return view('back-end.orders.show')->with(compact(
+            'OrderService',
+            'back_end_markers',
+            'provider',
+            'user'
+        ));
+    }
     /**
      * Show the form for editing the specified resource.
      *

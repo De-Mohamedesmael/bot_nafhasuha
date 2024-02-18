@@ -4,8 +4,9 @@ $moment_time_format = App\Models\System::getProperty('time_format') == '12' ? 'h
 <script>
     var moment_time_format = "{{$moment_time_format}}";
 </script>
+
 <script type="text/javascript" src="{{asset('assets/back-end/js/lang/'.app()->getLocale().'.js') }}"></script>
-<script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.min.js') }}"></script>
+
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery-ui.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery/jquery.timepicker.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/popper.js/umd/popper.min.js') }}">
@@ -28,8 +29,7 @@ $moment_time_format = App\Models\System::getProperty('time_format') == '12' ? 'h
 </script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/chart.js/Chart.min.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
-<script type="text/javascript"
-    src="{{asset('assets/back-end/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+
 <script type="text/javascript" src="{{asset('assets/back-end/js/charts-custom.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/js/front.js') }}"></script>
 <script type="text/javascript" src="{{asset('assets/back-end/vendor/daterange/js/knockout-3.4.2.js') }}"></script>

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('title', __('lang.title') . ':*') !!}
+            {!! Form::label('title', __('lang.title') . ':*' ,['class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('title', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                 <span class="input-group-btn">
@@ -19,7 +19,7 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('description', __('lang.description') . ':*') !!}
+            {!! Form::label('description', __('lang.description') . ':*',['class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('body', false, ['class' => 'form-control', 'placeholder' => __('lang.body'), 'required']) !!}
                 <span class="input-group-btn">
@@ -38,7 +38,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('type', __('lang.type') . ':*') !!}
+            {!! Form::label('type', __('lang.type') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('type', ['3'=>__('lang.3'),'2'=>__('lang.2')], false, [
                 'class' => 'selectpicker
                         form-control',
@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-4 hide div_type_id"id="div_2">
         <div class="form-group">
-            {!! Form::label('type_id', __('lang.coupons') . ':*') !!}
+            {!! Form::label('type_id', __('lang.coupons') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('type_id', $coupons, false, [
                 'class' => 'selectpicker
                         form-control input_2',
@@ -61,7 +61,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            {!! Form::label('type_model', __('lang.type_model') . ':*') !!}
+            {!! Form::label('type_model', __('lang.type_model') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('type_model', ['User'=>__('lang.User'),'Provider'=>__('lang.Provider')], false, [
                 'class' => 'selectpicker
                         form-control',
@@ -72,7 +72,7 @@
     </div>
     <div class="col-md-4  div_type_model_id"id="div_User">
         <div class="form-group">
-            {!! Form::label('user_id', __('lang.user') . ':*') !!}
+            {!! Form::label('user_id', __('lang.user') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('user_id[]', $users, false, [
                 'class' => 'selectpicker
                         form-control input_User',
@@ -85,7 +85,7 @@
     </div>
     <div class="col-md-4 hide div_type_model_id"id="div_Provider">
         <div class="form-group">
-            {!! Form::label('provider_id', __('lang.provider') . ':*') !!}
+            {!! Form::label('provider_id', __('lang.provider') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('provider_id[]', $providers, false, [
                 'class' => 'selectpicker
                         form-control  input_Provider',

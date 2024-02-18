@@ -176,38 +176,23 @@
     <div class="row m-3 mb-0">
         <div class="col-md-12">
             <button type="button" value="0"
+                    class="badge badge-pill badge-primary column-toggle">@lang('lang.number_bill')</button>
+            <button type="button" value="1"
                     class="badge badge-pill badge-primary column-toggle">@lang('lang.invoice_no')</button>
-            <button type="button" value="1" class="badge badge-pill badge-primary column-toggle">@lang('lang.service_title')</button>
             <button type="button" value="2" class="badge badge-pill badge-primary column-toggle">@lang('lang.client_name')</button>
-            <button type="button" value="3" class="badge badge-pill badge-primary column-toggle">@lang('lang.client_phone')</button>
-            <button type="button" value="4" class="badge badge-pill badge-primary column-toggle">@lang('lang.provider_name')</button>
-            <button type="button" value="5" class="badge badge-pill badge-primary column-toggle">@lang('lang.provider_phone')</button>
-            <button type="button" value="6" class="badge badge-pill badge-primary column-toggle">@lang('lang.suggested_price')</button>
-            <button type="button" value="7" class="badge badge-pill badge-primary column-toggle">@lang('lang.grand_total')</button>
-            <button type="button" value="8" class="badge badge-pill badge-primary column-toggle">@lang('lang.discount_amount')</button>
-            <button type="button" value="9" class="badge badge-pill badge-primary column-toggle">@lang('lang.final_total')</button>
-            <button type="button" value="13" class="badge badge-pill badge-primary column-toggle">@lang('lang.address')</button>
-            <button type="button" value="14" class="badge badge-pill badge-primary column-toggle">@lang('lang.cancel_reason')</button>
-            <button type="button" value="17" class="badge badge-pill badge-primary column-toggle">@lang('lang.canceled_at')</button>
+            <button type="button" value="3" class="badge badge-pill badge-primary column-toggle">@lang('lang.provider_name')</button>
+            <button type="button" value="4" class="badge badge-pill badge-primary column-toggle">@lang('lang.cancel_reason')</button>
+            <button type="button" value="5" class="badge badge-pill badge-primary column-toggle">@lang('lang.canceled_at')</button>
         </div>
     </div>
     <div class="table-responsive">
         <table id="order_table" class="table   table-striped">
             <thead>
                 <tr>
+                    <th>@lang('lang.number_bill')</th>
                     <th>@lang('lang.invoice_no')</th>
-
-                    <th>@lang('lang.service_title')</th>
-
                     <th >@lang('lang.client_name')</th>
-                    <th >@lang('lang.client_phone')</th>
                     <th >@lang('lang.provider_name')</th>
-                    <th >@lang('lang.provider_phone')</th>
-                    <th class="sum">@lang('lang.suggested_price')</th>
-                    <th class="sum">@lang('lang.grand_total')</th>
-                    <th class="sum">@lang('lang.discount_amount')</th>
-                    <th class="sum">@lang('lang.final_total')</th>
-                    <th >@lang('lang.address')</th>
                     <th>@lang('lang.cancel_reason')</th>
                     <th>@lang('lang.canceled_at')</th>
                 </tr>
@@ -215,23 +200,6 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th style="text-align: right">@lang('lang.total')</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
         </table>
     </div>
 @endsection
@@ -245,7 +213,10 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],
@@ -281,23 +252,16 @@
             },
             columnDefs: [
                 {
-                    targets: [7],
+                    targets: [4],
                     orderable: false,
                     searchable: false,
                 },
             ],
             columns: [
+                { data: "id", name: "id" },
                 { data: "invoice_no", name: "transactions.invoice_no" },
-                { data: "service_title", name: "service_title" },
                 { data: "client_name", name: "users.name" },
-                { data: "client_phone", name: "users.phone" },
                 { data: "provider_name", name: "providers.name" },
-                { data: "provider_phone", name: "providers.phone" },
-                { data: "suggested_price", name: "transactions.suggested_price" },
-                { data: "grand_total", name: "transactions.grand_total" },
-                { data: "discount_amount", name: "transactions.discount_amount" },
-                { data: "final_total", name: "transactions.final_total" },
-                { data: "address", name: "address" },
                 { data: "cancel_reason", name: "cancel_reason" },
                 { data: "canceled_at", name: "canceled_at" },
             ],

@@ -190,4 +190,13 @@
   'providerCounts_have_order' => 'لديه طلبات',
   'registered provider' => 'انضم لنا',
   'provider statistics by Month' => 'احصائيات مزودي الخدمات',
+  'Provider profile update' => 'Provider profile update',
+  'entries' => 'ادخالات',
+  'Show' => 'عرض',
+  'Look for...' => 'ابحث عن ...',
+  'order_number' => 'طلب رقم',
+  'final_total' => 'Final total',
+  'invoice_no' => 'Invoice no',
+  'images' => 'صور',
+  'canceled_by' => 'الغي بواسطة',
 );

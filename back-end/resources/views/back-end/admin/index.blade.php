@@ -11,10 +11,10 @@
 
         .check {
             position: relative;
-            display: block;
-            width: 70px;
-            height: 30px;
-            background-color: #f46a6a;
+            /*display: block;*/
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
             cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
@@ -22,7 +22,7 @@
         }
 
         input:checked[type="checkbox"] ~ .check {
-            background-color: #34c38f;
+            background-color: #013e6b;
             /*   box-shadow: 0 0 0 1200px #092c3e; */
         }
 
@@ -32,8 +32,8 @@
             top: 3px;
             left: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transition: all 0.5s;
         }
@@ -48,8 +48,8 @@
             top: 3px;
             right: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transform: translateX(50px);
             transition: all 0.5s;
@@ -62,60 +62,62 @@
         .btn-modal {
             cursor: pointer;
         }
+        a.btn.edit_employee.a-image {
+            margin: 0 5px;
+        }
     </style>
 @endsection
-
+@section('sli_li')
+    <span class="parent"> < {{__('lang.employees')}} / </span>    @lang('lang.all_employees')
+@endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.employees')</h3>
-        </div>
-        @can('admin_module.admins.create')
-            <a style="color: white" href="{{ route('admin.admins.create') }}" class="btn btn-info"><i
-                    class="dripicons-plus"></i>
-                @lang('lang.add_new_employee')</a>
-        @endcan
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_employees')
 
-
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="table-responsive">
-                                    <table class="table" id="employee_table">
-                                        <thead>
-                                            <tr>
-                                                <th>@lang('lang.profile_photo')</th>
-                                                <th>@lang('lang.employee_name')</th>
-                                                <th>@lang('lang.email')</th>
-                                                <th>@lang('lang.mobile')</th>
-                                                @can('admin_module.admin.edit')
-                                                    <th>@lang('lang.status')</th>
-                                                @endcan
-                                                <th>@lang('lang.created_at')</th>
-                                                <th class="notexport">@lang('lang.action')</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-
-
-
-                                        </tbody>
-                                        <tfoot>
-
-                                        </tfoot>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <div  class="dev-create">
+
+                @can('admin_module.admins.create')
+                    <a  href="{{ route('admin.admins.create') }}" class="btn btn-create"><i
+                            class="dripicons-plus"></i>
+                        @lang('lang.add_new_employee')
+                    </a>
+                @endcan
+            </div>
+
         </div>
+
+
+
+    </div>
+
+    <div class="table-responsive">
+        <table class="table" id="employee_table">
+            <thead>
+            <tr>
+                <th>@lang('lang.profile_photo')</th>
+                <th>@lang('lang.employee_name')</th>
+                <th>@lang('lang.email')</th>
+                <th>@lang('lang.mobile')</th>
+                @can('admin_module.admins.edit')
+                    <th>@lang('lang.status')</th>
+                @endcan
+                <th>@lang('lang.created_at')</th>
+                <th class="notexport">@lang('lang.action')</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+
+
+            </tbody>
+            <tfoot>
+
+            </tfoot>
+        </table>
     </div>
 @endsection
 
@@ -127,7 +129,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

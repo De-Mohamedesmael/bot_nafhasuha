@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('title', __('lang.title') . ':*') !!}
+            {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('title', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                 <span class="input-group-btn">
@@ -19,7 +19,7 @@
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            {!! Form::label('sort', __('lang.sort') . ':*') !!}
+            {!! Form::label('sort', __('lang.sort') . ':*',[ 'class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::number('sort', false, ['class' => 'form-control', 'placeholder' => __('lang.sort'), 'required']) !!}
 

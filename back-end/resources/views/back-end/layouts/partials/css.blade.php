@@ -2,7 +2,9 @@
 <!-- Bootstrap CSS-->
 <link rel="stylesheet" href="{{asset('assets/back-end/vendor/bootstrap/css/bootstrap.min.css')}}" type="text/css">
 <link rel="stylesheet" href="{{asset('assets/back-end/vendor/bootstrap-toggle/css/bootstrap-toggle.min.css')}}" type="text/css">
-
+<!-- Custom Scrollbar-->
+<link rel="stylesheet" href="{{asset('assets/back-end/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css')}}"
+      type="text/css">
 <link rel="stylesheet" href="{{asset('assets/back-end/vendor/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" type="text/css">
 <link rel="stylesheet" href="{{asset('assets/back-end/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css')}}" type="text/css">
 
@@ -17,9 +19,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,500,700">
 <!-- jQuery Circle-->
 <link rel="stylesheet" href="{{asset('assets/back-end/css/grasp_mobile_progress_circle-1.0.0.min.css')}}" type="text/css">
-<!-- Custom Scrollbar-->
-<link rel="stylesheet" href="{{asset('assets/back-end/vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css')}}"
-type="text/css">
+
 <!-- virtual keybord stylesheet-->
 <link rel="stylesheet" href="{{asset('assets/back-end/vendor/keyboard/css/keyboard.css')}}" type="text/css">
 <!-- date range stylesheet-->

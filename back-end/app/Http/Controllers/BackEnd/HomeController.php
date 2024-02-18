@@ -72,13 +72,9 @@ class HomeController extends Controller
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
-        $userCounts = [];
-        $userCounts_all = [];
+
         $providerCounts = [];
         $providerCounts_all = [];
-        $Complete =[];
-        $Canceled=[];
-        $Pending=[];
 //        $currentYear = now()->year;
 
         $usersByMonthTotal = User::select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
@@ -136,106 +132,25 @@ class HomeController extends Controller
             ->orderBy('month')
             ->get();
 
-
-
-        $AmountCompletedByMonthThisYear=OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
-            ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
-            -> wherein('order_services.status',  ['completed'])
-            ->select(DB::raw('MONTH(order_services.created_at) as month'),
-                DB::raw('sum(transactions.final_total) as sum_final_total'))
-//            ->whereYear('order_services.created_at', $currentYear)
-            ->where('order_services.created_at', '>=', $start_date)
-            ->where('order_services.created_at', '<=', $end_date);
-
-        if (!empty(request()->area_id)) {
-            $AmountCompletedByMonthThisYear=  $AmountCompletedByMonthThisYear->where('users.area_id',  request()->area_id);
-        }elseif (!empty(request()->city_id)) {
-            $AmountCompletedByMonthThisYear=  $AmountCompletedByMonthThisYear->whereIn('users.city_id', request()->city_id);
-
-        }
-        $AmountCompletedByMonthThisYear=  $AmountCompletedByMonthThisYear->groupBy('month')
-            ->orderBy('month')
-            ->get();
-        $AmountCanceledByMonthThisYear=OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
-            ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
-
-            ->wherein('order_services.status',  ['declined','canceled'])
-            ->select(DB::raw('MONTH(order_services.created_at) as month'),
-                DB::raw('sum(transactions.final_total) as sum_final_total'))
-//            ->whereYear('order_services.created_at', $currentYear)
-            ->where('order_services.created_at', '>=', $start_date)
-            ->where('order_services.created_at', '<=', $end_date);
-
-        if (!empty(request()->area_id)) {
-            $AmountCanceledByMonthThisYear=   $AmountCanceledByMonthThisYear->where('users.area_id',  request()->area_id);
-        }elseif (!empty(request()->city_id)) {
-            $AmountCanceledByMonthThisYear=  $AmountCanceledByMonthThisYear->whereIn('users.city_id', request()->city_id);
-
-        }
-        $AmountCanceledByMonthThisYear= $AmountCanceledByMonthThisYear->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        $AmountPendingByMonthThisYear=OrderService::leftJoin('transactions', 'transactions.id', '=', 'order_services.transaction_id')
-            ->leftJoin('users', 'users.id', '=', 'order_services.user_id')
-            ->wherein('order_services.status',  ['pending', 'approved','PickUp','received'])
-            ->select(DB::raw('MONTH(order_services.created_at) as month'),
-                DB::raw('sum(transactions.final_total) as sum_final_total'))
-            ->where('order_services.created_at', '>=', $start_date)
-            ->where('order_services.created_at', '<=', $end_date);
-
-        if (!empty(request()->area_id)) {
-            $AmountPendingByMonthThisYear=  $AmountPendingByMonthThisYear->where('users.area_id',  request()->area_id);
-        }elseif (!empty(request()->city_id)) {
-            $AmountPendingByMonthThisYear=  $AmountPendingByMonthThisYear->whereIn('users.city_id', request()->city_id);
-
-        }
-        $AmountPendingByMonthThisYear=  $AmountPendingByMonthThisYear ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-        $AmountCompleted=0;
-        $AmountPending=0;
-        $AmountCanceled=0;
         foreach ($months as $month) {
            $providerCount = $providersByMonthTotal->where('month', array_search($month, $months) + 1)->first();
             $providerCountThisYear = $providersByMonthThisYear->where('month', array_search($month, $months) + 1)->first();
 
-
-
-
-            $CompletedCount = $AmountCompletedByMonthThisYear->where('month', array_search($month, $months) + 1)->first();
-            $PendingThisYear = $AmountPendingByMonthThisYear->where('month', array_search($month, $months) + 1)->first();
-            $CanceledThisYear = $AmountCanceledByMonthThisYear->where('month', array_search($month, $months) + 1)->first();
             $providerCounts[] = $providerCount ? $providerCount->count : 0;
             $providerCounts_all[] = $providerCountThisYear ? $providerCountThisYear->count : 0;
-
-
-            $Complete[] = $CompletedCount ? $CompletedCount->sum_final_total : 0;
-            $Canceled[] = $CanceledThisYear ? $CanceledThisYear->sum_final_total : 0;
-            $Pending[] = $PendingThisYear ? $PendingThisYear->sum_final_total : 0;
-            $AmountCompleted+=$PendingThisYear ? $PendingThisYear->sum_final_total : 0;
-            $AmountPending +=$PendingThisYear ? $PendingThisYear->sum_final_total : 0;
-            $AmountCanceled +=$CanceledThisYear ? $CanceledThisYear->sum_final_total : 0;
         }
         $providerCountsString = '[' . implode(', ', $providerCounts) . ']';
         $providerCountsAllString = '[' . implode(', ', $providerCounts_all) . ']';
 
 
-        $CompleteString = '[' . implode(', ', $Complete) . ']';
-        $CanceledString = '[' . implode(', ', $Canceled) . ']';
-        $PendingString = '[' . implode(', ', $Pending) . ']';
+
         $data=[
             'success'=>true,
 //            'userCountsString'=>$userCountsString,
 //            'userCountsAllString'=>$userCountsAllString,
             'providerCountsString'=>$providerCountsString,
             'providerCountsAllString'=>$providerCountsAllString,
-            'CompleteString'=>$CompleteString,
-            'CanceledString'=>$CanceledString,
-            'PendingString'=>$PendingString,
-            'AmountCompleted'=>$AmountCompleted,
-            'AmountPending'=>$AmountPending,
-            'AmountCanceled'=>$AmountCanceled,
+
         ];
         return $data;
     }

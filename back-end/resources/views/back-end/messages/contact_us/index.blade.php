@@ -64,12 +64,11 @@
         }
     </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.contact_us')}} / </span>    @lang('lang.all_contact_us')
+@endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_contact_us')</h3>
-        </div>
-    </div>
+
     <div class="table-responsive">
         <table id="contact_us_table" class="table">
             <thead>
@@ -86,14 +85,7 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tfoot>
+
         </table>
     </div>
 @endsection
@@ -106,7 +98,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

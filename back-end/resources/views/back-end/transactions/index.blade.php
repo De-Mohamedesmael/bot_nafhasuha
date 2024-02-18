@@ -65,36 +65,51 @@
     td{
         text-align: center;
     }
+    .card {
+        border-radius: 15px;
+    }
+
+    button.btn-filter {
+        max-height: 35px;
+        margin-top: 10px;
+    }
 </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.transactions')}} / </span>  @if(!isset($type))  @lang('lang.view_all_transactions')@else @lang('lang.view_all_transactions_'.$type) @endif
 @endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
                @if(!isset($type))  @lang('lang.view_all_transactions')@else @lang('lang.view_all_transactions_'.$type) @endif
 
-            </h3>
+            </div>
+            @php
+                $url=  route("admin.transaction.index",$type);
 
+            @endphp
+            @if($type != 'user' )
+                <div  class="dev-create">
+
+
+                    <a  href="{{ route('admin.transaction.create') }}" class="btn btn-create"><i
+                            class="dripicons-plus"></i>
+                        @lang('lang.create') @lang('lang.Withdrawal')
+                    </a>
+                </div>
+            @endif
         </div>
 
 
-        @php
-            $url=  route("admin.transaction.index",$type);
 
-        @endphp
-        @if($type != 'user' )
-            <a style="color: white" href="{{ route('admin.transaction.create') }}" class="btn btn-info"><i
-                    class="dripicons-plus"></i>
-                @lang('lang.create') @lang('lang.Withdrawal')
-            </a>
-        @endif
     </div>
-    <div class="card mt-3 pt-2 pb-1">
+    <div class="card mt-3 pt-4 pb-1">
         <div class="col-md-12">
-            <div class="row">
+            <div class="row ">
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('type_data', __('lang.type') . ':', []) !!}
+                        {!! Form::label('type_data', __('lang.type') . ':', ['class'=>'sp-label new-des']) !!}
                         {!! Form::select('type_data', ['TopUpCredit'=>__('lang.TopUpCredit'),'InvitationBonus'=>__('lang.InvitationBonus'),'JoiningBonus'=>__('lang.JoiningBonus'),'Withdrawal'=>__('lang.Withdrawal')], request()->payment_method, [
 'class' => 'form-control
                     filter_product
@@ -106,7 +121,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('status', __('lang.status') . ':', []) !!}
+                        {!! Form::label('status', __('lang.status') . ':',  ['class'=>'sp-label new-des']) !!}
                         {!! Form::select('status', ['pending'=>__('lang.pending'),'received'=>__('lang.received'),'canceled'=>__('lang.canceled')], request()->payment_method, [
 'class' => 'form-control
                     filter_product
@@ -120,7 +135,7 @@
                     @if($type == 'user')
                         <div class="col-md-3">
                             <div class="form-group">
-                                {!! Form::label('user_id', __('lang.client') . ':', []) !!}
+                                {!! Form::label('user_id', __('lang.client') . ':',  ['class'=>'sp-label new-des']) !!}
                                 {!! Form::select('user_id', $users, request()->user_id, [
     'class' => 'form-control
                         filter_product
@@ -134,7 +149,7 @@
                         @if($type == 'provider')
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    {!! Form::label('provider_id', __('lang.provider') . ':', []) !!}
+                                    {!! Form::label('provider_id', __('lang.provider') . ':',  ['class'=>'sp-label new-des']) !!}
                                     {!! Form::select('provider_id', $providers, request()->provider_id, [
             'class' => 'form-control
                                 filter_product
@@ -150,58 +165,58 @@
 
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('start_date', __('lang.generation_start_date'), []) !!}
+                        {!! Form::label('start_date', __('lang.generation_start_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('start_date', request()->start_date, ['class' => 'form-control filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('start_time', __('lang.generation_start_time'), []) !!}
+                        {!! Form::label('start_time', __('lang.generation_start_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('end_date', __('lang.generation_end_date'), []) !!}
+                        {!! Form::label('end_date', __('lang.generation_end_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('end_date', request()->end_date, ['class' => 'form-control filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('end_time', __('lang.generation_end_time'), []) !!}
+                        {!! Form::label('end_time', __('lang.generation_end_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_start_date', __('lang.complete_start_date'), []) !!}
+                        {!! Form::label('complete_start_date', __('lang.complete_start_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_start_date', request()->complete_start_date, ['class' => 'form-control datepicker filter_product', 'id' => 'complete_start_date']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_start_time', __('lang.complete_start_time'), []) !!}
+                        {!! Form::label('complete_start_time', __('lang.complete_start_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_end_date', __('lang.complete_end_date'), []) !!}
+                        {!! Form::label('complete_end_date', __('lang.complete_end_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_end_date', request()->complete_end_date, ['class' => 'form-control filter_product', 'id' => 'complete_end_date']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_end_time', __('lang.complete_end_time'), []) !!}
+                        {!! Form::label('complete_end_time', __('lang.complete_end_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
 
                 <input type="hidden" name="product_id" id="product_id" value="">
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-success mt-4 ml-2" id="submit-filter">@lang('lang.filter')</button>
+                    <button type="submit" class="btn btn-success btn-filter" id="submit-filter">@lang('lang.filter')</button>
 
-                    <button class="btn btn-danger mt-4 clear_filters">@lang('lang.clear_filters')</button>
+                    <button class="btn btn-danger  clear_filters btn-filter">@lang('lang.clear_filters')</button>
                 </div>
             </div>
         </div>
@@ -219,8 +234,8 @@
             <button type="button" value="6" class="badge badge-pill badge-primary column-toggle">@lang('lang.updated_at')</button>
             <button type="button" value="7" class="badge badge-pill badge-primary column-toggle">@lang('lang.created_at')</button>
             <button type="button" value="8" class="badge badge-pill badge-primary column-toggle">@lang('lang.completed_at')</button>
-            <button type="button" value="9" class="badge badge-pill badge-primary column-toggle">@lang('lang.created_by')</button>
-            <button type="button" value="10" class="badge badge-pill badge-primary column-toggle">@lang('lang.canceled_by')</button>
+            <button type="button" value="9" class="badge badge-pill badge-primary column-toggle badge-warning">@lang('lang.created_by')</button>
+            <button type="button" value="10" class="badge badge-pill badge-primary column-toggle badge-warning">@lang('lang.canceled_by')</button>
             <button type="button" value="11" class="badge badge-pill badge-primary column-toggle">@lang('lang.action')</button>
 
         </div>
@@ -246,23 +261,7 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-                <tr>
 
-
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th style="text-align: right">@lang('lang.total')</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
         </table>
     </div>
 @endsection
@@ -276,7 +275,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],
@@ -319,6 +322,14 @@
                     orderable: false,
                     searchable: false,
                 },
+                {
+                    target: 9,
+                    visible: false,
+                },
+                {
+                    target: 10,
+                    visible: false
+                }
             ],
             columns: [
                 { data: "invoice_no", name: "transactions.invoice_no" },

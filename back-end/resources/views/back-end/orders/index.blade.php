@@ -68,6 +68,7 @@
     td{
         text-align: center;
     }
+
 </style>
 @endsection
 @section('sli_li')
@@ -82,10 +83,15 @@
         @endphp
     <div class="card mt-3 pt-2 pb-1">
         <div class="col-md-12">
+            <h3  class="title-page-item">
+                @if(!isset($status))  @lang('lang.view_all_orders')@else @lang('lang.view_all_orders_'.$status) @endif
+
+            </h3>
             <div class="row">
+
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('category_id',  __('lang.category') , []) !!}
+                        {!! Form::label('category_id',  __('lang.category') ,  ['class'=>'sp-label new-des']) !!}
                         {!! Form::select('category_id', $categories, request()->category_id, [
 'class' => 'form-control filter_product
                     selectpicker',
@@ -96,7 +102,7 @@
                 </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('city_id', __('lang.city') . ':', []) !!}
+                            {!! Form::label('city_id', __('lang.city') . ':',  ['class'=>'sp-label new-des']) !!}
                             {!! Form::select('city_id', $cities, request()->city_id, [
 'class' => 'form-control filter_product
                     selectpicker',
@@ -107,7 +113,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('area_id', __('lang.area') . ':', []) !!}
+                            {!! Form::label('area_id', __('lang.area') . ':',  ['class'=>'sp-label new-des']) !!}
                             {!! Form::select('area_id', $areas, request()->area_id, [
 'class' => 'form-control filter_product
                     selectpicker',
@@ -118,7 +124,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('user_id', __('lang.client') . ':', []) !!}
+                            {!! Form::label('user_id', __('lang.client') . ':',  ['class'=>'sp-label new-des']) !!}
                             {!! Form::select('user_id', $users, request()->user_id, [
 'class' => 'form-control
                     filter_product
@@ -131,7 +137,7 @@
 
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('provider_id', __('lang.provider') . ':', []) !!}
+                        {!! Form::label('provider_id', __('lang.provider') . ':',  ['class'=>'sp-label new-des']) !!}
                         {!! Form::select('provider_id', $providers, request()->provider_id, [
 'class' => 'form-control
                     filter_product
@@ -143,7 +149,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('payment_method', __('lang.payment_method') . ':', []) !!}
+                        {!! Form::label('payment_method', __('lang.payment_method') . ':',  ['class'=>'sp-label new-des']) !!}
                         {!! Form::select('payment_method', ['Online'=>__('lang.Online'),'Cash'=>__('lang.Cash'),'Wallet'=>__('lang.Wallet')], request()->payment_method, [
 'class' => 'form-control
                     filter_product
@@ -156,49 +162,49 @@
                 <div class="col-md-6"></div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('start_date', __('lang.generation_start_date'), []) !!}
+                        {!! Form::label('start_date', __('lang.generation_start_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('start_date', request()->start_date, ['class' => 'form-control filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('start_time', __('lang.generation_start_time'), []) !!}
+                        {!! Form::label('start_time', __('lang.generation_start_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('end_date', __('lang.generation_end_date'), []) !!}
+                        {!! Form::label('end_date', __('lang.generation_end_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('end_date', request()->end_date, ['class' => 'form-control filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('end_time', __('lang.generation_end_time'), []) !!}
+                        {!! Form::label('end_time', __('lang.generation_end_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_start_date', __('lang.complete_start_date'), []) !!}
+                        {!! Form::label('complete_start_date', __('lang.complete_start_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_start_date', request()->complete_start_date, ['class' => 'form-control datepicker filter_product', 'id' => 'complete_start_date']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_start_time', __('lang.complete_start_time'), []) !!}
+                        {!! Form::label('complete_start_time', __('lang.complete_start_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_start_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_end_date', __('lang.complete_end_date'), []) !!}
+                        {!! Form::label('complete_end_date', __('lang.complete_end_date'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_end_date', request()->complete_end_date, ['class' => 'form-control filter_product', 'id' => 'complete_end_date']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        {!! Form::label('complete_end_time', __('lang.complete_end_time'), []) !!}
+                        {!! Form::label('complete_end_time', __('lang.complete_end_time'),  ['class'=>'sp-label new-des']) !!}
                         {!! Form::text('complete_end_time', null, ['class' => 'form-control time_picker filter_product']) !!}
                     </div>
                 </div>
@@ -213,53 +219,33 @@
         </div>
     </div>
     <div class="row m-3 mb-0">
-        <div class="col-md-12">
+        <div class="col-md-12" style="
+    justify-content: center;
+    display: flex;
+">
             <button type="button" value="0"
-                    class="badge badge-pill badge-primary column-toggle">@lang('lang.invoice_no')</button>
+                    class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.number_bill')</button>
+            <button type="button" value="1"
+                    class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.invoice_no')</button>
 
-            <button type="button" value="1" class="badge badge-pill badge-primary column-toggle">@lang('lang.service_title')</button>
-            <button type="button" value="2" class="badge badge-pill badge-primary column-toggle">@lang('lang.client_name')</button>
-            <button type="button" value="3" class="badge badge-pill badge-primary column-toggle">@lang('lang.client_phone')</button>
-            <button type="button" value="4" class="badge badge-pill badge-primary column-toggle">@lang('lang.provider_name')</button>
-            <button type="button" value="5" class="badge badge-pill badge-primary column-toggle">@lang('lang.provider_phone')</button>
-            <button type="button" value="6" class="badge badge-pill badge-primary column-toggle">@lang('lang.suggested_price')</button>
-            <button type="button" value="7" class="badge badge-pill badge-primary column-toggle">@lang('lang.grand_total')</button>
-            <button type="button" value="8" class="badge badge-pill badge-primary column-toggle">@lang('lang.discount_amount')</button>
-            <button type="button" value="9" class="badge badge-pill badge-primary column-toggle">@lang('lang.final_total')</button>
-            <button type="button" value="10" class="badge badge-pill badge-primary column-toggle">@lang('lang.payment_method')</button>
-            <button type="button" value="11" class="badge badge-pill badge-primary column-toggle">@lang('lang.status')</button>
-            <button type="button" value="12" class="badge badge-pill badge-primary column-toggle">@lang('lang.image')</button>
-            <button type="button" value="13" class="badge badge-pill badge-primary column-toggle">@lang('lang.address')</button>
-            <button type="button" value="14" class="badge badge-pill badge-primary column-toggle">@lang('lang.cancel_reason')</button>
-            <button type="button" value="15" class="badge badge-pill badge-primary column-toggle">@lang('lang.canceled_by')</button>
-            <button type="button" value="16" class="badge badge-pill badge-primary column-toggle">@lang('lang.updated_at')</button>
-            <button type="button" value="17" class="badge badge-pill badge-primary column-toggle">@lang('lang.created_at')</button>
-            <button type="button" value="18" class="badge badge-pill badge-primary column-toggle">@lang('lang.action')</button>
+            <button type="button" value="2" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.client_name')</button>
+            <button type="button" value="3" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.provider_name')</button>
+            <button type="button" value="4" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.payment_method')</button>
+            <button type="button" value="5" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.status')</button>
+            <button type="button" value="6" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.created_at')</button>
+            <button type="button" value="7" class="badge badge-pill badge-primary column-toggle m-1">@lang('lang.action')</button>
         </div>
     </div>
     <div class="table-responsive">
         <table id="order_table" class="table  table-striped">
             <thead>
                 <tr>
+                    <th>@lang('lang.number_bill')</th>
                     <th>@lang('lang.invoice_no')</th>
-
-                    <th>@lang('lang.service_title')</th>
-
                     <th >@lang('lang.client_name')</th>
-                    <th >@lang('lang.client_phone')</th>
                     <th >@lang('lang.provider_name')</th>
-                    <th >@lang('lang.provider_phone')</th>
-                    <th class="sum">@lang('lang.suggested_price')</th>
-                    <th class="sum">@lang('lang.grand_total')</th>
-                    <th class="sum">@lang('lang.discount_amount')</th>
-                    <th class="sum">@lang('lang.final_total')</th>
                     <th >@lang('lang.payment_method')</th>
                     <th>@lang('lang.status')</th>
-                    <th >@lang('lang.image')</th>
-                    <th >@lang('lang.address')</th>
-                    <th>@lang('lang.cancel_reason')</th>
-                    <th>@lang('lang.canceled_by')</th>
-                    <th>@lang('lang.updated_at')</th>
                     <th>@lang('lang.created_at')</th>
                     <th class="notexport">@lang('lang.action')</th>
                 </tr>
@@ -267,24 +253,7 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <th style="text-align: right">@lang('lang.total')</th>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
+
         </table>
     </div>
 @endsection
@@ -298,7 +267,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],
@@ -345,23 +318,12 @@
                 },
             ],
             columns: [
+                { data: "id", name: "id" },
                 { data: "invoice_no", name: "transactions.invoice_no" },
-                { data: "service_title", name: "service_title" },
                 { data: "client_name", name: "users.name" },
-                { data: "client_phone", name: "users.phone" },
                 { data: "provider_name", name: "providers.name" },
-                { data: "provider_phone", name: "providers.phone" },
-                { data: "suggested_price", name: "transactions.suggested_price" },
-                { data: "grand_total", name: "transactions.grand_total" },
-                { data: "discount_amount", name: "transactions.discount_amount" },
-                { data: "final_total", name: "transactions.final_total" },
                 { data: "payment_method", name: "payment_method" },
                 { data: "status", name: "status" },
-                { data: "image", name: "image" },
-                { data: "address", name: "address" },
-                { data: "canceled_by", name: "canceled_by" },
-                { data: "cancel_reason", name: "cancel_reason" },
-                { data: "updated_at", name: "updated_at" },
                 { data: "created_at", name: "created_at" },
                 { data: "action", name: "action" },
             ],

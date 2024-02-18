@@ -91,30 +91,21 @@ class AdminController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = '<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
+                        $html = '';
 
                         if (auth()->user()->can('admin_module.admins.edit')) {
-                            $html .= '<li>
-                                <a href="' . route('admin.admins.edit', $row->id) . '"
-                                    class="btn edit_employee"><i
-                                        class="fa fa-pencil-square-o"></i>
-                                    ' . __('lang.edit') . '</a>
-                            </li>';
-                            $html .= '<li class="divider"></li>';
+                            $html .= '<a href="' . route('admin.admins.edit', $row->id) . '"
+                                     class="btn edit_employee a-image" title="' . __('lang.edit') . '">
+                                            <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
+
+                                    </a>';
                         }
                         if (auth()->user()->can('admin_module.admins.delete')) {
-                            $html .= '<li>
-                                <a data-href="' . route('admin.admins.delete', $row->id) . '"
+                            $html .= '<a data-href="' . route('admin.admins.delete', $row->id) . '"
                                     data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
-                                    class="btn delete_item text-red"><i
-                                        class="fa fa-trash"></i>
-                                    ' . __('lang.delete') . '</a>
-                            </li>';
+                                    class="btn delete_item text-red" title="' . __('lang.delete') . '"><i
+                                        class="dripicons-trash"></i>
+                                    </a>';
                         }
                         /* $html .= '<li class="divider"></li>';
                             if (auth()->user()->can('sms_module.sms.create_and_edit')) {
@@ -135,7 +126,6 @@ class AdminController extends Controller
                                </li>';
                            }*/
 
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

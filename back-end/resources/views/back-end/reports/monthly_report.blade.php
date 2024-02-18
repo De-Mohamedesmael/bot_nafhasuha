@@ -11,11 +11,13 @@
         </style>
     @endif
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.reports')}} / </span>  @lang('lang.monthly_report')@endsection
 @section('content')
 <div class="col-md-12  no-print">
     <div class="card">
         <div class="card-header d-flex align-items-center">
-            <h4>@lang('lang.monthly_report')</h4>
+            <div class="print-title">@lang('lang.monthly_report')</div>
         </div>
 
         <form action="">
@@ -24,14 +26,14 @@
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('city_id', __('lang.city'), []) !!}
+                            {!! Form::label('city_id', __('lang.city'), [ 'class'=>"sp-label new-des"]) !!}
                             {!! Form::select('city_id', $cities, request()->city_id, ['class' =>
                             'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('area_id', __('lang.area'), []) !!}
+                            {!! Form::label('area_id', __('lang.area'), [ 'class'=>"sp-label new-des"]) !!}
                             {!! Form::select('area_id', [], false, ['class' =>
                             'form-control selectpicker', 'id' =>
                             'area_id', 'data-live-search' => 'true', 'placeholder' =>
@@ -40,7 +42,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            {!! Form::label('payment_type', __('lang.payment_type'), []) !!}
+                            {!! Form::label('payment_type', __('lang.payment_type'), [ 'class'=>"sp-label new-des"]) !!}
                             {!! Form::select('payment_type', $payment_types, request()->payment_type,
                             ['class' =>
                             'form-control', 'placeholder' => __('lang.all'),'data-live-search'=>"true"]) !!}
@@ -49,7 +51,6 @@
 
 
                     <div class="col-md-3">
-                        <br>
                         <button type="submit" class="btn btn-success mt-2">@lang('lang.filter')</button>
                         <a href="{{route('admin.reports.getMonthlyReport')}}"
                             class="btn btn-danger mt-2 ml-2">@lang('lang.clear_filter')</a>

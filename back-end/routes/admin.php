@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::get('create', [OrderController::class,'create'])->name('create');
         Route::post('create', [OrderController::class,'store'])->name('store');
         Route::get('edit/{id}',[OrderController::class, 'edit'])->name('edit');
+        Route::get('show/{order_id}',[OrderController::class, 'show'])->name('show');
         Route::put('update/{id}', [OrderController::class,'update'])->name('update');
         Route::delete('delete/{id}', [OrderController::class,'destroy'])->name('delete');
         Route::get('send-offer/{order_id}', [OrderController::class,'getSendOffer'])->name('get-send-offer');

@@ -12,9 +12,9 @@
     .check {
         position: relative;
         display: block;
-        width: 70px;
-        height: 30px;
-        background-color: #f46a6a;
+        width: 55px;
+        height: 24px;
+        background-color: #7a0d0d;
         cursor: pointer;
         border-radius: 20px;
         overflow: hidden;
@@ -22,7 +22,7 @@
     }
 
     input:checked[type="checkbox"] ~ .check {
-        background-color: #34c38f;
+        background-color: #013e6b;
         /*   box-shadow: 0 0 0 1200px #092c3e; */
     }
 
@@ -32,8 +32,8 @@
         top: 3px;
         left: 4px;
         background-color: #eff2f7;
-        width: 25px;
-        height: 25px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
         transition: all 0.5s;
     }
@@ -48,8 +48,8 @@
         top: 3px;
         right: 4px;
         background-color: #eff2f7;
-        width: 25px;
-        height: 25px;
+        width: 18px;
+        height: 18px;
         border-radius: 50%;
         transform: translateX(50px);
         transition: all 0.5s;
@@ -64,27 +64,40 @@
     }
 </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.providers')}} / </span>    @lang('lang.all_providers')
+@endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_providers')</h3>
-        </div>
-        <a style="color: white" href="{{ route('admin.provider.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.provider')</a>
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_providers')
 
+            </div>
+
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.provider.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.create') @lang('lang.provider')
+                </a>
+            </div>
+
+        </div>
     </div>
     <div class="table-responsive">
         <table id="provider_table" class="table">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>@lang('lang.name')</th>
                     <th>@lang('lang.photo')</th>
                     <th class="sum">@lang('lang.balance')</th>
                     <th>@lang('lang.mobile_number')</th>
                     <th>@lang('lang.email')</th>
-                    <th>@lang('lang.totalRate')</th>
-                    <th>@lang('lang.status')</th>
+{{--                    <th>@lang('lang.totalRate')</th>--}}
+                    <th>@lang('lang.status_')</th>
                     <th>@lang('lang.city')</th>
                     <th>@lang('lang.joining_date')</th>
                     <th class="notexport">@lang('lang.action')</th>
@@ -97,13 +110,15 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <th style="text-align: right">@lang('lang.total')</th>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+{{--                    <td></td>--}}
                 </tr>
             </tfoot>
         </table>
@@ -118,7 +133,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],
@@ -152,12 +171,12 @@
                 },
             ],
             columns: [
+                { data: "id", name: "id" },
                 { data: "name", name: "name" },
                 { data: "image", name: "image" },
                 { data: "balance", name: "balance" },
                 { data: "phone", name: "phone" },
                 { data: "email", name: "email" },
-                { data: "totalRate", name: "totalRate" },
                 { data: "status", name: "status" },
                 { data: "city", name: "city" },
                 { data: "created_at", name: "created_at" },

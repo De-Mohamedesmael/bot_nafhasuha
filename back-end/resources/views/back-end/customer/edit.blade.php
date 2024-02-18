@@ -1,5 +1,25 @@
 @extends('back-end.layouts.app')
-@section('title', __('lang.customer'))
+@section('title')
+    @lang('lang.customer')  @lang('lang.edit_customer')
+@endsection
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.customer.index")}}"> {{__('lang.customers')}} </a> / </span>
+    @lang('lang.edit_customer')
+@endsection
 @section('content')
 <section class="forms">
     <div class="container-fluid">
@@ -7,7 +27,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_customer')</h4>
+                        <div class="print-title">@lang('lang.edit_customer')</div>
+
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -21,7 +42,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('name', __( 'lang.name' ) . ':') !!}
+                                    {!! Form::label('name', __( 'lang.name' ) . ':',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::text('name', $customer->name, ['class' => 'form-control', 'placeholder' =>
                                     __(
                                     'lang.name' )]);
@@ -31,13 +52,13 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('phone', __('lang.mobile_number') . ':*') !!}
+                                    {!! Form::label('phone', __('lang.mobile_number') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::text('phone', $customer->phone, ['class' => 'form-control', 'placeholder' => __('lang.mobile_number'), 'required']) !!}
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('email', __( 'lang.email' ) . ':') !!}
+                                    {!! Form::label('email', __( 'lang.email' ) . ':',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::email('email', $customer->email, ['class' => 'form-control', 'placeholder'
                                     => __(
                                     'lang.email' ) ]);
@@ -46,7 +67,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('city_id', __('lang.city') . ':*') !!}
+                                    {!! Form::label('city_id', __('lang.city') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('city_id', $cities, $customer->city_id, [
                             'class' => 'selectpicker
                                     form-control',
@@ -58,7 +79,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('area_id', __('lang.area') . ':*') !!}
+                                    {!! Form::label('area_id', __('lang.area') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('area_id', $areas, $customer->area_id, [
                             'class' => 'selectpicker
                                     form-control',
@@ -70,26 +91,28 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    {!! Form::label('address', __( 'lang.address' ) . ':') !!}
+                                    {!! Form::label('address', __( 'lang.address' ) . ':',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::textarea('address', $customer->address, ['class' => 'form-control', 'rows'
-                                    => 3, 'placeholder' => __(
+                                    => 1, 'placeholder' => __(
                                     'lang.address' ) ]);
                                     !!}
                                 </div>
                             </div>
-                            <div class="row mt-4">
 
-                                <div class="col-sm-6">
-                                    <label for="password">@lang('lang.password')</label>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="sp-label new-des"  for="password">@lang('lang.password')</label>
                                     <input type="password" class="form-control" name="password" id="password"
                                             placeholder="Create New Password">
                                 </div>
-                                <div class="col-sm-6">
-                                    <label for="pass">@lang('lang.confirm_password')</label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="sp-label new-des" for="pass">@lang('lang.confirm_password')</label>
                                     <input type="password" class="form-control" id="password_confirmation"
                                           value="{{null}}" name="password_confirmation" placeholder="Conform Password" autocomplete="false">
                                 </div>
-
                             </div>
 
                             <div class="col-md-4 " style="margin-top: 10px;">
@@ -145,7 +168,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group justify-cont">
                                     <input type="submit" value="{{trans('lang.save')}}" id="submit-btn"
                                         class="btn btn-primary">
                                 </div>

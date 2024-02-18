@@ -210,29 +210,17 @@ class TransactionController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
-
-                        $html .= '<li class="divider"></li>';
+                        $html = '';
                         if($row->status == 'pending'  ){
 
 
                             //                        if (auth()->user()->can('customer_module.customer.accept_transaction')){
-                            $html .='<li >
-                                                        <a href = "'. route('admin.transaction.accept',  ['id'=>$row->id]).'"><i
-                                                                class="fa fa-money btn" ></i > '. __('lang.accept_transaction').' </a >
-                                                    </li >';
+                            $html .='<a href = "'. route('admin.transaction.accept',  ['id'=>$row->id]).'" title="'. __('lang.accept_transaction').'">
+                                                <img class="icon-action" src="'.asset('assets/back-end/images/design/icon-accept-transaction.svg').'">
+                                     </a >';
 
                             //                        }
                         }
-
-
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

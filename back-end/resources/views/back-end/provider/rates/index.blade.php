@@ -1,5 +1,5 @@
 @extends('back-end.layouts.app')
-@section('title', __('lang.rate_list'))
+@section('title', __('lang.providers') || $provider->name || __('lang.rate_list') )
 @section('styles')
 <style>
     input[type="checkbox"] {
@@ -64,12 +64,10 @@
     }
 </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.provider.index")}}"> {{__('lang.providers')}} </a> / &nbsp; {{$provider->name}} &nbsp;/</span>  @lang('lang.rate_list')
+@endsection
 @section('content')
-    <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.rate_list')</h3>
-        </div>
-    </div>
     <div class="table-responsive">
         <table id="provider_table" class="table">
             <thead>
@@ -85,15 +83,6 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
         </table>
     </div>
 @endsection
@@ -106,7 +95,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

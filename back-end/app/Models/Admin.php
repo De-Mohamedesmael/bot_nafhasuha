@@ -133,7 +133,7 @@ class Admin extends Authenticatable implements  HasMedia
                 'daily_report' => __('lang.daily_report'),
                 'monthly_report' => __('lang.monthly_report'),
                 'yearly_report' => __('lang.yearly_report'),
-                'best_report' => __('lang.best_report'),
+//                'best_report' => __('lang.best_report'),
 
             ],
 
@@ -153,7 +153,7 @@ class Admin extends Authenticatable implements  HasMedia
             'daily_report' ,
             'monthly_report' ,
             'yearly_report' ,
-            'best_report' ,
+//            'best_report' ,
 
         ];
     }

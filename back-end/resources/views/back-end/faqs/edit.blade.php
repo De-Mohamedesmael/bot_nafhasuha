@@ -1,5 +1,22 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.edit_faq'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.faqs.index")}}"> {{__('lang.faqs')}} </a> / </span>  @lang('lang.edit_faq')
+@endsection
 @section('content')
 <section class="forms">
     <div class="container-fluid">
@@ -7,7 +24,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_faq')</h4>
+                        <div class="print-title">@lang('lang.edit_faq')</div>
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -19,7 +36,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('category_faq_id', __('lang.category_faq') . ':*') !!}
+                                    {!! Form::label('category_faq_id', __('lang.category_faq') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     {!! Form::select('category_faq_id', $category_faqs, $faq->category_faq_id, [
                             'class' => 'selectpicker
                                     form-control',
@@ -30,7 +47,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    {!! Form::label('title', __('lang.title') . ':*') !!}
+                                    {!! Form::label('title', __('lang.title') . ':*',[ 'class'=>"sp-label new-des"]) !!}
                                     <div class="input-group my-group">
                                         {!! Form::text('title', $faq->title , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
                                         <span class="input-group-btn">
@@ -49,7 +66,7 @@
 
                             <div  class="col-md-6">
                                 <div class="form-group pt-2">
-                                    <label class="input-label"
+                                    <label class="input-label sp-label new-des"  style="top: 4px !important;"
                                            for="ar_description">{{\App\CPU\translate('description')}}
                                         (ar)</label>
                                     <textarea name="translations[ar][description]" class="editor textarea" cols="30"
@@ -58,7 +75,7 @@
                             </div>
                             <div  class="col-md-6">
                                 <div class="form-group pt-2">
-                                    <label class="input-label"
+                                    <label  class="input-label sp-label new-des"  style="top: 4px !important;"
                                            for="ar_description">{{\App\CPU\translate('description')}}
                                         (en)</label>
                                     <textarea name="translations[en][description]" class="editor textarea" cols="30"
@@ -74,7 +91,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group justify-cont">
                                     <input type="submit" value="{{trans('lang.save')}}" id="submit-btn"
                                         class="btn btn-primary">
                                 </div>
