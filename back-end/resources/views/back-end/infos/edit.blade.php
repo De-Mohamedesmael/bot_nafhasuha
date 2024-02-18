@@ -3,8 +3,22 @@
 
 @section('styles')
     <style>
+        div#content {
+            padding-top: 0;
+        }
 
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
+        .sp-label.new-des {
+            background: linear-gradient( to top, #fefefe00 0%, #fdfdff 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+            top: -11px !important;
+        }
     </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  {{__('lang.infos')}}  / </span>  @lang('lang.edit') - {{$info->title}}
 @endsection
 @section('content')
     @php
@@ -17,7 +31,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_info')</h4>
+                        <div class="print-title">
+                            @lang('lang.edit') {{$info->title}}
+                        </div>
+
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -45,40 +62,54 @@
                                     @php( $info_t=  $info->translateOrDefault($localeCode))
                                     <div class="tab-pane @if($localeCode == 'ar') active @endif" id="tab-{{$localeCode}}" role="tabpanel">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <label for="title">{{ \App\CPU\translate('name')}} ({{strtoupper($localeCode)}})</label>
-                                                <input type="text" name="{{$localeCode}}[title]" class="form-control" id="title" value="{{old('title',$info_t?$info_t["title"]:null)}}" placeholder="{{\App\CPU\translate('Ex')}} : {{\App\CPU\translate('LUX')}}" {{$localeCode == $default_lang? 'required':''}}>
+                                            <div class="col-md-7"  style="justify-content: center;">
 
-                                                <div class="form-group pt-2">
-                                                    <label class="input-label"
-                                                           for="{{$localeCode}}_description">{{\App\CPU\translate('description')}}
-                                                        ({{strtoupper($localeCode)}})</label>
-                                                    <textarea name="{{$localeCode}}[description]" class="editor textarea" cols="30"
-                                                              rows="10" >{!!old('description',$info_t?$info_t["description"]:null) !!}</textarea>
+                                               <div class="col-md-12">
+                                                    <div class="form-group ">
+                                                        <label class="sp-label new-des" for="title">{{ \App\CPU\translate('name')}} ({{strtoupper($localeCode)}})</label>
+                                                        <input type="text" name="{{$localeCode}}[title]" class="form-control" id="title" value="{{old('title',$info_t?$info_t["title"]:null)}}" placeholder="{{\App\CPU\translate('Ex')}} : {{\App\CPU\translate('LUX')}}" {{$localeCode == $default_lang? 'required':''}}>
+                                                    </div>
                                                 </div>
-                                                <label for="video">{{ \App\CPU\translate('video') . ' - embed'}} ({{strtoupper($localeCode)}})</label>
-                                                <input type="text" name="{{$localeCode}}[video]" class="form-control" id="video" value="{{old('video',$info_t?$info_t["video"]:null)}}" placeholder="https://www.youtube.com/embed/id-video" >
+                                                <div class="col-md-12">
+                                                    <div class="form-group pt-2">
+                                                        <label class="input-label sp-label new-des" style="top: -5px !important;"
+                                                               for="{{$localeCode}}_description">{{\App\CPU\translate('description')}}
+                                                            ({{strtoupper($localeCode)}})</label>
+                                                        <textarea name="{{$localeCode}}[description]" class="editor textarea" cols="30"
+                                                                  rows="10" >{!!old('description',$info_t?$info_t["description"]:null) !!}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class=" d-flex">
+                                                    <div class="form-group  col-md-6" >
+                                                        <label class="sp-label new-des" for="video">{{ \App\CPU\translate('video') . ' - embed'}} ({{strtoupper($localeCode)}})</label>
 
-                                                @if($localeCode == $default_lang)
-                                                    <label for="sort">{{ \App\CPU\translate('sort')}} </label>
-                                                    <input type="number" name="sort" class="form-control" id="sort" value="{{old('sort',$info->sort)}}"  >
+                                                        <input type="text" name="{{$localeCode}}[video]" class="form-control" id="video" value="{{old('video',$info_t?$info_t["video"]:null)}}" placeholder="https://www.youtube.com/embed/id-video" >
+                                                    </div>
+                                                    <div class="form-group  col-md-6" >
+                                                        @if($localeCode == $default_lang)
+                                                            <label class="sp-label new-des" for="sort">{{ \App\CPU\translate('sort')}} </label>
+                                                            <input type="number" name="sort" class="form-control" id="sort" value="{{old('sort',$info->sort)}}"  >
 
-                                                @endif
+                                                        @endif
+                                                    </div>
+                                                </div>
+
+
                                             </div>
-                                            <div class="col-md-6 row m-0 p-0">
-                                                <div class="card-header col-md-12">
-                                                    <h4>{{\App\CPU\translate('seo_section')}}</h4>
+                                            <div class="col-md-5 row m-0 p-0" style="justify-content: center;">
+                                                <div class="card-header col-md-12" >
+                                                    <h4 class="text-center">{{\App\CPU\translate('seo_section')}}</h4>
                                                 </div>
-                                                <div class="form-group col-md-6">
-                                                    <label class="input-label"
+                                                <div class="form-group col-md-12">
+                                                    <label class="sp-label new-des input-label"
                                                            for="{{$localeCode}}_meta_keywords">{{\App\CPU\translate('meta_keywords')}}
                                                         ({{strtoupper($localeCode)}})</label>
                                                     <textarea class="w-100" name="{{$localeCode}}[meta_keywords]"
 
                                                               rows="5" {{$localeCode == $default_lang? 'required':''}}>{{old('meta_keywords',$info_t?$info_t["meta_keywords"]:null)}}</textarea>
                                                 </div>
-                                                <div class="form-group  col-md-6" >
-                                                    <label class="input-label"
+                                                <div class="form-group  col-md-12" >
+                                                    <label class="sp-label new-des input-label"
                                                            for="{{$localeCode}}_meta_description">{{\App\CPU\translate('meta_description')}}
                                                         ({{strtoupper($localeCode)}})</label>
                                                     <textarea class="w-100" name="{{$localeCode}}[meta_description]"
@@ -87,7 +118,7 @@
                                                 </div>
                                                 @php( $img=  $info->translateOrDefault($localeCode)? asset('assets/images/'.$info->translateOrDefault($localeCode) ->img) : null)
                                                 <div class="col-md-6 mt-2 mb-3">
-                                                    <label for="image">{{\App\CPU\translate('image')}}<span class="text-danger">*</span></label>
+                                                    <label class="sp-label new-des" for="image">{{\App\CPU\translate('image')}}<span class="text-danger">*</span></label>
                                                     <input type="file" class="form-control" id="image" name="{{$localeCode}}[img]">
                                                     @error('image')
                                                     <span class="text-danger">{{ $message }}</span>

@@ -1,17 +1,39 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.create') .' '.__('lang.Withdrawal'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
 
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.transaction.index")}}"> {{__('lang.transactions')}} </a> / </span> @lang('lang.create') @lang('lang.Withdrawal')
+@endsection
 @section('content')
-    <section class="forms">
+    <section class="forms pt-0">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.create') @lang('lang.Withdrawal')</h4>
+                            <div class="print-title">@lang('lang.create') @lang('lang.Withdrawal')</div>
                         </div>
                         <div class="card-body">
-                            <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
+                            <p class="italic">
+                                <small>@lang('lang.required_fields_info')</small>
+                            <span class="well">
+                                <strong>@lang('lang.wallet_balance'): </strong><span class=""
+                                                                                     data-currency_symbol="true" id="get_wallet">{{ @num_format(0) }}</span><br>
+                            </span>
+                            </p>
                             {!! Form::open(['url' => route('admin.transaction.store'), 'id' => 'transaction-form', 'method' => 'POST', 'class' => '', 'enctype' => 'multipart/form-data']) !!}
 
                             @include('back-end.transactions.partial.create_form')
@@ -19,7 +41,7 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <div class="form-group justify-cont">
                                         <input type="submit" value="{{ trans('lang.save') }}" id="submit-btn"
                                             class="btn btn-primary">
                                     </div>

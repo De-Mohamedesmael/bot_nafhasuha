@@ -12,9 +12,9 @@
         .check {
             position: relative;
             display: block;
-            width: 70px;
-            height: 30px;
-            background-color: #f46a6a;
+            width: 55px;
+            height: 24px;
+            background-color: #7a0d0d;
             cursor: pointer;
             border-radius: 20px;
             overflow: hidden;
@@ -22,7 +22,7 @@
         }
 
         input:checked[type="checkbox"] ~ .check {
-            background-color: #34c38f;
+            background-color: #013e6b;
             /*   box-shadow: 0 0 0 1200px #092c3e; */
         }
 
@@ -32,8 +32,8 @@
             top: 3px;
             left: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transition: all 0.5s;
         }
@@ -48,8 +48,8 @@
             top: 3px;
             right: 4px;
             background-color: #eff2f7;
-            width: 25px;
-            height: 25px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             transform: translateX(50px);
             transition: all 0.5s;
@@ -64,18 +64,31 @@
         }
     </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.category_faqs')}} / </span>    @lang('lang.all_category_faqs')
+@endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_category_faqs')</h3>
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_category_faqs')
+
+            </div>
+            <div  class="dev-create">
+                @can('info_module.category_faqs.create')
+                    <a  href="{{ route('admin.category_faqs.create') }}" class="btn btn-create"><i
+                            class="dripicons-plus"></i>
+                        @lang('lang.add_category_faq')
+                    </a>
+                @endcan
+            </div>
+
         </div>
-        @can('info_module.category_faqs.create')
-            <a style="color: white" href="{{ route('admin.category_faqs.create') }}" class="btn btn-info"><i
-                    class="dripicons-plus"></i>
-                @lang('lang.add_category_faq')</a>
-        @endcan
+
+
 
     </div>
+
     <div class="table-responsive">
         <table id="category_faq_table" class="table">
             <thead>
@@ -89,14 +102,6 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tfoot>
         </table>
     </div>
 @endsection
@@ -109,7 +114,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

@@ -2,11 +2,20 @@
 @section('title', __('lang.add_faq'))
 @section('styles')
     <style>
-        label#body-error , label#title-error {
-            position: absolute;
-            left: 10px;
+        div#content {
+            padding-top: 0;
         }
+        .sp-label.new-des {
+            top: -1px !important;
+        }
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+
     </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.faqs.index")}}"> {{__('lang.faqs')}} </a> / </span>  @lang('lang.add_faq')
 @endsection
 @section('content')
     <section class="forms">
@@ -15,7 +24,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h4>@lang('lang.add_faq')</h4>
+                            <div class="print-title">@lang('lang.add_faq')</div>
                         </div>
                         <div class="card-body">
                             <p class="italic"><small>@lang('lang.required_fields_info')</small></p>
@@ -26,7 +35,7 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <div class="form-group  justify-cont">
                                         <input type="submit" value="{{ trans('lang.save') }}" id="submit-btn"
                                             class="btn btn-primary">
                                     </div>

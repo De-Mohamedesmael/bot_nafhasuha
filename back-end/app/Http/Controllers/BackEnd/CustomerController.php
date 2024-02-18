@@ -85,42 +85,36 @@ class CustomerController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
 
-                        $html .= '<li class="divider"></li>';
+                        $html = '';
 //                        if (auth()->user()->can('customer_module.customer.edit')){
-                            $html .='<li >
+                            $html .='
                                                     <a data-href = "'. route('admin.customer.pay',  ['customer_id'=>$row->id]).'"
-                                                        class="btn-modal" data-container = ".view_modal" ><i
-                                                            class="fa fa-money btn" ></i > '. __('lang.pay_customer').' </a >
-                                                </li >';
+                                                        class="btn-modal a-image" data-container = ".view_modal" title=" '. __('lang.pay_customer').'" >
+                                                         <img class="icon-action" src="'.asset('assets/back-end/images/design/icon-accept-transaction.svg').'">
+                                                         </a >
+                                                ';
 
 //                        }
-                        $html .= '<li class="divider"></li>';
 
 //                        if (auth()->user()->can('customer_module.customer.add_balen')){
-                        $html .='<li>
-                                                <a href="'. route('admin.customer.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
+                        $html .='
+                                                <a class="a-image" href="'. route('admin.customer.edit',$row->id) .'" target="_blank" title="'.__('lang.edit').'">
+                                                               <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
+                                                        </a>
+                                            ';
 
 //                        }
-                        $html .= '<li class="divider"></li>';
+                        $html .= '';
 
 //                            if (auth()->user()->can('customer_module.customer.delete')) {
                                 $html .=
-                                    '<li>
+                                    '
                                     <a data-href="' . route('admin.customer.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
+                                        class="btn text-red delete_item" title="' . __('lang.delete') . '"><i class="dripicons-trash"></i>
+                                        </a>
+                                    ';
 //                            }
 
 

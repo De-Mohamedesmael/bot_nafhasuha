@@ -23,15 +23,19 @@
                                    @if(auth()->user()->can('order_module.order.view') ||
                                    auth()->user()->can('order_module.order.create')||
                                    auth()->user()->can('order_module.order.edit')  )
-                <li class="li-item have-children @if(in_array(request()->segment(2), ['orders'])) active @endif" >
-                    <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld"  d-hrf="{{route('admin.order.index')}}">
+
+                <li class="li-item have-children @if(in_array(request()->segment(2), ['orders']) ) active @endif" >
+                    <a href="#orders" aria-expanded="false" data-toggle="collapse"  class="a-itemhavecheld @if(in_array(request()->segment(2), ['orders']) && request()->segment(3) == 'show')  collapsed @endif"  d-hrf="{{route('admin.order.index')}}">
+r
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.orders')}}</span>
 
                     </a>
                     <ul id="orders"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])) show @endif active-children">
+
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['orders'])&& request()->segment(3) != 'show') show @endif active-children">
+
 
                           @can('order_module.order.view')
                         <li
@@ -90,15 +94,19 @@
                                   auth()->user()->can('transactions_module.transactions.view') ||
                                   auth()->user()->can('transactions_module.transactions.edit'))
 
-                <li>
-                    <a href="#transactions" aria-expanded="false" data-toggle="collapse" d-hrf="{{route('admin.transaction.index')}}">
+
+                <li  class="li-item have-children @if(in_array(request()->segment(2), ['transactions']) ) active @endif" >
+                    <a href="#transactions" aria-expanded="false" class="a-itemhavecheld @if(in_array(request()->segment(2), ['transactions']) && request()->segment(3) == 'create')  collapsed @endif" data-toggle="collapse" d-hrf="{{route('admin.transaction.index')}}">
+
                         <i
                             class="dripicons-card"></i>
                         <span>{{__('lang.transactions')}}</span>
 
                     </a>
                     <ul id="transactions"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions'])) show @endif active-children">
+
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transactions']) && request()->segment(3) != 'create') show @endif active-children">
+
 
                           @can('order_module.order.view')
                         <li
@@ -125,15 +133,15 @@
                     @if(auth()->user()->can('customer_module.customer.edit') ||
                     auth()->user()->can('customer_module.customer.view') ||
                     auth()->user()->can('customer_module.customer.create')  )
-                        <li>
-                            <a href="#customer" aria-expanded="false" data-toggle="collapse">
+                        <li  class="li-item have-children @if(in_array(request()->segment(2), ['customer']) ) active @endif" >
+                            <a href="#customer"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.customer.index')}}">
                                 <i
                                     class="dripicons-user-group"></i>
                                 <span>{{__('lang.customers')}}</span>
 
                             </a>
                             <ul id="customer"
-                                class="collapse list-unstyled @if(in_array(request()->segment(2), ['customer', 'customer-type'])) show @endif">
+                                class="collapse list-unstyled @if(in_array(request()->segment(2), ['customer', 'customer-type'])) show @endif  active-children">
 
                                   @can('customer_module.customer.view')
                                     <li
@@ -157,15 +165,15 @@
                    @if(auth()->user()->can('provider_module.provider.edit') ||
                    auth()->user()->can('provider_module.provider.view') ||
                    auth()->user()->can('provider_module.provider.create')  )
-                <li>
-                    <a href="#provider" aria-expanded="false" data-toggle="collapse">
+                        <li  class="li-item have-children @if(in_array(request()->segment(2), ['provider']) ) active @endif" >
+                            <a href="#provider"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.provider.index')}}">
                         <i
                             class="dripicons-user-group"></i>
                         <span>{{__('lang.providers')}}</span>
 
                     </a>
                     <ul id="provider"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['provider', 'provider-type'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['provider', 'provider-type'])) show @endif  active-children">
 
                           @can('provider_module.provider.view')
                         <li
@@ -192,15 +200,16 @@
                     || auth()->user()->can('reports.yearly_report.special')
                     || auth()->user()->can('reports.best_report.special')
                     )
+                        <li  class="li-item have-children @if(in_array(request()->segment(2), ['reports']) ) active @endif" >
+                            <a href="#reports"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.reports.getDailyReport')}}">
 
-                        <li>
-                            <a href="#reports" aria-expanded="false" data-toggle="collapse">
+
                                 <i class="fa fa-file-text"></i>
                                 <span>{{__('lang.reports')}}</span>
 
                             </a>
                             <ul id="reports"
-                                class="collapse list-unstyled @if(in_array(request()->segment(2), ['reports'])) show @endif">
+                                class="collapse list-unstyled @if(in_array(request()->segment(2), ['reports'])) show @endif  active-children">
                                 @can('reports.daily_report.special')
                                     <li
                                         class="@if(request()->segment(2) == 'reports' && request()->segment(3) == 'get-daily-report') active @endif">
@@ -239,15 +248,17 @@
                                    @if(auth()->user()->can('notification_module.notification.edit') ||
                                    auth()->user()->can('notification_module.notification.view') ||
                                    auth()->user()->can('notification_module.notification.create')  )
-                <li>
-                    <a href="#notifications" aria-expanded="false" data-toggle="collapse">
+                        <li  class="li-item have-children @if(in_array(request()->segment(2), ['notifications']) ) active @endif" >
+                            <a href="#notifications"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.notifications.index')}}">
+
+
                         <i
                             class="dripicons-user-group"></i>
                         <span>{{__('lang.notifications')}}</span>
 
                     </a>
                     <ul id="notifications"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['notifications'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['notifications'])) show @endif  active-children">
 
                           @can('notification_module.notification.view')
                         <li
@@ -269,10 +280,13 @@
 
 
                                 @if( !empty($module_settings['system_settings']) )
-                <li><a href="#system_settings" aria-expanded="false" data-toggle="collapse"> <i
-                            class="dripicons-network-4"></i><span>@lang('lang.system_settings')</span></a>
+                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['transporters','cy_periodics','tires','type_batteries','type_gasolines','vehicle_brands','vehicle_models','vehicle_types','vehicle_manufacture_years']) ) active @endif" >
+                        <a href="#system_settings"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.vehicle_types.index')}}">
+                            <i class="dripicons-network-4"></i>
+                            <span>@lang('lang.system_settings')</span>
+                        </a>
                     <ul id="system_settings"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transporters','cy_periodics','tires','type_batteries','type_gasolines','vehicle_brands','vehicle_models','vehicle_types','vehicle_manufacture_years'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['transporters','cy_periodics','tires','type_batteries','type_gasolines','vehicle_brands','vehicle_models','vehicle_types','vehicle_manufacture_years'])) show @endif  active-children">
 
 
                         @can('system_settings.vehicle_types.view')
@@ -393,10 +407,13 @@
                                 @endif
 
                 @if( !empty($module_settings['settings']) )
-                    <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i
-                                class="dripicons-gear"></i><span>@lang('lang.settings')</span></a>
+                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas']) ) active @endif" >
+                        <a href="#setting"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.service.index')}}">
+                            <i class="dripicons-gear"></i>
+                            <span>@lang('lang.settings')</span>
+                        </a>
                         <ul id="setting"
-                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['service','banks','icons', 'category','slider','splash_screen','countries','city','areas'])) show @endif  active-children">
 
 
                                 @can('settings.service.view')
@@ -507,10 +524,13 @@
                     </li>
                 @endif
                 @if( !empty($module_settings['messages']) )
-                <li><a href="#messages" aria-expanded="false" data-toggle="collapse"> <i
-                            class="dripicons-conversation"></i><span>@lang('lang.messages_and_contact_us')</span></a>
+                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['contact_us']) ) active @endif" >
+                        <a href="#messages"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.contact_us.index')}}">
+                            <i class="dripicons-conversation"></i>
+                            <span>@lang('lang.messages_and_contact_us')</span>
+                        </a>
                     <ul id="messages"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['contact_us'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['contact_us'])) show @endif  active-children">
 
 
                         @can('messages.contact_us.view')
@@ -524,15 +544,16 @@
                 </li>
                 @endif
                 @if( !empty($module_settings['info_module']) )
-                    <li>
-                        <a href="#infos" aria-expanded="false" data-toggle="collapse">
+                    <li  class="li-item have-children @if(in_array(request()->segment(2), ['infos','category_faqs','faqs']) ) active @endif" >
+                        <a href="#infos"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.infos.edit','who-are-we')}}">
+
                             <i
                                 class="dripicons-document"></i>
                             <span>{{__('lang.infos')}}</span>
 
                         </a>
                         <ul id="infos"
-                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['infos','category_faqs','faqs'])) show @endif">
+                            class="collapse list-unstyled @if(in_array(request()->segment(2), ['infos','category_faqs','faqs'])) show @endif  active-children">
 
 
                             @can('info_module.infos.special')
@@ -600,15 +621,16 @@
                        @if(auth()->user()->can('admin_module.admins.create') ||
                        auth()->user()->can('admin_module.admins.view') ||
                        auth()->user()->can('admin_module.admins.edit'))
-                            <li>
-                    <a href="#admins" aria-expanded="false" data-toggle="collapse">
+                        <li  class="li-item have-children @if(in_array(request()->segment(2), ['admins']) ) active @endif" >
+                            <a href="#admins"   class="a-itemhavecheld " aria-expanded="false" data-toggle="collapse"  d-hrf="{{route('admin.admins.index')}}">
+
                         <i
                             class="dripicons-user-group"></i>
                         <span>{{__('lang.admins')}}</span>
 
                     </a>
                     <ul id="admins"
-                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['admins'])) show @endif">
+                        class="collapse list-unstyled @if(in_array(request()->segment(2), ['admins'])) show @endif  active-children">
 
                           @can('admin_module.admins.view')
                         <li
@@ -627,6 +649,9 @@
                 </li>
                        @endif
                  @endif
+                <li class="li-item">
+                    &nbsp;
+                </li>
 {{--                <li class="@if(request()->segment(1) == 'tutorials' && empty(request()->segment(2))) active @endif">--}}
 {{--                    <a href="#"><i--}}
 {{--                            class="fa fa-info-circle"></i><span>{{__('lang.tutorials')}}</span></a>--}}

@@ -69,36 +69,28 @@ class FaqController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" faq="menu">';
+                        $html = '';
 
                             if (auth()->user()->can('info_module.faqs.edit')) {
-                        $html .='<li>
-                                                <a href="'. route('admin.faqs.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
+                        $html .='
+                                <a  class=" a-image" href="'. route('admin.faqs.edit',$row->id) .'" target="_blank" title="'.__('lang.edit').'">
+                                    <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
+                                </a>    ';
                             }
 
-                        $html .= '<li class="divider"></li>';
 
                             if (auth()->user()->can('info_module.faqs.delete')) {
                         $html .=
-                            '<li>
+                            '
                                     <a data-href="' . route('admin.faqs.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::id()) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
+                                        class="btn text-red delete_item" title="' . __('lang.delete') . '"><i class="dripicons-trash"></i>
+                                        </a>
+                                    ';
                             }
 
 
 
-                        $html .= '</ul></div>';
                         return $html;
                     }
                 )

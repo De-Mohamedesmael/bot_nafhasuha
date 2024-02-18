@@ -64,16 +64,30 @@
     }
 </style>
 @endsection
+@section('sli_li')
+    <span class="parent"> < {{__('lang.notifications')}} / </span>  @lang('lang.all_notifications')
+@endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center">
-            <h3 class="print-title">@lang('lang.all_notifications')</h3>
+        <div class="card-header d-flex align-items-center" style="justify-content: center">
+            <div class="print-title">
+                @lang('lang.all_notifications')
+            </div>
+
+            <div  class="dev-create">
+
+
+                <a  href="{{ route('admin.notifications.create') }}" class="btn btn-create"><i
+                        class="dripicons-plus"></i>
+                    @lang('lang.add_notification')
+                </a>
+            </div>
         </div>
-        <a style="color: white" href="{{ route('admin.notifications.create') }}" class="btn btn-info"><i
-                class="dripicons-plus"></i>
-            @lang('lang.add_notification')</a>
+
+
 
     </div>
+
     <div class="table-responsive">
         <table id="notification_table" class="table">
             <thead>
@@ -91,15 +105,7 @@
             <tbody>
 
             </tbody>
-            <tfoot>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tfoot>
+
         </table>
     </div>
 @endsection
@@ -112,7 +118,11 @@
             info: false,
             bAutoWidth: false,
             language: {
-                url: dt_lang_url,
+                search: "",
+                entries: "{{\App\CPU\translate('entries')}}",
+                Show: "{{\App\CPU\translate('entries')}}",
+                searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
+
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],

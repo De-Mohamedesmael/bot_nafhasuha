@@ -81,42 +81,33 @@ class ProviderController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
-
-                        $html .= '<li class="divider"></li>';
+                        $html = '';
 
 //                        if (auth()->user()->can('provider_module.provider.add_balen')){
-                        $html .='<li>
-                                                <a href="'. route('admin.provider.edit',$row->id) .'" target="_blank"><i
-                                                        class="dripicons-document-edit btn"></i>'.__('lang.edit').'</a>
-                                            </li>';
+                        $html .='<a class="a-image" href="'. route('admin.provider.edit',$row->id) .'" target="_blank" title="'.__('lang.edit').'">
+                                           <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
+                              </a>
+                                            ';
 
 //                        }
-                        $html .= '<li class="divider"></li>';
 
 //                        if (auth()->user()->can('provider_module.provider.add_balen')){
-                        $html .='<li>
-                                                <a href="'. route('admin.provider.view_rate',$row->id) .'" ><i
-                                                        class="dripicons-star btn"></i>'.__('lang.view_rate_list').'</a>
-                                            </li>';
+                        $html .=' <a href="'. route('admin.provider.view_rate',$row->id) .'" title="'.__('lang.view_rate_list').'"><i
+                                                        class="dripicons-star"></i></a>
+                                            ';
 
 //                        }
-                        $html .= '<li class="divider"></li>';
+                        $html .= '';
 
 //                            if (auth()->user()->can('provider_module.provider.delete')) {
                                 $html .=
-                                    '<li>
+                                    '
                                     <a data-href="' . route('admin.provider.delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
+                                        class="btn text-red delete_item" title="'.__('lang.delete').'"><i class="dripicons-trash"></i>
+
+                                    </a>
+                                    ';
 //                            }
 
 
@@ -549,27 +540,17 @@ class ProviderController extends Controller
                 ->addColumn(
                     'action',
                     function ($row) {
-                        $html = ' <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">' . __('lang.action') . '
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
-
-
-
-                        $html .= '<li class="divider"></li>';
+                        $html = '';
 
 
 //                            if (auth()->user()->can('provider_module.provider.rate.delete')) {
                         $html .=
-                            '<li>
+                            '
                                     <a data-href="' . route('admin.provider.rate_delete', $row->id)  . '"
                                         data-check_password="' . route('admin.checkPassword', Auth::user()->id) . '"
-                                        class="btn text-red delete_item"><i class="dripicons-trash"></i>
-                                        ' . __('lang.delete') . '</a>
-                                    </li>';
+                                        class="btn text-red delete_item" title="' . __('lang.delete') . '"><i class="dripicons-trash"></i>
+                                        </a>
+                                    ';
 //                            }
 
 
@@ -585,8 +566,8 @@ class ProviderController extends Controller
                 ])
                 ->make(true);
         }
-
-        return view('back-end.provider.rates.index',compact('provider_id'));
+        $provider = Provider::find($provider_id);
+        return view('back-end.provider.rates.index',compact('provider_id','provider'));
     }
 
     /**

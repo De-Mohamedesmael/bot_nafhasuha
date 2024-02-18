@@ -1,6 +1,23 @@
 @extends('back-end.layouts.app')
 @section('title', __('lang.employee'))
+@section('styles')
+    <style>
+        div#content {
+            padding-top: 0;
+        }
 
+        .sp-label.new-des.back-e9 {
+            background: linear-gradient( to top, #e9ecef 0%, #e9ecef 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+        }
+        .sp-label.new-des {
+            background: linear-gradient( to top, #fefefe00 0%, #fdfdff 50%, #ffffff00 50%, #ffffff00 100% ) !important;
+            top: -10px !important;
+        }
+    </style>
+@endsection
+@section('sli_li')
+    <span class="parent"> <  <a href="{{route("admin.admins.index")}}"> {{__('lang.employees')}} </a> / </span>  @lang('lang.edit_employee') - {{ $admin->name }}
+@endsection
 @section('content')
     <div class="container-fluid">
 
@@ -8,7 +25,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header d-flex align-items-center">
-                        <h4>@lang('lang.edit_employee')</h4>
+                        <div class="print-title">@lang('lang.edit_employee')</div>
                     </div>
                     <div class="card-body">
                         {!! Form::open(['url' => route('admin.admins.update', $admin->id), 'method' => 'put', 'id' => 'edit_employee_form', 'enctype' => 'multipart/form-data']) !!}
@@ -16,17 +33,17 @@
                         <div class="row">
 
                             <div class="col-sm-4">
-                                <label for="fname">@lang('lang.name'):*</label>
+                                <label class="sp-label new-des" for="fname">@lang('lang.name'):*</label>
                                 <input type="text" class="form-control" name="name" value="{{ $admin->name }}" @if($admin->name == 'Admin') readonly @endif
                                     id="name" required placeholder="Name">
                             </div>
                             <div class="col-sm-4">
-                                <label for="email">@lang('lang.email'):*<small>(@lang('lang.it_will_be_used_for_login'))</small></label>
+                                <label class="sp-label new-des" for="email">@lang('lang.email'):*<small>(@lang('lang.it_will_be_used_for_login'))</small></label>
                                 <input type="email" class="form-control" name="email" value="{{ $admin->email }}"
                                        id="email" required placeholder="Email">
                             </div>
                             <div class="col-sm-4">
-                                <label for="phone">@lang('lang.phone')</label>
+                                <label class="sp-label new-des" for="phone">@lang('lang.phone')</label>
                                 <input type="phone" class="form-control" name="phone" value="{{ $admin->phone }}"
                                     id="email" required placeholder="Phone">
                             </div>
@@ -35,16 +52,16 @@
 
                         <div class="row mt-4">
                             <div class="col-md-4">
-                                <label for="photo">@lang('lang.profile_photo')</label>
+                                <label class="sp-label new-des" for="photo">@lang('lang.profile_photo')</label>
                                 <input type="file" name="photo" id="photo" class="form-control" />
                             </div>
                             <div class="col-sm-4">
-                                <label for="password">@lang('lang.password')</label>
+                                <label class="sp-label new-des" for="password">@lang('lang.password')</label>
                                 <input type="password" class="form-control" name="password" id="password"
                                     placeholder="Create New Password">
                             </div>
                             <div class="col-sm-4">
-                                <label for="pass">@lang('lang.confirm_password')</label>
+                                <label class="sp-label new-des" for="pass">@lang('lang.confirm_password')</label>
                                 <input type="password" class="form-control" id="password_confirmation"
                                     name="password_confirmation" placeholder="Conform Password">
                             </div>
@@ -63,7 +80,9 @@
                         <div class="row mt-4">
 
                             <div class="col-sm-12">
-                                <button type="submit" class="btn btn-primary" id="submit-btn">@lang('lang.update_employee')</button>
+                                <div class="form-group justify-cont">
+                                    <button type="submit" class="btn btn-primary" id="submit-btn">@lang('lang.update_employee')</button>
+                                </div>
                             </div>
 
                         </div>
