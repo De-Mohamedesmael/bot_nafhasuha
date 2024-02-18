@@ -162,13 +162,13 @@
             padding: 0;
         }
         td {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             color: #144d79;
             padding: 15px 0;
         }
         td.title-table {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             color: #25364F;
             padding: 15px 0;

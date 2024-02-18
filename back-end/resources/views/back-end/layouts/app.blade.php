@@ -836,6 +836,8 @@
             }
         }
     </style>
+
+    @yield('styles')
     @if(app()->getLocale() =="en")
         <style>
             button.close {
@@ -849,9 +851,71 @@
                 right: auto !important;
                 left: 10% !important;
             }
+            .brand-big {
+                right: auto !important;
+                left: 8% !important;
+            }
+            li.sli_li {
+                left: 20% !important;
+                right: auto !important;
+            }
+            .main-menu {
+                direction: ltr !important;
+            }
+            .mCSB_scrollTools {
+                left: 0 !important;
+                right: auto !important;
+            }
+            .page {
+                margin-right: auto !important;
+                margin-left: 220px !important;
+            }
+            li.li-item.active a.a-itemhavecheld {
+                margin-right: auto !important;
+                margin-left: 20px;
+                border-radius: 25px 0;
+            }
+
+            .next-active-children, .active-children {
+                border-radius: 20px 0 0 !important;
+            }
+            .active-children, .next-active-children{
+                margin-right: auto !important;
+                margin-left: 20px !important;
+            }
+            .next-active {
+                border-radius:  0 0 20px !important;
+            }
+            .previous-active {
+                border-radius: 0 0 20px !important;
+            }
+            .active-children li, .next-active-children li, .next-active-children li.active, .side-navbar li.li-item.active ul a {
+                padding-right: 0 !important;
+                padding-left: 15px !important;
+                margin-right: 0px !important;
+            }
+            .li-item li::before {
+                right: 0;
+                left: 5px;
+            }
+            .main-menu, li.li-item.active {
+                background: linear-gradient( to right, #013e6b 0%, #013e6b 50%, #f8f8f8 50%, #f8f8f8 100% );
+            }
+            .next-active {
+                border-radius: 0 20px !important;
+            }
+            .active-children li:last-child, .next-active-children li:last-child {
+                border-radius: 0 0 0 18px;
+            }
+            @media screen and ( min-width: 1600px) {
+
+                li.sli_li {
+                    left: 14% !important;
+                    right: auto !important;
+                }
+            }
         </style>
     @endif
-    @yield('styles')
 </head>
 
 <body onload="myFunction()">
