@@ -618,6 +618,19 @@
         .input-group>.custom-file:focus, .input-group>.custom-select:focus, .input-group>.form-control:focus {
             z-index: 0;
         }
+        .side-navbar.lodaing{
+            z-index: 1!important;
+        }
+        #loader {
+            position: absolute;
+        }
+        div#lay_out_loader {
+            position: absolute;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.54) !important;
+        }
         @media screen and ( min-width: 1600px) {
             .dt-buttons {
                 width: 31%;
@@ -945,7 +958,10 @@
 </head>
 
 <body onload="myFunction()">
-    <div id="loader"></div>
+
+    <div id="lay_out_loader">
+        <div id="loader"></div>
+    </div>
     @include('back-end.layouts.partials.header')
     <div class="page">
         @include('back-end.layouts.partials.sidebar')
@@ -1196,6 +1212,9 @@
 
         function showPage() {
             document.getElementById("loader").style.display = "none";
+            document.getElementById("lay_out_loader").style.display = "none";
+            $('.side-navbar').removeClass('lodaing');
+
             document.getElementById("content").style.display = "block";
             document.addEventListener("DOMContentLoaded", function() {
                 // Find the elements with the class name "side-navbar"
