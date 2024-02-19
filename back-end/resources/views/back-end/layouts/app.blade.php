@@ -592,6 +592,29 @@
             background-color: #fff0 !important;
             top: 10% !important;
         }
+        ul.pagination {
+            border-radius: 15px !important;
+            background-color: #fff;
+            border: 1px solid #96aaaf00;
+            padding: 1px !important;
+            margin: 5px !important;
+            box-shadow: 1px 1px 8px 0px #00000026;
+        }
+        li.paginate_button.page-item a.page-link {
+            border-radius: 50%;
+            padding: 2px 8px;
+            margin-top: 2px;
+            border: none;
+        }
+        ul.pagination .paginate_button.page-item.previous a  ,ul.pagination .paginate_button.page-item.next a{
+            color: #000 !important;
+            font-weight: 800;
+            font-size: 15px;
+            padding: 2px 8px;
+            margin: 2px 6px;
+            border-radius: 50%;
+            border: 1px solid #0000002e;
+        }
         @media screen and ( min-width: 1600px) {
             .dt-buttons {
                 width: 31%;
