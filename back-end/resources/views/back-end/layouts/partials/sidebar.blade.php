@@ -3,7 +3,7 @@
     $module_settings = !empty($module_settings) ? json_decode($module_settings, true) : [];
 @endphp
 <!-- Side Navbar -->
-<nav class="side-navbar no-print  " style="    height: 100%;">
+<nav class="side-navbar no-print lodaing " style="    height: 100%;">
     <div class="side-navbar-wrapper">
         <!-- Sidebar Navigation Menus-->
         <div class="main-menu">
