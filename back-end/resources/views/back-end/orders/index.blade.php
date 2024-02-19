@@ -268,10 +268,15 @@
             bAutoWidth: false,
             language: {
                 search: "",
-                entries: "{{\App\CPU\translate('entries')}}",
-                Show: "{{\App\CPU\translate('entries')}}",
                 searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
-
+                "lengthMenu":     "{{\App\CPU\translate('Show')}} _MENU_ {{\App\CPU\translate('entries')}}",
+                "paginate": {
+                    "next":       ">",
+                    "previous":   "<"
+                },
+                buttons: {
+                    colvis:"{{\App\CPU\translate('Column visibility')}}"
+                }
             },
             lengthMenu: [
                 [10, 25, 50, 75, 100, 200, 500, -1],
