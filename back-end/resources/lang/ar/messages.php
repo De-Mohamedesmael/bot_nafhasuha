@@ -199,5 +199,7 @@
   'invoice_no' => 'Invoice no',
   'images' => 'صور',
   'canceled_by' => 'الغي بواسطة',
+  'Column visibility' => 'اخفاء الحقول',
+  'Last' => 'Last',
+  'First' => 'First',
 );
-
