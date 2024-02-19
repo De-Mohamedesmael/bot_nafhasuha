@@ -615,6 +615,9 @@
             border-radius: 50%;
             border: 1px solid #0000002e;
         }
+        .input-group>.custom-file:focus, .input-group>.custom-select:focus, .input-group>.form-control:focus {
+            z-index: 0;
+        }
         @media screen and ( min-width: 1600px) {
             .dt-buttons {
                 width: 31%;
@@ -1057,12 +1060,12 @@
     @include('back-end.layouts.partials.javascript')
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
-        var datatable_params = {
+
+        var table = $(".dataTable").DataTable({
             lengthChange: true,
             paging: true,
             info: false,
             bAutoWidth: false,
-            order: [],
             language: {
                 search: "",
                 searchPlaceholder:"{{\App\CPU\translate('Look for...')}}",
@@ -1130,8 +1133,7 @@
                         }
                     });
             },
-        };
-        var table = $(".dataTable").DataTable(datatable_params);
+        });
         table.columns(".hidden").visible(false);
         $.ajaxSetup({
             headers: {
