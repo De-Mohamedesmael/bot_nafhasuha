@@ -15,7 +15,7 @@
     </style>
 @endsection
 @section('sli_li')
-    <span class="parent"> <  <a href="{{route("admin.tires.index")}}"> {{__('lang.tires')}} </a> / </span>  @lang('lang.add_provider')
+    <span class="parent"> <  <a href="{{route("admin.icons.index")}}"> {{__('lang.icons')}} </a> / </span>  @lang('lang.add_icon')
 @endsection
 @section('content')
     <section class="forms p-0">
@@ -35,7 +35,7 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group">
+                                    <div class="form-group justify-cont">
                                         <input type="submit" value="{{ trans('lang.save') }}" id="submit-btn"
                                             class="btn btn-primary">
                                     </div>

@@ -15,7 +15,7 @@
     </style>
 @endsection
 @section('sli_li')
-    <span class="parent"> <  <a href="{{route("admin.tires.index")}}"> {{__('lang.tires')}} </a> / </span>  @lang('lang.add_provider')
+    <span class="parent"> <  <a href="{{route("admin.tires.index")}}"> {{__('lang.tires')}} </a> / </span>  @lang('lang.add_tire')
 @endsection
 @section('content')
 <section class="forms p-0">
@@ -24,7 +24,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <div class="print-title">@lang('lang.add_provider')</div>
+                            <div class="print-title">@lang('lang.add_tire')</div>
 
                         </div>
                         <div class="card-body">
