@@ -459,9 +459,7 @@
         span.title-collapse {
             padding: 0 5px;
         }
-        .side-navbar li:hover > a:hover,.side-navbar li:focus > a:hover {
-            text-shadow: 2px 2px #df2237;
-        }
+
         li.li-item.active:hover > a:hover,li.li-item.active:focus > a:hover ,
         .side-navbar li.li-item.active li:hover > a:hover, .side-navbar li.li-item.active li:focus > a:hover{
             text-shadow: none !important;
@@ -630,6 +628,12 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.54) !important;
+        }
+        body.overflow-h {
+            overflow: hidden;
+        }
+        button, input, optgroup, select, textarea {
+            font-family: "Nunito", sans-serif !important;
         }
         @media screen and ( min-width: 1600px) {
             .dt-buttons {
@@ -957,7 +961,7 @@
     @endif
 </head>
 
-<body onload="myFunction()">
+<body class="overflow-h" onload="myFunction()">
 
     <div id="lay_out_loader">
         <div id="loader"></div>
@@ -1214,6 +1218,7 @@
             document.getElementById("loader").style.display = "none";
             document.getElementById("lay_out_loader").style.display = "none";
             $('.side-navbar').removeClass('lodaing');
+            $('body').removeClass('overflow-h');
 
             document.getElementById("content").style.display = "block";
             document.addEventListener("DOMContentLoaded", function() {

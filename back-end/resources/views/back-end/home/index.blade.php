@@ -250,7 +250,7 @@
                         <div class="col-sm-5 counter">
                             <div class="wrapper count-title text-center">
                                 <div class="icon">
-                                    <img class="count-img" src="{{asset('assets/back-end/images/design/user.png')}}">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/user.svg')}}">
 
                                 </div>
                                 <div class="name"><strong
@@ -265,7 +265,7 @@
                         <div class="col-sm-7 counter">
                             <div class="wrapper count-title text-center">
                                 <div class="icon">
-                                    <img class="count-img" src="{{asset('assets/back-end/images/design/provider.png')}}">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/provider.svg')}}">
 
                                 </div>
                                 <div class="name"><strong
@@ -282,7 +282,7 @@
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
                                 <div class="icon">
-                                    <img class="count-img" src="{{asset('assets/back-end/images/design/pending.png')}}">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/pending.svg')}}">
                                 </div>
                                 <div class="name"><strong
                                         style="color: #ff8952">{{\App\CPU\translate('total_orders_pending')}}</strong>
@@ -297,7 +297,7 @@
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
                                 <div class="icon">
-                                    <img class="count-img" src="{{asset('assets/back-end/images/design/complete.png')}}">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/complete.svg')}}">
                                 </div>
                                 <div class="name"><strong
                                         style="color: #297ff9">{{\App\CPU\translate('total_orders_completed')}}</strong>
@@ -310,7 +310,7 @@
                         <div class="col-sm-4 counter">
                             <div class="wrapper count-title text-center">
                                 <div class="icon">
-                                    <img class="count-img" src="{{asset('assets/back-end/images/design/cancele.png')}}">
+                                    <img class="count-img" src="{{asset('assets/back-end/images/design/cancele.svg')}}">
 
                                 </div>
                                 <div class="name"><strong

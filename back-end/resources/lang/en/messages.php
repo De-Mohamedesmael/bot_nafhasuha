@@ -149,4 +149,6 @@
   'Not found Provider' => 'Not found Provider',
   'Look for...' => 'Look for...',
   'entries' => 'Entries',
+  'Column visibility' => 'Column visibility',
+  'Show' => 'Show',
 );

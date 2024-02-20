@@ -235,7 +235,7 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         footer: true,
-        text: '<img src="/assets/back-end/images/design/flat-color-icons_print.png" class="icon-export"> <span>'+title_print+'</span>',
+        text: '<img src="/assets/back-end/images/design/flat-color-icons_print.svg" class="icon-export"> <span>'+title_print+'</span>',
         title: $('title').text(),
         exportOptions: {
             columns: ":visible:not(.notexport)",
@@ -246,7 +246,7 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         footer: true,
-        text: '<img src="/assets/back-end/images/design/svg.png" class="icon-export"> <span>excel</span>',
+        text: '<img src="/assets/back-end/images/design/svg.svg" class="icon-export"> <span>excel</span>',
 
         title: $('title').text(),
         exportOptions: {
@@ -259,7 +259,7 @@ var buttons = [
         charset: 'UTF-8',
         bom: true,
         title: $('title').text(),
-        text: '<img src="/assets/back-end/images/design/svg.png" class="icon-export"> <span>svg</span>',
+        text: '<img src="/assets/back-end/images/design/svg.svg" class="icon-export"> <span>svg</span>',
 
         messageTop: $('title').text(),
         exportOptions: {
@@ -268,7 +268,7 @@ var buttons = [
         },
     },
     { text: 'pdf' ,
-        text: '<img src="/assets/back-end/images/design/pdf.png" class="icon-export"> <span>pdf</span>',
+        text: '<img src="/assets/back-end/images/design/pdf.svg" class="icon-export"> <span>pdf</span>',
         action: function () {
 
             // var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -350,7 +350,7 @@ var buttons = [
         footer: true,
         charset: 'UTF-8',
         bom: true,
-        text: '<img src="/assets/back-end/images/design/copy.png" class="icon-export"> <span>'+title_copy+'</span>',
+        text: '<img src="/assets/back-end/images/design/copy.svg" class="icon-export"> <span>'+title_copy+'</span>',
 
         title:$('title').text(),
         exportOptions: {
