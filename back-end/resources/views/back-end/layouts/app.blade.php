@@ -1090,35 +1090,27 @@
                 let badge_count = parseInt($('.online-order-badge').text()) + 1;
                 $('.online-order-badge').text(badge_count);
                 $('.online-order-badge').show();
-                console.log(data, 'notification-number');
-                        let notification_number = parseInt($('.notification-number').text());
-                        console.log(notification_number, 'notification-number');
-                        if (!isNaN(notification_number)) {
-                            notification_number = parseInt(notification_number) + 1;
-                        } else {
-                            notification_number = 1;
-                        }
-                        $('.notification-list').empty().append(
-                            `<i class="dripicons-bell"></i><span class="badge badge-danger notification-number">${notification_number}</span>`
-                        );
-                        $('.notifications').prepend(
-                            `<li>
-                                <a class=" notification_item"
-                                    data-mark-read-action=""
-                                    data-href="{{ url('/') }}/pos/${transaction_id}/edit?status=final">
-                                    <p style="margin:0px"><i class="dripicons-bell"></i> ${LANG.new_order_placed_invoice_no} #
-                                        ${result.invoice_no}</p>
-                                    <span class="text-muted">
-                                        @lang('lang.total'): ${__currency_trans_from_en(result.final_total, false)}
-                                    </span>
-                                </a>
+                
+                        $.ajax({
+                            method: 'get',
+                            url: "{{route('admin.admin-notifications.get-details','')}}/" + data.id,
+                            data: {},
+                            success: function(result) {
+                                let notification_number = parseInt($('.notification-number').text());
+                                console.log(notification_number, 'notification-number');
+                                if (!isNaN(notification_number)) {
+                                    notification_number = parseInt(notification_number) + 1;
+                                } else {
+                                    notification_number = 1;
+                                }
+                                $('.notification-list').empty().append(
+                                    `<i class="dripicons-bell"></i><span class="badge badge-danger notification-number">${notification_number}</span>`
+                                );
+                                $('.notifications').prepend(result);
+                                $('.no_new_notification_div').addClass('hide');
 
-                            </li>`
-                        );
-                        $('.no_new_notification_div').addClass('hide');
-
-
-
+                                },
+                            });
             }
         });
 

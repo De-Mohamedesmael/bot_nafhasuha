@@ -151,4 +151,8 @@
   'entries' => 'Entries',
   'Column visibility' => 'Column visibility',
   'Show' => 'Show',
+  'The request has been successfully cancelled' => 'The request has been successfully cancelled',
+  'You cannot place an offer when you already have an order' => 'You cannot place an offer when you already have an order',
+  'Order Not Found' => 'Order Not Found',
+  'Your wallet balance is insufficient' => 'Your wallet balance is insufficient',
 );

@@ -202,4 +202,5 @@
   'Column visibility' => 'اخفاء الحقول',
   'Last' => 'Last',
   'First' => 'First',
+  'Your vehicle has been modified successfully. Thank you.' => 'Your vehicle has been modified successfully. Thank you.',
 );

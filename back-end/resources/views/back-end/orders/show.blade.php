@@ -26,6 +26,9 @@
 
 @endsection
 @section('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
+
+
     <style>
         input[type="checkbox"] {
             -webkit-appearance: none;
@@ -176,6 +179,9 @@
         tr.tr-sp {
             background-color: #f6f5fd;
         }
+        a.image-popup {
+            cursor: zoom-in;
+        }
     </style>
 @endsection
 @section('sli_li')
@@ -231,10 +237,16 @@
                                 <td class="title-table">{{\App\CPU\translate('images')}}</td>
                                 <td class="value-table">
 
-                                   @foreach ($OrderService->getMedia('images') as $image)
-                                   <div class="image-order" >
-                                            <img src="{{ $image->getUrl()}} " height="50px" width="50px"></div>
-                                    @endforeach
+  
+                                    
+                                    <div class="images">
+                                        @foreach ($OrderService->getMedia('images') as $k=> $image)
+                                        <a href="{{ $image->getUrl()}}" class="image-popup">
+                                          <img src="{{ $image->getUrl()}}" alt="Image" height="50px" width="50px">
+                                        </a>
+                                            
+                                        @endforeach
+                                    </div>
                                 </td>
                             </tr>
                             <tr class="tr-sp">
@@ -277,19 +289,32 @@
                         </table>
                     </div>
                 </div>
-
-                <div id="map">
-
-                </div>
+                @if( in_array($class,['approved','completed']))
+                    <div id="map">
+    
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 @endsection
 
 @section('javascript')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+          $('.image-popup').magnificPopup({
+            type: 'image'
+          });
+        });
+</script>
+@if( in_array($class,['approved','completed']))
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
     <script>
+        
         let map, activeInfoWindow, markers ,info_window_data= [];
         /* ----------------------------- Initialize Map ----------------------------- */
         function initMap() {
@@ -338,7 +363,10 @@
             });
 
         }
+        
+       
+
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&callback=initMap&language={{app()->getLocale()}}" async></script>
-
+@endif
 @endsection
