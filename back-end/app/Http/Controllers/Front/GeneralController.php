@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\Events\NewNotifyEvent;
 use App\Http\Controllers\ApiController;
 use App\Http\Resources\CategoryFaqResource;
 use App\Http\Resources\Front\CategoryResource;
@@ -9,6 +10,7 @@ use App\Http\Resources\IconResource;
 use App\Http\Resources\InfoResource;
 use App\Http\Resources\Front\SplashScreenResource;
 use App\Http\Resources\Front\ServiceResource;
+use App\Models\Admin;
 use App\Models\AppScreen;
 use App\Models\Category;
 use App\Models\CategoryFaq;
@@ -16,6 +18,7 @@ use App\Models\ContactUs;
 use App\Models\FaqTranslation;
 use App\Models\Icon;
 use App\Models\Info;
+use App\Models\NotificationAdmin;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\System;
@@ -122,12 +125,19 @@ class GeneralController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        ContactUs::create([
+        $ContactUs= ContactUs::create([
             'title' => $request->title,
             'country_id' => $request->country_id,
             'phone' => $request->phone,
             'note' => $request->note,
         ]);
+$NotificationAdmin=  NotificationAdmin::create([
+            'admin_id'=>Admin::first()->id,
+            'type'=>'ContactUs',
+            'type_id'=>$ContactUs->id,
+            'message'=>$request->note,
+        ]);
+        event(new NewNotifyEvent($NotificationAdmin->id));
 
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }

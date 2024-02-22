@@ -16,6 +16,9 @@ class NotificationAdmin extends Model
      */
     protected $guarded = ['id'];
 
-
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class,'type_id');
+    }
 
 }

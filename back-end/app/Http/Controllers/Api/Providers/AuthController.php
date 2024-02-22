@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Providers;
 
+use App\Events\NewNotifyEvent;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Providers\ProviderResource;
 use App\Http\Resources\UserResource;
+use App\Models\NotificationAdmin;
 use App\Models\Provider;
 use App\Models\Setting;
 use App\Models\Slider;
@@ -127,6 +129,13 @@ class AuthController extends ApiController
                     ->toMediaCollection('commercial_register');
             }
             $data= $this->createNewToken(auth()->attempt($request->only(['phone', 'password'])));
+            NotificationAdmin::create([
+                'admin_id'=>Admin::first()->id,
+                'type'=>'ContactUs',
+                'type_id'=>$provider->id,
+                'message'=>__('notifications.admin.text.NewProvider'),
+            ]);
+            event(new NewNotifyEvent($provider->id,'NewProvider',__('notifications.admin.text.NewProvider')));
             DB::commit();
             return responseApi(200, translate('user registered'),$data);
         }catch (\Exception $exception){

@@ -18,6 +18,7 @@ use App\Http\Controllers\BackEnd\SliderController;
 use App\Http\Controllers\BackEnd\SplashScreenController;
 
 use App\Http\Controllers\BackEnd\NotificationController;
+use App\Http\Controllers\BackEnd\AdminNotificationController;
 use App\Http\Controllers\BackEnd\IconController;
 use App\Http\Controllers\BackEnd\BankController;
 
@@ -328,6 +329,12 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::delete('delete/{id}', [NotificationController::class,'destroy'])->name('delete');
         Route::post('update_status', [NotificationController::class,'update_status'])->name('update_status');
         Route::post('delete-image', [NotificationController::class,'deleteImage'])->name('deleteImage');
+
+    });
+    Route::group(['prefix'=>'admin-notifications','as'=>'admin-notifications.'], function () {
+
+        Route::get('/mark-as-read/{id}', [AdminNotificationController::class,'markAsRead'])->name('markAsRead');
+        Route::get('/notification-seen', [AdminNotificationController::class,'notificationSeen'])->name('notificationSeen');
 
     });
     Route::group(['prefix'=>'splash_screen','as'=>'splash_screen.'], function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Providers;
 
+use App\Events\NewNotifyEvent;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
@@ -28,6 +29,7 @@ use App\Models\Country;
 use App\Models\FaqTranslation;
 use App\Models\Icon;
 use App\Models\Info;
+use App\Models\NotificationAdmin;
 use App\Models\SplashScreen;
 use App\Models\User;
 use App\Models\Transporter;
@@ -175,17 +177,23 @@ class GeneralController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        ContactUs::create([
+        $ContactUs= ContactUs::create([
             'title' => $request->title,
             'country_id' => $request->country_id,
             'phone' => $request->phone,
             'note' => $request->note,
         ]);
-
+        NotificationAdmin::create([
+            'admin_id'=>Admin::first()->id,
+            'type'=>'ContactUs',
+            'type_id'=>$ContactUs->id,
+            'message'=>$request->note,
+        ]);
+        event(new NewNotifyEvent($ContactUs->id,'ContactUs',$request->note));
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
 
-    
+
     public function indexCategories(Request $request)
     {
 

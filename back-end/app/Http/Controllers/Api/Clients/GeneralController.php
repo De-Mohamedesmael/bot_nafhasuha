@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Clients;
 
+use App\Events\NewNotifyEvent;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AreaResource;
@@ -15,6 +16,7 @@ use App\Http\Resources\IconResource;
 use App\Http\Resources\InfoResource;
 use App\Http\Resources\SplashScreenResource;
 use App\Http\Resources\UserResource;
+use App\Models\Admin;
 use App\Models\Area;
 use App\Models\CancelReason;
 use App\Models\CategoryFaq;
@@ -27,6 +29,7 @@ use App\Models\CyPeriodic;
 use App\Models\FaqTranslation;
 use App\Models\Icon;
 use App\Models\Info;
+use App\Models\NotificationAdmin;
 use App\Models\Provider;
 use App\Models\ProviderRate;
 use App\Models\SplashScreen;
@@ -36,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Pusher\Pusher;
 use function App\CPU\translate;
 
 
@@ -175,13 +179,35 @@ class GeneralController extends ApiController
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
 
-        ContactUs::create([
+        $ContactUs=ContactUs::create([
             'title' => $request->title,
             'country_id' => $request->country_id,
             'phone' => $request->phone,
             'note' => $request->note,
         ]);
-
+        $NotificationAdmin=  NotificationAdmin::create([
+            'admin_id'=>Admin::first()->id,
+            'type'=>'ContactUs',
+            'type_id'=>$ContactUs->id,
+            'message'=>$request->note,
+        ]);
+        $options = [
+            'cluster' => 'ap2',
+            'useTLS' => true
+        ];
+        $Pusher = new Pusher(
+            env('PUSHER_APP_ID'),
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            $options
+        );
+        $data=[
+           'type_id'=>$ContactUs->id ,
+           'type'=>'ContactUs' ,
+           'message'=>$request->note ,
+        ];
+        $Pusher->trigger('notify-channel','new-notify',$data);
+        event(new NewNotifyEvent($NotificationAdmin->id));
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
    public function storeRate(Request $request){
