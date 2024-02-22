@@ -28,14 +28,19 @@ class NotificationController extends ApiController
         $count_paginate=$request->count_paginate?:$this->count_paginate;
 
         $notifications= Notification::wherehas('users',function ($q) {
-                $q->where('users.id',auth()->id());
-            })->with('users_pov',function ($q) {
-                $q->where('user_notifications.user_id',auth()->id());
-            })->latest()->simplePaginate($count_paginate);
+            $q->where('users.id',auth()->id());
+        })->with('users_pov',function ($q) {
+            $q->where('user_notifications.user_id',auth()->id());
+        })->latest();
+        if($count_paginate == 'ALL'){
+            $notifications=  $notifications->get();
+        }else{
+            $notifications=  $notifications->simplePaginate($count_paginate);
+        }
         return  responseApi(200, translate('return_data_success'),NotificationResource::collection($notifications));
 
     }
-     public function count()
+    public function count()
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
@@ -47,7 +52,7 @@ class NotificationController extends ApiController
 
 
     }
-     public function show(Request $request)
+    public function show(Request $request)
     {
         if(!auth()->check())
             return responseApi(403, translate('Unauthenticated user'));
@@ -82,9 +87,9 @@ class NotificationController extends ApiController
 
         $notifications= FcmTokenModel::where('token',$request->fcm_token)->first();
         if(!$notifications){
-          $notifications=  FcmTokenModel::create([
-                                "token"=>$request->fcm_token,
-                              ]);
+            $notifications=  FcmTokenModel::create([
+                "token"=>$request->fcm_token,
+            ]);
 
             if(auth()->user()){
                 FcmTokenModel::where('user_id',auth()->user()->id)

@@ -11,11 +11,9 @@
     }
 </style>
 @php
-$new_notifications = App\Models\NotificationAdmin::where('admin_id', Auth::guard('admin')->id())->whereDate('created_at',
-date('Y-m-d'))->orderBy('created_at', 'desc')->get();
+$new_notifications = App\Models\NotificationAdmin::whereDate('created_at',date('Y-m-d'))->orderBy('created_at', 'desc')->get();
 $new_count = $new_notifications->where('is_seen', 0)->count();
-$earlier_notifications = App\Models\NotificationAdmin::where('admin_id', Auth::guard('admin')->id())
-->whereDate('created_at', '<', date('Y-m-d'))
+$earlier_notifications = App\Models\NotificationAdmin::whereDate('created_at', '<', date('Y-m-d'))
 ->orderBy('created_at', 'desc')
 ->limit(10)->get();
 @endphp
@@ -28,7 +26,7 @@ $earlier_notifications = App\Models\NotificationAdmin::where('admin_id', Auth::g
     </a>
     <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default notifications" user="menu">
         @forelse($new_notifications as $notification)
-        @include('layouts.partials.notification_data_list', ['notification' => $notification])
+        @include('back-end.layouts.partials.notification_data_list', ['notification' => $notification])
         @empty
         <div class="text-center no_new_notification_div">
             <span class="text-muted" style="font-size: 12px">@lang('lang.no_new_notification')</span>
@@ -41,7 +39,7 @@ $earlier_notifications = App\Models\NotificationAdmin::where('admin_id', Auth::g
         <hr style="margin: 0px">
         @endif
         @foreach($earlier_notifications as $notification)
-        @include('layouts.partials.notification_data_list', ['notification' => $notification])
+        @include('back-end.layouts.partials.notification_data_list', ['notification' => $notification])
         @endforeach
     </ul>
 </li>
