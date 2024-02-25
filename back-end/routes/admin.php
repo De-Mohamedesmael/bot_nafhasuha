@@ -336,6 +336,7 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
 
         Route::get('/mark-as-read/{id}', [AdminNotificationController::class,'markAsRead'])->name('markAsRead');
         Route::get('/get-details/{id}', [AdminNotificationController::class,'getDetails'])->name('get-details');
+
         Route::get('/notification-seen', [AdminNotificationController::class,'notificationSeen'])->name('notificationSeen');
 
     });

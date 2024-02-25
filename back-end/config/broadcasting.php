@@ -27,7 +27,6 @@ return [
     | each available type of connection are provided inside this array.
     |
     */
-
     'connections' => [
 
         'pusher' => [
@@ -36,8 +35,9 @@ return [
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'cluster' =>"ap2",
                 'useTLS' => true,
+                
             ],
         ],
 
@@ -58,6 +58,7 @@ return [
         'null' => [
             'driver' => 'null',
         ],
+        
 
     ],
 

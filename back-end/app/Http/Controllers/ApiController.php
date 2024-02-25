@@ -17,6 +17,7 @@ use App\Models\UserNotification;
 use App\Models\NotificationNote;
 use App\Models\NotificationTranslation;
 use App\Models\NotificationNoteTranslation;
+use Pusher\Pusher;
 
 class ApiController extends BaseController
 {
@@ -416,4 +417,18 @@ class ApiController extends BaseController
         curl_close($ch);
         // FCM response
     }
+    
+    
+    
+      public function sendPusherNotification($data)
+    {
+        $app_id = env('PUSHER_APP_ID');
+        $app_key =  env('PUSHER_APP_KEY');
+        $app_secret =  env('PUSHER_APP_SECRET');
+        $app_cluster =  env('PUSHER_APP_CLUSTER');
+        $pusher = new Pusher($app_key, $app_secret, $app_id, ['cluster' => $app_cluster]);
+        
+        $pusher->trigger('notify-channel', 'new-notify', $data);
+    }
+    
 }

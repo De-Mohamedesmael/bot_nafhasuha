@@ -39,6 +39,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use function App\CPU\translate;
 
+use App\Models\Admin;
 
 class GeneralController extends ApiController
 {
@@ -183,13 +184,19 @@ class GeneralController extends ApiController
             'phone' => $request->phone,
             'note' => $request->note,
         ]);
-        NotificationAdmin::create([
+       $NotificationAdmin= NotificationAdmin::create([
             'admin_id'=>Admin::first()->id,
             'type'=>'ContactUs',
             'type_id'=>$ContactUs->id,
             'message'=>$request->note,
         ]);
-        event(new NewNotifyEvent($ContactUs->id,'ContactUs',$request->note));
+        $data_n=[
+          'id'=>$NotificationAdmin->id ,
+          'type_id'=>$ContactUs->id ,
+          'type'=>'ContactUs' ,
+          'message'=>$request->note ,
+        ];
+        $this->sendPusherNotification($data_n);
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
 

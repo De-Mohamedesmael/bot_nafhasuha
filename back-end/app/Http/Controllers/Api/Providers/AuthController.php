@@ -12,6 +12,8 @@ use App\Models\Provider;
 use App\Models\Setting;
 use App\Models\Slider;
 use App\Models\User;
+use App\Models\Admin;
+
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
 use File;
@@ -129,13 +131,20 @@ class AuthController extends ApiController
                     ->toMediaCollection('commercial_register');
             }
             $data= $this->createNewToken(auth()->attempt($request->only(['phone', 'password'])));
-            NotificationAdmin::create([
+           $NotificationAdmin= NotificationAdmin::create([
                 'admin_id'=>Admin::first()->id,
-                'type'=>'ContactUs',
+                'type'=>'NewProvider',
                 'type_id'=>$provider->id,
                 'message'=>__('notifications.admin.text.NewProvider'),
             ]);
-            event(new NewNotifyEvent($provider->id,'NewProvider',__('notifications.admin.text.NewProvider')));
+              
+        $data_n=[
+          'id'=>$NotificationAdmin->id ,
+              'type_id'=>$provider->id ,
+              'type'=>'NewProvider' ,
+              'message'=>__('notifications.admin.text.NewProvider') ,
+            ];
+        $this->sendPusherNotification($data_n);
             DB::commit();
             return responseApi(200, translate('user registered'),$data);
         }catch (\Exception $exception){
