@@ -1453,7 +1453,7 @@
 
                 },
             });
-            window.open(href, '_blank');
+            window.location.href=href;
         })
         $.fn.modal.Constructor.prototype._enforceFocus = function() {};
         $('input').attr('autocomplete', 'off');

@@ -62,6 +62,9 @@
     .btn-modal {
         cursor: pointer;
     }
+    label.sp-label {
+        background: linear-gradient( to top, #fdfdff 0%, #fdfdff 50%, white 50%, white 100% );
+    }
 </style>
 @endsection
 @section('sli_li')
@@ -69,7 +72,9 @@
 @endsection
 @section('content')
     <div class="container-fluid">
-        <div class="card-header d-flex align-items-center" style="justify-content: center">
+        <div class="card-header ">
+        <div class="d-flex align-items-center" style="justify-content: center">
+
             <div class="print-title">
                 @lang('lang.all_notifications')
             </div>
@@ -83,6 +88,18 @@
                 </a>
             </div>
         </div>
+            <div class="col-md-12">
+
+                <div class="btn-group w-100">
+                    <div class="row mt-4 w-100" style="margin: 0 1%;">
+                        <div class="col-md-2">
+                            <label class="sp-label" for="type_notify"><b>@lang('lang.type_notify')</b></label>
+                            {!! Form::select('type_notify', ['Notify'=>__('lang.Notify'),'Mail'=>__('lang.Mail'),'SMS'=>__('lang.SMS')],  false, ['class' => 'form-control ','data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'id' => 'type_notify']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
@@ -94,6 +111,7 @@
                 <tr>
                     <th>#</th>
                     <th>@lang('lang.photo')</th>
+                    <th>@lang('lang.type_notify')</th>
                     <th>@lang('lang.title')</th>
                     <th>@lang('lang.type_model')</th>
                     <th>@lang('lang.type')</th>
@@ -151,6 +169,7 @@
                 url: '{{route("admin.notifications.index")}}',
                 data: function (d) {
                     d.notification_id = $("#notification_id").val();
+                    d.type_notify = $("#type_notify").val();
                 },
             },
             columnDefs: [
@@ -163,6 +182,7 @@
             columns: [
                 { data: "id", name: "id" },
                 { data: "image", name: "image" },
+                { data: "type_notify", name: "type_notify" },
                 { data: "title", name: "notification_translations.title" },
                 { data: "type_model", name: "type_model" },
                 { data: "type", name: "type" },
@@ -321,6 +341,13 @@
                         );
                     }
                 },
+            });
+        });
+
+        $( document ).ready(function() {
+
+            $(document).on('change', '#type_notify', function () {
+                notification_sales_table.ajax.reload();
             });
         });
     </script>

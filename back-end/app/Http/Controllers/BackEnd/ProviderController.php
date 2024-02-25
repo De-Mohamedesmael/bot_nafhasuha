@@ -82,7 +82,10 @@ class ProviderController extends Controller
                     'action',
                     function ($row) {
                         $html = '';
-
+                        $html.='<a href="'.route('admin.provider.show', $row->id).'"
+                           class="" title="'.__('lang.show').'">
+                           <i class="far fa-eye"></i> </a>
+                        </a>';
 //                        if (auth()->user()->can('provider_module.provider.add_balen')){
                         $html .='<a class="a-image" href="'. route('admin.provider.edit',$row->id) .'" target="_blank" title="'.__('lang.edit').'">
                                            <img class="icon-action" src="'.asset('assets/back-end/images/design/edit.svg').'">
@@ -129,7 +132,13 @@ class ProviderController extends Controller
 
         return view('back-end.provider.index');
     }
-
+    public function show($id)
+    {
+        $provider = Provider::find($id);
+        return view('back-end.provider.show')->with(compact(
+            'provider'
+        ));
+    }
     /**
      * Show the form for creating a new resource.
      *

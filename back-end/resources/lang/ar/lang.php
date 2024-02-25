@@ -1678,7 +1678,10 @@ return [
     'enter_email'=>'ادخل بريدك الالكتروني',
 
     'comment'=>'تعليق',
-    'show'=>'عرض الطلب',
+    'doneSendMessage'=>'تم ارسال الرسالة بنجاح',
+    'replay-message'=>'ادخل الرد',
+    'show'=>'عرض ',
+    'commercial_register'=>'السجل التجاري ',
     'edit_provider'=>'تعديل مقدم خدمة',
     'add_provider'=>'اضافة مقدم خدمة',
     'all_services'=>'جميع الخدمات',
@@ -1691,5 +1694,14 @@ return [
     'edit_slider'=>'تعديل شريحة',
     'add_slider'=>'اضافة شريحة',
     'edit_icon'=>'تعديل ايكون تواصل',
+    'type_notify'=>'نوع الاشعار',
+    'SMS'=>'رسالة نصية',
+    'Mail'=>'رسالة بريدية',
+    'Notify'=>'اشعار',
+    'Dear'=>'عزيزي',
+    'if you have any questions you can contact with us in our email'=>'إذا كان لديك أي أسئلة يمكنك الاتصال بنا عبر البريد الإلكتروني لدينا',
+    'thank you'=>'شكرا لك',
+    'status_1'=>'فعال',
+    'status_0'=>'غير فعال',
 
 ];
