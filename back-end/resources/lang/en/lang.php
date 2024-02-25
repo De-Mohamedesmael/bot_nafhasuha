@@ -1671,4 +1671,9 @@ return [
     "sum_final_total_InvitationBonus"=>'Invitation Bonus',
     "sum_final_total_JoiningBonus"=>'Joining Bonus',
     "total_discount"=>'Total discounts',
+
+
+    'Dear'=>'Dear',
+    'if you have any questions you can contact with us in our email'=>'if you have any questions you can contact with us in our email',
+    'thank you'=>'thank you',
 ];
