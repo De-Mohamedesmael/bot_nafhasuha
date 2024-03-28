@@ -408,9 +408,9 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
         Route::get('/get-daily-report', [ReportController::class,'getDailyReport'])->name('getDailyReport');
         Route::get('/get-monthly-report', [ReportController::class,'getMonthlyReport'])->name('getMonthlyReport');
         Route::get('/get-yearly-report', [ReportController::class,'getYearlyReport'])->name('getYearlyReport');
-        Route::get('/get-best-report', [ReportController::class,'getBestReport'])->name('getBestReport');
 
     });
+    Route::post('print', [ReportController::class,'print'])->name('print');
     Route::post('logout', [LoginController::class,'logout'])->name('logout');
 
 });

@@ -192,7 +192,7 @@
                   @endif
              @endif
 
-                @if( !empty($module_settings['reports']) )
+                @if( !empty($module_settings['reports_module']) )
 
                     @if( auth()->user()->can('reports.daily_report.special')
                     || auth()->user()->can('reports.monthly_report.special')

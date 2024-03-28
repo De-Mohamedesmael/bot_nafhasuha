@@ -12,6 +12,20 @@ return [
     | these language lines according to your application's requirements.
     |
     */
+    'months'=>[
+        '1'=>'يناير',
+        '2'=>'فبراير',
+        '3'=>'مارس',
+        '4'=>'أبريل',
+        '5'=>'مايو',
+        '6'=>'يونيو',
+        '7'=>'يوليو',
+        '8'=>'أغسطس',
+        '9'=>'سبتمبر',
+        '10'=>'أكتوبر',
+        '11'=>'نوفمبر',
+        '12'=>'ديسمبر'
+    ],
     'APP_NAME'=>'بوت',
     'Get in Touch'=>'ابقى على تواصل',
     'Together we can make To make you do the impossible.'=>'معًا يمكننا أن نجعلك تفعل المستحيل.',

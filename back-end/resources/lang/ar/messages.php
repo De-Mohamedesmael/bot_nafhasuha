@@ -202,4 +202,10 @@
   'Column visibility' => 'اخفاء الحقول',
   'Last' => 'Last',
   'First' => 'First',
+  'This text cannot be printed' => 'This text cannot be printed',
+  'count_order_canceled' => 'Count order canceled',
+  'count_order_completed' => 'Count order completed',
+  'count_all_order' => 'Count all order',
+  'from' => 'من',
+  'orders' => 'طلبات',
 );
