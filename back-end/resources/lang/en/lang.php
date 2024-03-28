@@ -1662,6 +1662,7 @@ return [
     "daily_report"=>'daily reports',
     "count_all_order"=>'number of orders',
     "count_order_completed"=>'Completed Orders',
+    "count_order_canceled"=>'Canceled Orders',
     "sum_deducted_total"=>'APP percentage',
     "sum_final_total"=>'completed total',
     "sum_provider_total"=>'provider ratio',

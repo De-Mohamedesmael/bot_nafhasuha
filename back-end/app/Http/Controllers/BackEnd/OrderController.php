@@ -90,6 +90,9 @@ class OrderController extends Controller
             }
 
 
+            if (!empty(request()->provider_id)) {
+                $query->where('order_services.provider_id', request()->provider_id);
+            }
             if (!empty(request()->category_id)) {
                 $query->where('order_services.category_id', request()->category_id);
             }
