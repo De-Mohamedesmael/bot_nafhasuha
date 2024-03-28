@@ -174,8 +174,8 @@ class ServiceController extends ApiController
 
 
         $provider = Provider::find($provider_id);
-            if(!$provider)
-                return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
+        if(!$provider)
+            return responseApi(404, translate("Page Not Found.If error persists,contact info@gmail.com"));
 
 
         $provider = $this->ServiceUtil->getOneProviderForMap($request->lat,$request->long,$provider_id);
@@ -195,19 +195,15 @@ class ServiceController extends ApiController
             return responseApi(403, translate('Unauthenticated user'));
 
         $validator = validator($request->all(), [
-//            'service_id' => 'required|integer|exists:services,id',
-            'payment_method' => 'required|string|in:Online,Wallet',
+            // 'payment_method' => 'required|string|in:Online,Wallet',
             'category_id' => 'required|integer|exists:categories,id',
             'vehicle_id' => 'required|integer|exists:user_vehicles,id',
             'status_vehicle' => 'required|in:1,0',
             'transporter_id' => 'required|integer|exists:transporters,id',
-
-//            'date_at' => 'required|Date',
-//            'time_at' => 'required|string',
             'address' => 'required|string|max:300',
             'lat' => 'required|string',
             'long' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
             'coupon_code' => 'nullable|string',
             'images' => 'nullable|array',
             'images.*' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
@@ -224,15 +220,12 @@ class ServiceController extends ApiController
         if(!$vehicle)
             return responseApi(404, translate("vehicle Not Found"));
 
+
+        $user= auth()->user();
         DB::beginTransaction();
         try {
             $amount= \Settings::get('PriceMaintenance',100);
-            if($request->payment_method == 'Wallet'){
-                $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
-                if($wallet_user < $amount){
-                    return responseApiFalse(405, translate('Your wallet balance is insufficient'));
-                }
-            }
+
             $request->merge([
                 'service_id'=>3,
             ]);
@@ -251,20 +244,161 @@ class ServiceController extends ApiController
                 $discount['discount_type'] = $item->type_discount;
                 $amount=$amount-$item->discount;
                 $item->use=$item->use+1;
-                $item->users()->attach($item->id);
+                $item->users()->attach($user->id);
                 $item->save();
 
             }
+            $request->merge([
+                'discount_value'=>$discount['discount_value'],
+                'discount_type'=>$discount['discount_type'],
+                'amount'=>$amount,
+                'order_type'=>'Maintenance',
+            ]);
+            $uid=rand(10000, 99999);
+            cache()->put('order-'.$user->id.'-'.$uid, $request->except('images') , now()->addDay());
+            if ($request->hasFile('images')) {
+                $files = $request->file('images');
+                foreach ($files as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $user->addMedia($file)
+                        ->usingFileName(time() . '.' . $extension)
+                        ->toMediaCollection('order_'.$uid);
+                }
+            }
+
+            if ($request->hasFile('videos')) {
+                $files = $request->file('videos');
+                foreach ($files as $file){
+                    $extension = $file->getClientOriginalExtension();
+                    $user->addMedia($file)
+                        ->usingFileName(time() . '.' . $extension)
+                        ->toMediaCollection('order_videos_'.$uid);
+                }
+            }
+            // $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle
+            //     ,'Maintenance', $request->service_id);
+
+
+            // $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->transporter_id,0,$amount);
+            // $OrderService->transaction_id=$transaction->id;
+            // $OrderService->save();
+
+            // $this->pushNotof('Order',$OrderService,auth()->id(),1);
+
+            DB::commit();
+            return  responseApi(200, translate('Your request has been successfully created. Thank you'),$uid);
+
+        }catch (\Exception $exception){
+            DB::rollBack();
+            dd($exception);
+            Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
+            return responseApiFalse(500, translate('Something went wrong'));
+        }
+
+
+    }
+
+    /** Payment OrderService for  Service not have Over Price
+     * @param Request $request
+     * @return Response
+     */
+    public function PaymentOrderService(Request $request)
+    {
+        if(!auth()->check())
+            return responseApi(403, translate('Unauthenticated user'));
+
+        $validator = validator($request->all(), [
+            'uid' => 'required',
+            'payment_method' => 'required|string|in:Online,Wallet',
+            'checkout_id' => 'nullable',
+            'payment_type' => 'nullable',
+
+        ]);
+
+
+        DB::beginTransaction();
+        try {
+            $user=auth()->user();
+            $data = cache()->get('order-'.$user->id.'-'.$request->uid);
+            if(!$data){
+                DB::rollBack();
+                return responseApi(404, translate("Order Not Found"));
+            }
+
+
+            $vehicle= UserVehicle::where('id',$data['vehicle_id'])
+                ->where('user_id',auth()->id())
+                ->first();
+
+
+
+            if(!$vehicle){
+                DB::rollBack();
+                return responseApi(404, translate("vehicle Not Found"));
+
+            }
+
+
+
+            $request->merge([
+                'discount_value'=>$data['discount_value'],
+                'discount_type'=>$data['discount_type'],
+                'category_id'=>$data['category_id'],
+                'vehicle_id'=>$data['vehicle_id'],
+                'status_vehicle'=>$data['status_vehicle'],
+                'transporter_id'=>$data['transporter_id'],
+                'address'=>$data['address'],
+                'lat'=>$data['lat'],
+                'long'=>$data['long'],
+                'details'=>$data['details'],
+            ]);
+            $discount['discount_value']=$data['discount_value'];
+            $discount['discount_type']=$data['discount_type'];
+            $amount= $data['amount'];
+            if($request->payment_method == 'Wallet'){
+                $wallet_user=$this->TransactionUtil->getWalletBalance(auth()->user());
+                if($wallet_user < $amount){
+                    return responseApiFalse(405, translate('Your wallet balance is insufficient'));
+                }
+            }elseif($request->payment_method == 'Online'){
+                $checkStatusPayment=$this->checkStatusPayment($request->checkout_id,auth()->id(),$request->payment_type,$amount);
+                if(!$checkStatusPayment['status']){
+                    DB::rollBack();
+                    return  responseApiFalse(502, $checkStatusPayment['message']);
+                }
+            }
 
             $OrderService = $this->ServiceUtil->StoreOrderService($request,$vehicle
-                ,'Maintenance', $request->service_id);
+                ,$data['order_type'], $request->service_id);
+
+
+            $mediaCollection = $user->getMedia('order_'.$request->uid);
+            $mediaCollection_videos = $user->getMedia('order_videos_'.$request->uid);
+
+
+            if ($mediaCollection) {
+                foreach ($mediaCollection as $media_one){
+                    $OrderService->addMedia($media_one->getPath())
+                        ->toMediaCollection('images');
+                }
+            }
+
+            if ($mediaCollection_videos) {
+                foreach ($mediaCollection_videos as $media_one){
+                    $OrderService->addMedia($media_one->getPath())
+                        ->toMediaCollection('videos');
+                }
+            }
+
             $transaction = $this->TransactionUtil->saveTransactionForOrderService($OrderService,$discount,$request->transporter_id,0,$amount);
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
-            $this->pushNotof('Order',$OrderService,auth()->id(),1);
 
+            $this->pushNotof('Order',$OrderService,auth()->id(),1);
+            $user->clearMediaCollection('order_videos_'.$request->uid);
+            $user->clearMediaCollection('order_'.$request->uid);
             DB::commit();
-            return  responseApi(200, translate('return_data_success'),$OrderService->id);
+            return  responseApi(200, translate('Your request has been successfully created. Thank you'),$OrderService->id);
 
         }catch (\Exception $exception){
             DB::rollBack();
@@ -274,7 +408,6 @@ class ServiceController extends ApiController
 
 
     }
-
     public function getCostMaintenance( )
     {
 
@@ -344,11 +477,11 @@ class ServiceController extends ApiController
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('Your request has been successfully created. Thank you'));
 
         }catch (\Exception $exception){
             DB::rollBack();
-           //return$exception ;
+            //return$exception ;
             Log::emergency('File: ' . $exception->getFile() . 'Line: ' . $exception->getLine() . 'Message: ' . $exception->getMessage());
             return responseApiFalse(500, translate('Something went wrong'));
         }
@@ -430,7 +563,7 @@ class ServiceController extends ApiController
             $OrderService->save();
             $this->pushNotof('Order',$OrderService,auth()->id(),1);
             DB::commit();
-            return  responseApi(200, translate('return_data_success'),$OrderService->id);
+            return  responseApi(200, translate('A periodic inspection request has been successfully created. Thank you'),$OrderService->id);
 
         }catch (\Exception $exception){
             DB::rollBack();
@@ -454,7 +587,7 @@ class ServiceController extends ApiController
             'vehicle_id' => 'required|integer|exists:user_vehicles,id',
             'category_id' => 'required|integer',
             'city_id' => 'required|integer|exists:cities,id',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
             'coupon_code' => 'nullable|string',
             'images' => 'nullable|array',
             'images.*' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
@@ -482,7 +615,7 @@ class ServiceController extends ApiController
             if($request->category_id == 0){
 
                 $request->merge([  'category_id'=>null,
-                    ]);
+                ]);
             }
             $discount['discount_value'] = 0;
             $discount['discount_type'] = null;
@@ -507,7 +640,7 @@ class ServiceController extends ApiController
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('Your consultation request has been created successfully. Thank you'));
 
         }catch (\Exception $exception){
             DB::rollBack();
@@ -537,7 +670,7 @@ class ServiceController extends ApiController
             'address_to' => 'required|string|max:300',
             'lat_to' => 'required|string',
             'long_to' => 'required|string',
-            'details' => 'required|string|max:1000',
+            'details' => 'nullable|string|max:1000',
             'coupon_code' => 'nullable|string',
             'images' => 'nullable|array',
             'images.*' => 'nullable|Image|mimes:jpeg,jpg,png,gif',
@@ -578,7 +711,7 @@ class ServiceController extends ApiController
             $OrderService->transaction_id=$transaction->id;
             $OrderService->save();
             DB::commit();
-            return  responseApi(200, translate('return_data_success'));
+            return  responseApi(200, translate('Your request has been successfully created. Thank you'));
 
         }catch (\Exception $exception){
             DB::rollBack();
@@ -634,6 +767,8 @@ class ServiceController extends ApiController
             'price_id' => 'required|integer',
             'payment_method' => 'required|string|in:Online,Cash,Wallet',
             'coupon_code' => 'nullable|string',
+            'checkout_id' => 'nullable',
+            'payment_type' => 'nullable',
         ]);
         if ($validator->fails())
             return responseApiFalse(405, $validator->errors()->first());
@@ -705,6 +840,13 @@ class ServiceController extends ApiController
                 if($wallet_user < $price_){
                     DB::rollBack();
                     return responseApiFalse(405, translate('Your wallet balance is insufficient'));
+                }
+            }elseif($request->payment_method == 'Online'){
+                $checkStatusPayment=$this->checkStatusPayment($request->checkout_id,auth()->id(),$request->payment_type,$final_total);
+                if(!$checkStatusPayment['status']){
+                    DB::rollBack();
+                    return  responseApiFalse(502, $checkStatusPayment['message']);
+
                 }
             }
             $order->payment_method=$request->payment_method;
@@ -802,8 +944,8 @@ class ServiceController extends ApiController
         if ($item) {
             if(!$item->is_multi_use){
                 $type_id=  $service_id;
-                 if($item->type == 'Category'){
-                     $type_id=  $category_id;
+                if($item->type == 'Category'){
+                    $type_id=  $category_id;
                 }
                 if( $item->type_id != $type_id ){
                     return ['status' => false, 'msg' => translate('coupon not active in this service')];
