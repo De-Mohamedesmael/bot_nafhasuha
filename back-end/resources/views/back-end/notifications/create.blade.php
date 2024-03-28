@@ -248,9 +248,6 @@
 
 
 
-        $(document).ready(function () {
-
-        });
 
         $('.datepicker').datepicker({
             language: '{{ session('language') }}',
@@ -265,6 +262,21 @@
             $('#div_'+type).show();
             $('.input_2').attr('required',false);
             $('.input_'+type).attr('required',true);
+
+        });
+
+
+        $('#type_notify').on('change', function(){
+            var type =$(this).val();
+            if(type == 'Notify'){
+                $('#div_type').show();
+                $('#div_image').show();
+            }else{
+                $('#div_type').hide();
+                $('#div_image').hide();
+            }
+
+
 
         });
         $('#type_model').on('change', function(){

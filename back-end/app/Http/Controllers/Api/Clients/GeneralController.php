@@ -39,7 +39,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Pusher\Pusher;
 use function App\CPU\translate;
 
 
@@ -191,23 +190,14 @@ class GeneralController extends ApiController
             'type_id'=>$ContactUs->id,
             'message'=>$request->note,
         ]);
-        $options = [
-            'cluster' => 'ap2',
-            'useTLS' => true
-        ];
-        $Pusher = new Pusher(
-            env('PUSHER_APP_ID'),
-            env('PUSHER_APP_KEY'),
-            env('PUSHER_APP_SECRET'),
-            $options
-        );
+      
         $data=[
-           'type_id'=>$ContactUs->id ,
-           'type'=>'ContactUs' ,
-           'message'=>$request->note ,
+          'id'=>$NotificationAdmin->id ,
+          'type_id'=>$ContactUs->id ,
+          'type'=>'ContactUs' ,
+          'message'=>$request->note ,
         ];
-        $Pusher->trigger('notify-channel','new-notify',$data);
-        event(new NewNotifyEvent($NotificationAdmin->id));
+        $this->sendPusherNotification($data);
         return responseApi(200,\App\CPU\translate('Your message has been successfully received, and we will get back to you as soon as possible. Thank you for contacting us.'));
     }
    public function storeRate(Request $request){

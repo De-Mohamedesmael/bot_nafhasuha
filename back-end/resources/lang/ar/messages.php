@@ -208,4 +208,5 @@
   'count_all_order' => 'Count all order',
   'from' => 'من',
   'orders' => 'طلبات',
+  'Your vehicle has been modified successfully. Thank you.' => 'Your vehicle has been modified successfully. Thank you.',
 );

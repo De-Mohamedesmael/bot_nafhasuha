@@ -4,6 +4,7 @@ namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\Dashboard\ContactUsRequest;
 use App\Models\ContactUs;
 use App\Utils\TransactionUtil;
 use App\Utils\Util;
@@ -54,11 +55,18 @@ class ContactUsController extends Controller
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
                 ->addColumn('country_name', function ($row) {
                     return $row->country?->title;
+                })->editColumn('note', function ($row) {
+                    return  substr(strip_tags($row->note), 0, 100);
                 })
                 ->addColumn(
                     'action',
                     function ($row) {
                         $html = '';
+                        $html.='<a data-href="'.route('admin.contact_us.show', $row->id).'"
+                           data-container=".view_modal" class="btn btn-modal a-image" title="'.__('lang.show').'">
+                           <i class="far fa-eye"></i> </a>
+                        </a>';
+
 //                            if (auth()->contact_us()->can('contact_us_module.contact_us.delete')) {
                                 $html .=
                                     '
@@ -86,6 +94,31 @@ class ContactUsController extends Controller
     }
 
 
+    public function show($id)
+    {
+        $ContactUs = ContactUs::find($id);
+        return view('back-end.messages.contact_us.show')->with(compact(
+            'ContactUs'
+        ));
+    }
+    public function sendMessage(ContactUsRequest $request)
+    {
+        $r=$this->commonUtil->SendSMS($request->replay, '966'.$request->phone);
+        if($r['status']){
+            $output = [
+                'success' => $r['status'],
+                'msg' => __('lang.doneSendMessage')
+            ];
+        }else{
+            $output = [
+                'success' => $r['status'],
+                'msg' => $r['message']
+            ];
+        }
+
+        return redirect()->back()->with('status', $output);
+
+    }
     /**
      * Remove the specified resource from storage.
      *

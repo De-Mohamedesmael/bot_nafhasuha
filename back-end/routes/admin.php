@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth:admin', 'SetSessionData', 'language', 'time
         Route::post('/', [ProviderController::class,'index'])->name('index');
         Route::get('create', [ProviderController::class,'create'])->name('create');
         Route::post('create', [ProviderController::class,'store'])->name('store');
+        Route::get('show/{id}',[ProviderController::class, 'show'])->name('show');
         Route::get('edit/{id}',[ProviderController::class, 'edit'])->name('edit');
         Route::put('update/{id}', [ProviderController::class,'update'])->name('update');
         Route::delete('delete/{id}', [ProviderController::class,'destroy'])->name('delete');
@@ -334,6 +335,8 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
     Route::group(['prefix'=>'admin-notifications','as'=>'admin-notifications.'], function () {
 
         Route::get('/mark-as-read/{id}', [AdminNotificationController::class,'markAsRead'])->name('markAsRead');
+        Route::get('/get-details/{id}', [AdminNotificationController::class,'getDetails'])->name('get-details');
+
         Route::get('/notification-seen', [AdminNotificationController::class,'notificationSeen'])->name('notificationSeen');
 
     });
@@ -348,6 +351,8 @@ Route::group(['prefix'=>'city','as'=>'city.'], function () {
     });
     Route::group(['prefix'=>'contact_us','as'=>'contact_us.'], function () {
         Route::get('/', [ContactUsController::class,'index'])->name('index');
+        Route::post('/', [ContactUsController::class,'sendMessage'])->name('send-message');
+        Route::get('show/{id}', [ContactUsController::class,'show'])->name('show');
         Route::delete('delete/{id}', [ContactUsController::class,'destroy'])->name('delete');
     });
 

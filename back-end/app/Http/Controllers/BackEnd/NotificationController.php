@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\BackEnd;
 
 use App\Http\Controllers\Controller;
-use App\Models\Area;
-use App\Models\Category;
-use App\Models\City;
+use App\Jobs\SendEmailsJob;
 use App\Models\Coupon;
 use App\Models\FcmToken;
 use App\Models\FcmTokenProvider;
-use App\Models\Info;
 use App\Models\Notification;
 use App\Models\Provider;
 use App\Models\User;
@@ -19,10 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
-use function App\CPU\translate;
 
 class NotificationController extends Controller
 {
@@ -61,6 +56,9 @@ class NotificationController extends Controller
                     'notification_translations.body',
                     'notification_translations.title'
                 );
+            if (\request()->has('type_notify') && \request()->type_notify != null){
+                $notifications=$notifications->where('type_notify',\request()->type_notify);
+            }
             $notifications=$notifications->groupBy('notifications.id');
             return DataTables::of($notifications)
                 ->editColumn('created_at', '{{@format_datetime($created_at)}}')
@@ -69,6 +67,8 @@ class NotificationController extends Controller
                 })
                 ->editColumn('type', function ($row) {
                     return  __('lang.'.$row->type);
+                })->editColumn('type_notify', function ($row) {
+                    return  __('lang.'.$row->type_notify);
                 })
                 ->addColumn('image', function ($row) use($logo) {
                     $image = asset('assets/images/'.$row->image);
@@ -144,7 +144,8 @@ class NotificationController extends Controller
         });
         $filteredRequest = new Request($filteredInput);
         $validator = validator($filteredRequest->all(), [
-            'type' => 'required|in:2,3',
+            'type_notify' => 'required|in:Notify,SMS,Mail',
+            'type' => 'required_if:type_notify,==,Notify|in:2,3',
             'type_model' => 'required|in:User,Provider',
             'type_id' => 'required_if:type,==,2|integer|exists:coupons,id',
             'user_id' => 'required_if:type_model,==,User|array',
@@ -166,6 +167,7 @@ class NotificationController extends Controller
          try {
         DB::beginTransaction();
         $notification = Notification::create([
+            "type_notify" => $request->type_notify,
             "type" => $request->type,
             "type_id" => $request->type_id,
             "type_model" => $request->type_model,
@@ -198,14 +200,49 @@ class NotificationController extends Controller
              if($request->has("provider_id")){
                  $notification->providers()->sync($request->provider_id);
              }
-            if($request->type_model == 'User'){
-                $FcmToken=FcmToken::wherein('user_id',$request->user_id)->pluck('token');
-                $this->sendNotification($notification,$FcmToken);
-            }else{
-                $FcmToken=FcmTokenProvider::wherein('provider_id',$request->provider_id)
-                    ->pluck('token');
-                $this->sendNotification($notification,$FcmToken);
-            }
+
+             if($request->type_notify == "Notify"){
+                 if($request->type_model == 'User'){
+                     $FcmToken=FcmToken::wherein('user_id',$request->user_id)->pluck('token');
+                     $this->sendNotification($notification,$FcmToken);
+                 }else{
+                     $FcmToken=FcmTokenProvider::wherein('provider_id',$request->provider_id)
+                         ->pluck('token');
+                     $this->sendNotification($notification,$FcmToken);
+                 }
+             }elseif($request->type_notify=='SMS'){
+                 if($request->type_model == 'User'){
+
+                     $phones=User::wherein('id',$request->user_id)->pluck('phone');
+
+                 }else{
+                     $phones=Provider::wherein('id',$request->user_id)->pluck('phone');
+
+                 }
+                 foreach ($phones as $phone){
+                     $this->commonUtil->SendSMS($notification->note,'966'.$phone);
+                 }
+             }else{
+                 if($request->type_model == 'User'){
+
+                     $emails=User::wherein('id',$request->user_id)->whereNotNull('email')->pluck('email');
+
+                 }else{
+                     $emails=Provider::wherein('id',$request->user_id)->whereNotNull('email')->pluck('email');
+
+                 }
+
+                 $from=env('MAIL_FROM_ADDRESS');
+                 foreach ($emails as $email) {
+                     $data["subject"] = $notification->title;
+                     $data["body"] = $notification->body;
+                     $data["email"] = trim($email);
+                     dd($data , $from ,view('emails.SendEmail'));
+                     dispatch(new SendEmailsJob($data, $from));
+                 }
+
+             }
+
 
         $notification_id=$notification->id;
         DB::commit();

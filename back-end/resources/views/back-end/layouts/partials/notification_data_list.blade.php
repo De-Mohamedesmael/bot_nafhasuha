@@ -3,11 +3,11 @@
     @php
     switch($notification->type){
         case'NewProvider':
-            $url=route('admin.provider.index');
+            $url=route('admin.provider.show',$notification->type_id);
             $icon='<i class="fa fa-user " style="color: rgb(19, 35, 255)"></i>';
         break;
         default:
-            $url=route('admin.contact_us.index');
+            $url=route('admin.contact_us.index',['contact_id'=>$notification->type_id]);
             $icon='<i class="dripicons-conversation " style="color: rgb(255, 187, 60)"></i>';
         break;
     }

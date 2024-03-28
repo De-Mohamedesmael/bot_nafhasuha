@@ -62,6 +62,13 @@
         .btn-modal {
             cursor: pointer;
         }
+        /*.modal.view_modal.no-print.show {*/
+        /*    top: 10%;*/
+        /*    right: 25%;*/
+        /*    bottom: 10%;*/
+        /*    left: 25%;*/
+        /*    border-radius: 10px;*/
+        /*}*/
     </style>
 @endsection
 @section('sli_li')
@@ -276,4 +283,18 @@
         });
 
     </script>
+        @if(request()->contact_id)
+            <script>
+                var container = '.view_modal';
+                $.ajax({
+                    url: "{{route('admin.contact_us.show',request()->contact_id)}}",
+                    dataType: 'html',
+                    success: function(result) {
+                        $(container).html(result).modal('show');
+                    },
+                });
+            </script>
+        @endif
+
+
 @endsection

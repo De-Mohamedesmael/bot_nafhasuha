@@ -1,6 +1,14 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
+        <label class="sp-label new-des" for="type_notify"><b>@lang('lang.type_notify')</b></label>
+            <div class="input-group my-group">
+        {!! Form::select('type_notify', ['Notify'=>__('lang.Notify'),'Mail'=>__('lang.Mail'),'SMS'=>__('lang.SMS')],  'Notify', ['class' => 'form-control ','data-live-search' => 'true', 'placeholder' => __('lang.please_select'), 'id' => 'type_notify']) !!}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
             {!! Form::label('title', __('lang.title') . ':*' ,['class'=>"sp-label new-des"]) !!}
             <div class="input-group my-group">
                 {!! Form::text('title', false , ['class' => 'form-control', 'placeholder' => __('lang.name'), 'required']) !!}
@@ -36,7 +44,7 @@
         ])
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4" id="div_type">
         <div class="form-group">
             {!! Form::label('type', __('lang.type') . ':*',['class'=>"sp-label new-des"]) !!}
             {!! Form::select('type', ['3'=>__('lang.3'),'2'=>__('lang.2')], false, [
@@ -97,7 +105,7 @@
     </div>
 
 
-    <div class="col-md-4 " style="margin-top: 10px;">
+    <div class="col-md-4 " style="margin-top: 10px;"  id="div_image">
         <div class="container mt-3">
             <div class="row mx-0" style="border: 1px solid #ddd;padding: 30px 0px;">
                 <div class="col-12">

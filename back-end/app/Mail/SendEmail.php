@@ -18,8 +18,10 @@ class SendEmail extends Mailable
      */
     public $massage;
     public $name;
-    public function __construct($massage ,$name)
+    public $title;
+    public function __construct($massage ,$name,$title)
     {
+      $this->title = $massage;
       $this->massage = $massage;
       $this->name = $name;
     }
@@ -32,8 +34,8 @@ class SendEmail extends Mailable
     public function build()
     {
 //        return $this->view('view.name');
-        return $this->from('garageqatar@sherifshalaby.tech')
-                    ->subject('Garage')
+        return $this->from('support@nafhasuha.com')
+                    ->subject($this->title)
                     ->view('emails.SendEmail')
                      ->with('massage', $this->massage)
                      ->with('name',$this->name);
