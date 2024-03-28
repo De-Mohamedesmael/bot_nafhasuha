@@ -79,6 +79,11 @@
             height: 250px !important;
             min-height: 250px !important;
         }
+        span.apexcharts-legend-text {
+            margin: 0 5px;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+        }
     </style>
     @if(app()->getLocale() =="ar")
 
